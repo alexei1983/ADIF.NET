@@ -2,9 +2,11 @@
 using System.Globalization;
 
 namespace ADIF.NET.Types {
-  public class AdifType {
+  public abstract class ADIFType<T> : IADIFType {
 
-    public virtual Type UnderlyingType { get; }
+    public virtual Type UnderlyingType => typeof(T);
+
+    public virtual string Type { get; }
 
     public virtual string FormatString { get; }
 
@@ -24,12 +26,8 @@ namespace ADIF.NET.Types {
 
     public virtual string[] Options { get; }
 
-    public virtual bool IsValidValue(object value) {
-      return !(value is null); 
-      }
+    //public abstract bool IsValidValue(object value);
 
-    public virtual bool IsValidValue(string value) {
-      return !string.IsNullOrEmpty(value);
-      }
+    //public abstract bool IsValidValue(string value);
     }
   }

@@ -8,6 +8,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.Continent;
 
-    public override string[] Options => typeof(Continent).GetValuesArray();
+    public override string[] Options => null;
     }
   }

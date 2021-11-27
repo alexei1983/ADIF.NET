@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ADIF.NET</RootNamespace>
     <AssemblyName>ADIF.NET</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,7 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdifLocation.cs" />
     <Compile Include="AdifHeader.cs" />
     <Compile Include="AdifQsoCollection.cs" />
     <Compile Include="AdifTagCollection.cs" />
@@ -85,7 +85,7 @@
     </Compile>
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
-    <Compile Include="Tags\UsacaCountiesTag.cs" />
+    <Compile Include="Tags\USACACountiesTag.cs" />
     <Compile Include="Tags\MyAntennaIntlTag.cs" />
     <Compile Include="Tags\MyCityIntlTag.cs" />
     <Compile Include="Tags\RigIntlTag.cs" />
@@ -164,7 +164,7 @@
     <Compile Include="Tags\BandRxTag.cs" />
     <Compile Include="Tags\CommentTag.cs" />
     <Compile Include="Tags\CreatedTimestampTag.cs" />
-    <Compile Include="Tags\ArrlSectTag.cs" />
+    <Compile Include="Tags\ARRLSectTag.cs" />
     <Compile Include="Tags\MyIotaTag.cs" />
     <Compile Include="Tags\RxPwrTag.cs" />
     <Compile Include="Tags\IntlStringTag.cs" />
@@ -194,9 +194,11 @@
     <Compile Include="Tags\AppDefTag.cs" />
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
-    <Compile Include="Types\AdifBoolean.cs" />
-    <Compile Include="Types\AdifNumber.cs" />
-    <Compile Include="Types\AdifType.cs" />
+    <Compile Include="Types\ADIFBoolean.cs" />
+    <Compile Include="Types\ADIFLocation.cs" />
+    <Compile Include="Types\ADIFNumber.cs" />
+    <Compile Include="Types\ADIFType.cs" />
+    <Compile Include="Types\IADIFType.cs" />
     <Compile Include="Values.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="OptionValue.cs" />

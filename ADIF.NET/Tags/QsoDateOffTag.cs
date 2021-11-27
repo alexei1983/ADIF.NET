@@ -1,8 +1,8 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class QsoDateOffTag : DateTag, ITag {
+  public class QSODateOffTag : DateTag, ITag {
 
-    public override string Name => TagNames.QsoDateOff;
+    public override string Name => TagNames.QSODateOff;
 
     }
   }

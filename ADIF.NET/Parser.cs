@@ -16,10 +16,10 @@ namespace ADIF.NET {
 
     public int QsoCount { get; private set; }
 
-    public AdifHeader Header { get; private set; }
+    public ADIFHeader Header { get; private set; }
 
     public Parser() { 
-      qsos = new List<AdifQsoCollection>();
+      qsos = new List<ADIFQSOCollection>();
       }
 
     /// <summary>
@@ -138,7 +138,7 @@ namespace ADIF.NET {
       this.body = new Dictionary<int, Dictionary<string, string>>();
       this.userDefinedFields = new List<UserDefTag>();
       this.appDefinedFields = new List<AppDefTag>();
-      this.Header = new AdifHeader();
+      this.Header = new ADIFHeader();
 
       if (string.IsNullOrWhiteSpace(this.data))
         throw new InvalidOperationException("No ADIF data found.");
@@ -164,7 +164,7 @@ namespace ADIF.NET {
     void Initialize() {
 
       // find the position of <EOH>
-      var headerEndingPos = this.data.IndexOf($"{Values.TagOpening}{TagNames.EndHeader}{Values.TagClosing}",
+      var headerEndingPos = this.data.IndexOf($"{Values.TAG_OPENING}{TagNames.EndHeader}{Values.TAG_CLOSING}",
                                               StringComparison.OrdinalIgnoreCase);
 
       if (headerEndingPos < 0)
@@ -181,9 +181,9 @@ namespace ADIF.NET {
       while (this.i < headerEndingPos) {
 
         // skip comments
-        if (this.data[this.i] == Values.CommentIndicator) {
+        if (this.data[this.i] == Values.COMMENT_INDICATOR) {
           while (this.i < headerEndingPos) {
-            if (this.data[this.i] == Values.LineEnding) {
+            if (this.data[this.i] == Values.LINE_ENDING) {
               break;
               }
 
@@ -193,10 +193,10 @@ namespace ADIF.NET {
         else {
 
           // find the beginning of a tag
-          if (this.data[this.i] == Values.TagOpening) {
+          if (this.data[this.i] == Values.TAG_OPENING) {
             this.i++;
             // record the key
-            while (this.i < headerEndingPos && this.data[this.i] != Values.ValueLengthChar) {
+            while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR) {
               tag = $"{tag}{this.data[this.i]}"; //tag + this.data[this.i];
               this.i++;
 
@@ -207,7 +207,7 @@ namespace ADIF.NET {
                 var fieldNumber = string.Empty;
             
                 // read the field ID
-                while (this.i < headerEndingPos && this.data[this.i] != Values.ValueLengthChar) {
+                while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR) {
                   fieldNumber = fieldNumber + this.data[this.i];
                   this.i++;
                   }
@@ -218,7 +218,7 @@ namespace ADIF.NET {
                 fieldId = fieldNumber.ToInt32();
 
                 // read the value length
-                while (this.i < headerEndingPos && this.data[this.i] != Values.ValueLengthChar) {
+                while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR) {
                   valueLength = valueLength + this.data[this.i];
                   this.i++;
                   }
@@ -227,7 +227,7 @@ namespace ADIF.NET {
                 this.i++;
 
                 // read the data type
-                while (this.i < headerEndingPos && this.data[this.i] != Values.TagClosing) {
+                while (this.i < headerEndingPos && this.data[this.i] != Values.TAG_CLOSING) {
                   userDefDataType = userDefDataType + this.data[this.i];
                   this.i++;
                   }
@@ -244,7 +244,7 @@ namespace ADIF.NET {
               this.i++;
 
               // find out how long the value is
-              while (this.i < headerEndingPos && this.data[this.i] != Values.TagClosing) {
+              while (this.i < headerEndingPos && this.data[this.i] != Values.TAG_CLOSING) {
                 valueLength = valueLength + this.data[this.i];
                 this.i++;
                 }
@@ -275,22 +275,22 @@ namespace ADIF.NET {
               var max = 0d;
 
               // read the field name
-              while (userDefLen > 0 && value[x] != Values.Comma) {
+              while (userDefLen > 0 && value[x] != Values.COMMA) {
                 fieldName = fieldName + value[x];
                 userDefLen--;
                 x++;
                 };
 
-              while (userDefLen > 0 && value[x] != Values.CurlyBraceOpen) {
+              while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_OPEN) {
                 x++;
                 userDefLen--;
                 }
 
-              if (userDefLen > 0 && value[x] == Values.CurlyBraceOpen) {
+              if (userDefLen > 0 && value[x] == Values.CURLY_BRACE_OPEN) {
                 x++; // iterate past the curly braces
 
                 // read the value between the curly braces
-                while (userDefLen > 0 && value[x] != Values.CurlyBraceClose) {
+                while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_CLOSE) {
                   curlyBraceVal = curlyBraceVal + value[x];
                   userDefLen--;
                   x++;
@@ -303,14 +303,14 @@ namespace ADIF.NET {
                 if (DataTypes.Enumeration.Equals(userDefDataType, StringComparison.OrdinalIgnoreCase)) {
 
                   // split by comma
-                  enumVals = curlyBraceVal.Split(new[] { Values.Comma }, StringSplitOptions.RemoveEmptyEntries);
+                  enumVals = curlyBraceVal.Split(new[] { Values.COMMA }, StringSplitOptions.RemoveEmptyEntries);
                   }
                 else {
 
                   // parse as range
-                  if (curlyBraceVal.Contains(Values.Colon.ToString())) {
+                  if (curlyBraceVal.Contains(Values.COLON.ToString())) {
 
-                    var minMaxArray = curlyBraceVal.Split(new[] { Values.Colon }, StringSplitOptions.RemoveEmptyEntries);
+                    var minMaxArray = curlyBraceVal.Split(new[] { Values.COLON }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (minMaxArray.Length == 2) {
                       min = minMaxArray[0].ToDouble();
@@ -378,7 +378,7 @@ namespace ADIF.NET {
 
       var record = string.Empty;
 
-		  var end = this.data.IndexOf($"{Values.TagOpening}{TagNames.EndRecord}{Values.TagClosing}", 
+		  var end = this.data.IndexOf($"{Values.TAG_OPENING}{TagNames.EndRecord}{Values.TAG_CLOSING}", 
                                   this.i, 
                                   StringComparison.OrdinalIgnoreCase);
 
@@ -407,7 +407,7 @@ namespace ADIF.NET {
 
       for (var a = 0; a < record.Length; a++) {
 
-        if (record[a] == Values.TagOpening) {
+        if (record[a] == Values.TAG_OPENING) {
           var tagName = string.Empty;
           var value = string.Empty;
           var len_str = string.Empty;
@@ -423,7 +423,7 @@ namespace ADIF.NET {
           a++; //go past the tag opening <
 
           // get the tag
-          while (record[a] != Values.ValueLengthChar) {
+          while (record[a] != Values.VALUE_LENGTH_CHAR) {
             tagName = tagName + record[a]; // append this char to the tag name
             a++;
 
@@ -433,42 +433,42 @@ namespace ADIF.NET {
               isAppField = true;
 
               // read the program ID
-              while (a < record.Length && record[a] != Values.Underscore) {
+              while (a < record.Length && record[a] != Values.UNDERSCORE) {
                 programId = programId + record[a];
                 a++;
                 }
 
               // bypass the underscore
-              if (record[a] == Values.Underscore)
+              if (record[a] == Values.UNDERSCORE)
                 a++;
 
               // read the field name (until we hit a colon)
-              while (a < record.Length && record[a] != Values.ValueLengthChar) {
+              while (a < record.Length && record[a] != Values.VALUE_LENGTH_CHAR) {
                 appFieldName = appFieldName + record[a];
                 a++;
                 }
 
               // read the length and data type
-              if (record[a] == Values.ValueLengthChar)
+              if (record[a] == Values.VALUE_LENGTH_CHAR)
                 a++;
 
-              while (a < record.Length && record[a] != Values.ValueLengthChar && record[a] != Values.TagClosing) {
+              while (a < record.Length && record[a] != Values.VALUE_LENGTH_CHAR && record[a] != Values.TAG_CLOSING) {
                 appFieldLength = appFieldLength + record[a];
                 a++;
                 }
 
               len = appFieldLength.ToInt32();
 
-              var dataTypePresent = record[a] == Values.ValueLengthChar;
+              var dataTypePresent = record[a] == Values.VALUE_LENGTH_CHAR;
 
               // bypass unnecessary characters
-              if (record[a] == Values.ValueLengthChar) //|| record[a] == Values.TagClosing)
+              if (record[a] == Values.VALUE_LENGTH_CHAR) //|| record[a] == Values.TagClosing)
                 a++;
 
               // read the data type, if one is present
               if (dataTypePresent) {
 
-                while (a < record.Length && record[a] != Values.TagClosing) {
+                while (a < record.Length && record[a] != Values.TAG_CLOSING) {
                   appFieldDataType = appFieldDataType + record[a];
                   a++;
                   }
@@ -489,12 +489,12 @@ namespace ADIF.NET {
 
             a++; // iterate past the : (value separator)
 
-            while (record[a] != Values.TagClosing && record[a] != Values.ValueLengthChar) {
+            while (record[a] != Values.TAG_CLOSING && record[a] != Values.VALUE_LENGTH_CHAR) {
               len_str = len_str + record[a];
               a++;
               };
-            if (record[a] == Values.ValueLengthChar) {
-              while (record[a] != Values.TagClosing) {
+            if (record[a] == Values.VALUE_LENGTH_CHAR) {
+              while (record[a] != Values.TAG_CLOSING) {
                 a++;
                 }
               }
@@ -515,9 +515,9 @@ namespace ADIF.NET {
           }
 
         // skip comments
-        if (record[a] == Values.CommentIndicator) {
+        if (record[a] == Values.COMMENT_INDICATOR) {
           while (a < record.Length) {
-            if (record[a] == Values.LineEnding) {
+            if (record[a] == Values.LINE_ENDING) {
               break;
               }
             a++;
@@ -531,11 +531,11 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<AdifQsoCollection> GetQsoCollection() {
+    public IEnumerable<ADIFQSOCollection> GetQsoCollection() {
 
       foreach (var key in body.Keys) {
         var currentQso = body[key];
-        var qso = new AdifQsoCollection();
+        var qso = new ADIFQSOCollection();
         foreach (var entry in currentQso) {
 
           // get the tag name and build it
@@ -564,7 +564,7 @@ namespace ADIF.NET {
     int i;
     Dictionary<string, string> headers;
     Dictionary<int, Dictionary<string, string>> body;
-    List<AdifQsoCollection> qsos;
+    List<ADIFQSOCollection> qsos;
     List<UserDefTag> userDefinedFields;
     List<AppDefTag> appDefinedFields;
 

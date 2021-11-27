@@ -10,6 +10,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.MyDxcc;
 
-    public override string[] Options => CountryCode.GetValuesArray();
+    public override string[] Options => null;
     }
   }

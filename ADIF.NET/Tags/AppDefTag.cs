@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class AppDefTag : Tag<object>, ITag {
 
-    public override string Name => $"{TagNames.AppDef}{ProgramId ?? Values.DefaultProgramId}_{FieldName ?? string.Empty}";
+    public override string Name => $"{TagNames.AppDef}{ProgramId ?? Values.DEFAULT_PROGRAM_ID}_{FieldName ?? string.Empty}";
 
     public string FieldName { get; set; }
 
@@ -18,7 +18,7 @@ namespace ADIF.NET.Tags {
         }
 
       set {
-        if (value?.Contains(Values.Underscore.ToString()) ?? false)
+        if (value?.Contains(Values.UNDERSCORE.ToString()) ?? false)
           throw new ArgumentException("Program ID cannot contain an underscore.");
 
         programId = value;

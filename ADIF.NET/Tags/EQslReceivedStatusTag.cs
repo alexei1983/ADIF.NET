@@ -2,11 +2,11 @@
 
 namespace ADIF.NET.Tags {
 
-  public class EQslReceivedStatusTag : RestrictedEnumerationTag, ITag {
+  public class EQSLReceivedStatusTag : RestrictedEnumerationTag, ITag {
 
-    public override string Name => TagNames.EQslReceivedStatus;
+    public override string Name => TagNames.EQSLReceivedStatus;
 
     [DefaultValue("N")]
-    public override string[] Options => typeof(EQslReceivedStatus).GetValuesArray();
+    public override string[] Options => null;
     }
   }

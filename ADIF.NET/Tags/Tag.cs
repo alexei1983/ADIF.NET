@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -37,6 +38,8 @@ namespace ADIF.NET.Tags {
     /// Whether or not the tag is a header tag.
     /// </summary>
     public virtual bool Header { get; }
+
+    public virtual IADIFType ADIFType { get; }
 
     /// <summary>
     /// 
@@ -179,12 +182,12 @@ namespace ADIF.NET.Tags {
       var retVal = string.Empty;
 
       if (!string.IsNullOrEmpty(Name)) {
-        retVal = $"{Values.TagOpening}{Name}";
+        retVal = $"{Values.TAG_OPENING}{Name}";
 
         if (!SuppressLength)
-          retVal = $"{retVal}{Values.ValueLengthChar}{ValueLength}";
+          retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
 
-        retVal = $"{retVal}{Values.TagClosing}{TextValue} ";
+        retVal = $"{retVal}{Values.TAG_CLOSING}{TextValue} ";
         }
       return retVal;
       }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime;
 using ADIF.NET.Tags;
 
 namespace ADIF.NET {
@@ -45,22 +46,22 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static (double, double) SplitDouble(this double value) {
+    public static void SplitDouble(this double value, out double one, out double two) {
 
       var values = value.ToString().Split('.');
 
-      var firstValue = 0d;
-      var secondValue = 0d;
+      one = 0d;
+      two = 0d;
 
       if (values.Length == 2) {
-        firstValue = double.Parse(values[0]);
-        secondValue = double.Parse(values[1]);
+        one = double.Parse(values[0]);
+        two = double.Parse(values[1]);
         }
       else {
-        firstValue = value;
+        one = value;
         }
       
-      return (firstValue, secondValue);
+      return;
       }
 
     /// <summary>
@@ -149,6 +150,14 @@ namespace ADIF.NET {
 
       return 0;
       }
+
+    public static bool IsDouble(this string str)
+    {
+      if (!string.IsNullOrWhiteSpace(str) && double.TryParse(str, out double dblVal))
+        return true;
+
+      return false;
+    }
 
     /// <summary>
     /// 
@@ -332,7 +341,7 @@ namespace ADIF.NET {
         return false;
 
       return (isNullOrWhiteSpace && allowEmptyString) || 
-             Regex.Match(str, Values.EmailAddressRegex).Success;
+             Regex.Match(str, Values.EMAIL_ADDRESS_REGEX).Success;
       }
 
     /// <summary>
@@ -685,13 +694,13 @@ namespace ADIF.NET {
     /// <returns>True if the <see cref="string"/> is an IOTA designator, else false.</returns>
     public static bool IsIotaDesignator(this string str) {
 
-      var continents = typeof(Continent).GetValuesArray();
+      var continents = ADIFEnumeration.Get("Continent");
       var regex = "^(";
 
-      for (var x = 0; x < continents.Length; x++) {
+      for (var x = 0; x < continents.Count; x++) {
         regex = $"{regex}{continents[x]}";
 
-        if ((x + 1) < continents.Length)
+        if ((x + 1) < continents.Count)
           regex = $"{regex}|";
         }
 
@@ -738,7 +747,7 @@ namespace ADIF.NET {
         if (obj is DateTime dateTime)
           return dateTime;
         else if (DateTime.TryParseExact(obj.ToString() ?? string.Empty,
-                                   Values.AdifDateFormat,
+                                   Values.ADIF_DATE_FORMAT,
                                    provider ?? CultureInfo.CurrentCulture,
                                    DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
                                    out DateTime dateTimeParsed))

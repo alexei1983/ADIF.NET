@@ -3,11 +3,11 @@ using ADIF.NET.Tags;
 
 namespace ADIF.NET {
 
-  public class AdifQsoCollection : AdifTagCollection {
+  public class ADIFQSOCollection : ADIFTagCollection {
 
-    public AdifQsoCollection() : base() { }
+    public ADIFQSOCollection() : base() { }
 
-    public AdifQsoCollection(params ITag[] tags) : this() {
+    public ADIFQSOCollection(params ITag[] tags) : this() {
       AddRange(tags);
       }
 

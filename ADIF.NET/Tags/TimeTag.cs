@@ -4,7 +4,7 @@ using System.Globalization;
 namespace ADIF.NET.Tags {
   public class TimeTag : DateTag, ITag {
 
-    public override string FormatString { get; set; } = Values.AdifTimeFormatShort;
+    public override string FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;
 
     public override object ConvertValue(object value) {
 
@@ -15,7 +15,7 @@ namespace ADIF.NET.Tags {
         else {
           var objStr = value.ToString() ?? string.Empty;
 
-          var formatString = objStr.Length > 4 ? Values.AdifTimeFormatLong : Values.AdifTimeFormatShort;
+          var formatString = objStr.Length > 4 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT;
 
           if (DateTime.TryParseExact(objStr,
                                      formatString,

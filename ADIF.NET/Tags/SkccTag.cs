@@ -6,8 +6,8 @@ namespace ADIF.NET.Tags {
   /// Represents the contacted station's Straight Key Century Club (SKCC) member information.
   /// </summary>
   [DisplayName("The contacted station's Straight Key Century Club (SKCC) member information.")]
-  public class SkccTag : StringTag, ITag {
+  public class SKCCTag : StringTag, ITag {
 
-    public override string Name => TagNames.Skcc;
+    public override string Name => TagNames.SKCC;
     }
   }

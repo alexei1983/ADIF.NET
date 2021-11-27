@@ -9,7 +9,7 @@ namespace ADIF.NET {
   /// <summary>
   /// Represents a collection of objects that implement the <see cref="ITag"/> interface.
   /// </summary>
-  public class AdifTagCollection : ICollection<ITag>, IEnumerable, IEnumerable<ITag>, IList<ITag> {
+  public class ADIFTagCollection : ICollection<ITag>, IEnumerable, IEnumerable<ITag>, IList<ITag> {
 
     public virtual ITag this[int index] {
       get {
@@ -29,11 +29,11 @@ namespace ADIF.NET {
 
     public bool IsReadOnly => false;
 
-    public AdifTagCollection() {
+    public ADIFTagCollection() {
       tags = new List<ITag>();
       }
 
-    public AdifTagCollection(params ITag[] tags) : this() {
+    public ADIFTagCollection(params ITag[] tags) : this() {
       AddRange(tags);
       }
 

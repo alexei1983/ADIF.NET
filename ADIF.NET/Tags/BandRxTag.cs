@@ -10,6 +10,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.BandRx;
 
-    public override string[] Options => typeof(Band).GetValuesArray();
+    public override string[] Options => null;
     }
   }

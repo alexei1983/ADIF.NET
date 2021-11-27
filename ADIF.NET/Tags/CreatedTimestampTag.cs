@@ -5,7 +5,7 @@ namespace ADIF.NET.Tags {
   public class CreatedTimestampTag : Tag<DateTime>, ITag {
 
     public override string Name => TagNames.CreatedTimestamp;
-    public override string FormatString { get; set; } = $"{Values.AdifDateFormat} {Values.AdifTimeFormatLong}";
+    public override string FormatString { get; set; } = $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}";
     public override bool Header => true;
 
     public CreatedTimestampTag() {
@@ -20,7 +20,7 @@ namespace ADIF.NET.Tags {
       if (!(value is null)) {
 
         if (DateTime.TryParseExact(value.ToString() ?? string.Empty,
-                                   FormatString ?? $"{Values.AdifDateFormat} {Values.AdifTimeFormatLong}",
+                                   FormatString ?? $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}",
                                    FormatProvider,
                                    DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
                                    out DateTime dateTimeParsed))

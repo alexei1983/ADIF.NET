@@ -7,7 +7,7 @@ namespace ADIF.NET {
   /// Represents a collection of objects that implement the <see cref="ITag"/> interface and which define 
   /// an ADIF header.
   /// </summary>
-  public class AdifHeader : AdifTagCollection {
+  public class ADIFHeader : ADIFTagCollection {
 
     /// <summary>
     /// 
@@ -33,15 +33,15 @@ namespace ADIF.NET {
       }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="AdifHeader"/> class.
+    /// Creates a new instance of the <see cref="ADIFHeader"/> class.
     /// </summary>
-    public AdifHeader() : base() { }
+    public ADIFHeader() : base() { }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="AdifHeader"/> class.
+    /// Creates a new instance of the <see cref="ADIFHeader"/> class.
     /// </summary>
     /// <param name="tags">Initial <see cref="ITag"/> options to add to the collection.</param>
-    public AdifHeader(params ITag[] tags) : this() {
+    public ADIFHeader(params ITag[] tags) : this() {
       AddRange(tags);
       }
 

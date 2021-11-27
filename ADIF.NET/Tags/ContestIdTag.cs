@@ -10,6 +10,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.ContestId;
 
-    public override string[] Options => Contest.GetOptionsArray();
+    public override string[] Options => null;
     }
   }

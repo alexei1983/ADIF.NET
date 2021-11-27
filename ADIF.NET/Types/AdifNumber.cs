@@ -1,37 +1,86 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ADIF.NET.Types {
-  public class AdifNumber : AdifType {
+  public class ADIFNumber : ADIFType<double?>, IFormattable {
 
-    public override string[] Options => typeof(BooleanValue).GetValuesArray();
-    public override Type UnderlyingType => typeof(double?);
     public override double MinValue => double.MinValue;
     public override double MaxValue => double.MaxValue;
+    public override string Type => DataTypes.Number;
 
-    public static double? Parse(object value) {
+    public static double? Parse(string s)
+    {
+      var result = default(double?);
 
-      if (value is double || value is double?)
-        return (double?)value;
-
-      var val = default(double?);
-
-      try {
-        val = Convert.ToDouble(value);
-        return val;
-        }
-      catch (Exception ex) {
-        throw new InvalidOperationException($"Could not convert value to {nameof(AdifNumber)}", ex);
-        }
+      try
+      {
+        var dblResult = double.Parse(s);
+        result = dblResult;
       }
-  
-    public override bool IsValidValue(object value) {
-      
+      catch (Exception ex)
+      {
+        throw new InvalidOperationException($"Could not convert value to {nameof(ADIFNumber)}", ex);
+      }
+
+      return result;
+    }
+
+    public static bool TryParse(string s, out double? result)
+    {
+      result = default(double?);
+
+      if (string.IsNullOrEmpty(s))
+        return true;
+
+      if (double.TryParse(s, out double dblResult))
+      {
+        result = dblResult;
+        return true;
+      }
+
+      return false;
+    }
+
+    public static bool IsValidValue(string value)
+    {
+      if (string.IsNullOrEmpty(value) || double.TryParse(value, out double _))
+        return true;
+
+      return false;
+    }
+
+    public static bool IsValidValue(object value)
+    {
+
       if (value is double || value is double?)
         return true;
 
-      var valStr = value?.ToString()?.ToUpper() ?? string.Empty;
+      return IsValidValue(value == null ? string.Empty : value.ToString());
+    }
 
-      return valStr.Equals("Y") || valStr.Equals("N") || valStr.Equals(string.Empty);
-      }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+      return ToString("G", CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public string ToString(string format)
+    {
+      return ToString(format, CultureInfo.CurrentCulture);
+    }
+
+
+    public string ToString(string format, IFormatProvider provider)
+    {
+      return string.Empty;
     }
   }
+}

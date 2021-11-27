@@ -6,8 +6,8 @@ namespace ADIF.NET.Tags {
   /// Represents the contacted station's city.
   /// </summary>
   [DisplayName("The contacted station's city.")]
-  public class QthIntlTag : IntlStringTag, ITag {
+  public class QTHIntlTag : IntlStringTag, ITag {
 
-    public override string Name => TagNames.QthIntl;
+    public override string Name => TagNames.QTHIntl;
     }
   }

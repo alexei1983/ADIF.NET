@@ -1,4 +1,5 @@
 ﻿using System;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -11,6 +12,8 @@ namespace ADIF.NET.Tags {
     public virtual double MinValue { get; }
 
     public virtual double MaxValue { get; }
+
+    public override IADIFType ADIFType => new ADIFNumber();
 
     public virtual bool AllowValuesOverMaxOnImport { get; }
 

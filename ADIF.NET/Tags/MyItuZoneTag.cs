@@ -6,9 +6,9 @@ namespace ADIF.NET.Tags {
   /// Represents the logging station's ITU zone.
   /// </summary>
   [DisplayName("The logging station's ITU zone.")]
-  public class MyItuZoneTag : NumberTag, ITag {
+  public class MyITUZoneTag : NumberTag, ITag {
 
-    public override string Name => TagNames.MyItuZone;
+    public override string Name => TagNames.MyITUZone;
 
     public override double MinValue => 1;
 

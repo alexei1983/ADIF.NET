@@ -7,15 +7,15 @@ namespace ADIF.NET.Tags {
   /// Represents the version of ADIF used to create the file.
   /// </summary>
   [DisplayName("The version of ADIF used to create the file.")]
-  public class AdifVersionTag : Tag<Version>, ITag {
+  public class ADIFVersionTag : Tag<Version>, ITag {
 
-    public override string Name => TagNames.AdifVer;
+    public override string Name => TagNames.ADIFVer;
     public override bool Header => true;
 
-    public AdifVersionTag() {
+    public ADIFVersionTag() {
       }
 
-    public AdifVersionTag(Version value) {
+    public ADIFVersionTag(Version value) {
       base.SetValue(value);
       }
 

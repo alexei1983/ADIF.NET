@@ -6,8 +6,8 @@ namespace ADIF.NET.Tags {
   /// Indicates whether the QSO was random or scheduled.
   /// </summary>
   [DisplayName("Indicates whether the QSO was random or scheduled.")]
-  public class QsoRandomTag : BooleanTag, ITag {
+  public class QSORandomTag : BooleanTag, ITag {
 
-    public override string Name => TagNames.QsoRandom;
+    public override string Name => TagNames.QSORandom;
     }
   }

@@ -1,43 +1,69 @@
 ﻿using System;
 
 namespace ADIF.NET.Types {
-  public class AdifBoolean : AdifType {
+  public class ADIFBoolean : ADIFType<bool?> {
 
     public override string[] Options => typeof(BooleanValue).GetValuesArray();
     public override bool IsEnumeration => true;
     public override bool RestrictToOptions => true;
-    public override Type UnderlyingType => typeof(bool?);
+    public override string Type => DataTypes.Boolean;
 
-    public static bool? Parse(object value) {
+    public static bool? Parse(string s)
+    {
+      if (!FromString(s, out bool? result))
+        throw new ArgumentException($"Invalid string value: '{s ?? string.Empty}'");
 
-      if (value is bool || value is bool?)
-        return (bool?)value;
+      return result;
+    }
 
-      return value?.ToString()?.ToNullableBooleanAdif();
-      }
+    public static bool TryParse(string s, out bool? result)
+    {
+      return FromString(s, out result);
+    }
 
-    public static bool TryParse(string str, out bool? value) {
-
-      value = null;
-      str = (str ?? string.Empty).ToUpper();
-      var options = typeof(BooleanValue).GetValuesArray();
-
-      if (Array.IndexOf(options, str) >= 0) {
-        value = str.ToAdifBoolean();
-        return true;
-        }
-      
-      return false;
-      }
-  
-    public override bool IsValidValue(object value) {
-      
+    public static bool IsValidValue(object value)
+    {
       if (value is bool || value is bool?)
         return true;
 
-      var valStr = value?.ToString()?.ToUpper() ?? string.Empty;
+      return FromString(value == null ? string.Empty : value.ToString(), out bool? _);  
+    }
 
-      return valStr.Equals("Y") || valStr.Equals("N") || valStr.Equals(string.Empty);
+    public static bool IsValidValue(string value)
+    {
+      return FromString(value == null ? string.Empty : value.ToString(), out bool? _);
+    }
+
+    static bool FromString(string s, out bool? result)
+    {
+      var success = false;
+      result = null;
+
+      s = (s ?? string.Empty).ToUpper();
+
+      switch (s)
+      {
+        case "Y":
+          result = true;
+          success = true;
+          break;
+
+        case "N":
+          result = false;
+          success = true;
+          break;
+
+        case "":
+          result = null;
+          success = true;
+          break;
+
+        default:
+          success = false;
+          break;
       }
+
+      return success;
     }
   }
+}

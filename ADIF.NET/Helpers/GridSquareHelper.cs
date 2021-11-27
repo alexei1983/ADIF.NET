@@ -75,7 +75,7 @@ namespace ADIF.NET.Helpers {
       return grid;
       }
 
-    public string[] GridSquaresFromList(string gridSquareList, char delimiter = Values.Comma) {
+    public string[] GridSquaresFromList(string gridSquareList, char delimiter = Values.COMMA) {
 
       if (string.IsNullOrWhiteSpace(gridSquareList))
         return null;

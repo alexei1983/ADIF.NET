@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   public class StringTag : Tag<string>, ITag {
 
     public override object ConvertValue(object value) {
-      return value?.ToString() ?? string.Empty;
+      return value == null ? string.Empty : value.ToString();
       }
 
     public override bool ValidateValue(object value) {

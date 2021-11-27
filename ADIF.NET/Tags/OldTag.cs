@@ -38,7 +38,7 @@ namespace ADIF.NET.Tags {
               if (string.IsNullOrEmpty(textValue))
                 textValue = localVal;
               else
-                textValue = $"{textValue}{ValueSeparator ?? Values.DefaultValueSeparator.ToString()}{localVal}";
+                textValue = $"{textValue}{ValueSeparator ?? Values.VALUE_SEPARATOR.ToString()}{localVal}";
               }
             }
           }
@@ -133,12 +133,12 @@ namespace ADIF.NET.Tags {
       var retVal = string.Empty;
 
       if (!string.IsNullOrEmpty(Name)) {
-        retVal = $"{Values.TagOpening}{Name}";
+        retVal = $"{Values.TAG_OPENING}{Name}";
 
         if (!SuppressLength)
-          retVal = $"{retVal}{Values.ValueLengthChar}{ValueLength}";
+          retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
 
-        retVal = $"{retVal}{Values.TagClosing}{TextValue} ";
+        retVal = $"{retVal}{Values.TAG_CLOSING}{TextValue} ";
         }
       return retVal;
       }

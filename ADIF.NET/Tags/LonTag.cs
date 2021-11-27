@@ -1,4 +1,5 @@
 ﻿using ADIF.NET.Attributes;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -10,8 +11,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.Lon;
 
+    public override IADIFType ADIFType => new ADIFLocation();
+
     public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && AdifLocation.TryParse(value.ToString(), out _);
+      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
       }
     }
   }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Dynamic;
 using System.Text;
 using System.Threading.Tasks;
 using ADIF.NET;
@@ -11,35 +12,48 @@ namespace TestApp {
   class Program {
     static void Main(string[] args) {
 
-      var items = typeof(Via).GetValues().ToArray();
-      var optionValues = OptionValue.FromType(typeof(Mode), false, false);
+      //var items = typeof(Via).GetValues().ToArray();
+      //var optionValues = OptionValue.FromType(typeof(Mode), false, false);
       
-      var myname = new MyNameTag();
-      myname.SetValue("Alex Jennings");
+      //var myname = new MyNameTag();
+      //myname.SetValue("Alex Jennings");
 
-      var qsoDate = new QsoDateTag();
-      qsoDate.SetValue(DateTime.Now);
+      //var qsoDate = new QsoDateTag();
+      //qsoDate.SetValue(DateTime.Now);
 
-      var mynametext = myname.Build();
-      var qsodatetext = qsoDate.Build();
+      //var mynametext = myname.Build();
+      //var qsodatetext = qsoDate.Build();
 
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
 
-      var file = @"C:\Users\S017138\Desktop\POTA\K-0315.adi";
-      var parser = new Parser();
-      parser.LoadFile(file);
-      parser.Parse();
-      var coll = parser.GetQsoCollection();
+      //var file = @"C:\Users\S017138\Desktop\POTA\K-0315.adi";
+      //var parser = new Parser();
+      //parser.LoadFile(file);
+      //parser.Parse();
+      //var coll = parser.GetQsoCollection();
 
-      var dxcc = new DxccTag();
-      dxcc.SetValue("1");
+      //var dxcc = new DxccTag();
+      //dxcc.SetValue("1");
 
-      var band = Band.Get(18.07566333);
+      //var band = Band.Get(2.14566333);
 
-      var locStr = "N103 45.099";
-      var loc = new AdifLocation(locStr);
-      var decDeg = loc.ToDecimalDegrees();
+      var band = Band.IsFrequencyInBand("20m", 14.101, 2);
+
+      //var enume = ADIFEnumeration.Get("Mode");
+
+      var locStr = "N039 42.017";
+
+      dynamic val = new ExpandoObject();
+      val.Name = "Test";
+      val.Value = "TST";
+
+      //var enumTot = ARRLSection.GetEnumeration();
+
+      var enumVal = new ADIFEnumerationValue(val);
+
+      //var loc = new ADIFLocation(locStr);
+      //var decDeg = loc.ToDecimalDegrees();
 
       var myGrid = new GridSquareHelper().GetGridSquareFromCall("K0UOG");
 

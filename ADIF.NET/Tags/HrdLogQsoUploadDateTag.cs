@@ -1,8 +1,8 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class HrdLogQsoUploadDateTag : DateTag, ITag {
+  public class HrdLogQSOUploadDateTag : DateTag, ITag {
 
-    public override string Name => TagNames.HrdLogQsoUploadDate;
+    public override string Name => TagNames.HrdLogQSOUploadDate;
 
     }
   }

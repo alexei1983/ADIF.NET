@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Globalization;
 
-namespace ADIF.NET {
+namespace ADIF.NET.Types {
 
-  public class AdifLocation : IFormattable {
+  public class ADIFLocation : ADIFType<string>, IFormattable {
 
-    public int ExpectedLength => LENGTH;
-    
-    public int Length => ToString().Length;
+    public override string Type => DataTypes.Location;
 
-    public string Direction { get; set; }
+    public string Direction { get; }
 
-    public int Degrees { get; set; }
+    public int Degrees { get; }
 
-    public double Minutes { get; set; }
+    public double Minutes { get; }
 
-    public AdifLocation(string location) {
+    public ADIFLocation(string location) {
 
-      if (!TryParse(location, out AdifLocation adifLocation))
+      if (!TryParse(location, out ADIFLocation adifLocation))
         throw new ArgumentException("Invalid location value.");
 
       Direction = adifLocation.Direction;
@@ -25,7 +23,7 @@ namespace ADIF.NET {
       Minutes = adifLocation.Minutes;
       }
 
-    public AdifLocation(string direction, 
+    public ADIFLocation(string direction, 
                         int degrees,
                         double minutes) {
 
@@ -43,32 +41,32 @@ namespace ADIF.NET {
       Minutes = minutes;
       }
 
-    public AdifLocation() { }
+    public ADIFLocation() { }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="location"></param>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     /// <returns></returns>
-    public static bool TryParse(string value, out AdifLocation location) {
+    public static bool TryParse(string s, out ADIFLocation result) {
 
-      location = default(AdifLocation);
+      result = default(ADIFLocation);
 
-      value = (value ?? string.Empty).Trim().ToUpper();
+      s = (s ?? string.Empty).Trim().ToUpper();
 
-      if (value.Length != LENGTH)
+      if (s.Length != LENGTH)
         return false;
 
-      if (value.Substring(4, 1) != " ")
+      if (s.Substring(4, 1) != " ")
         return false;
 
-      var direction = value.Substring(0, 1);
+      var direction = s.Substring(0, 1);
 
       if (!ValidateDirection(direction))
         return false;
 
-      var degreesStr = value.Substring(1, 3);
+      var degreesStr = s.Substring(1, 3);
       
       if (!int.TryParse(degreesStr, out int degrees))
         return false;
@@ -76,7 +74,7 @@ namespace ADIF.NET {
       if (!ValidateDegrees(degrees))
         return false;
 
-      var minutesStr = value.Substring(5);
+      var minutesStr = s.Substring(5);
 
       if (!double.TryParse(minutesStr, out double minutes))
         return false;
@@ -84,16 +82,18 @@ namespace ADIF.NET {
       if (!ValidateMinutes(minutes))
         return false;
 
-      location = new AdifLocation(direction, degrees, minutes);
+      result = new ADIFLocation(direction, degrees, minutes);
       return true;
       }
 
     public double ToDecimalDegrees() {
       // Decimal Degrees = degrees + (minutes / 60) + (seconds / 3600)
 
-      var minutesParts = Minutes.SplitDouble();
+      Minutes.SplitDouble(out double mins, out double secs);
 
-      return (Degrees + (minutesParts.Item1 / 60) + (minutesParts.Item2 / 3600));
+      var degrees = Direction == "S" || Direction == "W" ? Math.Abs(Degrees) * -1 : Math.Abs(Degrees);
+
+      return degrees + ((mins / 60) + (secs / 3600));
       }
 
     /// <summary>

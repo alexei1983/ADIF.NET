@@ -1,4 +1,5 @@
 ﻿using ADIF.NET.Attributes;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -11,7 +12,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.MyLat;
 
     public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && AdifLocation.TryParse(value.ToString(), out _);
+      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
       }
     }
   }

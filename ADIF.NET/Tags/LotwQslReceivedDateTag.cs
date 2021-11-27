@@ -1,8 +1,8 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class LotwQslReceivedDateTag : DateTag, ITag {
+  public class LotwQSLReceivedDateTag : DateTag, ITag {
 
-    public override string Name => TagNames.LotwQslReceivedDate;
+    public override string Name => TagNames.LotwQSLReceivedDate;
 
     }
   }

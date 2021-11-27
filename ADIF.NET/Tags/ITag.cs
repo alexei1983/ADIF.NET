@@ -1,4 +1,5 @@
 ﻿using System;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -23,6 +24,8 @@ namespace ADIF.NET.Tags {
 
     int? ValueLength { get; }
 
+    IADIFType ADIFType { get; }
+
     string[] Options { get; }
 
     bool RestrictOptions { get; }
@@ -40,5 +43,6 @@ namespace ADIF.NET.Tags {
     bool ValidateValue();
 
     object ConvertValue(object value);
+
     }
   }

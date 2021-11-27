@@ -1,5 +1,7 @@
 ﻿
 
+using ADIF.NET.Types;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -8,6 +10,8 @@ namespace ADIF.NET.Tags {
   public class BooleanTag : Tag<bool>, ITag {
 
     public override string[] Options => typeof(BooleanValue).GetValuesArray();
+
+    public override IADIFType ADIFType => new ADIFBoolean();
 
     public override object ConvertValue(object value) {
       return value?.ToBoolean() ?? false;
