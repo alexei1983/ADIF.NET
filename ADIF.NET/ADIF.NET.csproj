@@ -218,7 +218,6 @@
     <Compile Include="Tags\EQslReceivedStatusTag.cs" />
     <Compile Include="Tags\ContinentTag.cs" />
     <Compile Include="Tags\ModeTag.cs" />
-    <Compile Include="Tags\OldITag.cs" />
     <Compile Include="Tags\BandTag.cs" />
     <Compile Include="Tags\MyNameTag.cs" />
     <Compile Include="Tags\MaxBurstsTag.cs" />
@@ -230,7 +229,6 @@
     <Compile Include="Tags\OperatorTag.cs" />
     <Compile Include="Tags\SigInfoTag.cs" />
     <Compile Include="Tags\MySigInfoTag.cs" />
-    <Compile Include="Tags\OldTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
