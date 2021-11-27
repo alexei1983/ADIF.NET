@@ -5,13 +5,14 @@ using System.Data.SQLite;
 using System.Dynamic;
 using System.IO;
 
-
 namespace ADIF.NET.Helpers {
 
   /// <summary>
   /// Provides SQLite database helper methods.
   /// </summary>
   public class SQLiteHelper : IDisposable {
+
+    public static readonly SQLiteHelper Instance;
 
     public bool Exists { get; private set; }
 
@@ -20,6 +21,11 @@ namespace ADIF.NET.Helpers {
     public bool Ready => Exists && Connected;
 
     public string Database { get; private set; }
+
+    static SQLiteHelper()
+    {
+      Instance = new SQLiteHelper();
+    }
 
     /// <summary>
     /// 
@@ -43,17 +49,20 @@ namespace ADIF.NET.Helpers {
         }
       }
 
-    public SQLiteHelper(byte[] database, bool compress = true) {
+    private SQLiteHelper()
+    {
+      byte[] bytes = Resources.adif;
 
-      if (database != null && database.Length > 0) {
+      if (bytes != null && bytes.Length > 0)
+      {
         var path = Path.GetTempFileName();
 
-        File.WriteAllBytes(path, database);
+        File.WriteAllBytes(path, bytes);
         Exists = true;
 
-        CreateConnection(path, compress, false);
-        }
+        CreateConnection(path, true, false);
       }
+    }
 
     /// <summary>
     /// 

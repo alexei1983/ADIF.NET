@@ -117,16 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DatabaseFileName" xml:space="preserve">
-    <value>adif.db</value>
-  </data>
-  <data name="DatabasePath" xml:space="preserve">
-    <value>C:\</value>
-  </data>
-  <data name="RetrieveContestsSql" xml:space="preserve">
-    <value>SELECT ContestId AS Value, ContestName AS Name, Deprecated AS Legacy, Deprecated AS ImportOnly FROM Contests ORDER BY ContestId</value>
-  </data>
-  <data name="RetrieveCountryCodesSql" xml:space="preserve">
-    <value>SELECT Code AS Value, Name, Deleted AS Legacy, Deleted AS ImportOnly FROM CountryCodes ORDER BY Code</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="adif" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>adif.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

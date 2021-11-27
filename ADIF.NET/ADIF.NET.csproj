@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
+    <Compile Include="Tags\HrdLogQSOUploadStatus.cs" />
     <Compile Include="Tags\USACACountiesTag.cs" />
     <Compile Include="Tags\MyAntennaIntlTag.cs" />
     <Compile Include="Tags\MyCityIntlTag.cs" />
@@ -154,7 +155,7 @@
     <Compile Include="Tags\ContactedOpTag.cs" />
     <Compile Include="Tags\CheckTag.cs" />
     <Compile Include="Tags\ClassTag.cs" />
-    <Compile Include="Tags\AdifVersionTag.cs" />
+    <Compile Include="Tags\ADIFVersionTag.cs" />
     <Compile Include="Tags\AIndexTag.cs" />
     <Compile Include="Tags\AntElTag.cs" />
     <Compile Include="Tags\AntAzTag.cs" />
@@ -232,12 +233,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="adif.db" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

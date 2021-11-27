@@ -42,6 +42,7 @@ namespace TestApp {
 
       var band = Band.IsFrequencyInBand("20m", 14.101, 2);
 
+      Values.ITU = 2;
       var ccs = Values.CountryCodes;
 
       var test = Values.Contests;

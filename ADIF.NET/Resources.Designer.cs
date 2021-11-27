@@ -22,7 +22,7 @@ namespace ADIF.NET {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ADIF.NET {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ADIF.NET.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace ADIF.NET {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,12 @@ namespace ADIF.NET {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to adif.db.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static string DatabaseFileName {
+        internal static byte[] adif {
             get {
-                return ResourceManager.GetString("DatabaseFileName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to C:\.
-        /// </summary>
-        public static string DatabasePath {
-            get {
-                return ResourceManager.GetString("DatabasePath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT ContestId AS Value, ContestName AS Name, Deprecated AS Legacy, Deprecated AS ImportOnly FROM Contests ORDER BY ContestId.
-        /// </summary>
-        public static string RetrieveContestsSql {
-            get {
-                return ResourceManager.GetString("RetrieveContestsSql", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT Code AS Value, Name, Deleted AS Legacy, Deleted AS ImportOnly FROM CountryCodes ORDER BY Code.
-        /// </summary>
-        public static string RetrieveCountryCodesSql {
-            get {
-                return ResourceManager.GetString("RetrieveCountryCodesSql", resourceCulture);
+                object obj = ResourceManager.GetObject("adif", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

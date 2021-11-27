@@ -9,6 +9,8 @@ using ADIF.NET.Helpers;
 namespace ADIF.NET {
 
   public static class Values {
+    public static int ITU { get; set; }
+
     public const string ADIF_DATE_FORMAT = "yyyyMMdd";
     public const string ADIF_TIME_FORMAT_LONG = "HHmmss";
     public const string ADIF_TIME_FORMAT_SHORT = "HHmm";
@@ -45,6 +47,7 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration SponsoredAwardPrefixes;
     public static readonly IEnumerable<CountryCode> CountryCodes;
     public static readonly IEnumerable<Contest> Contests;
+    public static readonly IEnumerable<Band> Bands;
 
 
     static Values()
@@ -64,6 +67,7 @@ namespace ADIF.NET {
       SponsoredAwardPrefixes = ADIFEnumeration.Get("SponsoredAwardPrefix");
       CountryCodes = CountryCode.Get();
       Contests = Contest.Get();
+      //Bands = Band.Get(ITU);
     }
   }
 
@@ -240,10 +244,8 @@ namespace ADIF.NET {
     public static ADIFEnumeration Get(string type)
     {
       var enumeration = new ADIFEnumeration(type);
-      var data = new ArrayList();
 
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-        data = sql.ReadData(ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''")));
+      var data = SQLiteHelper.Instance.ReadData(ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''")));
 
       foreach (dynamic d in data)
       {
@@ -391,10 +393,9 @@ namespace ADIF.NET {
 
     public static List<CountryCode> Get()
     {
-      var data = new ArrayList();
       var list = new List<CountryCode>();
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-        data = sql.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
+
+      var data = SQLiteHelper.Instance.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
 
       foreach (dynamic d in data)
       {
@@ -456,10 +457,8 @@ namespace ADIF.NET {
 
     public static List<Contest> Get()
     {
-      var data = new ArrayList();
       var list = new List<Contest>();
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-        data = sql.ReadData(RETRIEVE_CONTESTS_SQL);
+      var data = SQLiteHelper.Instance.ReadData(RETRIEVE_CONTESTS_SQL);
 
       foreach (dynamic d in data)
       {
@@ -551,22 +550,22 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="itu"></param>
     /// <returns></returns>
-    public static IEnumerable<Band> Get(int itu)
+    public static List<Band> Get(int itu)
     {
       if (itu < 1 || itu > 3)
         throw new ArgumentException("Invalid ITU region.");
 
       var bands = new List<Band>();
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
+
+      var data = SQLiteHelper.Instance.ReadData(GET_BANDS_SQL.Replace("{{ITU}}", itu.ToString()));
+      foreach (var d in data)
       {
-        var data = sql.ReadData(GET_BANDS_SQL.Replace("{{ITU}}", itu.ToString()));
-        foreach (var d in data)
-        {
-          var band = new Band(d);
-          if (band != null)
-            yield return band;
-        }
+        var band = new Band(d);
+        if (band != null)
+          bands.Add(band);
       }
+
+      return bands;
     }
 
     /// <summary>
@@ -580,11 +579,8 @@ namespace ADIF.NET {
       if (itu < 1 || itu > 3)
         throw new ArgumentException("Invalid ITU region.");
 
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-      {
-        var data = sql.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString()).Replace("{{{FREQUENCY}}", frequency.ToString()));
-        return data.Count > 0;
-      }
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString()).Replace("{{{FREQUENCY}}", frequency.ToString()));
+      return data.Count > 0;
     }
 
     /// <summary>
@@ -598,13 +594,10 @@ namespace ADIF.NET {
       if (itu < 1 || itu > 3)
         throw new ArgumentException("Invalid ITU region.");
 
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-      {
-        var data = sql.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString())
-                                                      .Replace("{{FREQUENCY}}", frequency.ToString()));
-        if (data.Count > 0)
-          return new Band(data[0]);
-      }
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString())
+                                                    .Replace("{{FREQUENCY}}", frequency.ToString()));
+      if (data.Count > 0)
+        return new Band(data[0]);
 
       return null;
     }
@@ -621,13 +614,10 @@ namespace ADIF.NET {
       if (itu < 1 || itu > 3)
         throw new ArgumentException("Invalid ITU region.");
 
-      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
-      {
-        var data = sql.ReadData(VALIDATE_FREQUENCY_BAND_SQL.Replace("{{ITU}}", itu.ToString())
-                                                            .Replace("{{FREQUENCY}}", frequency.ToString())
-                                                            .Replace("{{NAME}}", band));
-        return data.Count > 0;
-      }
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_BAND_SQL.Replace("{{ITU}}", itu.ToString())
+                                                          .Replace("{{FREQUENCY}}", frequency.ToString())
+                                                          .Replace("{{NAME}}", band));
+      return data.Count > 0;
     }
 
     const string GET_UPPER_FREQENCY_SQL = "SELECT UpperFrequency FROM \"Bands\" WHERE Name = '{{NAME}}' AND ITU = {{ITU}}";
