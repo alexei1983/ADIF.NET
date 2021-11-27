@@ -1,4 +1,5 @@
-﻿using ADIF.NET.Attributes;
+﻿using System.Linq;
+using ADIF.NET.Attributes;
 
 namespace ADIF.NET.Tags {
 
@@ -10,6 +11,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.ContestId;
 
-    public override string[] Options => null;
+    public override string[] Options => Values.Contests.Select(c => c.Code).ToArray();
     }
   }

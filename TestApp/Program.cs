@@ -38,7 +38,13 @@ namespace TestApp {
 
       //var band = Band.Get(2.14566333);
 
+
+
       var band = Band.IsFrequencyInBand("20m", 14.101, 2);
+
+      var ccs = Values.CountryCodes;
+
+      var test = Values.Contests;
 
       //var enume = ADIFEnumeration.Get("Mode");
 

@@ -247,9 +247,9 @@ namespace ADIF.NET {
       if (value.HasValue) {
 
         if (value == true)
-          return BooleanValue.Yes;
+          return "Y";
         else if (value == false)
-          return BooleanValue.No;
+          return "N";
         }
 
       return string.Empty;
@@ -263,7 +263,7 @@ namespace ADIF.NET {
     public static string ToAdifBooleanValue(this bool value) {
 
       var val = ((bool?)value).ToAdifBooleanValue();
-      return !string.IsNullOrEmpty(val) ? val : BooleanValue.No;
+      return !string.IsNullOrEmpty(val) ? val : "N";
       }
 
     /// <summary>

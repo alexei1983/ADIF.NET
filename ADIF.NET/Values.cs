@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Globalization;
+using System.Linq;
 using System.Collections.Generic;
 using ADIF.NET.Attributes;
 using ADIF.NET.Helpers;
@@ -28,7 +29,43 @@ namespace ADIF.NET {
     public const char UNDERSCORE = '_';
     public const string DEFAULT_PROGRAM_ID = "ADIF.NET";
     public static readonly Version ADIFVersion = new Version(3, 1, 0);
+
+    public static readonly ADIFEnumeration QSOUploadStatuses;
+    public static readonly ADIFEnumeration QSOCompleteStatuses;
+    public static readonly ADIFEnumeration Via;
+    public static readonly ADIFEnumeration AntennaPaths;
+    public static readonly ADIFEnumeration QSLMediums;
+    public static readonly ADIFEnumeration Continents;
+    public static readonly ADIFEnumeration EQSLSentStatuses;
+    public static readonly ADIFEnumeration EQSLReceivedStatuses;
+    public static readonly ADIFEnumeration PropagationModes;
+    public static readonly ADIFEnumeration ARRLSections;
+    public static readonly ADIFEnumeration Awards;
+    public static readonly ADIFEnumeration Modes;
+    public static readonly ADIFEnumeration SponsoredAwardPrefixes;
+    public static readonly IEnumerable<CountryCode> CountryCodes;
+    public static readonly IEnumerable<Contest> Contests;
+
+
+    static Values()
+    {
+      QSOUploadStatuses = ADIFEnumeration.Get("QSOUploadStatus");
+      QSOCompleteStatuses = ADIFEnumeration.Get("QSOCompleteStatus");
+      Via = ADIFEnumeration.Get("Via");
+      AntennaPaths = ADIFEnumeration.Get("AntennaPath");
+      QSLMediums = ADIFEnumeration.Get("QSLMedium");
+      Continents = ADIFEnumeration.Get("Continent");
+      EQSLSentStatuses = ADIFEnumeration.Get("EQSLSentStatus");
+      EQSLReceivedStatuses = ADIFEnumeration.Get("EQSLReceivedStatus");
+      PropagationModes = ADIFEnumeration.Get("PropagationMode");
+      ARRLSections = ADIFEnumeration.Get("ARRLSection");
+      Awards = ADIFEnumeration.Get("Award");
+      Modes = ADIFEnumeration.Get("Mode");
+      SponsoredAwardPrefixes = ADIFEnumeration.Get("SponsoredAwardPrefix");
+      CountryCodes = CountryCode.Get();
+      Contests = Contest.Get();
     }
+  }
 
   /// <summary>
   /// Defines the names of ADIF tags.
@@ -217,6 +254,11 @@ namespace ADIF.NET {
 
       return enumeration.Count > 0 ? enumeration : null;
     }
+
+    public string[] GetOptions()
+    {
+      return this.Select(v => v.Code).ToArray();
+    }
   
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
   }
@@ -252,11 +294,11 @@ namespace ADIF.NET {
         if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is string code)
           this.Code = code;
 
-        if (dict.ContainsKey(nameof(ImportOnly)) && dict[nameof(ImportOnly)] is long importOnly)
-          this.ImportOnly = importOnly == 1;
+        if (dict.ContainsKey(nameof(ImportOnly)) && dict[nameof(ImportOnly)] is bool importOnly)
+          this.ImportOnly = importOnly;
 
-        if (dict.ContainsKey(nameof(Legacy)) && dict[nameof(Legacy)] is long legacy)
-          this.Legacy = legacy == 1;
+        if (dict.ContainsKey(nameof(Legacy)) && dict[nameof(Legacy)] is bool legacy)
+          this.Legacy = legacy;
 
         if (dict.ContainsKey(nameof(Parent)) && dict[nameof(Parent)] is string parent)
           this.Parent = parent;
@@ -320,15 +362,117 @@ namespace ADIF.NET {
 
   }
 
-  [Enumeration]
-  public static class BooleanValue {
+  public class CountryCode {
 
-    [AlternateName("True")]
-    public const string Yes = "Y";
-    [AlternateName("False")]
-    public const string No = "N"; 
+    public int Code { get; set; }
+    public string Name { get; set; }
+    public bool Deleted { get; set; }
+
+    public CountryCode(int code, string name, bool deleted) {
+      this.Code = code;
+      this.Name = name;
+      this.Deleted = deleted;
     }
-  
+
+    public CountryCode(dynamic value)
+    {
+      if (value is IDictionary<string, object> dict)
+      {
+        if (dict.ContainsKey(nameof(Name)) && dict[nameof(Name)] is string name)
+          this.Name = name;
+
+        if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is int code)
+          this.Code = code;
+
+        if (dict.ContainsKey(nameof(Deleted)) && dict[nameof(Deleted)] is bool deleted)
+          this.Deleted = deleted;
+      }
+    }
+
+    public static List<CountryCode> Get()
+    {
+      var data = new ArrayList();
+      var list = new List<CountryCode>();
+      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
+        data = sql.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
+
+      foreach (dynamic d in data)
+      {
+        var cc = new CountryCode(d);
+        if (cc.Code > 0)
+          list.Add(cc);
+      }
+
+      return list;
+    }
+
+    const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name, Deleted FROM \"CountryCodes\" ORDER BY Code";
+
+  }
+
+  public class Contest {
+
+    public string Code { get; set; }
+    public string Name { get; set; }
+    public bool Deprecated { get; set; }
+    public DateTime? ValidStart { get; set; }
+    public DateTime? ValidEnd { get; set; }
+
+    public Contest(string code, string name, bool deprecated, DateTime? validStart, DateTime? validEnd)
+    {
+      this.Code = code;
+      this.Name = name;
+      this.Deprecated = deprecated;
+      this.ValidEnd = validEnd;
+      this.ValidStart = validStart;
+    }
+
+    public Contest(dynamic value)
+    {
+      if (value is IDictionary<string, object> dict)
+      {
+        if (dict.ContainsKey(nameof(Name)) && dict[nameof(Name)] is string name)
+          this.Name = name;
+
+        if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is string code)
+          this.Code = code;
+
+        if (dict.ContainsKey(nameof(Deprecated)) && dict[nameof(Deprecated)] is bool deprecated)
+          this.Deprecated = deprecated;
+
+        if (dict.ContainsKey(nameof(ValidStart)) && dict[nameof(ValidStart)] is long validStart)
+        {
+          if (validStart > 0)
+            this.ValidStart = DateTimeOffset.FromUnixTimeSeconds(validStart).DateTime;
+        }
+
+        if (dict.ContainsKey(nameof(ValidEnd)) && dict[nameof(ValidEnd)] is long validEnd)
+        {
+          if (validEnd > 0)
+            this.ValidEnd = DateTimeOffset.FromUnixTimeSeconds(validEnd).DateTime;
+        }
+      }
+    }
+
+    public static List<Contest> Get()
+    {
+      var data = new ArrayList();
+      var list = new List<Contest>();
+      using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
+        data = sql.ReadData(RETRIEVE_CONTESTS_SQL);
+
+      foreach (dynamic d in data)
+      {
+        var contest = new Contest(d);
+        if (!string.IsNullOrEmpty(contest.Code))
+          list.Add(contest);
+      }
+
+      return list;
+    }
+
+    const string RETRIEVE_CONTESTS_SQL = "SELECT Code, Name, Deprecated, ValidStart, ValidEnd FROM \"Contests\" ORDER BY Code";
+  }
 
   [Enumeration]
   public static class DataTypes {
@@ -407,12 +551,12 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="itu"></param>
     /// <returns></returns>
-    public IEnumerable<Band> Get(int itu)
+    public static IEnumerable<Band> Get(int itu)
     {
       if (itu < 1 || itu > 3)
         throw new ArgumentException("Invalid ITU region.");
 
-      List<Band> bands = new List<Band>();
+      var bands = new List<Band>();
       using (var sql = new SQLiteHelper(@"C:\Users\S017138\Desktop\adif.db"))
       {
         var data = sql.ReadData(GET_BANDS_SQL.Replace("{{ITU}}", itu.ToString()));

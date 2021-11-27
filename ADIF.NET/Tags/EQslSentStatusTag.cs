@@ -7,6 +7,6 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.EQSLSentStatus;
 
     [DefaultValue("N")]
-    public override string[] Options => null;
+    public override string[] Options => Values.EQSLSentStatuses.GetOptions();
     }
   }

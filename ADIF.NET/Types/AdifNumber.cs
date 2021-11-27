@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Globalization;
 
 namespace ADIF.NET.Types {
-  public class ADIFNumber : ADIFType<double?>, IFormattable {
+  public class ADIFNumber : ADIFType<double?> {
 
     public override double MinValue => double.MinValue;
     public override double MaxValue => double.MaxValue;
@@ -51,36 +50,10 @@ namespace ADIF.NET.Types {
 
     public static bool IsValidValue(object value)
     {
-
       if (value is double || value is double?)
         return true;
 
       return IsValidValue(value == null ? string.Empty : value.ToString());
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString()
-    {
-      return ToString("G", CultureInfo.CurrentCulture);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    public string ToString(string format)
-    {
-      return ToString(format, CultureInfo.CurrentCulture);
-    }
-
-
-    public string ToString(string format, IFormatProvider provider)
-    {
-      return string.Empty;
     }
   }
 }

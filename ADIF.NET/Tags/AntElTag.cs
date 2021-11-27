@@ -20,7 +20,7 @@ namespace ADIF.NET.Tags {
       this.SetValue(elevation);
       }
 
-    public override void SetValue(double value) {
+    public override void SetValue(double? value) {
       importValue = value;
       base.SetValue(ConvertValue(value));
       }

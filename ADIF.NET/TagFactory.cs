@@ -128,7 +128,7 @@ namespace ADIF.NET {
       { TagNames.SigInfoIntl, typeof(SigInfoIntlTag) },
       { TagNames.SilentKey, typeof(SilentKeyTag) },
       { TagNames.SKCC, typeof(SKCCTag) },
-      { TagNames.SotaRef, typeof(SotaRefTag) },
+      { TagNames.SotaRef, typeof(SOTARefTag) },
       { TagNames.Srx, typeof(SrxTag) },
       { TagNames.SrxString, typeof(SrxStringTag) },
       { TagNames.Stx, typeof(StxTag) },

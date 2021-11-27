@@ -1,6 +1,6 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class SotaRefTag : StringTag, ITag {
+  public class SOTARefTag : StringTag, ITag {
 
     public override string Name => TagNames.SotaRef;
 

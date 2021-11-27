@@ -10,6 +10,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.PropMode;
 
-    public override string[] Options => null;
+    public override string[] Options => Values.PropagationModes.GetOptions();
     }
   }

@@ -6,6 +6,6 @@ namespace ADIF.NET.Tags {
   public class ARRLSectTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.ARRLSect;
-    public override string[] Options => null;
+    public override string[] Options => Values.ARRLSections.GetOptions();
     }
   }

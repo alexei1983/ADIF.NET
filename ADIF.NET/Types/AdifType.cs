@@ -26,8 +26,5 @@ namespace ADIF.NET.Types {
 
     public virtual string[] Options { get; }
 
-    //public abstract bool IsValidValue(object value);
-
-    //public abstract bool IsValidValue(string value);
     }
   }

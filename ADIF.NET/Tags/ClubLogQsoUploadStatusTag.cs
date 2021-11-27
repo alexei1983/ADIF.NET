@@ -6,7 +6,7 @@ namespace ADIF.NET.Tags {
   public class ClubLogQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.ClubLogQSOUploadStatus;
-    public override string[] Options => null;
+    public override string[] Options => Values.QSOUploadStatuses.GetOptions();
 
     }
   }
