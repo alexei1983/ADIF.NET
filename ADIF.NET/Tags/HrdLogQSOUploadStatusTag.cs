@@ -2,7 +2,7 @@
 
 namespace ADIF.NET.Tags {
 
-  public class HrdLogQSOUploadStatus : RestrictedEnumerationTag, ITag {
+  public class HrdLogQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.HrdLogQSOUploadStatus;
 

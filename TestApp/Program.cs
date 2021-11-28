@@ -27,11 +27,11 @@ namespace TestApp {
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
 
-      //var file = @"C:\Users\S017138\Desktop\POTA\K-0315.adi";
-      //var parser = new Parser();
-      //parser.LoadFile(file);
-      //parser.Parse();
-      //var coll = parser.GetQsoCollection();
+      var file = @"C:\wsjtx_log.adi";
+      var parser = new Parser();
+      parser.LoadFile(file);
+      parser.Parse();
+      var coll = parser.GetQsoCollection();
 
       //var dxcc = new DxccTag();
       //dxcc.SetValue("1");
@@ -42,22 +42,8 @@ namespace TestApp {
 
       var band = Band.IsFrequencyInBand("20m", 14.101, 2);
 
-      Values.ITU = 2;
-      var ccs = Values.CountryCodes;
+     
 
-      var test = Values.Contests;
-
-      //var enume = ADIFEnumeration.Get("Mode");
-
-      var locStr = "N039 42.017";
-
-      dynamic val = new ExpandoObject();
-      val.Name = "Test";
-      val.Value = "TST";
-
-      //var enumTot = ARRLSection.GetEnumeration();
-
-      var enumVal = new ADIFEnumerationValue(val);
 
       //var loc = new ADIFLocation(locStr);
       //var decDeg = loc.ToDecimalDegrees();

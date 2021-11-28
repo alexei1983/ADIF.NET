@@ -58,6 +58,7 @@ namespace ADIF.NET {
       { TagNames.GridSquare, typeof(GridSquareTag) },
       { TagNames.GuestOp, typeof(GuestOpTag) },
       { TagNames.HrdLogQSOUploadDate, typeof(HrdLogQSOUploadDateTag) },
+      { TagNames.HrdLogQSOUploadStatus, typeof(HrdLogQSOUploadStatusTag) },
       { TagNames.Iota, typeof(IotaTag) },
       { TagNames.IotaIslandId, typeof(IotaIslandIdTag) },
       { TagNames.Ituz, typeof(ItuzTag) },

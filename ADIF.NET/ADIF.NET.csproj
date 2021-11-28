@@ -84,7 +84,7 @@
     </Compile>
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
-    <Compile Include="Tags\HrdLogQSOUploadStatus.cs" />
+    <Compile Include="Tags\HrdLogQSOUploadStatusTag.cs" />
     <Compile Include="Tags\USACACountiesTag.cs" />
     <Compile Include="Tags\MyAntennaIntlTag.cs" />
     <Compile Include="Tags\MyCityIntlTag.cs" />
