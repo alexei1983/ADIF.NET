@@ -32,24 +32,89 @@ namespace ADIF.NET {
     public const string DEFAULT_PROGRAM_ID = "ADIF.NET";
     public static readonly Version ADIFVersion = new Version(3, 1, 0);
 
+    /// <summary>
+    /// QSO upload status enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration QSOUploadStatuses;
+
+    /// <summary>
+    /// QSO completion status enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration QSOCompleteStatuses;
+
+    /// <summary>
+    /// QSL via enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration Via;
+
+    /// <summary>
+    /// Antenna path enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration AntennaPaths;
+
+    /// <summary>
+    /// QSL medium enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration QSLMediums;
+
+    /// <summary>
+    /// Continent enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration Continents;
+
+    /// <summary>
+    /// eSQL sent status enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration EQSLSentStatuses;
+
+    /// <summary>
+    /// eQSL received status enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration EQSLReceivedStatuses;
+
+    /// <summary>
+    /// Propagation mode enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration PropagationModes;
+
+    /// <summary>
+    /// ARRL section enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration ARRLSections;
+
+    /// <summary>
+    /// Award enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration Awards;
+
+    /// <summary>
+    /// Mode enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration Modes;
+
+    /// <summary>
+    /// Sponsored award prefix enumeration.
+    /// </summary>
     public static readonly ADIFEnumeration SponsoredAwardPrefixes;
+
+    /// <summary>
+    /// Country codes.
+    /// </summary>
     public static readonly IEnumerable<CountryCode> CountryCodes;
+
+    /// <summary>
+    /// Contests.
+    /// </summary>
     public static readonly IEnumerable<Contest> Contests;
+
+    /// <summary>
+    /// Amateur radio bands.
+    /// </summary>
     public static readonly IEnumerable<Band> Bands;
 
-
+    /// <summary>
+    /// Instantiates the static data fields for the class.
+    /// </summary>
     static Values()
     {
       QSOUploadStatuses = ADIFEnumeration.Get("QSOUploadStatus");
@@ -220,14 +285,32 @@ namespace ADIF.NET {
     public const string Web = "WEB";
     }
 
+  /// <summary>
+  /// Represents an ADIF enumeration.
+  /// </summary>
   public class ADIFEnumeration : List<ADIFEnumerationValue> {
 
+    /// <summary>
+    /// The enumeration type.
+    /// </summary>
     public string Type { get; set; }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumeration"/> class.
+    /// </summary>
     public ADIFEnumeration() { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumeration"/> class.
+    /// </summary>
+    /// <param name="type">The enumeration type.</param>
     public ADIFEnumeration(string type) : this(type, null) { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumeration"/> class.
+    /// </summary>
+    /// <param name="type">The enumeration type.</param>
+    /// <param name="values">Values to add to the current enumeration.</param>
     public ADIFEnumeration(string type, params ADIFEnumerationValue[] values)
     {
       this.Type = type;
@@ -241,6 +324,10 @@ namespace ADIF.NET {
       }
     }
 
+    /// <summary>
+    /// Retrieves an ADIF enumeration by type.
+    /// </summary>
+    /// <param name="type">The enumeration type to retrieve.</param>
     public static ADIFEnumeration Get(string type)
     {
       var enumeration = new ADIFEnumeration(type);
@@ -257,6 +344,9 @@ namespace ADIF.NET {
       return enumeration.Count > 0 ? enumeration : null;
     }
 
+    /// <summary>
+    /// Retrieves a string array of ADIF enumeration codes.
+    /// </summary>
     public string[] GetOptions()
     {
       return this.Select(v => v.Code).ToArray();
@@ -265,18 +355,57 @@ namespace ADIF.NET {
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
   }
 
+  /// <summary>
+  /// Represents a value in an ADIF enumeration.
+  /// </summary>
   public class ADIFEnumerationValue : IFormattable {
 
+    /// <summary>
+    /// The code for the enumeration value.
+    /// </summary>
     public string Code { get; set; }
+
+    /// <summary>
+    /// The display name of the enumeration value.
+    /// </summary>
     public string DisplayName { get; set; }
+
+    /// <summary>
+    /// Whether or not the enumeration value is only valid on import.
+    /// </summary>
     public bool ImportOnly { get; set; }
+
+    /// <summary>
+    /// Whether or not the enumeration value is a legacy value.
+    /// </summary>
     public bool Legacy { get; set; }
+
+    /// <summary>
+    /// The parent code for the enumeration value.
+    /// </summary>
     public string Parent { get; set; }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
+    /// </summary>
+    /// <param name="code">The code for the enumeration value.</param>
     public ADIFEnumerationValue(string code) : this(code, null) { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
+    /// </summary>
+    /// <param name="code">The code for the enumeration value.</param>
+    /// <param name="displayName">The display name of the enumeration value.</param>
     public ADIFEnumerationValue(string code, string displayName) : this(code, displayName, false, false, null) { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
+    /// </summary>
+    /// <param name="code">The code for the enumeration value.</param>
+    /// <param name="displayName">The display name of the enumeration value.</param>
+    /// <param name="importOnly">Whether or not the enumeration value is only valid on import.</param>
+    /// <param name="legacy">Whether or not the enumeration value is a legacy value.</param>
+    /// <param name="parent">The parent code for the enumeration value.</param>
     public ADIFEnumerationValue(string code, string displayName, bool importOnly, bool legacy, string parent = null)
     {
       this.DisplayName = displayName;
@@ -286,6 +415,10 @@ namespace ADIF.NET {
       this.Parent = parent;
     }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
+    /// </summary>
+    /// <param name="value">Dynamic object representing the enumeration value.</param>
     public ADIFEnumerationValue(dynamic value)
     {
       if (value is IDictionary<string, object> dict)
@@ -307,16 +440,28 @@ namespace ADIF.NET {
       }
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
     public override string ToString()
     {
       return ToString("G", CultureInfo.CurrentCulture);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
     public string ToString(string format)
     {
       return ToString(format, CultureInfo.CurrentCulture);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <param name="provider"></param>
     public string ToString(string format, IFormatProvider provider)
     {
       if (string.IsNullOrEmpty(format))
@@ -364,6 +509,9 @@ namespace ADIF.NET {
 
   }
 
+  /// <summary>
+  /// Represents a country code.
+  /// </summary>
   public class CountryCode {
 
     public int Code { get; set; }
@@ -411,8 +559,10 @@ namespace ADIF.NET {
 
   }
 
-  public class Contest {
-
+  /// <summary>
+  /// Represents a contest.
+  /// </summary>
+  public class Contest  {
     public string Code { get; set; }
     public string Name { get; set; }
     public bool Deprecated { get; set; }
@@ -518,7 +668,7 @@ namespace ADIF.NET {
   }
 
   /// <summary>
-  /// 
+  /// Represents an amateur radio band.
   /// </summary>
   public class Band {
 

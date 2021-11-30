@@ -12,14 +12,9 @@ namespace ADIF.NET {
   /// </summary>
   public class Parser {
 
-    public int HeaderCount => Header?.Count ?? 0;
-
-    public int QsoCount { get; private set; }
-
-    public ADIFHeader Header { get; private set; }
+    ADIFHeader Header { get; set; }
 
     public Parser() { 
-      qsos = new List<ADIFQSOCollection>();
       }
 
     /// <summary>
@@ -86,24 +81,6 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    public string GetHeader(string key) {
-      return headers.ContainsKey(key) ? headers[key] : throw new InvalidOperationException($"Header key '{key}' not found.");
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="qso"></param>
-    /// <returns></returns>
-    public Dictionary<string, string> GetQso(int qso) {
-      return body.ContainsKey(qso) ? body[qso] : throw new IndexOutOfRangeException($"QSO {qso} not found.");
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="tagName"></param>
     /// <param name="userDefinedTag"></param>
     /// <returns></returns>
@@ -132,7 +109,7 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    public void Parse() {
+    public ADIFResult Parse() {
 
       this.headers = new Dictionary<string, string>();
       this.body = new Dictionary<int, Dictionary<string, string>>();
@@ -148,15 +125,52 @@ namespace ADIF.NET {
 
       while (this.i < this.data.Length) {
 
-        var qso = GetQso();
+        var qso = GetQSO();
 
         if (qso != null && qso.Count > 0) {
           body.Add(++qsoCount, qso);
           }
         }
 
-      this.QsoCount = body.Count;
+      var result = new ADIFResult
+      {
+        Header = this.Header,
+        QSOs = new ADIFQSOCollection()
+      };
+
+      foreach (var key in body.Keys)
+      {
+        var currentQso = body[key];
+        var qso = new ADIFQSO();
+        foreach (var entry in currentQso)
+        {
+          // get the tag name and build it
+          var tag = TagFactory.TagFromName(entry.Key);
+
+          if (tag == null)
+          {
+            if (IsUserDefinedField(entry.Key, out UserDefTag userTag))
+            {
+              tag = new UserDefValueTag(userTag);
+            }
+            else if (IsAppDefinedField(entry.Key, out AppDefTag appTag))
+            {
+              tag = appTag;
+            }
+          }
+
+          if (tag != null)
+          {
+            tag.SetValue(entry.Value);
+            qso.Add(tag);
+          }
+        }
+
+        result.QSOs.Add(qso);
       }
+
+      return result;
+    }
 
     /// <summary>
     /// 
@@ -361,8 +375,6 @@ namespace ADIF.NET {
       foreach (var userDefined in userDefinedFields)
         Header.Add(userDefined);
 
-      // this.HeaderCount = headers.Count;
-
       if (this.i >= this.data.Length) 
         throw new InvalidOperationException("ADIF data contains no QSO records.");
 
@@ -371,7 +383,7 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    Dictionary<string, string> GetQso() {
+    Dictionary<string, string> GetQSO() {
 
       if (this.i >= this.data.Length)
         return null;
@@ -390,7 +402,7 @@ namespace ADIF.NET {
 		  record = this.data.Substring(this.i, end - this.i);
 
       this.i = end + 5;
-      return GetQsoArray(record);
+      return GetQSOArray(record);
       } // end method
 
     /// <summary>
@@ -398,7 +410,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="record"></param>
     /// <returns></returns>
-    Dictionary<string, string> GetQsoArray(string record) {
+    Dictionary<string, string> GetQSOArray(string record) {
 
       var retVal = new Dictionary<string, string>();
 
@@ -527,44 +539,11 @@ namespace ADIF.NET {
       return retVal;
       }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<ADIFQSOCollection> GetQsoCollection() {
-
-      foreach (var key in body.Keys) {
-        var currentQso = body[key];
-        var qso = new ADIFQSOCollection();
-        foreach (var entry in currentQso) {
-
-          // get the tag name and build it
-          var tag = TagFactory.TagFromName(entry.Key);
-
-          if (tag == null) {
-            if (IsUserDefinedField(entry.Key, out UserDefTag userTag)) {
-              tag = new UserDefValueTag(userTag);
-              }
-            else if (IsAppDefinedField(entry.Key, out AppDefTag appTag)) {
-              tag = appTag;
-              }
-            }
-
-          if (tag != null) {
-            tag.SetValue(entry.Value);
-            qso.Add(tag);
-            }
-          }
-
-        yield return qso;
-        }
-      }
-
     string data;
     int i;
     Dictionary<string, string> headers;
     Dictionary<int, Dictionary<string, string>> body;
-    List<ADIFQSOCollection> qsos;
+    List<ADIFQSO> qsos;
     List<UserDefTag> userDefinedFields;
     List<AppDefTag> appDefinedFields;
 

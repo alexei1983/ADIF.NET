@@ -10,11 +10,48 @@ using ADIF.NET.Helpers;
 
 namespace TestApp {
   class Program {
+
+    public const int MORSE_NONE = 0x0;
+    public static readonly int[] morse_ascii = new int[] {
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    0x73, MORSE_NONE, 0x55, 0x32,                   /* , _ . / */
+    0x3F, 0x2F, 0x27, 0x23,                         /* 0 1 2 3 */
+    0x21, 0x20, 0x30, 0x38,                         /* 4 5 6 7 */
+    0x3C, 0x3E, MORSE_NONE, MORSE_NONE,             /* 8 9 _ _ */
+    MORSE_NONE, 0x31, MORSE_NONE, 0x4C,             /* _ = _ ? */
+    MORSE_NONE, 0x05, 0x18, 0x1A,                   /* _ A B C */
+    0x0C, 0x02, 0x12, 0x0E,                         /* D E F G */
+    0x10, 0x04, 0x17, 0x0D,                         /* H I J K */
+    0x14, 0x07, 0x06, 0x0F,                         /* L M N O */
+    0x16, 0x1D, 0x0A, 0x08,                         /* P Q R S */
+    0x03, 0x09, 0x11, 0x0B,                         /* T U V W */
+    0x19, 0x1B, 0x1C, MORSE_NONE,                   /* X Y Z _ */
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+    MORSE_NONE, 0x05, 0x18, 0x1A,                   /* _ A B C */
+    0x0C, 0x02, 0x12, 0x0E,                         /* D E F G */
+    0x10, 0x04, 0x17, 0x0D,                         /* H I J K */
+    0x14, 0x07, 0x06, 0x0F,                         /* L M N O */
+    0x16, 0x1D, 0x0A, 0x08,                         /* P Q R S */
+    0x03, 0x09, 0x11, 0x0B,                         /* T U V W */
+    0x19, 0x1B, 0x1C, MORSE_NONE,                   /* X Y Z _ */
+    MORSE_NONE, MORSE_NONE, MORSE_NONE, MORSE_NONE,
+     };
+
     static void Main(string[] args) {
 
       //var items = typeof(Via).GetValues().ToArray();
       //var optionValues = OptionValue.FromType(typeof(Mode), false, false);
-      
+
       //var myname = new MyNameTag();
       //myname.SetValue("Alex Jennings");
 
@@ -30,8 +67,8 @@ namespace TestApp {
       var file = @"C:\wsjtx_log.adi";
       var parser = new Parser();
       parser.LoadFile(file);
-      parser.Parse();
-      var coll = parser.GetQsoCollection();
+      var res = parser.Parse();
+      //var coll = parser.GetQsoCollection();
 
       //var dxcc = new DxccTag();
       //dxcc.SetValue("1");

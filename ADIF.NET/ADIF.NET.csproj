@@ -64,7 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdifHeader.cs" />
-    <Compile Include="AdifQsoCollection.cs" />
+    <Compile Include="ADIFQSO.cs" />
+    <Compile Include="ADIFQSOCollection.cs" />
+    <Compile Include="ADIFResult.cs" />
     <Compile Include="AdifTagCollection.cs" />
     <Compile Include="Attributes\DefaultValueAttribute.cs" />
     <Compile Include="Attributes\DeprecatedTagAttribute.cs" />
