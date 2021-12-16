@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using ADIF.NET.Attributes;
+﻿using ADIF.NET.Attributes;
 
 namespace ADIF.NET.Tags {
 
@@ -11,6 +10,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.MyDxcc;
 
-    public override string[] Options => Values.CountryCodes.Select(c => c.Code.ToString()).ToArray();
+    public override ADIFEnumeration Options => Values.CountryCodes;
     }
   }

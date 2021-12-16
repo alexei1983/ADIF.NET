@@ -59,6 +59,7 @@ namespace ADIF.NET.Helpers {
 
         File.WriteAllBytes(path, bytes);
         Exists = true;
+        tempPath = path;
 
         CreateConnection(path, true, false);
       }
@@ -147,6 +148,18 @@ namespace ADIF.NET.Helpers {
       Exists = false;
       Database = null;
 
+      if (!string.IsNullOrEmpty(tempPath))
+      {
+        try
+        {
+          new FileInfo(tempPath).Delete();
+          tempPath = null;
+        }
+        catch
+        {
+        }
+      }
+
       GC.SuppressFinalize(this);
       }
 
@@ -216,6 +229,7 @@ namespace ADIF.NET.Helpers {
       }
 
     SQLiteConnection connection;
+    string tempPath;
 
     }
   }

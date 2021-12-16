@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using ADIF.NET.Attributes;
+﻿using ADIF.NET.Attributes;
 
 namespace ADIF.NET.Tags {
 
@@ -18,7 +16,7 @@ namespace ADIF.NET.Tags {
 
     public override bool RestrictOptions => field?.CustomOptions?.Length > 0;
 
-    public override string[] Options => field?.CustomOptions ?? new string[] { };
+    public override ADIFEnumeration Options => ADIFEnumeration.FromUserDefinedTag(field);
 
     public double MinValue => field?.LowerBound ?? 0;
 
@@ -32,9 +30,8 @@ namespace ADIF.NET.Tags {
 
       if (base.ValidateValue(value)) {
 
-        if (Options.Length > 0 && RestrictOptions) {
-          return Options.FirstOrDefault(o => o.Equals(value.ToString(),
-                                                      StringComparison.OrdinalIgnoreCase)) != null;
+        if (Options?.Count > 0 && RestrictOptions) {
+          return Options.IsValid(value.ToString());
           }
 
         else if (MaxValue > MinValue) {

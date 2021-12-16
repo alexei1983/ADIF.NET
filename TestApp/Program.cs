@@ -64,18 +64,23 @@ namespace TestApp {
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
 
-      var file = @"C:\wsjtx_log.adi";
+      var file = @"C:\Users\S017138\Desktop\K0UOG@K-1213-20211212.adi";
       var parser = new Parser();
       parser.LoadFile(file);
       var res = parser.Parse();
       //var coll = parser.GetQsoCollection();
 
-      //var dxcc = new DxccTag();
-      //dxcc.SetValue("1");
+      var countries = ADIFEnumeration.Get("Band");
 
       //var band = Band.Get(2.14566333);
 
+      var alaskaRegex = @"^P[A-I].{1,}$";
 
+      var is1 = System.Text.RegularExpressions.Regex.IsMatch("XE2TN", alaskaRegex);
+      var is2 = System.Text.RegularExpressions.Regex.IsMatch("XX4HG", alaskaRegex);
+      var is3 = System.Text.RegularExpressions.Regex.IsMatch("XA4TN", alaskaRegex);
+      var is4 = System.Text.RegularExpressions.Regex.IsMatch("N0MTN", alaskaRegex);
+      var is5 = System.Text.RegularExpressions.Regex.IsMatch("AL91B", alaskaRegex);
 
       var band = Band.IsFrequencyInBand("20m", 14.101, 2);
 

@@ -11,6 +11,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.Dxcc;
 
-    public override string[] Options => Values.CountryCodes.Select(c => c.Code.ToString()).ToArray();
+    public override ADIFEnumeration Options => Values.CountryCodes;
     }
   }

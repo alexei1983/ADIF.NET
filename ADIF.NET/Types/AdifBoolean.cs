@@ -3,7 +3,8 @@
 namespace ADIF.NET.Types {
   public class ADIFBoolean : ADIFType<bool?> {
 
-    public override string[] Options => new string[] { "Y", "N", string.Empty };
+    public override ADIFEnumeration Options => new ADIFEnumeration("Boolean", new ADIFEnumerationValue("Y"), 
+                                                                              new ADIFEnumerationValue("N"));
     public override bool IsEnumeration => true;
     public override bool RestrictToOptions => true;
     public override string Type => DataTypes.Boolean;

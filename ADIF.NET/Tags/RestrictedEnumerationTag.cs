@@ -12,7 +12,7 @@ namespace ADIF.NET.Tags {
 
     public override bool ValidateValue(object value) {    
       return base.ValidateValue(value) && 
-             Array.IndexOf(Options, value.ToString()) >= 0;
+             this.Options.IsValid(value.ToString());
       }
     }
   }

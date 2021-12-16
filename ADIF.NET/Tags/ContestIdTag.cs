@@ -11,6 +11,6 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.ContestId;
 
-    public override string[] Options => Values.Contests.Select(c => c.Code).ToArray();
+    public override ADIFEnumeration Options => Values.Contests;
     }
   }

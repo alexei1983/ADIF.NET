@@ -5,11 +5,13 @@ using System.Linq;
 using System.Collections.Generic;
 using ADIF.NET.Attributes;
 using ADIF.NET.Helpers;
+using ADIF.NET.Tags;
 
 namespace ADIF.NET {
 
   public static class Values {
-    public static int ITU { get; set; }
+
+    public static byte ITU { get; set; }
 
     public const string ADIF_DATE_FORMAT = "yyyyMMdd";
     public const string ADIF_TIME_FORMAT_LONG = "HHmmss";
@@ -98,19 +100,19 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration SponsoredAwardPrefixes;
 
     /// <summary>
-    /// Country codes.
+    /// Country code enumeration.
     /// </summary>
-    public static readonly IEnumerable<CountryCode> CountryCodes;
+    public static readonly ADIFEnumeration CountryCodes;
 
     /// <summary>
-    /// Contests.
+    /// Contest enumeration.
     /// </summary>
-    public static readonly IEnumerable<Contest> Contests;
+    public static readonly ADIFEnumeration Contests;
 
     /// <summary>
-    /// Amateur radio bands.
+    /// Amateur radio band enumeration
     /// </summary>
-    public static readonly IEnumerable<Band> Bands;
+    public static readonly ADIFEnumeration Bands;
 
     /// <summary>
     /// Instantiates the static data fields for the class.
@@ -130,9 +132,9 @@ namespace ADIF.NET {
       Awards = ADIFEnumeration.Get("Award");
       Modes = ADIFEnumeration.Get("Mode");
       SponsoredAwardPrefixes = ADIFEnumeration.Get("SponsoredAwardPrefix");
-      CountryCodes = CountryCode.Get();
-      Contests = Contest.Get();
-      //Bands = Band.Get(ITU);
+      CountryCodes = ADIFEnumeration.Get("Countries");
+      Contests = ADIFEnumeration.Get("Contest");
+      Bands = ADIFEnumeration.Get("Band");
     }
   }
 
@@ -325,14 +327,54 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// Creates an <see cref="ADIFEnumeration"/> object using the custom options in a user-defined tag.
+    /// </summary>
+    /// <param name="tag">User-defined tag from which to derive the enumeration.</param>
+    public static ADIFEnumeration FromUserDefinedTag(UserDefTag tag)
+    {
+      if (tag == null)
+        throw new ArgumentNullException(nameof(tag), "User-defined tag is required.");
+
+      if (tag.CustomOptions != null)
+      {
+        var enumVal = new ADIFEnumeration(tag.FieldName);
+        foreach (var option in tag.CustomOptions)
+          enumVal.Add(new ADIFEnumerationValue(option));
+
+        return enumVal;
+      }
+
+      return null;
+    }
+
+    /// <summary>
     /// Retrieves an ADIF enumeration by type.
     /// </summary>
     /// <param name="type">The enumeration type to retrieve.</param>
     public static ADIFEnumeration Get(string type)
     {
+      if (string.IsNullOrEmpty(type))
+        throw new Exception("Enumeration type is required.");
+
       var enumeration = new ADIFEnumeration(type);
 
-      var data = SQLiteHelper.Instance.ReadData(ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''")));
+      ArrayList data = null;
+
+      type = type.ToUpper();
+
+      if (type == "COUNTRIES")
+        data = SQLiteHelper.Instance.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
+      else if (type == "BAND")
+      {
+        if (Values.ITU <= 0)
+          Values.ITU = 2;
+
+        data = SQLiteHelper.Instance.ReadData(RETRIEVE_BANDS_SQL.Replace("{{ITU}}", Values.ITU.ToString()));
+      }
+      else if (type == "CONTEST")
+        data = SQLiteHelper.Instance.ReadData(RETRIEVE_CONTESTS_SQL);
+      else
+        data = SQLiteHelper.Instance.ReadData(ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''")));
 
       foreach (dynamic d in data)
       {
@@ -345,14 +387,30 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// Retrieves a string array of ADIF enumeration codes.
+    /// Determines whether or not the specified value is valid for the current <see cref="ADIFEnumeration"/>.
     /// </summary>
-    public string[] GetOptions()
+    /// <param name="value">Value to check for validity.</param>
+    public bool IsValid(string value)
+    {
+      if (value == null)
+        throw new ArgumentNullException(nameof(value), "Value is required.");
+
+      return GetValues().Contains(value);
+    }
+
+    /// <summary>
+    /// Retrieves a string array of codes for the current <see cref="ADIFEnumeration"/>.
+    /// </summary>
+    public string[] GetValues()
     {
       return this.Select(v => v.Code).ToArray();
     }
   
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
+    const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
+    const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\" WHERE ITU = {{ITU}}";
+    const string RETRIEVE_CONTESTS_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS Legacy, Deprecated AS ImportOnly FROM \"Contests\" ORDER BY Name, Code";
+
   }
 
   /// <summary>
@@ -426,8 +484,14 @@ namespace ADIF.NET {
         if (dict.ContainsKey(nameof(DisplayName)) && dict[nameof(DisplayName)] is string name)
           this.DisplayName = name;
 
-        if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is string code)
-          this.Code = code;
+        if (dict.ContainsKey(nameof(Code))) {
+          if (dict[nameof(Code)] is string code)
+            this.Code = code;
+          else if (dict[nameof(Code)] is int intCode)
+            this.Code = intCode.ToString();
+          else if (dict[nameof(Code)] is double dblCode)
+            this.Code = dblCode.ToString();
+        }
 
         if (dict.ContainsKey(nameof(ImportOnly)) && dict[nameof(ImportOnly)] is bool importOnly)
           this.ImportOnly = importOnly;

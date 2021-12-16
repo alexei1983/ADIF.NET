@@ -22,7 +22,6 @@ namespace ADIF.NET.Tags {
     {
       get
       {
-
         var textValue = string.Empty;
 
         var val = Value;
@@ -81,7 +80,6 @@ namespace ADIF.NET.Tags {
     {
       get
       {
-
         if (!SuppressLength)
           return TextValue.Length;
         else
@@ -92,10 +90,10 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// The valid values for an enumeration-type tag.
     /// </summary>
-    public virtual string[] Options { get; }
+    public virtual ADIFEnumeration Options { get; }
 
     /// <summary>
-    /// Whether or not the value of the tag is restricted solely to the valid options.
+    /// Whether or not the value of the tag is restricted solely to the options.
     /// </summary>
     public virtual bool RestrictOptions { get; }
 
@@ -238,6 +236,25 @@ namespace ADIF.NET.Tags {
         return Equals(tag);
 
       return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+      return this.ToString("G", CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public string ToString(string format)
+    {
+      return this.ToString(format, CultureInfo.CurrentCulture);
     }
 
     /// <summary>

@@ -692,13 +692,13 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="str">String to check.</param>
     /// <returns>True if the <see cref="string"/> is an IOTA designator, else false.</returns>
-    public static bool IsIotaDesignator(this string str) {
+    public static bool IsIOTADesignator(this string str) {
 
-      var continents = ADIFEnumeration.Get("Continent");
+      var continents = Values.Continents;
       var regex = "^(";
 
       for (var x = 0; x < continents.Count; x++) {
-        regex = $"{regex}{continents[x]}";
+        regex = $"{regex}{continents[x].Code}";
 
         if ((x + 1) < continents.Count)
           regex = $"{regex}|";
@@ -714,7 +714,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="str">String to check.</param>
     /// <returns>True if the <see cref="string"/> is a SOTA designator, else false.</returns>
-    public static bool IsSotaDesignator(this string str) {
+    public static bool IsSOTADesignator(this string str) {
 
       var regex = @"[A-Za-z0-9]{1,3}\/[A-Za-z]{2,3}\-[0-9]{3}";
       return Regex.IsMatch(str ?? string.Empty, regex);

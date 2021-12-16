@@ -5,7 +5,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.MySotaRef;
 
     public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && value.ToString().IsSotaDesignator();
+      return base.ValidateValue(value) && value.ToString().IsSOTADesignator();
       }
     }
   }

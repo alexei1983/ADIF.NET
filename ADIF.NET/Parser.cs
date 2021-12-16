@@ -12,8 +12,6 @@ namespace ADIF.NET {
   /// </summary>
   public class Parser {
 
-    ADIFHeader Header { get; set; }
-
     public Parser() { 
       }
 
@@ -52,6 +50,8 @@ namespace ADIF.NET {
     /// <param name="encoding"></param>
     public void LoadStream(Stream stream, Encoding encoding = null) {
 
+      this.data = null;
+
       if (stream != null && stream.CanRead) {
 
         if (encoding == null)
@@ -88,7 +88,6 @@ namespace ADIF.NET {
 
       userDefinedTag = userDefinedFields?.FirstOrDefault(u => u.FieldName.Equals(tagName, 
                                                                                  StringComparison.OrdinalIgnoreCase));
-
       return userDefinedTag != null;
       }
 
@@ -102,7 +101,6 @@ namespace ADIF.NET {
 
       appDefinedTag = appDefinedFields?.FirstOrDefault(a => a.FieldName.Equals(tagName,
                                                                                StringComparison.OrdinalIgnoreCase));
-
       return appDefinedTag != null;
       }
 
@@ -115,7 +113,7 @@ namespace ADIF.NET {
       this.body = new Dictionary<int, Dictionary<string, string>>();
       this.userDefinedFields = new List<UserDefTag>();
       this.appDefinedFields = new List<AppDefTag>();
-      this.Header = new ADIFHeader();
+      headerInternal = new ADIFHeader();
 
       if (string.IsNullOrWhiteSpace(this.data))
         throw new InvalidOperationException("No ADIF data found.");
@@ -134,7 +132,7 @@ namespace ADIF.NET {
 
       var result = new ADIFResult
       {
-        Header = this.Header,
+        Header = headerInternal,
         QSOs = new ADIFQSOCollection()
       };
 
@@ -367,13 +365,13 @@ namespace ADIF.NET {
 
         if (headerTag != null && headerTag.Header) {
           headerTag.SetValue(header.Value);
-          Header.Add(headerTag);
+          headerInternal.Add(headerTag);
           }
         }
 
       // add the user-defined fields to the headers
       foreach (var userDefined in userDefinedFields)
-        Header.Add(userDefined);
+        headerInternal.Add(userDefined);
 
       if (this.i >= this.data.Length) 
         throw new InvalidOperationException("ADIF data contains no QSO records.");
@@ -543,9 +541,9 @@ namespace ADIF.NET {
     int i;
     Dictionary<string, string> headers;
     Dictionary<int, Dictionary<string, string>> body;
-    List<ADIFQSO> qsos;
     List<UserDefTag> userDefinedFields;
     List<AppDefTag> appDefinedFields;
+    ADIFHeader headerInternal;
 
     } // end class
 

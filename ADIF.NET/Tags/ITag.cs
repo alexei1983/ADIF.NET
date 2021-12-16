@@ -26,7 +26,7 @@ namespace ADIF.NET.Tags {
 
     IADIFType ADIFType { get; }
 
-    string[] Options { get; }
+    ADIFEnumeration Options { get; }
 
     bool RestrictOptions { get; }
 
@@ -43,6 +43,8 @@ namespace ADIF.NET.Tags {
     bool ValidateValue();
 
     object ConvertValue(object value);
+
+    string ToString(string format);
 
     }
   }

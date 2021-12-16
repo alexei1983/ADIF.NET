@@ -2,6 +2,7 @@
 using System.Globalization;
 
 namespace ADIF.NET.Types {
+
   public abstract class ADIFType<T> : IADIFType {
 
     public virtual Type UnderlyingType => typeof(T);
@@ -24,7 +25,7 @@ namespace ADIF.NET.Types {
 
     public virtual double MaxValue { get; }
 
-    public virtual string[] Options { get; }
+    public virtual ADIFEnumeration Options { get; }
 
     }
   }

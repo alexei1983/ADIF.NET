@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.Iota;
 
     public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && value.ToString().IsIotaDesignator();
+      return base.ValidateValue(value) && value.ToString().IsIOTADesignator();
       }
     }
   }

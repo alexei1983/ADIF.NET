@@ -76,6 +76,7 @@
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
+    <Compile Include="GridSquare.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />
     <Compile Include="Helpers\SQLiteHelper.cs" />
     <Compile Include="Parser.cs" />

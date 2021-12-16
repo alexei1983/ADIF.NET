@@ -23,6 +23,6 @@ namespace ADIF.NET.Types {
 
     double MaxValue { get; }
 
-    string[] Options { get; }
+    ADIFEnumeration Options { get; }
   }
 }
