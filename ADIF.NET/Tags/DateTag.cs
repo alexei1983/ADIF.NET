@@ -2,6 +2,10 @@
 using System.Globalization;
 
 namespace ADIF.NET.Tags {
+
+  /// <summary>
+  /// Represents an ADIF tag that stores a date value.
+  /// </summary>
   public class DateTag : Tag<DateTime> {
 
     public override string FormatString { get; set; } = Values.ADIF_DATE_FORMAT;
@@ -12,7 +16,7 @@ namespace ADIF.NET.Tags {
 
         if (value is DateTime dateTime)
           return dateTime;
-        else if (DateTime.TryParseExact(value.ToString() ?? string.Empty,
+        else if (DateTime.TryParseExact(value.ToString(),
                                        Values.ADIF_DATE_FORMAT,
                                        FormatProvider,
                                        DateTimeStyles.AllowInnerWhite | 

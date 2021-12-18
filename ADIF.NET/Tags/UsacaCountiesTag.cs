@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
   [DisplayName("Two US counties in the case where the contacted station is located on a border between two counties, representing counties credited to the QSO for the CQ Magazine USA-CA award program.")]
   public class USACACountiesTag : StringTag, ITag {
 
-    public override string Name => TagNames.USACA_Counties;
+    public override string Name => TagNames.USACACounties;
 
     public override string ValueSeparator => Values.COLON.ToString();
 

@@ -8,6 +8,6 @@ namespace ADIF.NET.Tags {
   [DisplayName("The contacted station's IOTA Island Identifier.")]
   public class IotaIslandIdTag : StringTag, ITag {
 
-    public override string Name => TagNames.IotaIslandId;
+    public override string Name => TagNames.IOTAIslandId;
     }
   }

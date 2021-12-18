@@ -11,7 +11,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.GridSquare;
 
     public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && value.IsAdifGridSquare();
+      return base.ValidateValue(value) && value.IsADIFGridSquare();
       }
     }
   }

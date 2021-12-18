@@ -1,18 +1,16 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents the contacted station's CQ zone.
   /// </summary>
-  [DisplayName("The contacted station's CQ Zone.")]
-  public class CqzTag : NumberTag, ITag {
+  public class CQZTag : NumberTag, ITag {
 
-    public override string Name => TagNames.Cqz;
+    public override string Name => TagNames.CQZ;
 
-    public CqzTag() { }
+    public CQZTag() { }
 
-    public CqzTag(double zone) {
+    public CQZTag(double zone) {
       base.SetValue(zone);
       }
 

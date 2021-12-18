@@ -64,6 +64,8 @@ namespace TestApp {
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
 
+      var utag = new UserDefValueTag(null);
+
       var file = @"C:\Users\S017138\Desktop\K0UOG@K-1213-20211212.adi";
       var parser = new Parser();
       parser.LoadFile(file);

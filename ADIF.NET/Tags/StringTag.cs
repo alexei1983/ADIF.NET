@@ -11,7 +11,7 @@ namespace ADIF.NET.Tags {
       }
 
     public override bool ValidateValue(object value) {
-      return (value?.ToString() ?? string.Empty).IsAscii();
+      return (value?.ToString() ?? string.Empty).IsASCII();
       }
 
     }

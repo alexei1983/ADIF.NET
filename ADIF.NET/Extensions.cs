@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime;
-using ADIF.NET.Tags;
 
 namespace ADIF.NET {
   public static class Extensions {
@@ -76,40 +71,6 @@ namespace ADIF.NET {
       }
 
     /// <summary>
-    /// Determines whether the specified <see cref="DateTime"/> value is after the current value.
-    /// </summary>
-    /// <param name="current">The current value.</param>
-    /// <param name="compareWith">Value to compare with.</param>
-    /// <returns>
-    /// 	<see cref="true"/> if the specified current is after; otherwise, <see cref="false"/>.
-    /// </returns>
-    public static bool IsAfter(this DateTime current, DateTime compareWith) {
-      return current > compareWith;
-      }
-
-    /// <summary>
-    /// Determines whether the specified <see cref="DateTime"/> is before the current value.
-    /// </summary>
-    /// <param name="current">The current value.</param>
-    /// <param name="compareWith">Value to compare with.</param>
-    /// <returns>
-    /// 	<see cref="true"/> if the specified current is before; otherwise, <see cref="false"/>.
-    /// </returns>
-    public static bool IsBefore(this DateTime current, DateTime compareWith) {
-      return current < compareWith;
-      }
-
-    /// <summary>
-    /// Determine if a <see cref="DateTime"/> is in the future.
-    /// </summary>
-    /// <param name="dateTime">The <see cref="DateTime"/> to be checked.</param>
-    /// <param name="utc">Whether or not the <see cref="DateTime"/> represents Universal Coordinated Time (UTC).</param>
-    /// <returns><see cref="true"/> if the specified <see cref="DateTime"/> is in the future; otherwise <see cref="false"/>.</returns>
-    public static bool IsInFuture(this DateTime dateTime, bool utc = false) {
-      return utc ? dateTime > DateTime.UtcNow : dateTime > DateTime.Now;
-      }
-
-    /// <summary>
     /// 
     /// </summary>
     /// <param name="str"></param>
@@ -151,14 +112,6 @@ namespace ADIF.NET {
       return 0;
       }
 
-    public static bool IsDouble(this string str)
-    {
-      if (!string.IsNullOrWhiteSpace(str) && double.TryParse(str, out double dblVal))
-        return true;
-
-      return false;
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -174,67 +127,10 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="dictionary"></param>
-    /// <returns></returns>
-    public static string ToKeyPairString<TKey, TValue>(this Dictionary<TKey, TValue> dictionary) {
-
-      var retVal = string.Empty;
-
-      if (dictionary == null || dictionary.Count == 0)
-        return retVal;
-
-      foreach (KeyValuePair<TKey, TValue> entry in dictionary) {
-        retVal = $"{retVal}{Environment.NewLine}Key: {entry.Key}, Value: {entry.Value}";
-        }
-
-      return retVal;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool ToAdifBoolean(this string str) {
-      return ToNullableBooleanAdif(str) ?? false;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="number"></param>
-    /// <returns></returns>
-    public static bool IsEvenNumber(this int number) {
-      return IsEvenNumber((long)number);
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="number"></param>
-    /// <returns></returns>
-    public static bool IsEvenNumber(this long number) {
-      return number % 2 == 0;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="number"></param>
-    /// <returns></returns>
-    public static bool IsOddNumber(this long number) {
-      return !number.IsEvenNumber();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="number"></param>
-    /// <returns></returns>
-    public static bool IsOddNumber(this int number) {
-      return IsOddNumber((long)number);
+    public static bool ToADIFBoolean(this string str) {
+      return ToNullableBooleanADIF(str) ?? false;
       }
 
     /// <summary>
@@ -242,7 +138,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string ToAdifBooleanValue(this bool? value) {
+    public static string ToADIFBooleanValue(this bool? value) {
 
       if (value.HasValue) {
 
@@ -260,9 +156,9 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string ToAdifBooleanValue(this bool value) {
+    public static string ToADIFBooleanValue(this bool value) {
 
-      var val = ((bool?)value).ToAdifBooleanValue();
+      var val = ((bool?)value).ToADIFBooleanValue();
       return !string.IsNullOrEmpty(val) ? val : "N";
       }
 
@@ -271,7 +167,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool? ToNullableBooleanAdif(this string str) {
+    public static bool? ToNullableBooleanADIF(this string str) {
 
       str = (str ?? string.Empty).ToUpper();
 
@@ -280,46 +176,6 @@ namespace ADIF.NET {
         return true;
 
       case "N":
-        return false;
-
-      default:
-        return null;
-        }
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static bool ToBoolean(this string str) {
-      return ToNullableBoolean(str) ?? false;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
-    public static bool? ToNullableBoolean(this string str) {
-
-      str = (str ?? string.Empty).ToUpper();
-
-      switch (str) {
-      case "TRUE":
-      case "T":
-      case "+":
-      case "YES":
-      case "Y":
-      case "ON":
-        return true;
-
-      case "FALSE":
-      case "F":
-      case "-":
-      case "NO":
-      case "N":
-      case "OFF":
         return false;
 
       default:
@@ -359,7 +215,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsAdifNumber(this object obj) {
+    public static bool IsADIFNumber(this object obj) {
 
       if (obj is null)
         return false;
@@ -372,12 +228,12 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsAdifString(this object obj) {
+    public static bool IsADIFString(this object obj) {
 
       if (obj is null)
         obj = string.Empty;
 
-      return obj.ToString().IsAscii();
+      return obj.ToString().IsASCII();
       }
 
     /// <summary>
@@ -385,11 +241,11 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsAdifMultilineString(this object obj) {
+    public static bool IsADIFMultilineString(this object obj) {
 
       var objStr = obj?.ToString() ?? string.Empty; 
 
-      return objStr.Contains($"{(char)13}{(char)10}") && objStr.IsAscii();
+      return objStr.Contains($"{(char)13}{(char)10}") && objStr.IsASCII();
       }
 
     /// <summary>
@@ -397,7 +253,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsAdifIntlMultilineString(this object obj) {
+    public static bool IsADIFIntlMultilineString(this object obj) {
 
       var objStr = obj?.ToString() ?? string.Empty;
 
@@ -410,7 +266,7 @@ namespace ADIF.NET {
     /// <param name="obj"></param>
     /// <param name="allowEmpty"></param>
     /// <returns></returns>
-    public static bool IsAdifGridSquare(this object obj, bool allowEmpty = false) {
+    public static bool IsADIFGridSquare(this object obj, bool allowEmpty = false) {
 
       var objStr = obj?.ToString() ?? string.Empty;
       var objStrLen = objStr.Length;
@@ -427,7 +283,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public static bool IsAdifPositiveInteger(this object obj) {
+    public static bool IsADIFPositiveInteger(this object obj) {
 
       if (obj is null)
         return false;
@@ -475,7 +331,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static bool IsAscii(this string str) {
+    public static bool IsASCII(this string str) {
       return Encoding.UTF8.GetByteCount(str) == str.Length;
       }
 
@@ -488,12 +344,12 @@ namespace ADIF.NET {
 
       if (!(obj is null)) {
 
-        if (obj is double)
-          return (double)obj;
+        if (obj is double dblVal)
+          return dblVal;
         else if (obj.IsNumber())
           return Convert.ToDouble(obj);
-        else if (double.TryParse(obj.ToString(), out double dblVal))
-          return dblVal;
+        else if (double.TryParse(obj.ToString(), out double parsedDblVal))
+          return parsedDblVal;
         }
 
       return 0;
@@ -506,40 +362,6 @@ namespace ADIF.NET {
     /// <returns></returns>
     public static string[] GetValuesArray(this Type type) {
       return type?.GetValues()?.ToArray() ?? new string[] { };
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static string[] GetSubOptionsArray<TAttribute>(this FieldInfo field,
-                                                          Func<TAttribute, string> valueSelector,
-                                                          bool inherit = false) where TAttribute : Attribute {
-
-      return field?.GetSubOptions(valueSelector, inherit)?.ToArray() ?? new string[] { };
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static IEnumerable<string> GetSubOptions<TAttribute>(this FieldInfo field,
-                                                               Func<TAttribute, string> valueSelector,
-                                                               bool inherit = false) where TAttribute: Attribute {
-
-      if (field != null) {
-
-        foreach (var subOptionValue in field.GetAttributeValues(valueSelector, inherit))
-          yield return subOptionValue;
-        }
       }
 
     /// <summary>
@@ -580,113 +402,6 @@ namespace ADIF.NET {
         }
       }
 
-    /// <summary>Makes a deep copy of the specified object.</summary>
-    /// <typeparam name="T"><see cref="Type"/> of the return object.</typeparam>
-    /// <param name="obj">Object to be copied.</param>
-    /// <returns>The copied object.</returns>
-    public static T Clone<T>(this object obj) {
-
-      var result = default(T);
-
-      if (obj is null)
-        return result;
-
-      var formatter = new BinaryFormatter();
-
-      using (var stream = new MemoryStream()) {
-
-        formatter.Serialize(stream, obj);
-        stream.Seek(0, SeekOrigin.Begin);
-
-        result = (T)formatter.Deserialize(stream);
-        }
-
-      return result;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="list"></param>
-    /// <returns></returns>
-    public static IList<T> Clone<T>(this IList<T> list) where T : ICloneable {
-
-      return list.Select(cloneable => cloneable.Clone()).Select(clonedObj => (T)clonedObj).ToList();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="type"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static IEnumerable<TValue> GetAttributeValues<TAttribute, TValue>(this Type type,
-                                                                             Func<TAttribute, TValue> valueSelector,
-                                                                             bool inherit = true) where TAttribute : Attribute {
-      if (valueSelector == null)
-        throw new ArgumentNullException(nameof(valueSelector));
-
-      var attributes = GetAttributes<TAttribute>(type, inherit);
-
-      if (attributes != null) {
-
-        foreach (var attribute in attributes)
-          yield return valueSelector(attribute);
-        }
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="type"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static TValue GetAttributeValue<TAttribute, TValue>(this Type type,
-                                                               Func<TAttribute, TValue> valueSelector,
-                                                               bool inherit = true) where TAttribute : Attribute { 
-      if (valueSelector == null)
-        throw new ArgumentNullException(nameof(valueSelector));
-
-      var attribute = GetAttribute<TAttribute>(type, inherit);
-
-      return attribute != null ? valueSelector(attribute) : default(TValue);
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="type"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static TAttribute GetAttribute<TAttribute>(this Type type,
-                                                      bool inherit = true) where TAttribute : Attribute {
-      var attributes = GetAttributes<TAttribute>(type, inherit);
-
-      return attributes?.FirstOrDefault();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="type"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static IEnumerable<TAttribute> GetAttributes<TAttribute>(this Type type,
-                                                                    bool inherit = true) where TAttribute : Attribute {
-      var attributes = type.GetCustomAttributes(typeof(TAttribute), inherit);
-
-      return attributes.Cast<TAttribute>();
-      }
-
     /// <summary>
     /// Determines whether or not the specified <see cref="string"/> is an IOTA designator.
     /// </summary>
@@ -723,20 +438,6 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static TAttribute GetAttribute<TAttribute>(this FieldInfo field,
-                                                      bool inherit = true) where TAttribute : Attribute {
-      var attributes = GetAttributes<TAttribute>(field, inherit);
-
-      return attributes?.FirstOrDefault();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="obj"></param>
     /// <param name="provider"></param>
     /// <returns></returns>
@@ -746,7 +447,7 @@ namespace ADIF.NET {
 
         if (obj is DateTime dateTime)
           return dateTime;
-        else if (DateTime.TryParseExact(obj.ToString() ?? string.Empty,
+        else if (DateTime.TryParseExact(obj.ToString(),
                                    Values.ADIF_DATE_FORMAT,
                                    provider ?? CultureInfo.CurrentCulture,
                                    DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
@@ -780,65 +481,7 @@ namespace ADIF.NET {
       else if (obj is bool?)
         return (bool?)obj ?? false;
       else
-        return obj.ToString().ToAdifBoolean();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static IEnumerable<TAttribute> GetAttributes<TAttribute>(this FieldInfo field,
-                                                                    bool inherit = true) where TAttribute : Attribute {
-      var attributes = field.GetCustomAttributes(typeof(TAttribute), inherit);
-
-      return attributes.Cast<TAttribute>();
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static TValue GetAttributeValue<TAttribute, TValue>(this FieldInfo field,
-                                                               Func<TAttribute, TValue> valueSelector,
-                                                               bool inherit = true) where TAttribute : Attribute {
-      if (valueSelector == null)
-        throw new ArgumentNullException(nameof(valueSelector));
-
-      var attribute = GetAttribute<TAttribute>(field, inherit);
-
-      return attribute != null ? valueSelector(attribute) : default(TValue);
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TAttribute"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="field"></param>
-    /// <param name="valueSelector"></param>
-    /// <param name="inherit"></param>
-    /// <returns></returns>
-    public static IEnumerable<TValue> GetAttributeValues<TAttribute, TValue>(this FieldInfo field,
-                                                                             Func<TAttribute, TValue> valueSelector,
-                                                                             bool inherit = true) where TAttribute : Attribute {
-      if (valueSelector == null)
-        throw new ArgumentNullException(nameof(valueSelector));
-
-      var attributes = GetAttributes<TAttribute>(field, inherit);
-
-      if (attributes != null) {
-
-        foreach (var attribute in attributes)
-          yield return valueSelector(attribute);
-        }
+        return obj.ToString().ToADIFBoolean();
       }
 
     }

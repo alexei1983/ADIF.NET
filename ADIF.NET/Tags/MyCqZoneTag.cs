@@ -8,6 +8,6 @@ namespace ADIF.NET.Tags {
   [DisplayName("The logging station's CQ Zone.")]
   public class MyCqZoneTag : NumberTag, ITag {
 
-    public override string Name => TagNames.MyCqZone;
+    public override string Name => TagNames.MyCQZone;
     }
   }

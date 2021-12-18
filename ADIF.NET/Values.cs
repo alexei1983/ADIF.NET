@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
@@ -11,7 +10,17 @@ namespace ADIF.NET {
 
   public static class Values {
 
-    public static byte ITU { get; set; }
+    public static byte ITU
+    {
+      get {  return ituRegion; }
+
+      set {
+        if (value < 1 || value > 3)
+          throw new ArgumentException("Invalid ITU region.");
+
+        ituRegion = value;
+      }
+    }
 
     public const string ADIF_DATE_FORMAT = "yyyyMMdd";
     public const string ADIF_TIME_FORMAT_LONG = "HHmmss";
@@ -136,6 +145,8 @@ namespace ADIF.NET {
       Contests = ADIFEnumeration.Get("Contest");
       Bands = ADIFEnumeration.Get("Band");
     }
+
+    static byte ituRegion;
   }
 
   /// <summary>
@@ -168,12 +179,12 @@ namespace ADIF.NET {
     public const string ContestId = "CONTEST_ID";
     public const string Country = "COUNTRY";
     public const string CountryIntl = "COUNTRY_INTL";
-    public const string Cqz = "CQZ";
+    public const string CQZ = "CQZ";
     public const string CreatedTimestamp = "CREATED_TIMESTAMP";
     public const string CreditSubmitted = "CREDIT_SUBMITTED";
     public const string CreditGranted = "CREDIT_GRANTED";
     public const string Distance = "DISTANCE";
-    public const string Dxcc = "DXCC";
+    public const string DXCC = "DXCC";
     public const string Email = "EMAIL";
     public const string EqCall = "EQ_CALL";
     public const string EndHeader = "EOH";
@@ -191,8 +202,8 @@ namespace ADIF.NET {
     public const string GuestOp = "GUEST_OP";
     public const string HrdLogQSOUploadDate = "HRDLOG_QSO_UPLOAD_DATE";
     public const string HrdLogQSOUploadStatus = "HRDLOG_QSO_UPLOAD_STATUS";
-    public const string Iota = "IOTA";
-    public const string IotaIslandId = "IOTA_ISLAND_ID";
+    public const string IOTA = "IOTA";
+    public const string IOTAIslandId = "IOTA_ISLAND_ID";
     public const string Ituz = "ITUZ";
     public const string KIndex = "K_INDEX";
     public const string Lat = "LAT";
@@ -211,12 +222,12 @@ namespace ADIF.NET {
     public const string MyCnty = "MY_CNTY";
     public const string MyCountry = "MY_COUNTRY";
     public const string MyCountryIntl = "MY_COUNTRY_INTL";
-    public const string MyCqZone = "MY_CQ_ZONE";
-    public const string MyDxcc = "MY_DXCC";
+    public const string MyCQZone = "MY_CQ_ZONE";
+    public const string MyDXCC = "MY_DXCC";
     public const string MyFists = "MY_FISTS";
     public const string MyGridSquare = "MY_GRIDSQUARE";
-    public const string MyIota = "MY_IOTA";
-    public const string MyIotaIslandId = "MY_IOTA_ISLAND_ID";
+    public const string MyIOTA = "MY_IOTA";
+    public const string MyIOTAIslandId = "MY_IOTA_ISLAND_ID";
     public const string MyITUZone = "MY_ITU_ZONE";
     public const string MyLat = "MY_LAT";
     public const string MyLon = "MY_LON";
@@ -230,12 +241,12 @@ namespace ADIF.NET {
     public const string MySigIntl = "MY_SIG_INTL";
     public const string MySigInfo = "MY_SIG_INFO";
     public const string MySigInfoIntl = "MY_SIG_INFO_INTL";
-    public const string MySotaRef = "MY_SOTA_REF";
+    public const string MySOTARef = "MY_SOTA_REF";
     public const string MyState = "MY_STATE";
     public const string MyStreet = "MY_STREET";
     public const string MyStreetIntl = "MY_STREET_INTL";
-    public const string MyUsacaCounties = "MY_USACA_COUNTIES";
-    public const string MyVuccGrids = "MY_VUCC_GRIDS";
+    public const string MyUSACACounties = "MY_USACA_COUNTIES";
+    public const string MyVUCCGrids = "MY_VUCC_GRIDS";
     public const string Name = "NAME";
     public const string NameIntl = "NAME_INTL";
     public const string Notes = "NOTES";
@@ -270,7 +281,7 @@ namespace ADIF.NET {
     public const string SigInfoIntl = "SIG_INFO_INTL";
     public const string SilentKey = "SILENT_KEY";
     public const string SKCC = "SKCC";
-    public const string SotaRef = "SOTA_REF";
+    public const string SOTARef = "SOTA_REF";
     public const string Srx = "SRX";
     public const string SrxString = "SRX_STRING";
     public const string Stx = "STX";
@@ -280,10 +291,10 @@ namespace ADIF.NET {
     public const string TimeOff = "TIME_OFF";
     public const string TimeOn = "TIME_ON";
     public const string TxPwr = "TX_PWR";
-    public const string UkSmg = "UKSMG";
-    public const string USACA_Counties = "USACA_COUNTIES";
+    public const string UKSmg = "UKSMG";
+    public const string USACACounties = "USACA_COUNTIES";
     public const string UserDef = "USERDEF";
-    public const string Vucc_Grids = "VUCC_GRIDS";
+    public const string VUCCGrids = "VUCC_GRIDS";
     public const string Web = "WEB";
     }
 
@@ -327,7 +338,7 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// Creates an <see cref="ADIFEnumeration"/> object using the custom options in a user-defined tag.
+    /// Creates an ADIF enumeration using the custom options in a user-defined tag.
     /// </summary>
     /// <param name="tag">User-defined tag from which to derive the enumeration.</param>
     public static ADIFEnumeration FromUserDefinedTag(UserDefTag tag)
@@ -354,27 +365,27 @@ namespace ADIF.NET {
     public static ADIFEnumeration Get(string type)
     {
       if (string.IsNullOrEmpty(type))
-        throw new Exception("Enumeration type is required.");
+        throw new ArgumentException("Enumeration type is required.", nameof(type));
 
       var enumeration = new ADIFEnumeration(type);
 
-      ArrayList data = null;
+      var query = string.Empty;
 
-      type = type.ToUpper();
-
-      if (type == "COUNTRIES")
-        data = SQLiteHelper.Instance.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
-      else if (type == "BAND")
+      if (type == "Countries")
+        query = RETRIEVE_COUNTRY_CODES_SQL;
+      else if (type == "Band")
       {
         if (Values.ITU <= 0)
           Values.ITU = 2;
 
-        data = SQLiteHelper.Instance.ReadData(RETRIEVE_BANDS_SQL.Replace("{{ITU}}", Values.ITU.ToString()));
+        query = RETRIEVE_BANDS_SQL.Replace("{{ITU}}", Values.ITU.ToString());
       }
-      else if (type == "CONTEST")
-        data = SQLiteHelper.Instance.ReadData(RETRIEVE_CONTESTS_SQL);
+      else if (type == "Contest")
+        query = RETRIEVE_CONTESTS_SQL;
       else
-        data = SQLiteHelper.Instance.ReadData(ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''")));
+        query = ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''"));
+
+      var data = SQLiteHelper.Instance.ReadData(query);
 
       foreach (dynamic d in data)
       {
@@ -404,6 +415,18 @@ namespace ADIF.NET {
     public string[] GetValues()
     {
       return this.Select(v => v.Code).ToArray();
+    }
+
+    /// <summary>
+    /// Retrieves the enumeration values belonging to the specified parent.
+    /// </summary>
+    /// <param name="parentCode">The code of the parent enumeration value.</param>
+    public IEnumerable<ADIFEnumerationValue> GetChildren(string parentCode)
+    {
+      if (string.IsNullOrEmpty(parentCode))
+        throw new ArgumentException("Parent code is required.", nameof(parentCode));
+
+      return this.Where(v => parentCode.Equals(v.Parent, StringComparison.OrdinalIgnoreCase));
     }
   
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
@@ -491,6 +514,8 @@ namespace ADIF.NET {
             this.Code = intCode.ToString();
           else if (dict[nameof(Code)] is double dblCode)
             this.Code = dblCode.ToString();
+          else if (dict[nameof(Code)] is long lngCode)
+            this.Code = lngCode.ToString();
         }
 
         if (dict.ContainsKey(nameof(ImportOnly)) && dict[nameof(ImportOnly)] is bool importOnly)
@@ -571,120 +596,6 @@ namespace ADIF.NET {
       }
     }
 
-  }
-
-  /// <summary>
-  /// Represents a country code.
-  /// </summary>
-  public class CountryCode {
-
-    public int Code { get; set; }
-    public string Name { get; set; }
-    public bool Deleted { get; set; }
-
-    public CountryCode(int code, string name, bool deleted) {
-      this.Code = code;
-      this.Name = name;
-      this.Deleted = deleted;
-    }
-
-    public CountryCode(dynamic value)
-    {
-      if (value is IDictionary<string, object> dict)
-      {
-        if (dict.ContainsKey(nameof(Name)) && dict[nameof(Name)] is string name)
-          this.Name = name;
-
-        if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is int code)
-          this.Code = code;
-
-        if (dict.ContainsKey(nameof(Deleted)) && dict[nameof(Deleted)] is bool deleted)
-          this.Deleted = deleted;
-      }
-    }
-
-    public static List<CountryCode> Get()
-    {
-      var list = new List<CountryCode>();
-
-      var data = SQLiteHelper.Instance.ReadData(RETRIEVE_COUNTRY_CODES_SQL);
-
-      foreach (dynamic d in data)
-      {
-        var cc = new CountryCode(d);
-        if (cc.Code > 0)
-          list.Add(cc);
-      }
-
-      return list;
-    }
-
-    const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name, Deleted FROM \"CountryCodes\" ORDER BY Code";
-
-  }
-
-  /// <summary>
-  /// Represents a contest.
-  /// </summary>
-  public class Contest  {
-    public string Code { get; set; }
-    public string Name { get; set; }
-    public bool Deprecated { get; set; }
-    public DateTime? ValidStart { get; set; }
-    public DateTime? ValidEnd { get; set; }
-
-    public Contest(string code, string name, bool deprecated, DateTime? validStart, DateTime? validEnd)
-    {
-      this.Code = code;
-      this.Name = name;
-      this.Deprecated = deprecated;
-      this.ValidEnd = validEnd;
-      this.ValidStart = validStart;
-    }
-
-    public Contest(dynamic value)
-    {
-      if (value is IDictionary<string, object> dict)
-      {
-        if (dict.ContainsKey(nameof(Name)) && dict[nameof(Name)] is string name)
-          this.Name = name;
-
-        if (dict.ContainsKey(nameof(Code)) && dict[nameof(Code)] is string code)
-          this.Code = code;
-
-        if (dict.ContainsKey(nameof(Deprecated)) && dict[nameof(Deprecated)] is bool deprecated)
-          this.Deprecated = deprecated;
-
-        if (dict.ContainsKey(nameof(ValidStart)) && dict[nameof(ValidStart)] is long validStart)
-        {
-          if (validStart > 0)
-            this.ValidStart = DateTimeOffset.FromUnixTimeSeconds(validStart).DateTime;
-        }
-
-        if (dict.ContainsKey(nameof(ValidEnd)) && dict[nameof(ValidEnd)] is long validEnd)
-        {
-          if (validEnd > 0)
-            this.ValidEnd = DateTimeOffset.FromUnixTimeSeconds(validEnd).DateTime;
-        }
-      }
-    }
-
-    public static List<Contest> Get()
-    {
-      var list = new List<Contest>();
-      var data = SQLiteHelper.Instance.ReadData(RETRIEVE_CONTESTS_SQL);
-
-      foreach (dynamic d in data)
-      {
-        var contest = new Contest(d);
-        if (!string.IsNullOrEmpty(contest.Code))
-          list.Add(contest);
-      }
-
-      return list;
-    }
-
-    const string RETRIEVE_CONTESTS_SQL = "SELECT Code, Name, Deprecated, ValidStart, ValidEnd FROM \"Contests\" ORDER BY Code";
   }
 
   [Enumeration]
@@ -782,6 +693,11 @@ namespace ADIF.NET {
       return bands;
     }
 
+    public static List<Band> Get()
+    {
+      return Get(Values.ITU);
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -795,6 +711,15 @@ namespace ADIF.NET {
 
       var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString()).Replace("{{{FREQUENCY}}", frequency.ToString()));
       return data.Count > 0;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequency"></param>
+    public static bool IsAmateurFrequency(double frequency)
+    {
+      return IsAmateurFrequency(frequency, Values.ITU);
     }
 
     /// <summary>
@@ -819,6 +744,15 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="frequency"></param>
+    public static Band Get(double frequency)
+    {
+      return Get(frequency, Values.ITU);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="band"></param>
     /// <param name="frequency"></param>
     /// <param name="itu"></param>
@@ -832,6 +766,16 @@ namespace ADIF.NET {
                                                           .Replace("{{FREQUENCY}}", frequency.ToString())
                                                           .Replace("{{NAME}}", band));
       return data.Count > 0;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="band"></param>
+    /// <param name="frequency"></param>
+    public static bool IsFrequencyInBand(string band, double frequency)
+    {
+      return IsFrequencyInBand(band, frequency, Values.ITU);
     }
 
     const string GET_UPPER_FREQENCY_SQL = "SELECT UpperFrequency FROM \"Bands\" WHERE Name = '{{NAME}}' AND ITU = {{ITU}}";

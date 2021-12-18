@@ -1,12 +1,10 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents the distance between the logging station and the contacted 
   /// station in kilometers via the specified signal path.
   /// </summary>
-  [DisplayName("The distance between the logging station and the contacted station in kilometers via the specified signal path.")]
   public class DistanceTag : NumberTag, ITag {
 
     public override string Name => TagNames.Distance;

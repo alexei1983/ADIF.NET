@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
   [DisplayName("The logging station's country code.")]
   public class MyDxccTag : RestrictedEnumerationTag, ITag {
 
-    public override string Name => TagNames.MyDxcc;
+    public override string Name => TagNames.MyDXCC;
 
     public override ADIFEnumeration Options => Values.CountryCodes;
     }

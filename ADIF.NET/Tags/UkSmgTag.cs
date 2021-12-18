@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
   [DisplayName("The contacted station's UKSMG member number.")]
   public class UkSmgTag : NumberTag, ITag {
 
-    public override string Name => TagNames.UkSmg;
+    public override string Name => TagNames.UKSmg;
 
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && value.ToDouble() > 0;

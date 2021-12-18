@@ -1,12 +1,10 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents a user-defined QSO field along with its value.
   /// </summary>
-  [DisplayName("A user-defined QSO field along with its value.")]
-  public class UserDefValueTag : Tag<object>, ITag {
+  public class UserDefValueTag : Tag<object> {
 
     public override string Name => field?.FieldName ?? string.Empty;
 

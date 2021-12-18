@@ -1,6 +1,4 @@
-﻿
-
-using ADIF.NET.Types;
+﻿using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 

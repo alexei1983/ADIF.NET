@@ -7,6 +7,6 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.EQSLReceivedStatus;
 
     [DefaultValue("N")]
-    public override string[] Options => Values.EQSLReceivedStatuses.GetOptions();
+    public override ADIFEnumeration Options => Values.EQSLReceivedStatuses;
     }
   }
