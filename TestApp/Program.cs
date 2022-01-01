@@ -66,11 +66,31 @@ namespace TestApp {
 
       var utag = new UserDefValueTag(null);
 
-      var file = @"C:\Users\S017138\Desktop\K0UOG@K-1213-20211212.adi";
+      var file = @"C:\Users\S017138\Desktop\K0UOG@K-2366-20211222.adi";
       var parser = new Parser();
       parser.LoadFile(file);
       var res = parser.Parse();
       //var coll = parser.GetQsoCollection();
+
+      var callTag = new CallTag();
+      callTag.SetValue("N7LV");
+
+      var bandTag = new BandTag();
+      bandTag.SetValue("20m");
+
+      var opTag = new OperatorTag();
+      opTag.SetValue("K0UOG");
+
+      var modeTag = new ModeTag();
+      modeTag.SetValue("CW");
+
+      var qso = new ADIFQSO(callTag, bandTag, opTag, modeTag, new EndRecordTag());
+      var adif = new ADIFDataSet();
+      adif.QSOs = new ADIFQSOCollection();
+      adif.QSOs.Add(qso);
+
+
+      var str = adif.ToADIF(EmitFlags.LowercaseTagNames | EmitFlags.AddCreatedTimestampIfNotPresent | EmitFlags.AddProgramIdIfNotPresent | EmitFlags.MirrorOperatorAndStationCallSign);
 
       var countries = ADIFEnumeration.Get("Band");
 

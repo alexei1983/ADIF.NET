@@ -1,12 +1,10 @@
-﻿using ADIF.NET.Attributes;
-using ADIF.NET.Types;
+﻿using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents the contacted station's latitude.
   /// </summary>
-  [DisplayName("The contacted station's latitude.")]
   public class LatTag : StringTag, ITag {
 
     public override string Name => TagNames.Lat;

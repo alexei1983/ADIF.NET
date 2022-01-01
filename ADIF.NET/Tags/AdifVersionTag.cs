@@ -3,7 +3,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents the version of ADIF used to create the file.
+  /// Represents the version of ADIF used to generate the data set.
   /// </summary>
   public class ADIFVersionTag : Tag<Version>, ITag {
 

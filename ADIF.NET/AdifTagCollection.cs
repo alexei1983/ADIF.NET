@@ -91,6 +91,19 @@ namespace ADIF.NET {
       return tags.IndexOf(tag);
       }
 
+    public virtual int IndexOf(string tagName)
+    {
+      if (string.IsNullOrEmpty(tagName))
+        return -1;
+
+      var tag = this.FirstOrDefault(t => t.Name.Equals(tagName, StringComparison.OrdinalIgnoreCase));
+
+      if (tag != null)
+        return IndexOf(tag);
+
+      return -1;
+    }
+
     public void CopyTo(ITag[] array, int arrayIndex) {
       tags.CopyTo(array, arrayIndex);
       }
@@ -106,50 +119,6 @@ namespace ADIF.NET {
     public virtual bool Contains(Type tagType) {
       return this.FirstOrDefault(t => tagType.Equals(t.GetType())) != null;
       }
-
-    //public string Build() {
-
-    //  //   < ADIF_VER:5 > 3.1.0
-    //  //< PROGRAMID:10 > ADIFMaster
-    //  // < PROGRAMVERSION:3 > 3.1
-    //  //  < EOH >
-
-    //  var headerTags = new List<Tag>();
-
-    //  if (!Contains(typeof(AdifVersionTag)))
-    //    headerTags.Add(new AdifVersionTag(Values.AdifVersion));
-
-    //  //if (!Contains(typeof(ProgramIdTag)))
-    //  //  headerTags.Add(new ProgramIdTag(ProgramId ?? Values.DefaultProgramId));
-
-    //  //if (ProgramVersion != null && !Contains(typeof(ProgramVersionTag)))
-    //  //  headerTags.Add(new ProgramVersionTag(ProgramVersion));
-
-    //  if (!Contains(typeof(CreatedTimestampTag)))
-    //    headerTags.Add(new CreatedTimestampTag());
-
-    //  if (!Contains(typeof(EndHeaderTag)))
-    //    headerTags.Add(new EndHeaderTag());
-
-    //  var insertAt = 0;
-
-    //  foreach (var tag in headerTags) {
-
-    //    if (Count > insertAt)
-    //      tags.Insert(insertAt, tag);
-    //    else
-    //      Add(tag);
-    //    }
-
-
-    //  var result = string.Empty;
-
-    //  foreach (var tag in this) {
-    //    result = $"{result}{tag.Build()}{(tag.Header ? Environment.NewLine : string.Empty)}";
-    //    }
-
-    //  return result;
-    //  }
 
     List<ITag> tags;
     }

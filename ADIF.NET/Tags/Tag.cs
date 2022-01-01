@@ -293,18 +293,32 @@ namespace ADIF.NET.Tags {
           return TextValue ?? string.Empty;
 
         case "A":
-          var retVal = string.Empty;
+          var upperVal = string.Empty;
 
           if (!string.IsNullOrEmpty(Name))
           {
-            retVal = $"{Values.TAG_OPENING}{Name}";
+            upperVal = $"{Values.TAG_OPENING}{ToString("N", provider)}";
 
             if (!SuppressLength)
-              retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
+              upperVal = $"{upperVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
 
-            retVal = $"{retVal}{Values.TAG_CLOSING}{TextValue} ";
+            upperVal = $"{upperVal}{Values.TAG_CLOSING}{TextValue} ";
           }
-          return retVal;
+          return upperVal;
+
+        case "a":
+          var lowerVal = string.Empty;
+
+          if (!string.IsNullOrEmpty(Name))
+          {
+            lowerVal = $"{Values.TAG_OPENING}{ToString("n", provider)}";
+
+            if (!SuppressLength)
+              lowerVal = $"{lowerVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
+
+            lowerVal = $"{lowerVal}{Values.TAG_CLOSING}{TextValue} ";
+          }
+          return lowerVal;
 
         default:
           throw new FormatException($"Format string '{format}' is not valid for type {GetType().Name}.");

@@ -1,8 +1,9 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
-  [DisplayName("The contacted station's IOTA designator.")]
+  /// <summary>
+  /// Represents the contacted station's IOTA designator.
+  /// </summary>
   public class IotaTag : StringTag, ITag {
 
     public override string Name => TagNames.IOTA;

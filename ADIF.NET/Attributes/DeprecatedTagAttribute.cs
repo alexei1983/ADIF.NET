@@ -7,9 +7,16 @@ namespace ADIF.NET.Attributes {
 
     public bool Deprecated { get; set; }
 
+    public string AlternateTagName { get; set; }
+
     public DeprecatedTagAttribute(bool deprecated)  {
       Deprecated = deprecated;
       }
+
+    public DeprecatedTagAttribute(string alternateTagName) : this(true)
+    {
+      AlternateTagName = alternateTagName;
+    }
 
     public DeprecatedTagAttribute() : this(true) { }
     }

@@ -5,8 +5,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the logging operator's callsign.
   /// </summary>
-  [DisplayName("The logging operator's callsign. (Deprecated: use OPERATOR instead)")]
-  [DeprecatedTag]
+  [DeprecatedTag(TagNames.Operator)]
   public class GuestOpTag : StringTag, ITag {
 
     public override string Name => TagNames.GuestOp;

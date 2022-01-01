@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>

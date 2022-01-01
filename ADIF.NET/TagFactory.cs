@@ -61,7 +61,7 @@ namespace ADIF.NET {
       { TagNames.HrdLogQSOUploadStatus, typeof(HrdLogQSOUploadStatusTag) },
       { TagNames.IOTA, typeof(IotaTag) },
       { TagNames.IOTAIslandId, typeof(IotaIslandIdTag) },
-      { TagNames.Ituz, typeof(ItuzTag) },
+      { TagNames.ITUZ, typeof(ITUZTag) },
       { TagNames.KIndex, typeof(KIndexTag) },
       { TagNames.Lat, typeof(LatTag) },
       { TagNames.Lon, typeof(LonTag) },
@@ -79,7 +79,7 @@ namespace ADIF.NET {
       { TagNames.MyCnty, typeof(MyCntyTag) },
       { TagNames.MyCQZone, typeof(MyCqZoneTag) },
       { TagNames.MyDXCC, typeof(MyDxccTag) },
-      { TagNames.MyFists, typeof(MyFistsTag) },
+      { TagNames.MyFists, typeof(MyFISTSTag) },
       { TagNames.MyGridSquare, typeof(MyGridSquareTag) },
       { TagNames.MyLat, typeof(MyLatTag) },
       { TagNames.MyLon, typeof(MyLonTag) },
@@ -132,6 +132,7 @@ namespace ADIF.NET {
       { TagNames.SOTARef, typeof(SOTARefTag) },
       { TagNames.Srx, typeof(SrxTag) },
       { TagNames.SrxString, typeof(SrxStringTag) },
+      { TagNames.StationCallSign, typeof(StationCallSignTag) },
       { TagNames.Stx, typeof(StxTag) },
       { TagNames.StxString, typeof(StxStringTag) },
       { TagNames.SWL, typeof(SWLTag) },
@@ -139,11 +140,12 @@ namespace ADIF.NET {
       { TagNames.TimeOff, typeof(TimeOffTag) },
       { TagNames.TimeOn, typeof(TimeOnTag) },
       { TagNames.TxPwr, typeof(TxPwrTag) },
-      { TagNames.UKSmg, typeof(UkSmgTag) },
+      { TagNames.UKSMG, typeof(UKSMGTag) },
       { TagNames.UserDef, typeof(UserDefTag) },
       { TagNames.Web, typeof(WebTag) }};
 
-    public static ITag TagFromName(string tagName) {
+    public static ITag TagFromName(string tagName)
+    {
 
       tagName = (tagName ?? string.Empty).ToUpper();
 
@@ -153,6 +155,16 @@ namespace ADIF.NET {
         return Activator.CreateInstance(keyValuePair.Value) as ITag;
 
       return null;
-      }
+    }
+
+    public static ITag TagFromName(string tagName, object value)
+    {
+      ITag tag = TagFromName(tagName);
+
+      if (tag != null)
+        tag.SetValue(value);
+
+      return tag;
     }
   }
+}

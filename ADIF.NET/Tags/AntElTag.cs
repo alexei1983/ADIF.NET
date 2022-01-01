@@ -1,11 +1,9 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents the logging station's antenna elevation in degrees.
   /// </summary>
-  [DisplayName("The logging station's antenna elevation, in degrees.")]
   public class AntElTag : NumberTag, ITag {
 
     public override string Name => TagNames.AntEl;

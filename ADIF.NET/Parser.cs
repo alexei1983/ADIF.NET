@@ -107,7 +107,7 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    public ADIFResult Parse() {
+    public ADIFDataSet Parse() {
 
       this.headers = new Dictionary<string, string>();
       this.body = new Dictionary<int, Dictionary<string, string>>();
@@ -130,7 +130,7 @@ namespace ADIF.NET {
           }
         }
 
-      var result = new ADIFResult
+      var result = new ADIFDataSet
       {
         Header = headerInternal,
         QSOs = new ADIFQSOCollection()

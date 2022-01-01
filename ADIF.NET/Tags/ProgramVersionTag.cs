@@ -1,12 +1,10 @@
 ﻿using System;
-using ADIF.NET.Attributes;
 
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// 
   /// </summary>
-  [DisplayName("")]
   public class ProgramVersionTag : Tag<Version>, ITag {
 
     public override string Name => TagNames.ProgramVersion;

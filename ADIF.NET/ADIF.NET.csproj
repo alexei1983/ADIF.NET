@@ -63,10 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADIFEmitSettings.cs" />
     <Compile Include="AdifHeader.cs" />
     <Compile Include="ADIFQSO.cs" />
     <Compile Include="ADIFQSOCollection.cs" />
-    <Compile Include="ADIFResult.cs" />
+    <Compile Include="ADIFDataSet.cs" />
     <Compile Include="AdifTagCollection.cs" />
     <Compile Include="Attributes\DefaultValueAttribute.cs" />
     <Compile Include="Attributes\DeprecatedTagAttribute.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Tags\MyRigTag.cs" />
     <Compile Include="Tags\QSORandomTag.cs" />
     <Compile Include="Tags\MyAntennaTag.cs" />
+    <Compile Include="Tags\StationCallSignTag.cs" />
     <Compile Include="Tags\WebTag.cs" />
     <Compile Include="Tags\UkSmgTag.cs" />
     <Compile Include="Tags\StxStringTag.cs" />
