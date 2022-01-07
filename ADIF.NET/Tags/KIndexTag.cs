@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class KIndexTag : NumberTag, ITag {
 
     public override string Name => TagNames.KIndex;
-    }
+
+    public KIndexTag() { }
+
+    public KIndexTag(double value) : base(value) { }
   }
+}

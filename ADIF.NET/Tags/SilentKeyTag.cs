@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class SilentKeyTag : BooleanTag, ITag {
 
     public override string Name => TagNames.SilentKey;
-    }
+
+    public SilentKeyTag() { }
+
+    public SilentKeyTag(bool value) : base(value) { }
   }
+}

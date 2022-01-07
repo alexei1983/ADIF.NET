@@ -1,11 +1,9 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents the logging station's antenna azimuth in degrees.
   /// </summary>
-  [DisplayName("The logging station's antenna azimuth, in degrees.")]
   public class AntAzTag : NumberTag, ITag {
 
     public override string Name => TagNames.AntAz;

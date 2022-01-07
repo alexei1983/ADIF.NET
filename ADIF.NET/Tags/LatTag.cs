@@ -11,6 +11,10 @@ namespace ADIF.NET.Tags {
 
     public override IADIFType ADIFType => new ADIFLocation();
 
+    public LatTag() { }
+
+    public LatTag(string value) : base(value) { }
+
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
       }

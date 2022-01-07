@@ -10,9 +10,7 @@ namespace ADIF.NET.Tags {
 
     public CQZTag() { }
 
-    public CQZTag(double zone) {
-      base.SetValue(zone);
-      }
+    public CQZTag(double value) : base(value) { }
 
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value);         

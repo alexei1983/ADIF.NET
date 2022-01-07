@@ -6,5 +6,10 @@ namespace ADIF.NET.Tags {
   /// from a list of options.
   /// </summary>
   public class EnumerationTag : Tag<string>, ITag {
+
+    public EnumerationTag() { }
+
+    public EnumerationTag(string value) : base(value) { }
+
     }
   }

@@ -11,5 +11,9 @@ namespace ADIF.NET.Tags {
     public override double MaxValue => 120;
 
     public override string Name => TagNames.Age;
-    }
+
+    public AgeTag() { }
+
+    public AgeTag(double value) : base(value) { }
   }
+}

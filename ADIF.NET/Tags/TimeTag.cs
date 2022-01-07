@@ -2,6 +2,10 @@
 using System.Globalization;
 
 namespace ADIF.NET.Tags {
+
+  /// <summary>
+  /// 
+  /// </summary>
   public class TimeTag : DateTag, ITag {
 
     public override string FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;

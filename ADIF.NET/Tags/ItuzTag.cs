@@ -11,5 +11,9 @@ namespace ADIF.NET.Tags {
     public override double MinValue => 1;
 
     public override double MaxValue => 90;
-    }
+
+    public ITUZTag() { }
+
+    public ITUZTag(double value) : base(value) { }
   }
+}

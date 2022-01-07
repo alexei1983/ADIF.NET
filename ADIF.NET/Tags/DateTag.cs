@@ -10,6 +10,10 @@ namespace ADIF.NET.Tags {
 
     public override string FormatString { get; set; } = Values.ADIF_DATE_FORMAT;
 
+    public DateTag() { }
+
+    public DateTag(DateTime value) : base(value) { }
+
     public override object ConvertValue(object value) {
 
       if (!(value is null)) {

@@ -11,9 +11,7 @@ namespace ADIF.NET.Tags {
 
     public DistanceTag() { }
 
-    public DistanceTag(double distance) {
-      base.SetValue(distance);
-      }
+    public DistanceTag(double value) : base(value) { }
 
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && value.ToDouble() > 0;   

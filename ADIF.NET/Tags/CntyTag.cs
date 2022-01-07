@@ -7,5 +7,5 @@ namespace ADIF.NET.Tags {
   public class CntyTag : StringTag, ITag {
 
     public override string Name => TagNames.Cnty;
-    }
   }
+}

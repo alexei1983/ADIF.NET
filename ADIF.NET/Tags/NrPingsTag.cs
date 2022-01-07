@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class NrPingsTag : NumberTag, ITag {
 
     public override string Name => TagNames.NrPings;
-    }
+
+    public NrPingsTag() { }
+
+    public NrPingsTag(double value) : base(value) { }
   }
+}

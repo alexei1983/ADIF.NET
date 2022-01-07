@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class MyAntennaTag : StringTag, ITag {
 
     public override string Name => TagNames.MyAntenna;
-    }
+
+    public MyAntennaTag() { }
+
+    public MyAntennaTag(string value) : base(value) { }
   }
+}

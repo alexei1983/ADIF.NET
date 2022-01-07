@@ -1,5 +1,4 @@
-﻿using System;
-using ADIF.NET.Types;
+﻿using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -16,6 +15,10 @@ namespace ADIF.NET.Tags {
     public override IADIFType ADIFType => new ADIFNumber();
 
     public virtual bool AllowValuesOverMaxOnImport { get; }
+
+    public NumberTag() { }
+
+    public NumberTag(double value) : base(value) { }
 
     public override object ConvertValue(object value)
     {

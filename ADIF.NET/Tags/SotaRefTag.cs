@@ -8,6 +8,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.SOTARef;
 
+    public SOTARefTag() { }
+
+    public SOTARefTag(string value) : base(value) { }
+
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && value.ToString().IsSOTADesignator();
       }

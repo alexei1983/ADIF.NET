@@ -10,6 +10,11 @@ namespace ADIF.NET.Tags {
 
     public override string ValueSeparator => Values.COLON.ToString();
 
+    public USACACountiesTag() { }
+
+    public USACACountiesTag(string value) : base(value) { }
+
+
     public override bool ValidateValue(object value) {
 
       if (base.ValidateValue(value)) {

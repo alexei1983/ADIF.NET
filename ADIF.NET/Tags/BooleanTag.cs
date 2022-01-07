@@ -11,6 +11,10 @@ namespace ADIF.NET.Tags {
 
     public override IADIFType ADIFType => new ADIFBoolean();
 
+    public BooleanTag() { }
+
+    public BooleanTag(bool value) : base(value) { }
+
     public override object ConvertValue(object value) {
       return value?.ToBoolean() ?? false;
       }

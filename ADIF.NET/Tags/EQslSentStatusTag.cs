@@ -2,6 +2,9 @@
 
 namespace ADIF.NET.Tags {
 
+  /// <summary>
+  /// 
+  /// </summary>
   public class EQSLSentStatusTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.EQSLSentStatus;

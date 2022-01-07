@@ -7,6 +7,10 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class IntlStringTag : Tag<string>, ITag {
 
+    public IntlStringTag() { }
+
+    public IntlStringTag(string value) : base(value) { }
+
     public override object ConvertValue(object value) {
       return value == null ? string.Empty : value.ToString();
       }

@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class MyRigIntlTag : IntlStringTag, ITag {
 
     public override string Name => TagNames.MyRigIntl;
-    }
+
+    public MyRigIntlTag() { }
+
+    public MyRigIntlTag(string value) : base(value) { }
   }
+}

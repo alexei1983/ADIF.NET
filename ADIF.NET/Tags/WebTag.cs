@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class WebTag : StringTag, ITag {
 
     public override string Name => TagNames.Web;
-    }
+
+    public WebTag() { }
+
+    public WebTag(string value) : base(value) { }
   }
+}

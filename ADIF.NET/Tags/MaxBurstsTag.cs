@@ -8,6 +8,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.MaxBursts;
 
+    public MaxBurstsTag() { }
+
+    public MaxBurstsTag(double value) : base(value) { }
+
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && value.ToDouble() >= 0;
       }

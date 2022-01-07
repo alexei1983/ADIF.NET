@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class CheckTag : StringTag, ITag {
 
     public override string Name => TagNames.Check;
-    }
+
+    public CheckTag() { }
+
+    public CheckTag(string value) : base(value) { }
   }
+}

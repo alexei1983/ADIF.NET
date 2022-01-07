@@ -14,9 +14,7 @@ namespace ADIF.NET.Tags {
 
     public AntElTag() { }
 
-    public AntElTag(double elevation) {
-      this.SetValue(elevation);
-      }
+    public AntElTag(double value) : base(value) { }
 
     public override void SetValue(double? value) {
       importValue = value;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using ADIF.NET.Tags;
 
 namespace ADIF.NET {
@@ -38,7 +39,22 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
+    /// <param name="outputFile"></param>
+    /// <param name="flags"></param>
+    public void ToADIF(string outputFile, EmitFlags flags = EmitFlags.None)
+    {
+      if (string.IsNullOrEmpty(outputFile))
+        throw new ArgumentException("Output file is required.", nameof(outputFile));
+
+      var adif = ToADIF(flags);
+
+      if (!string.IsNullOrEmpty(adif))
+        File.WriteAllText(outputFile, adif);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public string ToADIF(EmitFlags flags = EmitFlags.None)
     {
       var formatString = (flags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";

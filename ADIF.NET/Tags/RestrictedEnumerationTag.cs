@@ -9,6 +9,10 @@ namespace ADIF.NET.Tags {
 
     public override bool RestrictOptions => true;
 
+    public RestrictedEnumerationTag() { }
+
+    public RestrictedEnumerationTag(string value) : base(value) { }
+
     public override bool ValidateValue(object value) {    
       return base.ValidateValue(value) && 
              this.Options.IsValid(value.ToString());

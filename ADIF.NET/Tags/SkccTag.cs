@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class SKCCTag : StringTag, ITag {
 
     public override string Name => TagNames.SKCC;
-    }
+
+    public SKCCTag() { }
+
+    public SKCCTag(string value) : base(value) { }
   }
+}

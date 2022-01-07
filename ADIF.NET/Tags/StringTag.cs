@@ -14,5 +14,9 @@ namespace ADIF.NET.Tags {
       return (value?.ToString() ?? string.Empty).IsASCII();
       }
 
+    public StringTag() { }
+
+    public StringTag(string value) : base(value) { }
+
     }
   }

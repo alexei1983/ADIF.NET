@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
   public class GuestOpTag : StringTag, ITag {
 
     public override string Name => TagNames.GuestOp;
-    }
+
+    public GuestOpTag() { }
+
+    public GuestOpTag(string value) : base(value) { }
+  }
   }

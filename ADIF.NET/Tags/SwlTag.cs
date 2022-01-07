@@ -7,5 +7,10 @@ namespace ADIF.NET.Tags {
   public class SWLTag : BooleanTag, ITag {
 
     public override string Name => TagNames.SWL;
+
+    public SWLTag() { }
+
+    public SWLTag(bool value) : base(value) { }
+
     }
   }

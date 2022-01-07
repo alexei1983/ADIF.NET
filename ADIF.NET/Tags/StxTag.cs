@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class StxTag : NumberTag, ITag {
 
     public override string Name => TagNames.Stx;
-    }
+
+    public StxTag() { }
+
+    public StxTag(double value) : base(value) { }
   }
+}

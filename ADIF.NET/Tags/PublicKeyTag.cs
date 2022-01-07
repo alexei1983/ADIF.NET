@@ -10,8 +10,6 @@ namespace ADIF.NET.Tags {
 
     public PublicKeyTag() { }
 
-    public PublicKeyTag(string value) {
-      SetValue(value);
-      }
+    public PublicKeyTag(string value) : base(value) { }
     }
   }
