@@ -12,11 +12,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Unclassified.Util {
+
   /// <summary>
   /// Class providing static methods for calculating with Maidenhead locators, especially
   /// distance and bearing.
   /// </summary>
   public class MaidenheadLocator {
+
     /// <summary>
     /// Convert a locator to latitude and longitude in degrees
     /// </summary>
@@ -282,10 +284,12 @@ namespace Unclassified.Util {
   /// Simple structure to store a position in latitude and longitude
   /// </summary>
   public struct LatLng : IComparable {
+
     /// <summary>
     /// Latitude, -90 to +90 (N/S direction)
     /// </summary>
     public double Lat;
+
     /// <summary>
     /// Longitude, -180 to +180 (W/E direction)
     /// </summary>
