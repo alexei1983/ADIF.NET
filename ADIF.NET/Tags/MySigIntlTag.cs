@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class MySigIntlTag : IntlStringTag, ITag {
 
     public override string Name => TagNames.MySigIntl;
-    }
+
+    public MySigIntlTag() { }
+
+    public MySigIntlTag(string value) : base(value) { }
   }
+}

@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class EqCallTag : StringTag, ITag {
 
     public override string Name => TagNames.EqCall;
-    }
+
+    public EqCallTag() { }
+
+    public EqCallTag(string value) : base(value) { }
   }
+}

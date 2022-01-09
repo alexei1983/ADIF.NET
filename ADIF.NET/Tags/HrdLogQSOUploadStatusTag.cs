@@ -11,5 +11,9 @@ namespace ADIF.NET.Tags {
 
     [DefaultValue("N")]
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
-    }
+
+    public HrdLogQSOUploadStatusTag() { }
+
+    public HrdLogQSOUploadStatusTag(string value) : base(value) { }
   }
+}

@@ -1,5 +1,4 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -8,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class MyGridSquareTag : StringTag, ITag {
 
     public override string Name => TagNames.MyGridSquare;
-    }
+
+    public MyGridSquareTag() { }
+
+    public MyGridSquareTag(string value) : base(value) { }
   }
+}

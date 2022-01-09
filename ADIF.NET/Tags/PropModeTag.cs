@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.PropMode;
 
     public override ADIFEnumeration Options => Values.PropagationModes;
-    }
+
+    public PropModeTag() { }
+
+    public PropModeTag(string value) : base(value) { }
   }
+}

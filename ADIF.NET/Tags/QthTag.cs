@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class QTHTag : StringTag, ITag {
 
     public override string Name => TagNames.QTH;
-    }
+
+    public QTHTag() { }
+
+    public QTHTag(string value) : base(value) { }
   }
+}

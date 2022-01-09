@@ -10,6 +10,10 @@ namespace ADIF.NET.Tags {
 
     public override string FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;
 
+    public TimeTag() { }
+
+    public TimeTag(DateTime value) : base(value) { }
+
     public override object ConvertValue(object value) {
 
       if (!(value is null)) {

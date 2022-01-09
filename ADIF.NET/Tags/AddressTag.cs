@@ -1,5 +1,4 @@
-﻿using ADIF.NET.Attributes;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -9,5 +8,9 @@ namespace ADIF.NET.Tags {
   public class AddressTag : StringTag, ITag {
 
     public override string Name => TagNames.Address;
-    }
+
+    public AddressTag() { }
+
+    public AddressTag(string value) : base(value) { }
   }
+}

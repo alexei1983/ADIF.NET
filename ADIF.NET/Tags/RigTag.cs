@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class RigTag : StringTag, ITag {
 
     public override string Name => TagNames.Rig;
-    }
+
+    public RigTag() { }
+
+    public RigTag(string value) : base(value) { }
   }
+}

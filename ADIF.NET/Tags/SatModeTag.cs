@@ -1,5 +1,4 @@
 ﻿
-
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -8,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class SatModeTag : StringTag, ITag {
 
     public override string Name => TagNames.SatMode;
-    }
+
+    public SatModeTag() { }
+
+    public SatModeTag(string value) : base(value) { }
   }
+}

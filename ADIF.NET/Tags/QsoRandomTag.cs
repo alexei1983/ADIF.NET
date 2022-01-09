@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class QSORandomTag : BooleanTag, ITag {
 
     public override string Name => TagNames.QSORandom;
-    }
+
+    public QSORandomTag() { }
+
+    public QSORandomTag(bool value) : base(value) { }
   }
+}

@@ -11,5 +11,9 @@ namespace ADIF.NET.Tags {
 
     [DefaultValue("N")]
     public override ADIFEnumeration Options => Values.EQSLSentStatuses;
-    }
+
+    public EQSLSentStatusTag() { }
+
+    public EQSLSentStatusTag(string value) : base(value) { }
   }
+}

@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ClubLogQSOUploadStatus;
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
 
-    }
+    public ClubLogQSOUploadStatusTag() { }
+
+    public ClubLogQSOUploadStatusTag(string value) : base(value) { }
+
   }
+}

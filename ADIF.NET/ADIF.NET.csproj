@@ -132,7 +132,7 @@
     <Compile Include="Tags\NrPingsTag.cs" />
     <Compile Include="Tags\NrBurstsTag.cs" />
     <Compile Include="Tags\MyIotaIslandIdTag.cs" />
-    <Compile Include="Tags\IotaIslandIdTag.cs" />
+    <Compile Include="Tags\IOTAIslandIdTag.cs" />
     <Compile Include="Tags\MyItuZoneTag.cs" />
     <Compile Include="Tags\ItuzTag.cs" />
     <Compile Include="Tags\MsShowerTag.cs" />

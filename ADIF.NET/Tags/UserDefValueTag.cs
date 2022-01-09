@@ -20,6 +20,11 @@ namespace ADIF.NET.Tags {
 
     public double MaxValue => field?.UpperBound ?? 0;
 
+    public UserDefValueTag(UserDefTag field, object value) : base(value)
+    {
+      this.field = field;
+    }
+
     public UserDefValueTag(UserDefTag field) {
       this.field = field;
       }

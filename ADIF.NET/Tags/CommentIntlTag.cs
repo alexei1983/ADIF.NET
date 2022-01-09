@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class CommentIntlTag : IntlStringTag, ITag {
 
     public override string Name => TagNames.CommentIntl;
-    }
+
+    public CommentIntlTag() { }
+
+    public CommentIntlTag(string value) : base(value) { }
   }
+}

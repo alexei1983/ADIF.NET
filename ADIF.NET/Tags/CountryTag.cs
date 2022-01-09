@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class CountryTag : StringTag, ITag {
 
     public override string Name => TagNames.Country;
-    }
+
+    public CountryTag() { }
+
+    public CountryTag(string value) : base(value) { }
   }
+}

@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class NrBurstsTag : NumberTag, ITag {
 
     public override string Name => TagNames.NrBursts;
-    }
+
+    public NrBurstsTag() { }
+
+    public NrBurstsTag(double value) : base(value) { }
   }
+}

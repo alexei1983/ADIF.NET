@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class PrecedenceTag : StringTag, ITag {
 
     public override string Name => TagNames.Precedence;
-    }
+
+    public PrecedenceTag() { }
+
+    public PrecedenceTag(string value) : base(value) { }
   }
+}

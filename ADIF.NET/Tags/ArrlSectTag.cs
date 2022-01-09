@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ARRLSect;
 
     public override ADIFEnumeration Options => Values.ARRLSections;
-    }
+
+    public ARRLSectTag() { }
+
+    public ARRLSectTag(string value) : base(value) { }
   }
+}

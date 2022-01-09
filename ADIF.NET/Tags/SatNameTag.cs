@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class SatNameTag : StringTag, ITag {
 
     public override string Name => TagNames.SatName;
-    }
+
+    public SatNameTag() { }
+
+    public SatNameTag(string value) : base(value) { }
   }
+}

@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ContestId;
 
     public override ADIFEnumeration Options => Values.Contests;
-    }
+
+    public ContestIdTag() { }
+
+    public ContestIdTag(string value) : base(value) { }
   }
+}

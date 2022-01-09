@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.Continent;
 
     public override ADIFEnumeration Options => Values.Continents;
-    }
+
+    public ContinentTag() { }
+
+    public ContinentTag(string value) : base(value) { }
   }
+}

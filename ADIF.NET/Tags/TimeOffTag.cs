@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -7,5 +8,9 @@ namespace ADIF.NET.Tags {
   public class TimeOffTag : TimeTag, ITag {
 
     public override string Name => TagNames.TimeOff;
-    }
+
+    public TimeOffTag() { }
+
+    public TimeOffTag(DateTime value) : base(value) { }
   }
+}

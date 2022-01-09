@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the solar flux at the time of the QSO.
   /// </summary>
-  public class SfiTag : NumberTag, ITag {
+  public class SFITag : NumberTag, ITag {
 
     public override string Name => TagNames.Sfi;
 
@@ -12,5 +12,9 @@ namespace ADIF.NET.Tags {
 
     public override double MinValue => 0d;
 
-    }
+    public SFITag() { }
+
+    public SFITag(double value) : base(value) { }
+
   }
+}

@@ -8,6 +8,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.GridSquare;
 
+    public GridSquareTag() { }
+
+    public GridSquareTag(string value) : base(value) { }
+
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value) && value.IsADIFGridSquare();
       }

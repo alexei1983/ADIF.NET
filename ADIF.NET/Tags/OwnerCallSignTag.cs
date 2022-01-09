@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class OwnerCallSignTag : StringTag, ITag {
 
     public override string Name => TagNames.OwnerCallSign;
-    }
+
+    public OwnerCallSignTag() { }
+
+    public OwnerCallSignTag(string value) : base(value) { }
   }
+}

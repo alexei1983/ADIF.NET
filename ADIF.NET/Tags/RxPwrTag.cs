@@ -7,5 +7,9 @@ namespace ADIF.NET.Tags {
   public class RxPwrTag : NumberTag, ITag {
 
     public override string Name => TagNames.RxPwr;
-    }
+
+    public RxPwrTag() { }
+
+    public RxPwrTag(double value) : base(value) { }
   }
+}

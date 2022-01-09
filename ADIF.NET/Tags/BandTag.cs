@@ -9,5 +9,9 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.Band;
 
     public override ADIFEnumeration Options => Values.Bands;
-    }
+
+    public BandTag() { }
+
+    public BandTag(string value) : base(value) { }
   }
+}

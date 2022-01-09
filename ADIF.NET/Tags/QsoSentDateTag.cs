@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -8,5 +9,9 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.QSOSentDate;
 
-    }
+    public QSOSentDateTag() { }
+
+    public QSOSentDateTag(DateTime value) : base(value) { }
+
   }
+}
