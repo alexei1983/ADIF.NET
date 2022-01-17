@@ -18,8 +18,10 @@ namespace ADIF.NET.Tags {
 
       if (!(value is null)) {
 
+        var final = DateTime.MinValue;
+
         if (value is DateTime dateTime)
-          return dateTime;
+          final = dateTime;
         else {
           var objStr = value.ToString() ?? string.Empty;
 
@@ -33,12 +35,14 @@ namespace ADIF.NET.Tags {
                                      DateTimeStyles.AllowTrailingWhite | 
                                      DateTimeStyles.NoCurrentDateDefault,
                                      out DateTime dateTimeParsed))
-            return dateTimeParsed;
+            final = dateTimeParsed;
           }
+
+        if (final != DateTime.MinValue && final.Kind != DateTimeKind.Utc)
+          final = final.ToUniversalTime();
         }
 
       return null;
       }
-
     }
   }

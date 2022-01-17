@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using ADIF.NET.Tags;
@@ -35,6 +36,47 @@ namespace ADIF.NET {
     /// QSO collection.
     /// </summary>
     public ADIFQSOCollection QSOs { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public ADIFDataSet() { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="values"></param>
+    public ADIFDataSet(List<Dictionary<string, string>> values)
+    {
+      if (values != null)
+      {
+        Header = new ADIFHeader();
+        QSOs = new ADIFQSOCollection();
+
+        foreach (var value in values)
+        {
+          var qso = new ADIFQSO();
+          foreach (var key in value.Keys)
+          {
+            var tag = TagFactory.TagFromName(key);
+
+            if (tag != null)
+            {
+              if (value[key] != null)
+                tag.SetValue(value[key]);
+
+              if (tag.Header)
+                Header.Add(tag);
+              else
+                qso.Add(tag);
+            }
+          }
+
+          if (qso.Count > 0)
+            QSOs.Add(qso);
+        }
+      }
+    }
 
     /// <summary>
     /// 

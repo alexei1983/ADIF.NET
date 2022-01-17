@@ -207,6 +207,7 @@ namespace ADIF.NET {
           // find the beginning of a tag
           if (this.data[this.i] == Values.TAG_OPENING) {
             this.i++;
+
             // record the key
             while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR) {
               tag = $"{tag}{this.data[this.i]}"; //tag + this.data[this.i];
