@@ -88,7 +88,22 @@
     </Compile>
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
+    <Compile Include="Tags\CreditGrantedTag.cs" />
+    <Compile Include="Tags\CreditSubmittedTag.cs" />
+    <Compile Include="Tags\CreditListTag.cs" />
     <Compile Include="Tags\HrdLogQSOUploadStatusTag.cs" />
+    <Compile Include="Tags\QSOCompleteTag.cs" />
+    <Compile Include="Tags\SubmodeTag.cs" />
+    <Compile Include="Tags\StateTag.cs" />
+    <Compile Include="Tags\MyStateTag.cs" />
+    <Compile Include="Tags\MultiValueStringTag.cs" />
+    <Compile Include="Tags\RstSent.cs" />
+    <Compile Include="Tags\RstRcvdTag.cs" />
+    <Compile Include="Tags\MyVUCCGridsTag.cs" />
+    <Compile Include="Tags\ForceInitTag.cs" />
+    <Compile Include="Tags\MyUSACACountiesTag.cs" />
+    <Compile Include="Tags\VUCCGridsTag.cs" />
+    <Compile Include="Tags\VEProvTag.cs" />
     <Compile Include="Tags\USACACountiesTag.cs" />
     <Compile Include="Tags\MyAntennaIntlTag.cs" />
     <Compile Include="Tags\MyCityIntlTag.cs" />
@@ -200,8 +215,10 @@
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
     <Compile Include="Types\ADIFBoolean.cs" />
+    <Compile Include="Types\ADIFCreditList.cs" />
     <Compile Include="Types\ADIFLocation.cs" />
     <Compile Include="Types\ADIFNumber.cs" />
+    <Compile Include="Types\ADIFString.cs" />
     <Compile Include="Types\ADIFType.cs" />
     <Compile Include="Types\IADIFType.cs" />
     <Compile Include="Values.cs" />

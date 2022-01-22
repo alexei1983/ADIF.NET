@@ -41,6 +41,8 @@ namespace ADIF.NET {
       { TagNames.CountryIntl, typeof(CountryIntlTag) },
       { TagNames.CQZ, typeof(CQZTag) },
       { TagNames.CreatedTimestamp, typeof(CreatedTimestampTag) },
+      { TagNames.CreditGranted, typeof(CreditGrantedTag) },
+      { TagNames.CreditSubmitted, typeof(CreditSubmittedTag) },
       { TagNames.Distance, typeof(DistanceTag) },
       { TagNames.DXCC, typeof(DXCCTag) },
       { TagNames.Email, typeof(EmailTag) },
@@ -53,6 +55,7 @@ namespace ADIF.NET {
       { TagNames.EQSLSentStatus, typeof(EQSLSentStatusTag) },
       { TagNames.Fists, typeof(FISTSTag) },
       { TagNames.FistsCc, typeof(FISTSCCTag) },
+      { TagNames.ForceInit, typeof(ForceInitTag) },
       { TagNames.Freq, typeof(FreqTag) },
       { TagNames.FreqRx, typeof(FreqRxTag) },
       { TagNames.GridSquare, typeof(GridSquareTag) },
@@ -97,6 +100,9 @@ namespace ADIF.NET {
       { TagNames.MySigInfo, typeof(MySigInfoTag) },
       { TagNames.MySigInfoIntl, typeof(MySigInfoIntlTag) },
       { TagNames.MySOTARef, typeof(MySOTARefTag) },
+      { TagNames.MyState, typeof(MyStateTag) },
+      { TagNames.MyUSACACounties, typeof(MyUSACACountiesTag) },
+      { TagNames.MyVUCCGrids, typeof(MyVUCCGridsTag) },
       { TagNames.Name, typeof(NameTag) },
       { TagNames.NameIntl, typeof(NameIntlTag) },
       { TagNames.NrBursts, typeof(NrBurstsTag) },
@@ -110,6 +116,7 @@ namespace ADIF.NET {
       { TagNames.PropMode, typeof(PropModeTag) },
       { TagNames.PublicKey, typeof(PublicKeyTag) },
       { TagNames.QrzQSOUploadDate, typeof(QRZQSOUploadDateTag) },
+      { TagNames.QSOComplete, typeof(QSOCompleteTag) },
       { TagNames.QSODate, typeof(QSODateTag) },
       { TagNames.QSODateOff, typeof(QSODateOffTag) },
       { TagNames.QSOReceivedDate, typeof(QSOReceivedDateTag) },
@@ -119,6 +126,8 @@ namespace ADIF.NET {
       { TagNames.QTHIntl, typeof(QTHIntlTag) },
       { TagNames.Rig, typeof(RigTag) },
       { TagNames.RigIntl, typeof(RigIntlTag) },
+      { TagNames.RstRcvd, typeof(RstRcvdTag) },
+      { TagNames.RstSent, typeof(RstSentTag) },
       { TagNames.RxPwr, typeof(RxPwrTag) },
       { TagNames.SatMode, typeof(SatModeTag) },
       { TagNames.SatName, typeof(SatNameTag) },
@@ -132,9 +141,11 @@ namespace ADIF.NET {
       { TagNames.SOTARef, typeof(SOTARefTag) },
       { TagNames.Srx, typeof(SrxTag) },
       { TagNames.SrxString, typeof(SrxStringTag) },
+      { TagNames.State, typeof(StateTag) },
       { TagNames.StationCallSign, typeof(StationCallSignTag) },
       { TagNames.Stx, typeof(StxTag) },
       { TagNames.StxString, typeof(StxStringTag) },
+      { TagNames.Submode, typeof(SubmodeTag) },
       { TagNames.SWL, typeof(SWLTag) },
       { TagNames.TenTen, typeof(TenTenTag) },
       { TagNames.TimeOff, typeof(TimeOffTag) },
@@ -142,11 +153,12 @@ namespace ADIF.NET {
       { TagNames.TxPwr, typeof(TxPwrTag) },
       { TagNames.UKSMG, typeof(UKSMGTag) },
       { TagNames.UserDef, typeof(UserDefTag) },
+      { TagNames.VUCCGrids, typeof(VUCCGridsTag) },
+      { TagNames.VEProv, typeof(VEProvTag) },
       { TagNames.Web, typeof(WebTag) }};
 
     public static ITag TagFromName(string tagName)
     {
-
       tagName = (tagName ?? string.Empty).ToUpper();
 
       var keyValuePair = TagMap.FirstOrDefault(kv => kv.Key.Equals(tagName));

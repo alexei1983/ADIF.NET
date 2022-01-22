@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ADIF.NET;
 using ADIF.NET.Tags;
 using ADIF.NET.Helpers;
+using ADIF.NET.Types;
 
 namespace TestApp {
   class Program {
@@ -63,6 +64,24 @@ namespace TestApp {
 
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
+
+      var cg = new CreditGrantedTag();
+      cg.AddValue("WAS", "CARD");
+      cg.AddValue("SOTA");
+      cg.AddValue("IOTA", "LOTW");
+      cg.AddValue("IOTA", "CARD");
+      cg.AddValue("IOTA", "BUR");
+      Console.WriteLine(cg.TextValue);
+
+      ADIFCreditList.Parse("IOTA,WAS:LOTW&CARD,DXCC:CARD");
+
+      var p = new Parser();
+      p.LoadFile(@"C:\Users\S017138\Desktop\wsjtx_log - Copy.adi");
+      var result = p.Parse();
+
+
+      return;
+
 
       var listTag = new List<Dictionary<string, string>>();
       listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K5GHM" }, { "TIME_ON", "2025" }, { "QSO_DATE", "2022-01-15" },

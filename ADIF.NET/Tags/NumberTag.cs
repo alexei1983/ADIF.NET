@@ -32,7 +32,22 @@ namespace ADIF.NET.Tags {
 
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) && ConvertValue(value) is double?;
+      if (base.ValidateValue(value))
+      {
+        var val = ConvertValue(value);
+
+        if (val is double dblVal)
+        {
+          if (MinValue >= 0 && dblVal < MinValue)
+            return false;
+          else if (MaxValue > 0 && dblVal > MaxValue)
+            return false;
+
+          return true;
+        }
+      }
+
+      return false;
     }
   }
 }

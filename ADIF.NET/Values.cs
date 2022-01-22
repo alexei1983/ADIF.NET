@@ -267,11 +267,21 @@ namespace ADIF.NET {
     public const string QSODate = "QSO_DATE";
     public const string QSOReceivedDate = "QSLRDATE";
     public const string QSOSentDate = "QSLSDATE";
+
+    public const string QSLRcvd = "QSL_RCVD";
+    public const string QSLRcvdVia = "QSL_RCVD_VIA";
+    public const string QSLSent = "QSL_SENT";
+    public const string QSLSentVia = "QSL_SENT_VIA";
+    public const string QSLVia = "QSL_VIA";
+    public const string QSOComplete = "QSO_COMPLETE";
+
     public const string QSORandom = "QSO_RANDOM";
     public const string QTH = "QTH";
     public const string QTHIntl = "QTH_INTL";
     public const string Rig = "RIG";
     public const string RigIntl = "RIG_INTL";
+    public const string RstRcvd = "RST_RCVD";
+    public const string RstSent = "RST_SENT";
     public const string RxPwr = "RX_PWR";
     public const string SatMode = "SAT_MODE";
     public const string SatName = "SAT_NAME";
@@ -285,9 +295,11 @@ namespace ADIF.NET {
     public const string SOTARef = "SOTA_REF";
     public const string Srx = "SRX";
     public const string SrxString = "SRX_STRING";
+    public const string State = "STATE";
     public const string StationCallSign = "STATION_CALLSIGN";
     public const string Stx = "STX";
     public const string StxString = "STX_STRING";
+    public const string Submode = "SUBMODE";
     public const string SWL = "SWL";
     public const string TenTen = "TEN_TEN";
     public const string TimeOff = "TIME_OFF";
@@ -296,6 +308,7 @@ namespace ADIF.NET {
     public const string UKSMG = "UKSMG";
     public const string USACACounties = "USACA_COUNTIES";
     public const string UserDef = "USERDEF";
+    public const string VEProv = "VE_PROV";
     public const string VUCCGrids = "VUCC_GRIDS";
     public const string Web = "WEB";
     }

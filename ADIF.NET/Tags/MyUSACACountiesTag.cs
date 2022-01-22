@@ -4,9 +4,9 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents two US counties where the contacted station is located on a border between two counties.
   /// </summary>
-  public class USACACountiesTag : MultiValueStringTag, ITag {
+  public class MyUSACACountiesTag : MultiValueStringTag, ITag {
 
-    public override string Name => TagNames.USACACounties;
+    public override string Name => TagNames.MyUSACACounties;
 
     public override string ValueSeparator => Values.COLON.ToString();
 
@@ -14,9 +14,9 @@ namespace ADIF.NET.Tags {
 
     public override int MinValueCount => 2;
 
-    public USACACountiesTag() : base() { }
+    public MyUSACACountiesTag() : base() { }
 
-    public USACACountiesTag(string value) : base(value) {
+    public MyUSACACountiesTag(string value) : base(value) {
     }
   }
 }
