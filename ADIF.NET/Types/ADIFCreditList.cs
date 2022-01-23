@@ -6,7 +6,7 @@ using System.Globalization;
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the CreditList ADIF type.
   /// </summary>
   public class ADIFCreditList : ADIFString, IADIFType {
 
@@ -124,6 +124,9 @@ namespace ADIF.NET.Types {
     }
   }
 
+  /// <summary>
+  /// Represents an ADIF CreditList value.
+  /// </summary>
   public class CreditList : List<CreditList.CreditListMember>, IFormattable {
 
     public void Add(string credit, string medium)

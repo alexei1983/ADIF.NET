@@ -125,6 +125,12 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration Bands;
 
     /// <summary>
+    /// Credit enumeration.
+    /// </summary>
+    public static readonly ADIFEnumeration Credits;
+
+
+    /// <summary>
     /// Instantiates the static data fields for the class.
     /// </summary>
     static Values()
@@ -143,8 +149,9 @@ namespace ADIF.NET {
       Modes = ADIFEnumeration.Get("Mode");
       SponsoredAwardPrefixes = ADIFEnumeration.Get("SponsoredAwardPrefix");
       CountryCodes = ADIFEnumeration.Get("Countries");
-      Contests = ADIFEnumeration.Get("Contest");
+      Contests = ADIFEnumeration.Get("ContestID");
       Bands = ADIFEnumeration.Get("Band");
+      Credits = ADIFEnumeration.Get("Credit");
     }
 
     static byte ituRegion;
@@ -395,8 +402,8 @@ namespace ADIF.NET {
 
         query = RETRIEVE_BANDS_SQL.Replace("{{ITU}}", Values.ITU.ToString());
       }
-      else if (type == "Contest")
-        query = RETRIEVE_CONTESTS_SQL;
+      else if (type == "Credit")
+        query = RETRIEVE_CREDIT_SQL;
       else
         query = ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''"));
 
@@ -447,7 +454,7 @@ namespace ADIF.NET {
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
     const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
     const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\" WHERE ITU = {{ITU}}";
-    const string RETRIEVE_CONTESTS_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS Legacy, Deprecated AS ImportOnly FROM \"Contests\" ORDER BY Name, Code";
+    const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
 
   }
 

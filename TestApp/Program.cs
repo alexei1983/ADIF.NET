@@ -73,6 +73,8 @@ namespace TestApp {
       cg.AddValue("IOTA", "BUR");
       Console.WriteLine(cg.TextValue);
 
+      var credits = Values.Credits;
+
       ADIFCreditList.Parse("IOTA,WAS:LOTW&CARD,DXCC:CARD");
 
       var p = new Parser();

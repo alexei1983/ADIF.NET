@@ -218,6 +218,7 @@
     <Compile Include="Types\ADIFCreditList.cs" />
     <Compile Include="Types\ADIFLocation.cs" />
     <Compile Include="Types\ADIFNumber.cs" />
+    <Compile Include="Types\ADIFSOTARef.cs" />
     <Compile Include="Types\ADIFString.cs" />
     <Compile Include="Types\ADIFType.cs" />
     <Compile Include="Types\IADIFType.cs" />
