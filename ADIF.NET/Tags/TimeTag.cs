@@ -10,6 +10,8 @@ namespace ADIF.NET.Tags {
 
     public override string FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;
 
+    public bool ConvertToUTC { get; }
+
     public TimeTag() { }
 
     public TimeTag(DateTime value) : base(value) { }
@@ -23,7 +25,7 @@ namespace ADIF.NET.Tags {
         if (value is DateTime dateTime)
           final = dateTime;
         else {
-          var objStr = value.ToString() ?? string.Empty;
+          var objStr = value.ToString();
 
           var formatString = objStr.Length > 4 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT;
 
@@ -38,8 +40,10 @@ namespace ADIF.NET.Tags {
             final = dateTimeParsed;
           }
 
-        if (final != DateTime.MinValue && final.Kind != DateTimeKind.Utc)
+        if (final != DateTime.MinValue && ConvertToUTC)
           final = final.ToUniversalTime();
+
+        return final;
         }
 
       return null;

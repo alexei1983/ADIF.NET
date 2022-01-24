@@ -80,6 +80,7 @@
     <Compile Include="GridSquare.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />
     <Compile Include="Helpers\SQLiteHelper.cs" />
+    <Compile Include="Helpers\UserDefHelper.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -1,4 +1,5 @@
-﻿
+﻿using ADIF.NET.Helpers;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -8,7 +9,16 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.UserDef;
 
-    public string FieldName { get; set; }
+    public string FieldName
+    {
+      get { return fieldName; }
+
+      set
+      {
+        UserDefHelper.ValidateFieldName(value);
+        fieldName = value;
+      }
+    }
 
     public override bool Header => true;
 
@@ -21,5 +31,6 @@ namespace ADIF.NET.Tags {
 
     public string DataType { get; set; }
 
-    }
+    string fieldName;
   }
+}

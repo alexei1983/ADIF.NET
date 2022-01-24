@@ -318,7 +318,18 @@ namespace ADIF.NET {
     public const string VEProv = "VE_PROV";
     public const string VUCCGrids = "VUCC_GRIDS";
     public const string Web = "WEB";
+
+    public static IEnumerable<string> GetTagNames()
+    {
+      var constants = typeof(TagNames).GetConstants(typeof(string));
+      return constants.Select(c => c.GetRawConstantValue().ToString());
     }
+
+    public static bool IsTagName(string name)
+    {
+      return GetTagNames().Where(c => c.Equals(name, StringComparison.OrdinalIgnoreCase)) != null;
+    }
+  }
 
   /// <summary>
   /// Represents an ADIF enumeration.

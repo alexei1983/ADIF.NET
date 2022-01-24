@@ -5,7 +5,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  [DeprecatedTag("")]
+  [DeprecatedTag(TagNames.State)]
   public class VEProvTag : StringTag, ITag {
 
     public override string Name => TagNames.VEProv;
