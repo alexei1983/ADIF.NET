@@ -18,7 +18,7 @@ namespace ADIF.NET.Tags {
         }
 
       set {
-        if (value?.Contains(Values.UNDERSCORE.ToString()) ?? false)
+        if (value != null && value.Contains(Values.UNDERSCORE.ToString()))
           throw new ArgumentException("Program ID cannot contain an underscore.");
 
         programId = value;
@@ -49,7 +49,7 @@ namespace ADIF.NET.Tags {
           return value.ToBoolean();
 
         default:
-          return value.ToString() ?? string.Empty;
+          return value.ToString();
           }
         }
 
@@ -57,6 +57,5 @@ namespace ADIF.NET.Tags {
       }
 
     string programId;
-
     }
   }

@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class BooleanTag : Tag<bool>, ITag {
 
-    public override ADIFEnumeration Options => new ADIFBoolean().Options;
+    public override ADIFEnumeration Options => ADIFType.Options;
 
     public override IADIFType ADIFType => new ADIFBoolean();
 

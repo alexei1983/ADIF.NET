@@ -5,13 +5,13 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  public class HrdLogQSOUploadDateTag : DateTag, ITag {
+  public class HRDLogQSOUploadDateTag : DateTag, ITag {
 
     public override string Name => TagNames.HrdLogQSOUploadDate;
 
-    public HrdLogQSOUploadDateTag() { }
+    public HRDLogQSOUploadDateTag() { }
 
-    public HrdLogQSOUploadDateTag(DateTime value) : base(value) { }
+    public HRDLogQSOUploadDateTag(DateTime value) : base(value) { }
 
   }
   }

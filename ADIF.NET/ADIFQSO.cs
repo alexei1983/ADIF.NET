@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ADIF.NET.Tags;
 
 namespace ADIF.NET {
@@ -7,6 +8,25 @@ namespace ADIF.NET {
   /// Contains the ADIF tags describing a QSO.
   /// </summary>
   public class ADIFQSO : ADIFTagCollection {
+
+    public override ITag this[int index] {
+
+      get => base[index];
+
+      set
+      {
+        if (value is null)
+          return;
+
+        if (value.Header)
+          throw new ArgumentException("Cannot insert header tag into QSO.");
+
+        if (Contains(value.GetType()))
+          throw new ArgumentException($"QSO already contains tag '{value.Name}'");
+
+        base[index] = value;
+      }
+    }
 
     /// <summary>
     /// Creates a new instance of the <see cref="ADIFQSO"/> class.
@@ -30,7 +50,7 @@ namespace ADIF.NET {
     {
       if (tags != null)
         foreach (var tag in tags)
-          this.Add(tag);
+          Add(tag);
     }
 
     /// <summary>
@@ -45,6 +65,9 @@ namespace ADIF.NET {
       if (tag.Header)
         throw new ArgumentException("Cannot insert header tag into QSO.");
 
+      if (Contains(tag.GetType()))
+        throw new ArgumentException($"QSO already contains tag '{tag.Name}'");
+
       base.Add(tag);
     }
 
@@ -54,8 +77,8 @@ namespace ADIF.NET {
     /// <param name="call">Callsign to add as the contacted station.</param>
     public void AddCall(string call)
     {
-      if (!this.Contains(typeof(CallTag)))
-        this.Add(new CallTag(call));
+      if (!Contains(typeof(CallTag)))
+        Add(new CallTag(call));
     }
 
     /// <summary>
@@ -64,8 +87,8 @@ namespace ADIF.NET {
     /// <param name="qsoDate">Date to add as the QSO date.</param>
     public void AddQSODate(DateTime qsoDate)
     {
-      if (!this.Contains(typeof(QSODateTag)))
-        this.Add(new QSODateTag(qsoDate));
+      if (!Contains(typeof(QSODateTag)))
+        Add(new QSODateTag(qsoDate));
     }
 
     /// <summary>
@@ -74,8 +97,8 @@ namespace ADIF.NET {
     /// <param name="timeOn">Time to add as the QSO time-on.</param>
     public void AddTimeOn(DateTime timeOn)
     {
-      if (!this.Contains(typeof(TimeOnTag)))
-        this.Add(new TimeOnTag(timeOn));
+      if (!Contains(typeof(TimeOnTag)))
+        Add(new TimeOnTag(timeOn));
     }
 
     /// <summary>
@@ -84,8 +107,8 @@ namespace ADIF.NET {
     /// <param name="mode">Mode to add to the current QSO.</param>
     public void AddMode(string mode)
     {
-      if (!this.Contains(typeof(ModeTag)))
-        this.Add(new ModeTag(mode));
+      if (!Contains(typeof(ModeTag)))
+        Add(new ModeTag(mode));
     }
 
     /// <summary>
@@ -94,8 +117,8 @@ namespace ADIF.NET {
     /// <param name="band">Band to add to the current QSO.</param>
     public void AddBand(string band)
     {
-      if (!this.Contains(typeof(BandTag)))
-        this.Add(new BandTag(band));
+      if (!Contains(typeof(BandTag)))
+        Add(new BandTag(band));
     }
 
     /// <summary>
@@ -104,8 +127,8 @@ namespace ADIF.NET {
     /// <param name="operatorCall">Callsign to add to the QSO as the operator.</param>
     public void AddOperator(string operatorCall)
     {
-      if (!this.Contains(typeof(OperatorTag)))
-        this.Add(new OperatorTag(operatorCall));
+      if (!Contains(typeof(OperatorTag)))
+        Add(new OperatorTag(operatorCall));
     }
 
     /// <summary>
@@ -114,28 +137,8 @@ namespace ADIF.NET {
     /// <param name="comment">Comment to add to the QSO.</param>
     public void AddComment(string comment)
     {
-      if (!this.Contains(typeof(CommentTag)))
-        this.Add(new CommentTag(comment));
-    }
-
-    /// <summary>
-    /// Adds a <see cref="SigInfoTag"/> to the current QSO.
-    /// </summary>
-    /// <param name="sigInfo">Special interest group information to add to the current QSO.</param>
-    public void AddSIGInfo(string sigInfo)
-    {
-      if (!this.Contains(typeof(SigInfoTag)))
-        this.Add(new SigInfoTag(sigInfo));
-    }
-
-    /// <summary>
-    /// Adds a <see cref="MySigInfoTag"/> to the current QSO.
-    /// </summary>
-    /// <param name="mySigInfo">Special interest group information to add to the current QSO.</param>
-    public void AddMySIGInfo(string mySigInfo)
-    {
-      if (!this.Contains(typeof(MySigInfoTag)))
-        this.Add(new MySigInfoTag(mySigInfo));
+      if (!Contains(typeof(CommentTag)))
+        Add(new CommentTag(comment));
     }
 
     /// <summary>
@@ -145,14 +148,14 @@ namespace ADIF.NET {
     /// <param name="setBand">Whether or not to set the band for the current QSO based on the frequency.</param>
     public void AddFreq(double frequency, bool setBand = false)
     {
-      if (!this.Contains(typeof(FreqTag)))
-        this.Add(new FreqTag(frequency));
+      if (!Contains(typeof(FreqTag)))
+        Add(new FreqTag(frequency));
 
       if (setBand)
       {
         var band = Band.Get(frequency);
         if (band != null)
-          this.AddBand(band.Name);
+          AddBand(band.Name);
       }
     }
 
@@ -162,8 +165,68 @@ namespace ADIF.NET {
     /// <param name="name">Personal name of the contacted station.</param>
     public void AddName(string name)
     {
-      if (!this.Contains(typeof(NameTag)))
+      if (!Contains(typeof(NameTag)))
         this.Add(new NameTag(name));
+    }
+
+    /// <summary>
+    /// Retrieves the date and time that the QSO started.
+    /// </summary>
+    public DateTime? GetQSODateTimeOn()
+    {
+      DateTime? result = null;
+
+      if (Contains(typeof(QSODateTag)))
+      {
+        var qsoDate = this.FirstOrDefault(q => q.GetType().Equals(typeof(QSODateTag)))?
+                                                          .Value as DateTime?;
+
+        if (qsoDate.HasValue && Contains(typeof(TimeOnTag)))
+        {
+          var timeOn = this.FirstOrDefault(q => q.GetType().Equals(typeof(TimeOnTag)))?
+                                                           .Value as DateTime?;
+          if (timeOn.HasValue)
+          {
+            result = new DateTime(qsoDate.Value.Year,
+                                  qsoDate.Value.Month,
+                                  qsoDate.Value.Day,
+                                  timeOn.Value.Hour,
+                                  timeOn.Value.Minute,
+                                  timeOn.Value.Second);
+          }
+        }
+      }
+      return result;
+    }
+
+    /// <summary>
+    /// Retrieves the date and time that the QSO ended.
+    /// </summary>
+    public DateTime? GetQSODateTimeOff()
+    {
+      DateTime? result = null;
+
+      if (Contains(typeof(QSODateOffTag)))
+      {
+        var qsoDate = this.FirstOrDefault(q => q.GetType().Equals(typeof(QSODateOffTag)))?
+                                                          .Value as DateTime?;
+
+        if (qsoDate.HasValue && Contains(typeof(TimeOffTag)))
+        {
+          var timeOn = this.FirstOrDefault(q => q.GetType().Equals(typeof(TimeOffTag)))?
+                                                           .Value as DateTime?;
+          if (timeOn.HasValue)
+          {
+            result = new DateTime(qsoDate.Value.Year,
+                                  qsoDate.Value.Month,
+                                  qsoDate.Value.Day,
+                                  timeOn.Value.Hour,
+                                  timeOn.Value.Minute,
+                                  timeOn.Value.Second);
+          }
+        }
+      }
+      return result;
     }
 
     /// <summary>
@@ -178,6 +241,9 @@ namespace ADIF.NET {
 
       if (tag.Header)
         throw new ArgumentException("Cannot insert header tag into QSO.");
+
+      if (Contains(tag.GetType()))
+        throw new ArgumentException($"QSO already contains tag '{tag.Name}'");
 
       base.Insert(index, tag);
     }

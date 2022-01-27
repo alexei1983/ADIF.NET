@@ -270,6 +270,8 @@ namespace TestApp {
 
 
       var dataset = new ADIFDataSet(listTag);
+
+      var timeOn = dataset.QSOs[0].GetQSODateTimeOn();
       //dataset.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-1212-20220124.adi", EmitFlags.AddCreatedTimestampIfNotPresent | EmitFlags.AddProgramIdIfNotPresent | EmitFlags.MirrorOperatorAndStationCallSign);
 
       return;

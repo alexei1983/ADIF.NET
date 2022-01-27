@@ -93,6 +93,8 @@
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />
     <Compile Include="Tags\HrdLogQSOUploadStatusTag.cs" />
+    <Compile Include="Tags\QSLViaTag.cs" />
+    <Compile Include="Tags\QSLRcvdTag.cs" />
     <Compile Include="Tags\QSOCompleteTag.cs" />
     <Compile Include="Tags\SubmodeTag.cs" />
     <Compile Include="Tags\StateTag.cs" />

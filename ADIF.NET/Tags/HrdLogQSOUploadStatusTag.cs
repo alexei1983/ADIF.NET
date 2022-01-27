@@ -5,15 +5,15 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  public class HrdLogQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
+  public class HRDLogQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.HrdLogQSOUploadStatus;
 
     [DefaultValue("N")]
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
 
-    public HrdLogQSOUploadStatusTag() { }
+    public HRDLogQSOUploadStatusTag() { }
 
-    public HrdLogQSOUploadStatusTag(string value) : base(value) { }
+    public HRDLogQSOUploadStatusTag(string value) : base(value) { }
   }
 }
