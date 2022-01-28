@@ -8,8 +8,7 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.QSLRcvd;
 
-    // TODO: Fix enumeration here
-    public override ADIFEnumeration Options => Values.EQSLReceivedStatuses;
+    public override ADIFEnumeration Options => Values.QSLReceivedStatuses;
 
     public QSLRcvdTag() { }
 

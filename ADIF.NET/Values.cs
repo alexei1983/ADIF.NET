@@ -131,6 +131,16 @@ namespace ADIF.NET {
     /// </summary>
     public static readonly ADIFEnumeration Credits;
 
+    /// <summary>
+    /// QSL received statuses.
+    /// </summary>
+    public static readonly ADIFEnumeration QSLReceivedStatuses;
+
+    /// <summary>
+    /// QSL sent statuses.
+    /// </summary>
+    public static readonly ADIFEnumeration QSLSentStatuses;
+
 
     /// <summary>
     /// Instantiates the static data fields for the class.
@@ -154,6 +164,8 @@ namespace ADIF.NET {
       Contests = ADIFEnumeration.Get("ContestID");
       Bands = ADIFEnumeration.Get("Band");
       Credits = ADIFEnumeration.Get("Credit");
+      QSLSentStatuses = ADIFEnumeration.Get("QSLSent");
+      QSLReceivedStatuses = ADIFEnumeration.Get("QSLRcvd");
     }
 
     static byte ituRegion;

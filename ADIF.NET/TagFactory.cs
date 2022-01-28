@@ -117,6 +117,8 @@ namespace ADIF.NET {
       { TagNames.PublicKey, typeof(PublicKeyTag) },
       { TagNames.QrzQSOUploadDate, typeof(QRZQSOUploadDateTag) },
       { TagNames.QSLVia, typeof(QSLViaTag) },
+      { TagNames.QSLSent, typeof(QSLSentTag) },
+      { TagNames.QSLRcvd, typeof(QSLRcvdTag) },
       { TagNames.QSOComplete, typeof(QSOCompleteTag) },
       { TagNames.QSODate, typeof(QSODateTag) },
       { TagNames.QSODateOff, typeof(QSODateOffTag) },
@@ -158,6 +160,10 @@ namespace ADIF.NET {
       { TagNames.VEProv, typeof(VEProvTag) },
       { TagNames.Web, typeof(WebTag) }};
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
     public static ITag TagFromName(string tagName)
     {
       tagName = (tagName ?? string.Empty).ToUpper();
@@ -170,6 +176,11 @@ namespace ADIF.NET {
       return null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
+    /// <param name="value"></param>
     public static ITag TagFromName(string tagName, object value)
     {
       ITag tag = TagFromName(tagName);

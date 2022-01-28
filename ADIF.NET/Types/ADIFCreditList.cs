@@ -90,6 +90,10 @@ namespace ADIF.NET.Types {
           if (creditQslSplit == null || creditQslSplit.Length != 2)
             throw new Exception("Error in CreditList value.");
 
+          // validate the credit part of the string
+          if (!Values.Credits.IsValid(creditQslSplit[0]))
+            throw new Exception($"Credit '{creditQslSplit[0]}' is not valid.");
+
           // now try to split by ampersand
           if (creditQslSplit[1].Contains(Values.AMPERSAND))
           {
@@ -116,6 +120,9 @@ namespace ADIF.NET.Types {
         } else
         {
           // if a colon was not present, simply validate against the credit enumeration
+          if (!Values.Credits.IsValid(val))
+            throw new Exception($"Credit '{val}' is not valid.");
+
           list.Add(val);
         }
       }
@@ -127,16 +134,21 @@ namespace ADIF.NET.Types {
   /// <summary>
   /// Represents an ADIF CreditList value.
   /// </summary>
-  public class CreditList : List<CreditList.CreditListMember>, IFormattable {
-
+  public class CreditList : List<CreditList.CreditListMember>, 
+                            IList<CreditList.CreditListMember>,
+                            IFormattable {
+ 
     public void Add(string credit, string medium)
     {
-      this.Add(new CreditListMember(credit, medium));
+      if (string.IsNullOrEmpty(credit) || string.IsNullOrEmpty(medium))
+        throw new Exception("Credit and medium are required.");
+
+      Add(new CreditListMember(credit, medium));
     }
 
     public void Add(string credit)
     {
-      this.Add(new CreditListMember(credit));
+      Add(new CreditListMember(credit));
     }
 
     public IEnumerable<string> GetMediums(string credit)
@@ -147,6 +159,7 @@ namespace ADIF.NET.Types {
     }
 
     public struct CreditListMember {
+
       public string Credit { get; }
       public string Medium { get; }
 
@@ -163,7 +176,7 @@ namespace ADIF.NET.Types {
 
     public override string ToString()
     {
-      return this.ToString("G", CultureInfo.CurrentCulture);
+      return ToString("G", CultureInfo.CurrentCulture);
     }
 
     public string ToString(string format, IFormatProvider provider)
@@ -182,12 +195,12 @@ namespace ADIF.NET.Types {
           var handled = new List<string>();
           var result = string.Empty;
 
-          for (var x = 0; x < this.Count; x++)
+          for (var x = 0; x < Count; x++)
           {
             if (handled.Contains(this[x].Credit.ToUpper()))
               continue;
 
-            if (x > 0 && (x + 1) < this.Count)
+            if (x > 0 && (x + 1) < Count)
               result += Values.COMMA.ToString();
 
             result += this[x].Credit;
