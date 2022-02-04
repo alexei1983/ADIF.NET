@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents the mode of the QSO.
+  /// 
   /// </summary>
   public class QSOCompleteTag : RestrictedEnumerationTag, ITag {
 
