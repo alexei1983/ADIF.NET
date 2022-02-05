@@ -90,8 +90,6 @@ namespace TestApp {
       Console.WriteLine(locLat.ToString());
       Console.WriteLine(locLng.ToString());
 
-      return;
-
       var cg = new CreditGrantedTag();
       cg.AddValue("WAS", "CARD");
       cg.AddValue("SOTA");
@@ -101,6 +99,13 @@ namespace TestApp {
       Console.WriteLine(cg.TextValue);
 
       var credits = Values.Credits;
+
+      var parse = new Parser();
+      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
+      var result = parse.Parse();
+
+      return;
+
 
       ADIFCreditList.Parse("IOTA,WAS:LOTW&CARD,DXCC:CARD");
 

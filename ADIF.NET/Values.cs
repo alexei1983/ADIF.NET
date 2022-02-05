@@ -435,7 +435,9 @@ namespace ADIF.NET {
     /// <param name="name">Name to check.</param>
     public static bool IsTagName(string name)
     {
-      return GetTagNames().Where(c => c.Equals(name, StringComparison.OrdinalIgnoreCase)) != null;
+      var names = GetTagNames().Where(c => c.Equals(name, StringComparison.OrdinalIgnoreCase))?.ToArray();
+      return names != null && names.Length > 0;
+      
     }
   }
 
