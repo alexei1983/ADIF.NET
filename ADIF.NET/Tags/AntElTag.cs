@@ -1,4 +1,5 @@
-﻿
+﻿using ADIF.NET.Types;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -18,15 +19,15 @@ namespace ADIF.NET.Tags {
 
     public override void SetValue(double? value) {
       importValue = value;
-      base.SetValue(ConvertValue(value));
+      SetValue(value);
       }
 
     public override void SetValue(object value) {
-      var convertedVal = base.ConvertValue(value);
+      var convertedVal = ConvertValue(value);
 
       if (convertedVal is double doubleVal) {
         importValue = doubleVal;
-        base.SetValue(this.ConvertValue(doubleVal));
+        base.SetValue(doubleVal);
         }
       }
 
@@ -35,13 +36,20 @@ namespace ADIF.NET.Tags {
       }
 
     public override object ConvertValue(object value) {
-      var convertedVal = base.ConvertValue(value);
+      var convertedVal = 0d;
+
+      if (value is double)
+        convertedVal = (double)value;
+      else if (ADIFNumber.TryParse(value == null ? string.Empty : value.ToString(), out double? result))
+        convertedVal = result.HasValue ? result.Value : 0;
 
       if (convertedVal is double doubleVal) {
 
         if (doubleVal > MaxValue) {
           doubleVal = doubleVal % MaxValue;
           }
+        else if (doubleVal < MinValue)
+          doubleVal = MinValue;
 
         return doubleVal;
         }
