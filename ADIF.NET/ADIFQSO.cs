@@ -65,7 +65,7 @@ namespace ADIF.NET {
       if (tag.Header)
         throw new ArgumentException("Cannot insert header tag into QSO.");
 
-      if (Contains(tag.GetType()))
+      if (Contains(tag.Name))
         throw new ArgumentException($"QSO already contains tag '{tag.Name}'");
 
       base.Add(tag);

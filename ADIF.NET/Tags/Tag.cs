@@ -217,6 +217,14 @@ namespace ADIF.NET.Tags {
         hash = (hash * hashingMultiplier) ^ (GetType().GetHashCode());
         hash = (hash * hashingMultiplier) ^ (!(TextValue is null) ? TextValue.GetHashCode() : 0);
         hash = (hash * hashingMultiplier) ^ (!(ValueLength is null) ? ValueLength.GetHashCode() : 0);
+
+        if (this is UserDefTag)
+        {
+          var userDefTag = this as UserDefTag;
+          hash = (hash * hashingMultiplier) ^ userDefTag.FieldId.GetHashCode();
+          hash = (hash * hashingMultiplier) ^ userDefTag.FieldName.GetHashCode();
+        }
+
         return hash;
       }
     }
