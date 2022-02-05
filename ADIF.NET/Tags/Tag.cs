@@ -244,7 +244,7 @@ namespace ADIF.NET.Tags {
     /// <returns></returns>
     public override string ToString()
     {
-      return this.ToString("G", CultureInfo.CurrentCulture);
+      return ToString("G", CultureInfo.CurrentCulture);
     }
 
     /// <summary>
@@ -254,7 +254,7 @@ namespace ADIF.NET.Tags {
     /// <returns></returns>
     public string ToString(string format)
     {
-      return this.ToString(format, CultureInfo.CurrentCulture);
+      return ToString(format, CultureInfo.CurrentCulture);
     }
 
     /// <summary>

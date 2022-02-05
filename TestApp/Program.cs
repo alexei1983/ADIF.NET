@@ -65,18 +65,30 @@ namespace TestApp {
       //var g = new ADIF.NET.Helpers.GridSquareHelper();
       //var ersu = g.GetGridSquare("3205 W. Avondale Dr, Denver, CO", ADIF.NET.Helpers.GridSquareHelper.LookupType.Address);
 
-      var latlng = new Unclassified.Util.LatLng();
-      latlng.Lat = -37.1039;
-      latlng.Long = 103.7414;
+      //var latlng = new Unclassified.Util.LatLng();
+      //latlng.Lat = -37.1039;
+      //latlng.Long = 103.7414;
 
-      Console.WriteLine(latlng.ToString());
+      //Console.WriteLine(latlng.ToString());
 
 
-      var latLng = "N037 23.455";
+      var lat = "S033 51.516";
+      var lng = "E151 12.850";
 
-      ADIFLocation.TryParse(latLng, out ADIFLocation loc);
-      if (loc != null)
-        Console.WriteLine(loc.ToDecimalDegrees());
+      ADIFLocation.TryParse(lat, out Location latLoc );
+      if (latLoc != null)
+        Console.WriteLine(latLoc.ToDecimalDegrees());
+
+      ADIFLocation.TryParse(lng, out Location lngLoc);
+      if (lngLoc != null)
+        Console.WriteLine(lngLoc.ToDecimalDegrees());
+
+      Location locLat = ADIFLocation.FromDecimalDegrees(-33.858611m, LocationType.Latitude);
+      Location locLng = ADIFLocation.FromDecimalDegrees(151.214167m, LocationType.Longitude);
+
+      Console.WriteLine();
+      Console.WriteLine(locLat.ToString());
+      Console.WriteLine(locLng.ToString());
 
       return;
 

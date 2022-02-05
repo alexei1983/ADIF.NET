@@ -4,8 +4,14 @@ using ADIF.NET.Helpers;
 
 namespace ADIF.NET.Types {
 
+  public enum LocationType {
+    Unspecified,
+    Latitude,
+    Longitude,
+  }
+
   /// <summary>
-  /// Represents an ADIF Location type.
+  /// Represents an ADIF Location.
   /// </summary>
   public class ADIFLocation : ADIFType<string> {
 
@@ -43,7 +49,7 @@ namespace ADIF.NET.Types {
 
       var minutesStr = s.Substring(5);
 
-      if (!double.TryParse(minutesStr, out double minutes))
+      if (!decimal.TryParse(minutesStr, out decimal minutes))
         throw new Exception($"Minutes must be a numeric value.");
 
       if (!LocationHelper.ValidateMinutes(minutes))
@@ -70,12 +76,73 @@ namespace ADIF.NET.Types {
         return false;
       }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public static bool IsValidValue(string value)
+    {
+      if (TryParse(value, out Location _))
+        return true;
+
+      return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public static bool IsValidValue(object value)
+    {
+      if (value is Location)
+        return true;
+
+      return IsValidValue(value == null ? string.Empty : value.ToString());
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="decimalDegrees"></param>
+    public static Location FromDecimalDegrees(decimal decimalDegrees, LocationType type)
+    {
+      if (type == LocationType.Latitude && (decimalDegrees < -90 || decimalDegrees > 90) )
+        throw new Exception("Invalid latitude decimal degrees.");
+      else if (type == LocationType.Longitude && (decimalDegrees < -180 || decimalDegrees > 180))
+        throw new Exception("Invalid longitude decimal degrees.");
+      else if (type == LocationType.Unspecified)
+        throw new Exception("Type must be latitude or longitude.");
+
+      var degrees = Math.Floor(Math.Truncate(100 * Math.Abs(decimalDegrees)) / 100);
+      var decimalPart = (Math.Abs(decimalDegrees) - degrees) * 60;
+
+      var direction = string.Empty;
+      if (type == LocationType.Latitude)
+      {
+        if (decimalDegrees >= 0)
+          direction = "N";
+        else if (decimalDegrees < 0)
+          direction = "S";
+      }
+      else if (type == LocationType.Longitude)
+      {
+        if (decimalDegrees >= 0)
+          direction = "E";
+        else if (decimalDegrees < 0)
+          direction = "W";
+      }
+
+      return new Location(direction, (int)degrees, decimalPart);
+    }
   }
 
   /// <summary>
   /// 
   /// </summary>
   public class Location : IFormattable {
+
+    LocationType LatLong { get; set; }
 
     /// <summary>
     /// 
@@ -90,13 +157,24 @@ namespace ADIF.NET.Types {
     /// <summary>
     /// 
     /// </summary>
-    public double Minutes { get; }
+    public decimal Minutes { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private Location()
+    {
+      if (!string.IsNullOrEmpty(Direction) && LatLong == LocationType.Unspecified)
+        LatLong = Direction == "N" || Direction == "S" ? LocationType.Latitude : 
+                  Direction == "E" || Direction == "W" ? LocationType.Longitude :
+                  LocationType.Unspecified;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="location"></param>
-    public Location(string location)
+    public Location(string location) : this()
     {
       if (!ADIFLocation.TryParse(location, out Location result))
         throw new ArgumentException("Invalid location value.");
@@ -114,16 +192,16 @@ namespace ADIF.NET.Types {
     /// <param name="minutes"></param>
     public Location(string direction,
                     int degrees,
-                    double minutes)
+                    decimal minutes) : this()
     {
-      if (!LocationHelper.ValidateDirection(direction))
-        throw new ArgumentException("Invalid direction.");
-
       if (!LocationHelper.ValidateDegrees(degrees))
         throw new ArgumentException("Invalid degrees.");
 
       if (!LocationHelper.ValidateMinutes(minutes))
         throw new ArgumentException("Invalid minutes.");
+
+      if (!LocationHelper.ValidateDirection(direction))
+        throw new ArgumentException("Invalid direction.");
 
       Direction = direction.ToUpper();
       Degrees = degrees;
@@ -133,8 +211,16 @@ namespace ADIF.NET.Types {
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
-    public double ToDecimalDegrees()
+    /// <param name="decimalDegrees"></param>
+    public static Location FromDecimalDegrees(decimal decimalDegrees, LocationType type)
+    {
+      return ADIFLocation.FromDecimalDegrees(decimalDegrees, type);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public decimal ToDecimalDegrees()
     {
       // .d = M.m / 60;
       // Decimal Degrees = Degrees + .d
@@ -177,16 +263,19 @@ namespace ADIF.NET.Types {
       {
         case "G":
         case "L":
-          return $"{ToString("D", provider)}{ToString("E", provider)} {ToString("M", provider)}";
+          return $"{ToString("C", provider)}{ToString("D", provider)} {ToString("M", provider)}";
 
-        case "D":
+        case "C":
           return Direction ?? string.Empty;
 
-        case "E":
+        case "D":
           return Degrees.ToString("000") ?? string.Empty;
 
         case "M":
           return Minutes.ToString("00.000") ?? string.Empty;
+
+        case "DD":
+          return ToDecimalDegrees().ToString(provider);
 
         default:
           throw new FormatException($"Format string '{format}' is not valid.");

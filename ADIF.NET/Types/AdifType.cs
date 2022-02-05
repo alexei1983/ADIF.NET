@@ -7,6 +7,9 @@ namespace ADIF.NET.Types {
 
     public virtual Type UnderlyingType => typeof(T);
 
+    /// <summary>
+    /// The ADIF data type indicator.
+    /// </summary>
     public virtual string Type { get; }
 
     public virtual string FormatString { get; }

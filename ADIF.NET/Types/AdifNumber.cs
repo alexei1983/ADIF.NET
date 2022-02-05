@@ -1,6 +1,10 @@
 ﻿using System;
 
 namespace ADIF.NET.Types {
+
+  /// <summary>
+  /// 
+  /// </summary>
   public class ADIFNumber : ADIFType<double?> {
 
     public override double MinValue => double.MinValue;
