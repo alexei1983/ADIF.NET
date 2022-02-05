@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.QSLSent;
 
-    public override ADIFEnumeration Options => Values.QSLReceivedStatuses;
+    public override ADIFEnumeration Options => Values.QSLSentStatuses;
 
     public QSLSentTag() { }
 

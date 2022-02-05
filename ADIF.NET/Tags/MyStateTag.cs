@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.MyState;
 
-    public override ADIFEnumeration Options => Values.CountryCodes;
+    //public override ADIFEnumeration Options => Values.CountryCodes;
 
     public MyStateTag() { }
 
