@@ -42,6 +42,14 @@ namespace ADIF.NET.Tags {
 
     public virtual IADIFType ADIFType { get; }
 
+    public virtual string DataType
+    {
+      get
+      {
+        return ADIFType != null ? ADIFType.Type : string.Empty;
+      }
+    }
+
     /// <summary>
     /// 
     /// </summary>

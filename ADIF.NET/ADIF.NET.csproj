@@ -219,6 +219,8 @@
     <Compile Include="Tags\AppDefTag.cs" />
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
+    <Compile Include="Types\ADIFTime.cs" />
+    <Compile Include="Types\ADIFDate.cs" />
     <Compile Include="Types\ADIFBoolean.cs" />
     <Compile Include="Types\ADIFCreditList.cs" />
     <Compile Include="Types\ADIFLocation.cs" />

@@ -153,7 +153,7 @@ namespace ADIF.NET {
             }
             else if (IsAppDefinedField(entry.Key, out AppDefTag appTag))
             {
-              tag = appTag;
+              tag = appTag.Clone() as AppDefTag;
             }
           }
 

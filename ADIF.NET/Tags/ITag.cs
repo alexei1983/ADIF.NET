@@ -18,6 +18,8 @@ namespace ADIF.NET.Tags {
 
     string ValueSeparator { get; set; }
 
+    string DataType { get; }
+
     IFormatProvider FormatProvider { get; set; }
 
     Type ExpectedValueType { get; }

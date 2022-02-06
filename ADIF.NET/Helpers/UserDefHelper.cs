@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADIF.NET.Tags;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Helpers {
 
@@ -8,6 +9,67 @@ namespace ADIF.NET.Helpers {
   /// Helper class for user-defined ADIF tags.
   /// </summary>
   public static class UserDefHelper {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="adifType"></param>
+    public static object ConvertValueByType(object value, string adifType)
+    {
+      if (string.IsNullOrEmpty(adifType))
+        throw new Exception("Invalid ADIF data type.");
+
+      value = value == null ? string.Empty : value;
+
+      switch (adifType.ToUpper())
+      {
+        case DataTypes.Boolean:
+          if (value is bool boolVal)
+            return boolVal;
+          else
+            return ADIFBoolean.Parse(value.ToString());
+
+        case DataTypes.Number:
+          if (value is double doubleVal)
+            return doubleVal;
+          else
+            return ADIFNumber.Parse(value.ToString());
+
+        case DataTypes.Location:
+          if (value is Location locationVal)
+            return locationVal;
+          else
+            return ADIFLocation.Parse(value.ToString());
+
+        case DataTypes.String:
+        case DataTypes.MultilineString:
+        case DataTypes.IntlMultilineString:
+        case DataTypes.IntlString:
+          return value.ToString();
+
+        case DataTypes.Date:
+          if (value is DateTime dateVal)
+            return dateVal;
+          else
+            return ADIFDate.Parse(value.ToString());
+
+        case DataTypes.Time:
+          if (value is DateTime timeVal)
+            return timeVal;
+          else
+            return ADIFTime.Parse(value.ToString());
+
+        case DataTypes.CreditList:
+          if (value is CreditList creditListVal)
+            return creditListVal;
+          else
+            return ADIFCreditList.Parse(value.ToString());
+
+        default:
+          return value.ToString();
+      }
+    }
 
     /// <summary>
     /// Validates the uniqueness of the field IDs for the specified user-defined tags.

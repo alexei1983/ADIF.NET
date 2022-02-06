@@ -1,11 +1,12 @@
 ﻿using System;
+using ADIF.NET.Helpers;
 
 namespace ADIF.NET.Tags {
 
   /// <summary>
   /// Represents an application-defined field and value.
   /// </summary>
-  public class AppDefTag : Tag<object>, ITag {
+  public class AppDefTag : Tag<object>, ITag, ICloneable {
 
     public override string Name => $"{TagNames.AppDef}{ProgramId ?? Values.DEFAULT_PROGRAM_ID}_{FieldName ?? string.Empty}";
 
@@ -25,36 +26,23 @@ namespace ADIF.NET.Tags {
         }
       }
 
-    public string DataType { get; set; }
+    public new string DataType { get; set; }
 
-    public new void SetValue(object value) {    
+    public new void SetValue(object value)
+    {
       var convertedVal = ConvertValue(value);
       base.SetValue(convertedVal);
-      }
+    }
 
-    public override object ConvertValue(object value) {
+    public override object ConvertValue(object value)
+    {
+      return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
+    }
 
-      if (!(value is null)) {
-
-        switch (DataType ?? DataTypes.String) {
-
-        case DataTypes.Number:
-          return value.ToDouble();
-
-        case DataTypes.Time:
-        case DataTypes.Date:
-          return value.ToDateTime();
-
-        case DataTypes.Boolean:
-          return value.ToBoolean();
-
-        default:
-          return value.ToString();
-          }
-        }
-
-      return value;
-      }
+    public object Clone()
+    {
+      return this.MemberwiseClone();
+    }
 
     string programId;
     }
