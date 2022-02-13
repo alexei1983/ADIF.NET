@@ -39,11 +39,6 @@ namespace ADIF.NET.Tags {
       return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
     }
 
-    public object Clone()
-    {
-      return this.MemberwiseClone();
-    }
-
     string programId;
     }
   }

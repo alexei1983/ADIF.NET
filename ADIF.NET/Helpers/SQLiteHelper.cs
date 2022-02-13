@@ -138,16 +138,28 @@ namespace ADIF.NET.Helpers {
         }
       }
 
+    public void Dispose() => Dispose(true);
+
     /// <summary></summary>
-    public void Dispose() {
-
-      if (connection != null)
-        connection.Dispose();
-
+    void Dispose(bool disposing)
+    {
       Connected = false;
       Exists = false;
       Database = null;
 
+      if (disposing)
+      {
+        if (connection != null)
+          connection.Dispose();
+
+        GC.SuppressFinalize(this);
+      }
+
+      DeleteTempFile();
+    }
+
+    void DeleteTempFile()
+    {
       if (!string.IsNullOrEmpty(tempPath))
       {
         try
@@ -159,15 +171,90 @@ namespace ADIF.NET.Helpers {
         {
         }
       }
+    }
 
-      GC.SuppressFinalize(this);
-      }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="query"></param>
+    public T ExecuteScalar<T>(string query)
+    {
+      return ExecuteScalar<T>(query, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="query"></param>
+    public T ExecuteScalar<T>(string query, Dictionary<string, object> parameters)
+    {
+      var tempResult = ExecuteScalar(query, parameters);
+
+      if (tempResult is T result)
+        return result;
+
+      return default(T);
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="query"></param>
-    public ArrayList ReadData(string query) {
+    public object ExecuteScalar(string query)
+    {
+      return ExecuteScalar(query, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    public object ExecuteScalar(string query, Dictionary<string, object> parameters)
+    {
+      CheckConnection();
+
+      using (var command = connection.CreateCommand())
+      {
+        command.CommandText = query;
+
+        if (parameters != null)
+        {
+          foreach (var keyValue in parameters)
+            command.Parameters.AddWithValue(keyValue.Key, keyValue.Value);
+        }
+
+        return command.ExecuteScalar();
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="str"></param>
+    public string EscapeString(string str)
+    {
+      if (str == null)
+        return string.Empty;
+
+      return str.Replace("'", "''");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    public ArrayList ReadData(string query)
+    {
+      return ReadData(query, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    public ArrayList ReadData(string query, Dictionary<string, object> parameters) {
 
       CheckConnection();
 
@@ -176,6 +263,12 @@ namespace ADIF.NET.Helpers {
       using (var command = connection.CreateCommand()) {
 
         command.CommandText = query;
+
+        if (parameters != null)
+        {
+          foreach (var keyValue in parameters)
+            command.Parameters.AddWithValue(keyValue.Key, keyValue.Value);
+        }
 
         using (var dataReader = command.ExecuteReader()) {
 
@@ -198,6 +291,8 @@ namespace ADIF.NET.Helpers {
 
       return result;
       }
+
+    ~SQLiteHelper() => Dispose(false);
 
     /// <summary>
     /// 

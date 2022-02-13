@@ -78,9 +78,11 @@
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
     <Compile Include="GridSquare.cs" />
+    <Compile Include="Helpers\DXCCHelper.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />
     <Compile Include="Helpers\SQLiteHelper.cs" />
     <Compile Include="Helpers\LocationHelper.cs" />
+    <Compile Include="Helpers\TagValidationHelper.cs" />
     <Compile Include="Helpers\UserDefHelper.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -94,7 +96,9 @@
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />
     <Compile Include="Tags\HrdLogQSOUploadStatusTag.cs" />
+    <Compile Include="Tags\QSLSentViaTag.cs" />
     <Compile Include="Tags\QSLSentTag.cs" />
+    <Compile Include="Tags\QSLRcvdViaTag.cs" />
     <Compile Include="Tags\QSLViaTag.cs" />
     <Compile Include="Tags\QSLRcvdTag.cs" />
     <Compile Include="Tags\QSOCompleteTag.cs" />
@@ -219,6 +223,7 @@
     <Compile Include="Tags\AppDefTag.cs" />
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
+    <Compile Include="Types\ADIFEnumerationType.cs" />
     <Compile Include="Types\ADIFTime.cs" />
     <Compile Include="Types\ADIFDate.cs" />
     <Compile Include="Types\ADIFBoolean.cs" />

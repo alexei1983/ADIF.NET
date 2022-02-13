@@ -373,9 +373,8 @@ namespace ADIF.NET {
     public const string QrzQSOUploadDate = "QRZCOM_QSO_UPLOAD_DATE";
     public const string QSODateOff = "QSO_DATE_OFF";
     public const string QSODate = "QSO_DATE";
-    public const string QSOReceivedDate = "QSLRDATE";
-    public const string QSOSentDate = "QSLSDATE";
-
+    public const string QSLRcvdDate = "QSLRDATE";
+    public const string QSLSentDate = "QSLSDATE";
     public const string QSLRcvd = "QSL_RCVD";
     public const string QSLRcvdVia = "QSL_RCVD_VIA";
     public const string QSLSent = "QSL_SENT";
@@ -549,7 +548,7 @@ namespace ADIF.NET {
       if (value == null)
         throw new ArgumentNullException(nameof(value), "Value is required.");
 
-      return GetValues().Contains(value);
+      return !string.IsNullOrEmpty(GetValues().FirstOrDefault(v => value.Equals(v, StringComparison.OrdinalIgnoreCase)));
     }
 
     /// <summary>
@@ -558,6 +557,18 @@ namespace ADIF.NET {
     public string[] GetValues()
     {
       return this.Select(v => v.Code).ToArray();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="code"></param>
+    public ADIFEnumerationValue GetValue(string code)
+    {
+      if (code == null)
+        code = string.Empty;
+
+      return this.FirstOrDefault(e => code.Equals(e.Code, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -947,6 +958,7 @@ namespace ADIF.NET {
     const string GET_BANDS_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}}";
     const string VALIDATE_FREQUENCY_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}} AND {{FREQUENCY}} >= LowerFrequency AND {{FREQUENCY}} <= UpperFrequency";
     const string VALIDATE_FREQUENCY_BAND_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}} AND {{FREQUENCY}} >= LowerFrequency AND {{FREQUENCY}} <= UpperFrequency AND Name = '{{NAME}}'";
-
   }
+
+
 }

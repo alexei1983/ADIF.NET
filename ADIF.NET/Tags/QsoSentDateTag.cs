@@ -5,13 +5,13 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  public class QSOSentDateTag : DateTag, ITag {
+  public class QSLSentDateTag : DateTag, ITag {
 
-    public override string Name => TagNames.QSOSentDate;
+    public override string Name => TagNames.QSLSentDate;
 
-    public QSOSentDateTag() { }
+    public QSLSentDateTag() { }
 
-    public QSOSentDateTag(DateTime value) : base(value) { }
+    public QSLSentDateTag(DateTime value) : base(value) { }
 
   }
 }

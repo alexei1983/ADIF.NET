@@ -104,6 +104,89 @@ namespace ADIF.NET {
       return -1;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
+    public ITag GetTag(string tagName)
+    {
+      if (string.IsNullOrEmpty(tagName))
+        throw new ArgumentException("Tag name is required.", nameof(tagName));
+
+      return this.FirstOrDefault(t => tagName.Equals(t.Name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
+    public bool Remove(string tagName)
+    {
+      if (!Contains(tagName))
+        return false;
+
+      return Remove(GetTag(tagName));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
+    public virtual bool Replace(ITag tag)
+    {
+      if (tag == null)
+        return false;
+
+      var indexOf = IndexOf(tag.Name);
+
+      if (indexOf >= 0)
+      {
+        RemoveAt(indexOf);
+        Insert(indexOf, tag);
+        return true;
+      }
+
+      return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
+    public virtual bool AddOrReplace(ITag tag)
+    {
+      var replaced = Replace(tag);
+
+      if (!replaced)
+      {
+        Add(tag);
+        replaced = true;
+      }
+
+      return replaced;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="remove"></param>
+    /// <param name="replace"></param>
+    public virtual bool Replace(ITag remove, ITag replace)
+    {
+      if (remove == null || replace == null)
+        return false;
+
+      var indexOf = IndexOf(remove);
+
+      if (indexOf >= 0 && Remove(remove))
+      {
+        Insert(indexOf, replace);
+        return true;
+      }
+
+      return false;
+    }
+
     public void CopyTo(ITag[] array, int arrayIndex) {
       tags.CopyTo(array, arrayIndex);
       }

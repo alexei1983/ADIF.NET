@@ -91,6 +91,11 @@ namespace ADIF.NET.Tags {
       return creditList.Select(c => c.Credit);
     }
 
+    public CreditList GetCreditList()
+    {
+      return creditList;
+    }
+
     CreditList creditList;
 
   }

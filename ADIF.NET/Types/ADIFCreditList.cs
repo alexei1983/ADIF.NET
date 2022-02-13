@@ -158,6 +158,38 @@ namespace ADIF.NET.Types {
                  .Select(c => c.Medium);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public IEnumerable<string> GetCredits()
+    {
+      return this.Where(c => !string.IsNullOrEmpty(c.Credit))?
+                 .Select(c => c.Credit)?
+                 .Distinct();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    public bool HasCredit(string credit)
+    {
+      return !string.IsNullOrEmpty(this.FirstOrDefault(c => c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase))
+                                                             .Credit);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    /// <param name="medium"></param>
+    public bool HasMediumInCredit(string credit, string medium)
+    {
+      return !string.IsNullOrEmpty(this.FirstOrDefault(c => c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase) &&
+                                                            c.Medium.Equals(medium, StringComparison.OrdinalIgnoreCase))
+                                                             .Medium);
+    }
+
     public struct CreditListMember {
 
       public string Credit { get; }
@@ -200,7 +232,7 @@ namespace ADIF.NET.Types {
             if (handled.Contains(this[x].Credit.ToUpper()))
               continue;
 
-            if (x > 0 && (x + 1) < Count)
+            if (x >= 0 && (x + 1) < Count)
               result += Values.COMMA.ToString();
 
             result += this[x].Credit;

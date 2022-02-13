@@ -33,6 +33,8 @@ namespace ADIF.NET.Helpers {
         case DataTypes.Number:
           if (value is double doubleVal)
             return doubleVal;
+          else if (value is double?)
+            return value as double?;
           else
             return ADIFNumber.Parse(value.ToString());
 
@@ -46,7 +48,11 @@ namespace ADIF.NET.Helpers {
         case DataTypes.MultilineString:
         case DataTypes.IntlMultilineString:
         case DataTypes.IntlString:
-          return value.ToString();
+        case DataTypes.Enumeration:
+          if (value is string strVal)
+            return strVal;
+          else
+            return value.ToString();
 
         case DataTypes.Date:
           if (value is DateTime dateVal)

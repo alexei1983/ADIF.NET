@@ -6,7 +6,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Defines the properties and methods that all ADIF.NET tags must implement.
   /// </summary>
-  public interface ITag : IFormattable {
+  public interface ITag : IFormattable, ICloneable {
 
     string Name { get; }
 
@@ -43,6 +43,10 @@ namespace ADIF.NET.Tags {
     bool ValidateValue(object value);
 
     bool ValidateValue();
+
+    object GetValue();
+
+    bool HasValue();
 
     object ConvertValue(object value);
 

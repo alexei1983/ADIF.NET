@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using ADIF.NET.Tags;
+using ADIF.NET.Helpers;
+using ADIF.NET.Types;
 
 namespace ADIF.NET {
 
@@ -77,8 +79,16 @@ namespace ADIF.NET {
     /// <param name="call">Callsign to add as the contacted station.</param>
     public void AddCall(string call)
     {
-      if (!Contains(typeof(CallTag)))
-        Add(new CallTag(call));
+      Add(new CallTag(call));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="call"></param>
+    public void SetCall(string call)
+    {
+      AddOrReplace(new CallTag(call));
     }
 
     /// <summary>
@@ -87,8 +97,92 @@ namespace ADIF.NET {
     /// <param name="qsoDate">Date to add as the QSO date.</param>
     public void AddQSODate(DateTime qsoDate)
     {
-      if (!Contains(typeof(QSODateTag)))
-        Add(new QSODateTag(qsoDate));
+      Add(new QSODateTag(qsoDate));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDate"></param>
+    public void SetQSODate(DateTime qsoDate)
+    {
+      AddOrReplace(new QSODateTag(qsoDate));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateTimeOn"></param>
+    public void AddQSODateTimeOn(DateTime qsoDateTimeOn)
+    {
+      AddQSODate(qsoDateTimeOn);
+      AddTimeOn(qsoDateTimeOn);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateTimeOn"></param>
+    public void SetQSODateTimeOn(DateTime qsoDateTimeOn)
+    {
+      SetQSODate(qsoDateTimeOn);
+      SetTimeOn(qsoDateTimeOn);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateTimeOff"></param>
+    public void SetQSODateTimeOff(DateTime qsoDateTimeOff)
+    {
+      SetQSODateOff(qsoDateTimeOff);
+      SetTimeOff(qsoDateTimeOff);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateTimeOff"></param>
+    public void AddQSODateTimeOff(DateTime qsoDateTimeOff)
+    {
+      AddQSODateOff(qsoDateTimeOff);
+      AddTimeOff(qsoDateTimeOff);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateOff"></param>
+    public void AddQSODateOff(DateTime qsoDateOff)
+    {
+      Add(new QSODateOffTag(qsoDateOff));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoDateOff"></param>
+    public void SetQSODateOff(DateTime qsoDateOff)
+    {
+      AddOrReplace(new QSODateOffTag(qsoDateOff));
+    }
+
+    /// <summary>
+    /// Adds a <see cref="TimeOffTag"/> to the current QSO.
+    /// </summary>
+    /// <param name="timeOff">Time to add as the QSO time-off.</param>
+    public void AddTimeOff(DateTime timeOff)
+    {
+      Add(new TimeOffTag(timeOff));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="timeOff"></param>
+    public void SetTimeOff(DateTime timeOff)
+    {
+      AddOrReplace(new TimeOffTag(timeOff));
     }
 
     /// <summary>
@@ -97,8 +191,16 @@ namespace ADIF.NET {
     /// <param name="timeOn">Time to add as the QSO time-on.</param>
     public void AddTimeOn(DateTime timeOn)
     {
-      if (!Contains(typeof(TimeOnTag)))
-        Add(new TimeOnTag(timeOn));
+      Add(new TimeOnTag(timeOn));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="timeOn"></param>
+    public void SetTimeOn(DateTime timeOn)
+    {
+      AddOrReplace(new TimeOnTag(timeOn));
     }
 
     /// <summary>
@@ -107,8 +209,18 @@ namespace ADIF.NET {
     /// <param name="mode">Mode to add to the current QSO.</param>
     public void AddMode(string mode)
     {
-      if (!Contains(typeof(ModeTag)))
-        Add(new ModeTag(mode));
+      if (!Values.Modes.IsValid(mode))
+        throw new ArgumentException($"Invalid mode: '{mode ?? string.Empty}'", nameof(mode));
+
+      Add(new ModeTag(mode));
+    }
+
+    public void SetMode(string mode)
+    {
+      if (!Values.Modes.IsValid(mode))
+        throw new ArgumentException($"Invalid mode: '{mode ?? string.Empty}'", nameof(mode));
+
+      AddOrReplace(new ModeTag(mode));
     }
 
     /// <summary>
@@ -117,8 +229,22 @@ namespace ADIF.NET {
     /// <param name="band">Band to add to the current QSO.</param>
     public void AddBand(string band)
     {
-      if (!Contains(typeof(BandTag)))
-        Add(new BandTag(band));
+      if (!Values.Bands.IsValid(band))
+        throw new ArgumentException($"Invalid band: '{band}'");
+
+      Add(new BandTag(band));
+    }
+
+    /// <summary>
+    /// Sets the band for the current QSO.
+    /// </summary>
+    /// <param name="band">Band value.</param>
+    public void SetBand(string band)
+    {
+      if (!Values.Bands.IsValid(band))
+        throw new ArgumentException($"Invalid band: '{band}'");
+
+      AddOrReplace(new BandTag(band));
     }
 
     /// <summary>
@@ -127,8 +253,16 @@ namespace ADIF.NET {
     /// <param name="operatorCall">Callsign to add to the QSO as the operator.</param>
     public void AddOperator(string operatorCall)
     {
-      if (!Contains(typeof(OperatorTag)))
-        Add(new OperatorTag(operatorCall));
+      Add(new OperatorTag(operatorCall));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="operatorCall"></param>
+    public void SetOperator(string operatorCall)
+    {
+      AddOrReplace(new OperatorTag(operatorCall));
     }
 
     /// <summary>
@@ -137,8 +271,16 @@ namespace ADIF.NET {
     /// <param name="comment">Comment to add to the QSO.</param>
     public void AddComment(string comment)
     {
-      if (!Contains(typeof(CommentTag)))
-        Add(new CommentTag(comment));
+      Add(new CommentTag(comment));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="comment"></param>
+    public void SetComment(string comment)
+    {
+      AddOrReplace(new CommentTag(comment));
     }
 
     /// <summary>
@@ -146,12 +288,11 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="frequency">Frequency to set for the current QSO.</param>
     /// <param name="setBand">Whether or not to set the band for the current QSO based on the frequency.</param>
-    public void AddFreq(double frequency, bool setBand = false)
+    public void AddFreq(double frequency, bool addBand = false)
     {
-      if (!Contains(typeof(FreqTag)))
-        Add(new FreqTag(frequency));
+      Add(new FreqTag(frequency));
 
-      if (setBand)
+      if (addBand)
       {
         var band = Band.Get(frequency);
         if (band != null)
@@ -160,13 +301,436 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequency"></param>
+    /// <param name="setBand"></param>
+    public void SetFreq(double frequency, bool setBand = false)
+    {
+      AddOrReplace(new FreqTag(frequency));
+
+      if (setBand)
+      {
+        var band = Band.Get(frequency);
+        if (band != null)
+          AddOrReplace(new BandTag(band.Name));
+      }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    /// <param name="suffix"></param>
+    public void SetRstRcvd(int readability, int strength, int tone, string suffix)
+    {
+      TagValidationHelper.ValidateRst(readability, strength, tone, suffix);
+      AddOrReplace(new RstRcvdTag($"{readability}{strength}{(tone > 0 ? tone.ToString() : string.Empty)}{suffix ?? string.Empty}"));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    /// <param name="suffix"></param>
+    public void AddRstRcvd(int readability, int strength, int tone, string suffix)
+    {
+      if (!Contains(TagNames.RstRcvd))
+        SetRstRcvd(readability, strength, tone, suffix);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    public void AddRstRcvd(int readability, int strength, int tone)
+    {
+       AddRstRcvd(readability, strength, tone, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    public void AddRstRcvd(int readability, int strength)
+    {
+      AddRstRcvd(readability, strength, -1, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    public void SetRstRcvd(int readability, int strength, int tone)
+    {
+      SetRstRcvd(readability, strength, tone, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    public void SetRstRcvd(int readability, int strength)
+    {
+      SetRstRcvd(readability, strength, -1, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    /// <param name="suffix"></param>
+    public void SetRstSent(int readability, int strength, int tone, string suffix)
+    {
+      TagValidationHelper.ValidateRst(readability, strength, tone, suffix);
+      AddOrReplace(new RstSentTag($"{readability}{strength}{(tone > 0 ? tone.ToString() : string.Empty)}{suffix ?? string.Empty}"));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    /// <param name="suffix"></param>
+    public void AddRstSent(int readability, int strength, int tone, string suffix)
+    {
+      if (!Contains(TagNames.RstSent))
+        SetRstSent(readability, strength, tone, suffix);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    public void AddRstSent(int readability, int strength, int tone)
+    {
+      AddRstSent(readability, strength, tone, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    public void AddRstSent(int readability, int strength)
+    {
+      AddRstSent(readability, strength, -1, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    /// <param name="tone"></param>
+    public void SetRstSent(int readability, int strength, int tone)
+    {
+      SetRstSent(readability, strength, tone, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="readability"></param>
+    /// <param name="strength"></param>
+    public void SetRstSent(int readability, int strength)
+    {
+      SetRstSent(readability, strength, -1, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="operatorName"></param>
+    /// <param name="streetAddress"></param>
+    /// <param name="city"></param>
+    /// <param name="state"></param>
+    /// <param name="postalCode"></param>
+    /// <param name="countryName"></param>
+    /// <param name="dxccCode"></param>
+    public void SetAddress(string operatorName,
+                           string streetAddress,
+                           string city,
+                           string state,
+                           string postalCode,
+                           string countryName,
+                           string dxccCode)
+    {
+      if (string.IsNullOrEmpty(operatorName) || string.IsNullOrEmpty(streetAddress) ||
+        string.IsNullOrEmpty(city) || string.IsNullOrEmpty(state) || string.IsNullOrEmpty(postalCode) ||
+        string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
+        throw new ArgumentException("Cannot add address: missing one or more required values.");
+
+      var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
+
+      if (dxccEntity == null)
+        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+
+      if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
+        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
+
+      var addressValue = $"{operatorName}{Values.LINE_ENDING}{streetAddress}{Values.LINE_ENDING}{city}, {state} {postalCode}" +
+                         $"{Values.LINE_ENDING}{countryName}";
+
+      var addressTag = new AddressTag(addressValue);
+
+      SetPrimaryAdminSubdivision(dxccCode, state, false);
+      AddOrReplace(addressTag);
+      AddOrReplace(new QTHTag(city));
+      AddOrReplace(new CountryTag(countryName));
+      SetName(operatorName);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dxccCode"></param>
+    /// <param name="primaryAdminSubdivisionCode"></param>
+    public void SetPrimaryAdminSubdivision(string dxccCode, string primaryAdminSubdivisionCode, bool setCountryNameFromDxcc = false)
+    {
+      var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
+
+      if (dxccEntity == null)
+        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+
+      if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), primaryAdminSubdivisionCode))
+        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{primaryAdminSubdivisionCode}'");
+
+      AddOrReplace(new StateTag(primaryAdminSubdivisionCode));
+      AddOrReplace(new DXCCTag(dxccCode));
+
+      if (setCountryNameFromDxcc)
+        AddOrReplace(new CountryTag(dxccEntity.DisplayName));
+    }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="operatorName"></param>
+    /// <param name="streetAddress"></param>
+    /// <param name="city"></param>
+    /// <param name="state"></param>
+    /// <param name="postalCode"></param>
+    /// <param name="dxccCode"></param>
+    public void SetAddress(string operatorName,
+                           string streetAddress,
+                           string city,
+                           string state,
+                           string postalCode,
+                           string dxccCode)
+    {
+      if (string.IsNullOrEmpty(dxccCode))
+        throw new ArgumentException("DXCC code is required.", nameof(dxccCode));
+
+      var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
+
+      if (dxccEntity == null)
+        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+
+      SetAddress(operatorName, streetAddress, city, state, postalCode, dxccEntity.DisplayName, dxccCode);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="city"></param>
+    /// <param name="state"></param>
+    /// <param name="postalCode"></param>
+    /// <param name="countryName"></param>
+    /// <param name="dxccCode"></param>
+    public void SetMyAddress(string city, string state, string postalCode, string countryName, string dxccCode)
+    {
+      if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(state) || string.IsNullOrEmpty(postalCode) ||
+        string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
+        throw new ArgumentException("Cannot set address: missing one or more required values.");
+
+      var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
+
+      if (dxccEntity == null)
+        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+
+      if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
+        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
+
+      AddOrReplace(new MyDXCCTag(dxccEntity.Code));
+      AddOrReplace(new MyCityTag(city));
+      AddOrReplace(new MyStateTag(state));
+      AddOrReplace(new MyCountryTag(countryName));
+      AddOrReplace(new MyPostalCodeTag(postalCode));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="receivedOn"></param>
+    /// <param name="via"></param>
+    public void MarkQSLReceived(DateTime receivedOn, string via)
+    {
+      if (Contains(TagNames.QSLRcvd))
+        Remove(TagNames.QSLRcvd);
+
+      Add(new QSLRcvdTag("Y"));
+
+      if (!string.IsNullOrEmpty(via))
+      {
+        if (!Values.Via.IsValid(via))
+          throw new ArgumentException($"'{via}' is not a valid QSL means.");
+
+        if (Contains(TagNames.QSLRcvdVia))
+          Remove(TagNames.QSLRcvdVia);
+
+        Add(new QSLRcvdViaTag(via));
+      }
+
+      if (receivedOn != DateTime.MinValue)
+      {
+        if (Contains(TagNames.QSLRcvdDate))
+          Remove(TagNames.QSLRcvdDate);
+
+        Add(new QSLRvcdDateTag(receivedOn));
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="receivedOn"></param>
+    public void MarkQSLReceived(DateTime receivedOn)
+    {
+      MarkQSLReceived(receivedOn, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void MarkQSLReceived()
+    {
+      MarkQSLReceived(DateTime.MinValue, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sentOn"></param>
+    /// <param name="sentVia"></param>
+    public void MarkQSLSent(DateTime sentOn, string sentVia)
+    {
+      if (Contains(TagNames.QSLSent))
+        Remove(TagNames.QSLSent);
+
+      Add(new QSLSentTag("Y"));
+
+      if (!string.IsNullOrEmpty(sentVia))
+      {
+        if (!Values.Via.IsValid(sentVia))
+          throw new ArgumentException($"'{sentVia}' is not a valid QSL means.");
+
+        if (Contains(TagNames.QSLSentVia))
+          Remove(TagNames.QSLSentVia);
+
+        Add(new QSLSentViaTag(sentVia));
+      }
+
+      if (sentOn != DateTime.MinValue)
+      {
+        if (Contains(TagNames.QSLSentDate))
+          Remove(TagNames.QSLSentDate);
+
+        Add(new QSLSentDateTag(sentOn));
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sentOn"></param>
+    public void MarkQSLSent(DateTime sentOn)
+    {
+      MarkQSLSent(sentOn, null);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void MarkQSLSent()
+    {
+      MarkQSLSent(DateTime.MinValue, null);
+    }
+
+
+    /// <summary>
     /// Adds a <see cref="NameTag"/> to the current QSO.
     /// </summary>
     /// <param name="name">Personal name of the contacted station.</param>
     public void AddName(string name)
     {
-      if (!Contains(typeof(NameTag)))
-        this.Add(new NameTag(name));
+      Add(new NameTag(name));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    public void SetName(string name)
+    {
+      AddOrReplace(new NameTag(name));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newCreditsGranted"></param>
+    public void MergeCreditGranted(CreditList newCreditsGranted)
+    {
+      if (newCreditsGranted == null || newCreditsGranted.Count < 1)
+        return;
+
+      var creditGranted = GetTag(TagNames.CreditGranted) as CreditListTag;
+
+      if (creditGranted == null)
+        creditGranted = new CreditListTag();
+
+      var existingList = creditGranted.GetCreditList();
+
+      foreach (var credit in newCreditsGranted)
+      {
+        if (!existingList.Contains(credit))
+          existingList.Add(credit);
+      }
+
+      AddOrReplace(new CreditGrantedTag(existingList.ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newCreditsGranted"></param>
+    public void MergeCreditGranted(string newCreditsGranted)
+    {
+      if (string.IsNullOrEmpty(newCreditsGranted))
+        return;
+
+      if (!ADIFCreditList.TryParse(newCreditsGranted, out CreditList result))
+        throw new ArgumentException($"Invalid credit string: '{newCreditsGranted}'", nameof(newCreditsGranted));
+
+      MergeCreditGranted(result);
     }
 
     /// <summary>
@@ -227,6 +791,56 @@ namespace ADIF.NET {
         }
       }
       return result;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ValidateFrequencyBand()
+    {
+      var freqTag = GetTag(TagNames.Freq) as FreqTag;
+      var bandTag = GetTag(TagNames.Band) as BandTag;
+
+      TagValidationHelper.ValidateFrequencyBand(freqTag, bandTag);
+
+      var freqRxTag = GetTag(TagNames.FreqRx) as FreqRxTag;
+      var bandRxTag = GetTag(TagNames.BandRx) as BandRxTag;
+
+      TagValidationHelper.ValidateFrequencyBand(freqRxTag, bandRxTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ValidatePrimaryAdminSubdivision()
+    {
+      var dxccTag = GetTag(TagNames.DXCC);
+      var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
+
+      TagValidationHelper.ValidatePrimaryAdminSubdivision(dxccTag, primarySubTag);
+
+      var myDxccTag = GetTag(TagNames.MyDXCC);
+      var myPrimarySubTag = GetTag(TagNames.MyState);
+
+      TagValidationHelper.ValidatePrimaryAdminSubdivision(myDxccTag, myPrimarySubTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ValidateSecondaryAdminSubdivision()
+    {
+      var dxccTag = GetTag(TagNames.DXCC);
+      var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
+      var secondarySubTag = GetTag(TagNames.Cnty);
+
+      TagValidationHelper.ValidateAdminSubdivisions(dxccTag, primarySubTag, secondarySubTag);
+
+      var myDxccTag = GetTag(TagNames.MyDXCC);
+      var myPrimarySubTag = GetTag(TagNames.MyState);
+      var mySecondarySubTag = GetTag(TagNames.MyCnty);
+
+      TagValidationHelper.ValidateAdminSubdivisions(myDxccTag, myPrimarySubTag, mySecondarySubTag);
     }
 
     /// <summary>

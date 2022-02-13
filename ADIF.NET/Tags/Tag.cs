@@ -8,7 +8,7 @@ namespace ADIF.NET.Tags {
   /// The base class from which all ADIF.NET tags inherit.
   /// </summary>
   /// <typeparam name="T">The <see cref="Type"/> of the underlying value of the tag.</typeparam>
-  public class Tag<T> : ITag, IFormattable, IEquatable<Tag<T>> {
+  public class Tag<T> : ITag, IFormattable, IEquatable<Tag<T>>, ICloneable {
 
     /// <summary>
     /// The name of the tag.
@@ -192,6 +192,19 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public virtual object GetValue()
+    {
+      return this.Value;
+    }
+
+    public virtual bool HasValue()
+    {
+      return Value == null || string.IsNullOrEmpty(TextValue);
+    }
+
+    /// <summary>
     /// Determines whether or not the specified <see cref="Tag{T}"/> object is equal to the current instance.
     /// </summary>
     /// <param name="tag">The <see cref="Tag{T}"/> object to compare to the current instance.</param>
@@ -207,6 +220,14 @@ namespace ADIF.NET.Tags {
              (TextValue ?? string.Empty).Equals(TextValue ?? string.Empty) &&
              (tag.ValueLength ?? 0).Equals(ValueLength ?? 0);
 
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public virtual object Clone()
+    {
+      return MemberwiseClone();
     }
 
     /// <summary>

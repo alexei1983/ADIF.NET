@@ -1,4 +1,6 @@
 ﻿
+using ADIF.NET.Types;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -6,6 +8,8 @@ namespace ADIF.NET.Tags {
   /// from a list of options.
   /// </summary>
   public class EnumerationTag : Tag<string>, ITag {
+
+    public override IADIFType ADIFType => new ADIFEnumerationType();
 
     public EnumerationTag() { }
 
