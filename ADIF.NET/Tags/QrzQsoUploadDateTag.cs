@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class QRZQSOUploadDateTag : DateTag, ITag {
 
-    public override string Name => TagNames.QrzQSOUploadDate;
+    public override string Name => TagNames.QRZQSOUploadDate;
 
     public QRZQSOUploadDateTag() { }
 

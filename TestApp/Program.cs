@@ -110,8 +110,21 @@ namespace TestApp {
       var credits = Values.Credits;
 
       var parse = new Parser();
-      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
-      //var result = parse.Parse();
+      //parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
+      parse.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212.adi");
+      var result = parse.Parse();
+
+      result.AddQSOTag(new MyNameTag("Alex"));
+      result.AddQSOTag(new MySigTag("POTA"));
+      result.AddQSOTag(new MySigInfoTag("K-0225"));
+      result.QSOs[0].SetRstSent(5, 9);
+      result.QSOs[0].SetRstRcvd(5, 3);
+
+      result.QSOs[0].SetRstSent(5, 9);
+      result.QSOs[0].SetRstRcvd(5, 3);
+
+      result.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212-2.adi", EmitFlags.None);
+      return;
 
       var qso12 = new ADIFQSO();
       qso12.AddCall("W7ZCO");

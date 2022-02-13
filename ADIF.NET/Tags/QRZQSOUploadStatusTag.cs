@@ -4,14 +4,14 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  public class HRDLogQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
+  public class QRZQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
 
     public override string Name => TagNames.HrdLogQSOUploadStatus;
 
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
 
-    public HRDLogQSOUploadStatusTag() { }
+    public QRZQSOUploadStatusTag() { }
 
-    public HRDLogQSOUploadStatusTag(string value) : base(value) { }
+    public QRZQSOUploadStatusTag(string value) : base(value) { }
   }
 }

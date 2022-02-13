@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class LotwQSLReceivedDateTag : DateTag, ITag {
 
-    public override string Name => TagNames.LotwQSLReceivedDate;
+    public override string Name => TagNames.LOTWQSLReceivedDate;
 
     public LotwQSLReceivedDateTag() { }
 

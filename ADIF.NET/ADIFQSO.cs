@@ -367,6 +367,42 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="db"></param>
+    public void AddRstRcvd(int db)
+    {
+      Add(new RstRcvdTag(db.ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="db"></param>
+    public void SetRstRcvd(int db)
+    {
+      AddOrReplace(new RstRcvdTag(db.ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="db"></param>
+    public void AddRstSent(int db)
+    {
+      Add(new RstSentTag(db.ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="db"></param>
+    public void SetRstSent(int db)
+    {
+      AddOrReplace(new RstSentTag(db.ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="readability"></param>
     /// <param name="strength"></param>
     /// <param name="tone"></param>

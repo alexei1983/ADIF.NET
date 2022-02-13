@@ -151,6 +151,41 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
+    public void AddQSOTag(ITag tag)
+    {
+      if (tag is null)
+        return;
+
+      if (tag.Header)
+        throw new Exception("Cannot add header tag to all QSOs.");
+
+      for (var i = 0; i < QSOs.Count; i++)
+      {
+        if (!QSOs[i].Contains(tag.Name))
+          QSOs[i].Add(tag);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
+    public void AddOrReplaceQSOTag(ITag tag)
+    {
+      if (tag is null)
+        return;
+
+      if (tag.Header)
+        throw new Exception("Cannot add header tag to all QSOs.");
+
+      for (var i = 0; i < QSOs.Count; i++)
+          QSOs[i].AddOrReplace(tag);
+    }
+
+    /// <summary>
     /// Returns a string representation of the current <see cref="ADIFDataSet"/>.
     /// </summary>
     public override string ToString()

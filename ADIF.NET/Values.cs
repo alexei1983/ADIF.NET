@@ -317,10 +317,10 @@ namespace ADIF.NET {
     public const string KIndex = "K_INDEX";
     public const string Lat = "LAT";
     public const string Lon = "LON";
-    public const string LotwQSLReceivedDate = "LOTW_QSLRDATE";
-    public const string LotwQSLSentDate = "LOTW_QSLSDATE";
-    public const string LotwQSLReceivedStatus = "LOTW_QSL_RCVD";
-    public const string LotwQSLSentStatus = "LOTW_QSL_SENT";
+    public const string LOTWQSLReceivedDate = "LOTW_QSLRDATE";
+    public const string LOTWQSLSentDate = "LOTW_QSLSDATE";
+    public const string LOTWQSLRcvdStatus = "LOTW_QSL_RCVD";
+    public const string LOTWQSLSentStatus = "LOTW_QSL_SENT";
     public const string MaxBursts = "MAX_BURSTS";
     public const string Mode = "MODE";
     public const string MsShower = "MS_SHOWER";
@@ -370,7 +370,8 @@ namespace ADIF.NET {
     public const string ProgramVersion = "PROGRAMVERSION";
     public const string PropMode = "PROP_MODE";
     public const string PublicKey = "PUBLIC_KEY";
-    public const string QrzQSOUploadDate = "QRZCOM_QSO_UPLOAD_DATE";
+    public const string QRZQSOUploadDate = "QRZCOM_QSO_UPLOAD_DATE";
+    public const string QRZQSOUploadStatus = "QRZCOM_QSO_UPLOAD_STATUS";
     public const string QSODateOff = "QSO_DATE_OFF";
     public const string QSODate = "QSO_DATE";
     public const string QSLRcvdDate = "QSLRDATE";
@@ -380,8 +381,9 @@ namespace ADIF.NET {
     public const string QSLSent = "QSL_SENT";
     public const string QSLSentVia = "QSL_SENT_VIA";
     public const string QSLVia = "QSL_VIA";
+    public const string QSLMsg = "QSLMSG";
+    public const string QSLMsgIntl = "QSLMSG_INTL";
     public const string QSOComplete = "QSO_COMPLETE";
-
     public const string QSORandom = "QSO_RANDOM";
     public const string QTH = "QTH";
     public const string QTHIntl = "QTH_INTL";
