@@ -229,6 +229,10 @@
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
     <Compile Include="Types\ADIFEnumerationType.cs" />
+    <Compile Include="Types\ADIFGridSquare.cs" />
+    <Compile Include="Types\ADIFIntlMultilineString.cs" />
+    <Compile Include="Types\ADIFIntlString.cs" />
+    <Compile Include="Types\ADIFMultilineString.cs" />
     <Compile Include="Types\ADIFTime.cs" />
     <Compile Include="Types\ADIFDate.cs" />
     <Compile Include="Types\ADIFBoolean.cs" />

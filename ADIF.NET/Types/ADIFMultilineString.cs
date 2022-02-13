@@ -1,16 +1,15 @@
-﻿using System;
-
+﻿
 namespace ADIF.NET.Types {
 
   /// <summary>
   /// 
   /// </summary>
-  public class ADIFString : ADIFType<string>, IADIFType {
+  public class ADIFMultilineString : ADIFType<string>, IADIFType {
 
     /// <summary>
     /// The ADIF data type indicator.
     /// </summary>
-    public override string Type => DataTypes.String;
+    public override string Type => DataTypes.MultilineString;
 
     /// <summary>
     /// 
@@ -22,10 +21,7 @@ namespace ADIF.NET.Types {
         s = string.Empty;
 
       if (!s.IsASCII())
-        throw new Exception("Invalid ADIF String.");
-
-      if (s.Contains(Environment.NewLine) || s.Contains(Values.LINE_ENDING.ToString()))
-        throw new Exception("ADIF String cannot contain line endings.");
+        throw new System.Exception("Invalid MultilineString.");
 
       return s;
     }
@@ -64,10 +60,7 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      return !string.IsNullOrEmpty(s) && 
-             s.IsASCII() && 
-             !s.Contains(Environment.NewLine) && 
-             !s.Contains(Values.LINE_ENDING.ToString());
+      return !string.IsNullOrEmpty(s) && s.IsASCII();
     }
   }
 }
