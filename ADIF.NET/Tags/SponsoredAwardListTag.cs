@@ -11,15 +11,13 @@ namespace ADIF.NET.Tags {
 
     public override string ValueSeparator => Values.COMMA.ToString();
 
-    public override IADIFType ADIFType => null;
+    public override IADIFType ADIFType => new ADIFSponsoredAwardList();
 
     public string[] Prefixes => Values.SponsoredAwardPrefixes.GetValues();
 
     public SponsoredAwardListTag() { }
 
-    public SponsoredAwardListTag(string value) : base(value) {
-
-    }
+    public SponsoredAwardListTag(string value) : base(value) { }
 
     /// <summary>
     /// 
@@ -31,8 +29,7 @@ namespace ADIF.NET.Tags {
       {
         try
         {
-          var values = SplitValue(value.ToString());
-          ValidateAwards(values);
+          ADIFSponsoredAwardList.Parse(value.ToString());
           return true;
         }
         catch
@@ -53,7 +50,9 @@ namespace ADIF.NET.Tags {
       if (string.IsNullOrEmpty(award))
         throw new ArgumentException("Award is required.", nameof(award));
 
-      ValidateAwards(award);
+      if (!ADIFSponsoredAwardList.TryParse(award, out _))
+        throw new ArgumentException($"Award '{award}' does not have a valid sponsored prefix.");
+
       base.AddValue(award);
     }
 
@@ -87,29 +86,6 @@ namespace ADIF.NET.Tags {
         throw new AggregateException(exceptions.ToArray());
       else if (exceptions.Count == 1)
         throw exceptions[0];
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="throwExceptionOnInvalidCount"></param>
-    /// <returns></returns>
-    string[] SplitValue(string value)
-    {
-      if (!string.IsNullOrEmpty(value))
-      {
-        if (value.Contains(ValueSeparator))
-        {
-          var splitVals = value.Split(new string[] { ValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
-          if (splitVals != null)
-            return splitVals;
-        }
-        else
-          return new string[] { value };
-      }
-
-      return null;
     }
   }
 }

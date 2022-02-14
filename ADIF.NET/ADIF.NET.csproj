@@ -231,6 +231,7 @@
     <Compile Include="Tags\AppDefTag.cs" />
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
+    <Compile Include="Types\ADIFSponsoredAwardList.cs" />
     <Compile Include="Types\ADIFEnumerationType.cs" />
     <Compile Include="Types\ADIFGridSquare.cs" />
     <Compile Include="Types\ADIFIntlMultilineString.cs" />

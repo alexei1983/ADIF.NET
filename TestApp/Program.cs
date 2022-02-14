@@ -123,7 +123,7 @@ namespace TestApp {
       result.QSOs[0].SetRstSent(5, 9);
       result.QSOs[0].SetRstRcvd(5, 3);
 
-      result.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212-2.adi", EmitFlags.None);
+      //result.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212-2.adi", EmitFlags.None);
       return;
 
       var qso12 = new ADIFQSO();
