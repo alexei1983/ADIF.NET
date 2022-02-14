@@ -49,6 +49,7 @@ namespace ADIF.NET.Helpers {
         case DataTypes.IntlMultilineString:
         case DataTypes.IntlString:
         case DataTypes.Enumeration:
+        case DataTypes.SponsoredAwardList:
           if (value is string strVal)
             return strVal;
           else

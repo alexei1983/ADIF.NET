@@ -273,6 +273,8 @@ namespace ADIF.NET {
     public const string AntPath = "ANT_PATH";
     public const string AIndex = "A_INDEX";
     public const string AppDef = "APP_";
+    public const string AwardSubmitted = "AWARD_SUBMITTED";
+    public const string AwardGranted = "AWARD_GRANTED";
     public const string Band = "BAND";
     public const string BandRx = "BAND_RX";
     public const string Call = "CALL";

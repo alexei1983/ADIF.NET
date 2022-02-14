@@ -92,7 +92,10 @@
     </Compile>
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
+    <Compile Include="Tags\AwardGrantedTag.cs" />
+    <Compile Include="Tags\AwardSubmittedTag.cs" />
     <Compile Include="Tags\CreditGrantedTag.cs" />
+    <Compile Include="Tags\SponsoredAwardListTag.cs" />
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />
     <Compile Include="Tags\LOTWQSLRcvdTag.cs" />

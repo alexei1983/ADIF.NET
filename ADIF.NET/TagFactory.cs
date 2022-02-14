@@ -24,6 +24,8 @@ namespace ADIF.NET {
       { TagNames.Age, typeof(AgeTag) },
       { TagNames.AntAz, typeof(AntAzTag) },
       { TagNames.ARRLSect, typeof(ARRLSectTag) },
+      { TagNames.AwardGranted, typeof(AwardGrantedTag) },
+      { TagNames.AwardSubmitted, typeof(AwardSubmittedTag) },
       { TagNames.Band, typeof(BandTag) },
       { TagNames.BandRx, typeof(BandRxTag) },
       { TagNames.Call, typeof(CallTag) },

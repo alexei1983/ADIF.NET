@@ -55,6 +55,9 @@ namespace ADIF.NET.Tags {
     {
       if (!string.IsNullOrEmpty(value))
       {
+        if (value.Contains(ValueSeparator))
+          throw new ArgumentException("Value cannot contain the delimiter character.");
+
         if ((MaxValueCount > 0 && values.Count < MaxValueCount) || AllowValueCountOverMax || MaxValueCount <= 0)
           values.Add(value);
       }
