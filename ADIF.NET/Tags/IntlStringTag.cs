@@ -1,4 +1,6 @@
 ﻿
+using ADIF.NET.Types;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -6,6 +8,8 @@ namespace ADIF.NET.Tags {
   /// with the potential presence of non-ASCII characters.
   /// </summary>
   public class IntlStringTag : Tag<string>, ITag {
+
+    public override IADIFType ADIFType => new ADIFIntlString();
 
     public IntlStringTag() { }
 

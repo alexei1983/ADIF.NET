@@ -1,10 +1,17 @@
 ﻿using System;
 
 namespace ADIF.NET.Types {
+
+  /// <summary>
+  /// Represents the Boolean ADIF type.
+  /// </summary>
   public class ADIFBoolean : ADIFType<bool?> {
 
-    public override ADIFEnumeration Options => new ADIFEnumeration("Boolean", new ADIFEnumerationValue("Y"), 
-                                                                              new ADIFEnumerationValue("N"));
+    /// <summary>
+    /// 
+    /// </summary>
+    public override ADIFEnumeration Options => new ADIFEnumeration(nameof(ADIFBoolean), new ADIFEnumerationValue("Y"), 
+                                                                                        new ADIFEnumerationValue("N"));
     public override bool IsEnumeration => true;
     public override bool RestrictToOptions => true;
     public override string Type => DataTypes.Boolean;

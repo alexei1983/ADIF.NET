@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace ADIF.NET.Types {
 
   /// <summary>
@@ -21,7 +22,7 @@ namespace ADIF.NET.Types {
         s = string.Empty;
 
       if (!s.IsASCII())
-        throw new System.Exception("Invalid MultilineString.");
+        throw new Exception("Invalid MultilineString.");
 
       return s;
     }

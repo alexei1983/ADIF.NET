@@ -22,14 +22,16 @@ namespace ADIF.NET.Tags {
 
     public override bool Header => true;
 
+    public override bool IsUserDef => true;
+
+    public new string DataType { get; set; }
+
     public int FieldId { get; set; }
 
     public string[] CustomOptions { get; set; }
 
     public double LowerBound { get; set; }
     public double UpperBound { get; set; }
-
-    public string DataType { get; set; }
 
     string fieldName;
   }

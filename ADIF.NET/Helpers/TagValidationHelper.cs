@@ -89,6 +89,11 @@ namespace ADIF.NET.Helpers {
                             $"subdivision '{primarySubDivTag.TextValue}' in DXCC entity {dxccTag.TextValue}.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="latTag"></param>
+    /// <param name="longTag"></param>
     public static void ValidateLatLong(ITag latTag, ITag longTag)
     {
       if (latTag == null && longTag == null)
@@ -125,6 +130,31 @@ namespace ADIF.NET.Helpers {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="tag"></param>
+    /// <param name="adifVersion"></param>
+    public static void ValidateTagVersion(ITag tag, Version adifVersion)
+    {
+      if (tag == null)
+        return;
+      
+      var tagName = tag.Name;
+      
+      if (tagName.StartsWith(TagNames.AppDef, StringComparison.OrdinalIgnoreCase))
+        tagName = TagNames.AppDef;
+      else if (tag.IsUserDef)
+        tagName = TagNames.UserDef;
+
+      var result = SQLiteHelper.Instance.ExecuteScalar<long>(TAG_VERSION_SQL,
+                                                             new Dictionary<string, object>() { { "@TagName", tagName },
+                                                                                                { "@Version", adifVersion.ToString()} });
+
+      if (result != 1)
+        throw new Exception($"Tag '{tag.Name}' is not valid for ADIF version {adifVersion}.");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="readability"></param>
     /// <param name="strength"></param>
     /// <param name="tone"></param>
@@ -150,5 +180,7 @@ namespace ADIF.NET.Helpers {
           throw new ArgumentException($"Invalid RST suffix: {suffix}");
       }
     }
+
+    const string TAG_VERSION_SQL = "SELECT 1 FROM Tags WHERE Name = @TagName AND MinVersion <= @Version AND (MaxVersion IS NULL OR MaxVersion >= @Version)";
   }
 }

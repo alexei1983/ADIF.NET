@@ -554,8 +554,6 @@ namespace ADIF.NET {
         AddOrReplace(new CountryTag(dxccEntity.DisplayName));
     }
 
-
-
     /// <summary>
     /// 
     /// </summary>

@@ -8,7 +8,7 @@ namespace ADIF.NET.Types {
   /// <summary>
   /// Represents the CreditList ADIF type.
   /// </summary>
-  public class ADIFCreditList : ADIFString, IADIFType {
+  public class ADIFCreditList : ADIFType<string>, IADIFType {
 
     public override string Type => DataTypes.CreditList;
 
@@ -88,11 +88,11 @@ namespace ADIF.NET.Types {
           var creditQslSplit = val.Split(Values.COLON);
 
           if (creditQslSplit == null || creditQslSplit.Length != 2)
-            throw new Exception("Error in CreditList value.");
+            throw new CreditListException("Invalid value.", val);
 
           // validate the credit part of the string
           if (!Values.Credits.IsValid(creditQslSplit[0]))
-            throw new Exception($"Credit '{creditQslSplit[0]}' is not valid.");
+            throw new CreditListException($"Credit '{creditQslSplit[0]}' is not valid.", creditQslSplit[0]);
 
           // now try to split by ampersand
           if (creditQslSplit[1].Contains(Values.AMPERSAND))
@@ -105,7 +105,7 @@ namespace ADIF.NET.Types {
             foreach (var medium in mediumSplit)
             {
               if (!Values.QSLMediums.IsValid(medium))
-                throw new Exception($"QSL medium '{medium}' is not valid for credit '{creditQslSplit[0]}'.");
+                throw new CreditListException($"QSL medium '{medium}' is not valid for credit '{creditQslSplit[0]}'.", $"{creditQslSplit[0]}:{medium}");
 
               list.Add(creditQslSplit[0], medium);
             }
@@ -113,7 +113,7 @@ namespace ADIF.NET.Types {
           {
             // if no ampersand is present, validate against QSL medium
             if (!Values.QSLMediums.IsValid(creditQslSplit[1]))
-              throw new Exception($"QSL medium '{creditQslSplit[1]}' is not valid for credit '{creditQslSplit[0]}'.");
+              throw new CreditListException($"QSL medium '{creditQslSplit[1]}' is not valid for credit '{creditQslSplit[0]}'.", $"{creditQslSplit[0]}:{creditQslSplit[1]}");
 
             list.Add(creditQslSplit[0], creditQslSplit[1]);
           } // end ampersand check
@@ -121,7 +121,7 @@ namespace ADIF.NET.Types {
         {
           // if a colon was not present, simply validate against the credit enumeration
           if (!Values.Credits.IsValid(val))
-            throw new Exception($"Credit '{val}' is not valid.");
+            throw new CreditListException($"Credit '{val}' is not valid.", val);
 
           list.Add(val);
         }
@@ -141,7 +141,7 @@ namespace ADIF.NET.Types {
     public void Add(string credit, string medium)
     {
       if (string.IsNullOrEmpty(credit) || string.IsNullOrEmpty(medium))
-        throw new Exception("Credit and medium are required.");
+        throw new CreditListException("Credit and medium are required.");
 
       Add(new CreditListMember(credit, medium));
     }
@@ -190,15 +190,34 @@ namespace ADIF.NET.Types {
                                                              .Medium);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public struct CreditListMember {
 
+      /// <summary>
+      /// 
+      /// </summary>
       public string Credit { get; }
+
+      /// <summary>
+      /// 
+      /// </summary>
       public string Medium { get; }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="credit"></param>
       public CreditListMember(string credit) : this(credit, null)
       {
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="credit"></param>
+      /// <param name="medium"></param>
       public CreditListMember(string credit, string medium)
       {
         Medium = medium;
@@ -206,11 +225,19 @@ namespace ADIF.NET.Types {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string ToString()
     {
       return ToString("G", CultureInfo.CurrentCulture);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <param name="provider"></param>
     public string ToString(string format, IFormatProvider provider)
     {
       if (string.IsNullOrEmpty(format))
@@ -261,5 +288,51 @@ namespace ADIF.NET.Types {
           throw new FormatException("Invalid format string.");
       }
     }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class CreditListException : Exception {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Value { get; set; }
+ 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="value"></param>
+    public CreditListException(string message, string value) : base(message)
+    {
+      Value = value;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    public CreditListException(string message) : base(message) { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="innerException"></param>
+    public CreditListException(string message, Exception innerException) : base(message, innerException) { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="value"></param>
+    /// <param name="innerException"></param>
+    public CreditListException(string message, string value, Exception innerException) : base(message, innerException)
+    {
+      Value = value;
+    }
+
   }
 }

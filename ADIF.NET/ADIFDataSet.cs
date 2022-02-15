@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using ADIF.NET.Tags;
+using ADIF.NET.Helpers;
 
 namespace ADIF.NET {
 
@@ -183,6 +184,76 @@ namespace ADIF.NET {
 
       for (var i = 0; i < QSOs.Count; i++)
           QSOs[i].AddOrReplace(tag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void CheckVersion()
+    {
+      if (Header == null)
+        throw new Exception("Cannot check tag version validity: no header found.");
+
+      if (!(Header.GetTag(TagNames.ADIFVer) is ADIFVersionTag versionTag))
+        throw new Exception($"Cannot check tag version validity: no '{TagNames.ADIFVer}' tag found.");
+
+      if (versionTag.Value == null)
+        throw new Exception($"Cannot check tag version validity: no value found for '{TagNames.ADIFVer}' tag.");
+
+      CheckVersion(versionTag.Value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="version"></param>
+    public void CheckVersion(Version version)
+    {
+      if (version == null)
+        throw new Exception($"Cannot check tag version validity: no ADIF version specified.");
+
+      var exceptions = new List<Exception>();
+
+      foreach (var qso in QSOs)
+      {
+        if (qso == null)
+          continue;
+
+        foreach (var tag in qso)
+        {
+          if (tag == null)
+            continue;
+
+          try
+          {
+            TagValidationHelper.ValidateTagVersion(tag, version);
+          }
+          catch (Exception ex)
+          {
+            exceptions.Add(ex);
+          }
+        }
+      }
+
+      foreach (var tag in Header)
+      {
+        if (tag == null)
+          continue;
+
+        try
+        {
+          TagValidationHelper.ValidateTagVersion(tag, version);
+        }
+        catch (Exception ex)
+        {
+          exceptions.Add(ex);
+        }
+      }
+
+      if (exceptions.Count > 1)
+        throw new AggregateException(exceptions.ToArray());
+      else if (exceptions.Count == 1)
+        throw exceptions[0];
     }
 
     /// <summary>

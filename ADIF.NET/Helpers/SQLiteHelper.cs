@@ -12,16 +12,19 @@ namespace ADIF.NET.Helpers {
   /// </summary>
   public class SQLiteHelper : IDisposable {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static readonly SQLiteHelper Instance;
 
-    public bool Exists { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public bool Connected { get; private set; }
 
-    public bool Ready => Exists && Connected;
-
-    public string Database { get; private set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
     static SQLiteHelper()
     {
       Instance = new SQLiteHelper();
@@ -30,25 +33,6 @@ namespace ADIF.NET.Helpers {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="filename"></param>
-    public SQLiteHelper(string filename) : this(filename, true, false) {
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="filename"></param>
-    /// <param name="compress"></param>
-    /// <param name="isNew"></param>
-    public SQLiteHelper(string filename, bool compress, bool isNew = false) {
-
-      Exists = new FileInfo(filename)?.Exists ?? false;
-
-      if (Exists || isNew) {
-        CreateConnection(filename, compress, isNew);
-        }
-      }
-
     private SQLiteHelper()
     {
       byte[] bytes = Resources.adif;
@@ -58,99 +42,92 @@ namespace ADIF.NET.Helpers {
         var path = Path.GetTempFileName();
 
         File.WriteAllBytes(path, bytes);
-        Exists = true;
         tempPath = path;
 
-        CreateConnection(path, true, false);
+        CopyDatabaseToMemory();
       }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="filename"></param>
-    /// <param name="compress"></param>
-    /// <param name="isNew"></param>
-    /// <returns></returns>
-    SQLiteConnection CreateConnection(string filename, 
-                                      bool compress = true,
-                                      bool isNew = false) {
-
-      var connString = $@"Data Source={filename};Version = 3;{(isNew ? "New = True;" : string.Empty)}{(compress ? "Compress = True;" : string.Empty)}";
-
-      // create a new database connection:
-      connection = new SQLiteConnection(connString);
-
-      // open the connection:
-      try {
-        connection.Open();
-        Connected = true;
-
-        Database = filename;
-
-        if (isNew)
-          Exists = true;
+    void CopyDatabaseToMemory()
+    {
+      try
+      {
+        using (var fileConnection = new SQLiteConnection($"Data Source={tempPath};Version=3;Compress=True;"))
+        {
+          fileConnection.Open();
+          memoryConnection = new SQLiteConnection("Data Source=:memory:;Version=3;New=True;Compress=True");
+          memoryConnection.Open();
+          Connected = true;
+          fileConnection.BackupDatabase(memoryConnection, "main", "main", -1, null, 0);
         }
-      catch (Exception ex) {
-        Connected = false;
-        Exists = false;
-        throw new InvalidOperationException(ex.Message, ex);
-        }
-      return connection;
+
+        DeleteTempFile();
       }
+      catch (Exception ex)
+      {
+        Connected = false;
+        throw new InvalidOperationException($"Could not initialize ADIF database: {ex.Message}", ex);
+      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="query"></param>
-    /// <returns></returns>
-    public int ExecuteNonQuery(string commandText) {
+    public int ExecuteNonQuery(string commandText)
+    {
 
       CheckConnection();
 
-      using (var command = connection.CreateCommand()) {
+      using (var command = memoryConnection.CreateCommand())
+      {
         command.CommandText = commandText;
         return command.ExecuteNonQuery();
-        }
       }
+    }
 
     /// <summary>
     /// Drops the specified table.
     /// </summary>
     /// <param name="table">Name of the table that will be dropped.</param>
-    public int DropTable(string table) {
+    public int DropTable(string table)
+    {
 
       CheckConnection();
 
-      using (var command = connection.CreateCommand()) {
+      using (var command = memoryConnection.CreateCommand())
+      {
         command.CommandText = $"DROP TABLE \"{table}\"";
         return command.ExecuteNonQuery();
-        }
       }
+    }
 
     /// <summary>
     /// Closes the database connection.
     /// </summary>
-    public void CloseConnection() {
-      if (connection != null) {
-        connection.Close();
+    public void CloseConnection()
+    {
+      if (memoryConnection != null)
+      {
+        memoryConnection.Close();
         Connected = false;
-        }
       }
+    }
 
     public void Dispose() => Dispose(true);
 
     /// <summary></summary>
     void Dispose(bool disposing)
     {
-      Connected = false;
-      Exists = false;
-      Database = null;
-
       if (disposing)
       {
-        if (connection != null)
-          connection.Dispose();
+        if (memoryConnection != null)
+          memoryConnection.Dispose();
+
+        Connected = false;
 
         GC.SuppressFinalize(this);
       }
@@ -158,13 +135,18 @@ namespace ADIF.NET.Helpers {
       DeleteTempFile();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     void DeleteTempFile()
     {
       if (!string.IsNullOrEmpty(tempPath))
       {
         try
         {
-          new FileInfo(tempPath).Delete();
+          var fi = new FileInfo(tempPath);
+          if (fi.Exists)
+            fi.Delete();
           tempPath = null;
         }
         catch
@@ -215,7 +197,7 @@ namespace ADIF.NET.Helpers {
     {
       CheckConnection();
 
-      using (var command = connection.CreateCommand())
+      using (var command = memoryConnection.CreateCommand())
       {
         command.CommandText = query;
 
@@ -254,13 +236,15 @@ namespace ADIF.NET.Helpers {
     /// 
     /// </summary>
     /// <param name="query"></param>
-    public ArrayList ReadData(string query, Dictionary<string, object> parameters) {
+    public ArrayList ReadData(string query, Dictionary<string, object> parameters)
+    {
 
       CheckConnection();
 
       var result = new ArrayList();
 
-      using (var command = connection.CreateCommand()) {
+      using (var command = memoryConnection.CreateCommand())
+      {
 
         command.CommandText = query;
 
@@ -270,27 +254,30 @@ namespace ADIF.NET.Helpers {
             command.Parameters.AddWithValue(keyValue.Key, keyValue.Value);
         }
 
-        using (var dataReader = command.ExecuteReader()) {
+        using (var dataReader = command.ExecuteReader())
+        {
 
-          while (dataReader.Read()) {
+          while (dataReader.Read())
+          {
 
             // get the number of values
             var valCnt = dataReader.VisibleFieldCount;
             dynamic dynObj = new ExpandoObject();
 
-            for (var x = 0; x < valCnt; x++) {
+            for (var x = 0; x < valCnt; x++)
+            {
               var colName = dataReader.GetName(x);
               var val = dataReader.GetValue(x);
 
               dynObj = AddProperty(dynObj, colName, val);
-              }
-            result.Add(dynObj);
             }
+            result.Add(dynObj);
           }
         }
+      }
 
       return result;
-      }
+    }
 
     ~SQLiteHelper() => Dispose(false);
 
@@ -300,10 +287,10 @@ namespace ADIF.NET.Helpers {
     /// <param name="expando"></param>
     /// <param name="propertyName"></param>
     /// <param name="propertyValue"></param>
-    /// <returns></returns>
     ExpandoObject AddProperty(ExpandoObject expando,
                               string propertyName,
-                              object propertyValue) {
+                              object propertyValue)
+    {
 
       var expandoDict = expando as IDictionary<string, object>;
 
@@ -313,18 +300,19 @@ namespace ADIF.NET.Helpers {
         expandoDict.Add(propertyName, propertyValue);
 
       return expandoDict as ExpandoObject;
-      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
-    void CheckConnection() {
-      if (connection == null) 
-        throw new InvalidOperationException("Connection has not been initialized.");
-      }
+    void CheckConnection()
+    {
+      if (memoryConnection == null)
+        throw new InvalidOperationException("ADIF database connection has not been initialized.");
+    }
 
-    SQLiteConnection connection;
+    SQLiteConnection memoryConnection;
     string tempPath;
 
-    }
   }
+}

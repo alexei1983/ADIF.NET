@@ -105,7 +105,7 @@ namespace ADIF.NET.Types {
         }
 
         if (checkedCount >= prefixes.Length)
-          exceptions.Add(new Exception($"Award '{award}' does not have a valid sponsored prefix."));
+          exceptions.Add(new SponsoredAwardListException($"Award '{award.ToUpper()}' does not have a valid sponsored prefix.", award.ToUpper()));
         else
           result.Add(award);
       }
@@ -120,5 +120,51 @@ namespace ADIF.NET.Types {
 
       return result.ToArray();    
     }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class SponsoredAwardListException : Exception {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Award { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="award"></param>
+    public SponsoredAwardListException(string message, string award) : base (message)
+    {
+      Award = award;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    public SponsoredAwardListException(string message) : base(message) { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="innerException"></param>
+    public SponsoredAwardListException(string message, Exception innerException) : base(message, innerException) { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="award"></param>
+    /// <param name="innerException"></param>
+    public SponsoredAwardListException(string message, string award, Exception innerException) : base(message, innerException)
+    {
+      Award = award;
+    }
+
   }
 }

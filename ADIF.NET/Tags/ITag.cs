@@ -34,6 +34,8 @@ namespace ADIF.NET.Tags {
 
     bool SuppressLength { get; }
 
+    bool IsUserDef { get; }
+
     bool Header { get; }
 
     void SetValue(object value);

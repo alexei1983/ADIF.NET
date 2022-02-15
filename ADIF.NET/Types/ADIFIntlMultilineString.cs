@@ -46,7 +46,7 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      return !string.IsNullOrEmpty(s);
+      return true;
     }
   }
 }

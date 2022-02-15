@@ -10,7 +10,9 @@ namespace ADIF.NET.Tags {
 
     public int FieldId => field?.FieldId ?? -1;
 
-    public string DataType => field?.DataType ?? string.Empty;
+    public override string DataType => field?.DataType ?? string.Empty;
+
+    public override bool IsUserDef => true;
 
     public override bool RestrictOptions => field?.CustomOptions?.Length > 0;
 

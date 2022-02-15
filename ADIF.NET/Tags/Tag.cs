@@ -112,6 +112,11 @@ namespace ADIF.NET.Tags {
     public virtual bool SuppressLength { get; }
 
     /// <summary>
+    /// Whether or not the tag is a user-defined tag.
+    /// </summary>
+    public virtual bool IsUserDef { get; }
+
+    /// <summary>
     /// Creates a new instance of the <see cref="Tag{T}"/> class.
     /// </summary>
     public Tag()
