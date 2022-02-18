@@ -11,6 +11,5 @@ namespace ADIF.NET.Tags {
     public SWLTag() { }
 
     public SWLTag(bool value) : base(value) { }
-
     }
   }

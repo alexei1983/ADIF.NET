@@ -204,6 +204,9 @@ namespace ADIF.NET.Tags {
       return this.Value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual bool HasValue()
     {
       return Value == null || string.IsNullOrEmpty(TextValue);
@@ -238,7 +241,6 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// 
     /// </summary>
-    /// <returns></returns>
     public override int GetHashCode()
     {
       unchecked
@@ -281,19 +283,17 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Returns a <see cref="string"/> representation of the current instance.
     /// </summary>
-    /// <returns></returns>
     public override string ToString()
     {
       return ToString("G", CultureInfo.CurrentCulture);
     }
 
     /// <summary>
-    /// 
+    /// Returns a <see cref="string"/> representation of the current instance.
     /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
+    /// <param name="format">The value that determines the format of the object as a <see cref="string"/>.</param>
     public string ToString(string format)
     {
       return ToString(format, CultureInfo.CurrentCulture);

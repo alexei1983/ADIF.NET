@@ -6,16 +6,35 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class USACACountiesTag : MultiValueStringTag, ITag {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string Name => TagNames.USACACounties;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string ValueSeparator => Values.COLON.ToString();
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override int MaxValueCount => 2;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override int MinValueCount => 2;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public USACACountiesTag() : base() { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public USACACountiesTag(string value) : base(value) {
     }
   }

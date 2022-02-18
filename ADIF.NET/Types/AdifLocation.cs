@@ -139,7 +139,10 @@ namespace ADIF.NET.Types {
   /// </summary>
   public class Location : IFormattable {
 
-    LocationType LatLong { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public LocationType LocationType { get; private set; }
 
     /// <summary>
     /// 
@@ -162,7 +165,7 @@ namespace ADIF.NET.Types {
     void SetLocationType()
     {
       if (!string.IsNullOrEmpty(Direction))
-        LatLong = Direction == "N" || Direction == "S" ? LocationType.Latitude : 
+        LocationType = Direction == "N" || Direction == "S" ? LocationType.Latitude : 
                   Direction == "E" || Direction == "W" ? LocationType.Longitude :
                   LocationType.Unspecified;
     }

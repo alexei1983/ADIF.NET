@@ -8,7 +8,7 @@ namespace ADIF.NET.Types {
   public class ADIFBoolean : ADIFType<bool?> {
 
     /// <summary>
-    /// 
+    /// Whether or not the type is an enumeration.
     /// </summary>
     public override bool IsEnumeration => true;
 

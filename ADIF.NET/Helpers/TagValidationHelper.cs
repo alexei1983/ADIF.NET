@@ -99,13 +99,16 @@ namespace ADIF.NET.Helpers {
       if (latTag == null && longTag == null)
         return;
       else if (latTag == null || longTag == null)
-        throw new Exception("Latitude and longitude tags are both required for validation.");
+        throw new Exception("Latitude and longitude are both required for validation.");
 
-      ValidateExpectedValueType(latTag, typeof(string));
-      ValidateExpectedValueType(longTag, typeof(string));
+      if (!(latTag.Value is Location latVal) || !(longTag.Value is Location longVal))
+        throw new Exception("Invalid latitude/longitude values.");
 
-      var latVal = latTag.Value as Location;
-      var longVal = longTag.Value as Location;
+      if (latVal.LocationType != LocationType.Latitude)
+        throw new Exception($"Latitude value '{latTag.TextValue}' is invalid.");
+
+      if (longVal.LocationType != LocationType.Longitude)
+        throw new Exception($"Longitude value '{longTag.TextValue}' is invalid.");
     }
 
     /// <summary>
