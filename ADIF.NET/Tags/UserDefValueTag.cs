@@ -1,4 +1,5 @@
-﻿
+﻿using ADIF.NET.Helpers;
+
 namespace ADIF.NET.Tags {
 
   /// <summary>
@@ -31,17 +32,32 @@ namespace ADIF.NET.Tags {
       this.field = field;
       }
 
+    public override object ConvertValue(object value)
+    {
+      return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
+    }
+
     public override bool ValidateValue(object value) {
 
       if (base.ValidateValue(value)) {
 
-        if (Options?.Count > 0 && RestrictOptions) {
-          return Options.IsValid(value.ToString());
-          }
+        object convObj = null;
 
-        else if (MaxValue > MinValue) {
-          var dblVal = value.ToDouble();
-          return dblVal >= MinValue && dblVal <= MaxValue;
+        try
+        {
+          convObj = ConvertValue(value);
+        }
+        catch
+        {
+          return false;
+        }
+
+        if (Options?.Count > 0 && RestrictOptions && convObj is string strVal) {
+          return Options.IsValid(strVal);
+          }
+        else if (MaxValue > MinValue && (convObj is double || convObj is double?)) {
+          var dblVal = (double?)convObj;
+          return (dblVal.HasValue && dblVal >= MinValue && dblVal <= MaxValue) || !dblVal.HasValue;
           }
         }
 

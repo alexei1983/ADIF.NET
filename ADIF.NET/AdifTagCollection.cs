@@ -119,6 +119,24 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="tagName"></param>
+    public T GetTagValue<T>(string tagName)
+    {
+      if (string.IsNullOrEmpty(tagName))
+        throw new ArgumentException("Tag name is required.", nameof(tagName));
+
+      var tag = GetTag(tagName);
+
+      if (tag != null && tag.Value is T tVal)
+        return tVal;
+
+      return default(T);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="tagName"></param>
     public bool Remove(string tagName)
     {

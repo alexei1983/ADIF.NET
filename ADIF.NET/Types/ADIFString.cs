@@ -3,7 +3,7 @@
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the String ADIF type.
   /// </summary>
   public class ADIFString : ADIFType<string>, IADIFType {
 
@@ -22,7 +22,7 @@ namespace ADIF.NET.Types {
         s = string.Empty;
 
       if (!s.IsASCII())
-        throw new Exception("Invalid ADIF String.");
+        throw new Exception("ADIF String cannot contain non-ASCII characters.");
 
       if (s.Contains(Environment.NewLine) || s.Contains(Values.LINE_ENDING.ToString()))
         throw new Exception("ADIF String cannot contain line endings.");
@@ -64,8 +64,10 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      return !string.IsNullOrEmpty(s) && 
-             s.IsASCII() && 
+      if (s == null)
+        s = string.Empty;
+
+      return s.IsASCII() && 
              !s.Contains(Environment.NewLine) && 
              !s.Contains(Values.LINE_ENDING.ToString());
     }

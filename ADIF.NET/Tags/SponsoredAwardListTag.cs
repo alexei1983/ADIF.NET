@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ADIF.NET.Types;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -44,6 +45,29 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="value"></param>
+    public override object ConvertValue(object value)
+    {
+      var strVal = string.Empty;
+      if (value is string)
+        strVal = (string)value;
+      else
+        strVal = value != null ? value.ToString() : string.Empty;
+
+      try
+      {
+        return ADIFSponsoredAwardList.Parse(strVal);
+      }
+      catch (Exception ex)
+      {
+        throw new ValueConversionException(value, Name, ex);
+      }
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="award"></param>
     public override void AddValue(string award)
     {
@@ -51,7 +75,7 @@ namespace ADIF.NET.Tags {
         throw new ArgumentException("Award is required.", nameof(award));
 
       if (!ADIFSponsoredAwardList.TryParse(award, out _))
-        throw new ArgumentException($"Award '{award}' does not have a valid sponsored prefix.");
+        throw new SponsoredAwardListException($"Award '{award}' does not have a valid sponsored prefix.", award);
 
       base.AddValue(award);
     }
@@ -79,7 +103,7 @@ namespace ADIF.NET.Tags {
         }
 
         if (checkedCount == Prefixes.Length)
-          exceptions.Add(new Exception($"Award '{award}' does not have a valid sponsored prefix."));
+          exceptions.Add(new SponsoredAwardListException($"Award '{award}' does not have a valid sponsored prefix."));
       }
 
       if (exceptions.Count > 1)

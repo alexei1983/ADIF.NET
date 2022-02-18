@@ -11,9 +11,9 @@ namespace ADIF.NET.Types {
   }
 
   /// <summary>
-  /// Represents an ADIF Location.
+  /// Represents the Location ADIF type.
   /// </summary>
-  public class ADIFLocation : ADIFType<string> {
+  public class ADIFLocation : ADIFType<string>, IADIFType {
 
     /// <summary>
     /// 
@@ -83,10 +83,7 @@ namespace ADIF.NET.Types {
     /// <param name="value"></param>
     public static bool IsValidValue(string value)
     {
-      if (TryParse(value, out Location _))
-        return true;
-
-      return false;
+      return TryParse(value, out Location _);
     }
 
     /// <summary>
@@ -108,11 +105,11 @@ namespace ADIF.NET.Types {
     public static Location FromDecimalDegrees(decimal decimalDegrees, LocationType type)
     {
       if (type == LocationType.Latitude && (decimalDegrees < -90 || decimalDegrees > 90) )
-        throw new Exception("Invalid latitude decimal degrees.");
+        throw new ArgumentException("Invalid latitude decimal degrees.", nameof(decimalDegrees));
       else if (type == LocationType.Longitude && (decimalDegrees < -180 || decimalDegrees > 180))
-        throw new Exception("Invalid longitude decimal degrees.");
+        throw new ArgumentException("Invalid longitude decimal degrees.", nameof(decimalDegrees));
       else if (type == LocationType.Unspecified)
-        throw new Exception("Type must be latitude or longitude.");
+        throw new ArgumentException("Type must be latitude or longitude.", nameof(type));
 
       var degrees = Math.Floor(Math.Truncate(100 * Math.Abs(decimalDegrees)) / 100);
       var decimalPart = (Math.Abs(decimalDegrees) - degrees) * 60;
@@ -162,9 +159,9 @@ namespace ADIF.NET.Types {
     /// <summary>
     /// 
     /// </summary>
-    private Location()
+    void SetLocationType()
     {
-      if (!string.IsNullOrEmpty(Direction) && LatLong == LocationType.Unspecified)
+      if (!string.IsNullOrEmpty(Direction))
         LatLong = Direction == "N" || Direction == "S" ? LocationType.Latitude : 
                   Direction == "E" || Direction == "W" ? LocationType.Longitude :
                   LocationType.Unspecified;
@@ -174,14 +171,16 @@ namespace ADIF.NET.Types {
     /// 
     /// </summary>
     /// <param name="location"></param>
-    public Location(string location) : this()
+    public Location(string location)
     {
       if (!ADIFLocation.TryParse(location, out Location result))
-        throw new ArgumentException("Invalid location value.");
+        throw new ArgumentException("Invalid location value.", nameof(location));
 
       Direction = result.Direction;
       Degrees = result.Degrees;
       Minutes = result.Minutes;
+
+      SetLocationType();
     }
 
     /// <summary>
@@ -192,7 +191,7 @@ namespace ADIF.NET.Types {
     /// <param name="minutes"></param>
     public Location(string direction,
                     int degrees,
-                    decimal minutes) : this()
+                    decimal minutes)
     {
       if (!LocationHelper.ValidateDegrees(degrees))
         throw new ArgumentException("Invalid degrees.");
@@ -206,6 +205,8 @@ namespace ADIF.NET.Types {
       Direction = direction.ToUpper();
       Degrees = degrees;
       Minutes = minutes;
+
+      SetLocationType();
     }
 
     /// <summary>
@@ -269,10 +270,10 @@ namespace ADIF.NET.Types {
           return Direction ?? string.Empty;
 
         case "D":
-          return Degrees.ToString("000") ?? string.Empty;
+          return Degrees.ToString("000");
 
         case "M":
-          return Minutes.ToString("00.000") ?? string.Empty;
+          return Minutes.ToString("00.000");
 
         case "DD":
           return ToDecimalDegrees().ToString(provider);

@@ -4,7 +4,7 @@ using System.Globalization;
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the Date ADIF type.
   /// </summary>
   public class ADIFDate : ADIFType<DateTime> {
 
@@ -13,7 +13,7 @@ namespace ADIF.NET.Types {
     public static DateTime Parse(string s)
     {
       if (!FromString(s, out DateTime result))
-        throw new ArgumentException($"Invalid string value: '{s ?? string.Empty}'");
+        throw new ArgumentException($"Invalid ADIF Date: '{s ?? string.Empty}'");
 
       return result;
     }
@@ -25,7 +25,7 @@ namespace ADIF.NET.Types {
 
     public static bool IsValidValue(object value)
     {
-      if (value is DateTime)
+      if (value is DateTime || value is DateTime?)
         return true;
 
       return FromString(value == null ? string.Empty : value.ToString(), out DateTime _);  

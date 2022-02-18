@@ -159,7 +159,11 @@ namespace ADIF.NET {
 
           if (tag != null)
           {
-            tag.SetValue(entry.Value);
+            if (tag is UserDefValueTag)
+              tag.SetValue(tag.ConvertValue(entry.Value));
+            else
+              tag.SetValue(entry.Value);
+
             qso.Add(tag);
           }
         }

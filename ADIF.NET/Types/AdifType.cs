@@ -18,8 +18,6 @@ namespace ADIF.NET.Types {
 
     public virtual bool IsEnumeration { get; }
 
-    public virtual bool RestrictToOptions { get; }
-
     public virtual bool MultiValue { get; }
 
     public virtual IFormatProvider FormatProvider { get; } = CultureInfo.CurrentCulture;
@@ -27,8 +25,6 @@ namespace ADIF.NET.Types {
     public virtual double MinValue { get; } 
 
     public virtual double MaxValue { get; }
-
-    public virtual ADIFEnumeration Options { get; }
 
     }
   }

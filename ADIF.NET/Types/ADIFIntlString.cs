@@ -3,7 +3,7 @@
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the IntlString ADIF type.
   /// </summary>
   public class ADIFIntlString : ADIFType<string>, IADIFType {
 
@@ -61,10 +61,11 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      return !string.IsNullOrEmpty(s) &&
-             !s.Contains(Environment.NewLine) &&
+      if (s == null)
+        s = string.Empty;
+
+      return !s.Contains(Environment.NewLine) &&
              !s.Contains(Values.LINE_ENDING.ToString());
     }
-
   }
 }

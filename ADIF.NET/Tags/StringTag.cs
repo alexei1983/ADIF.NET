@@ -1,5 +1,6 @@
-﻿
+﻿using System;
 using ADIF.NET.Types;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -8,19 +9,55 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class StringTag : Tag<string>, ITag {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override IADIFType ADIFType => new ADIFString();
 
-    public override object ConvertValue(object value) {
-      return value == null ? string.Empty : value.ToString();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public override object ConvertValue(object value)
+    {
+      try
+      {
+        var result = ADIFString.Parse(value == null ? string.Empty : value.ToString());
+        return result;
       }
-
-    public override bool ValidateValue(object value) {
-      return (value?.ToString() ?? string.Empty).IsASCII();
+      catch (Exception ex)
+      {
+        throw new ValueConversionException(value, Name, ex);
       }
+    }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public override bool ValidateValue(object value)
+    {
+      try
+      {
+        ConvertValue(value);
+        return true;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public StringTag() { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public StringTag(string value) : base(value) { }
 
-    }
   }
+}

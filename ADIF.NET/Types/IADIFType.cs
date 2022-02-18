@@ -13,8 +13,6 @@ namespace ADIF.NET.Types {
 
     bool IsEnumeration { get; }
 
-    bool RestrictToOptions { get; }
-
     bool MultiValue { get; }
 
     IFormatProvider FormatProvider { get; } 
@@ -22,7 +20,5 @@ namespace ADIF.NET.Types {
     double MinValue { get; }
 
     double MaxValue { get; }
-
-    ADIFEnumeration Options { get; }
   }
 }

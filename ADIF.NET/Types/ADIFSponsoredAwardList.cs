@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Types {
 
@@ -120,51 +121,5 @@ namespace ADIF.NET.Types {
 
       return result.ToArray();    
     }
-  }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  public class SponsoredAwardListException : Exception {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Award { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="award"></param>
-    public SponsoredAwardListException(string message, string award) : base (message)
-    {
-      Award = award;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    public SponsoredAwardListException(string message) : base(message) { }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="innerException"></param>
-    public SponsoredAwardListException(string message, Exception innerException) : base(message, innerException) { }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="award"></param>
-    /// <param name="innerException"></param>
-    public SponsoredAwardListException(string message, string award, Exception innerException) : base(message, innerException)
-    {
-      Award = award;
-    }
-
   }
 }

@@ -10,16 +10,21 @@ namespace ADIF.NET.Types {
     /// <summary>
     /// 
     /// </summary>
-    public override ADIFEnumeration Options => new ADIFEnumeration(nameof(ADIFBoolean), new ADIFEnumerationValue("Y"), 
-                                                                                        new ADIFEnumerationValue("N"));
     public override bool IsEnumeration => true;
-    public override bool RestrictToOptions => true;
+
+    /// <summary>
+    /// 
+    /// </summary>
     public override string Type => DataTypes.Boolean;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
     public static bool? Parse(string s)
     {
       if (!FromString(s, out bool? result))
-        throw new ArgumentException($"Invalid string value: '{s ?? string.Empty}'");
+        throw new ArgumentException($"Invalid ADIF Boolean value: '{s ?? string.Empty}'");
 
       return result;
     }
@@ -39,7 +44,7 @@ namespace ADIF.NET.Types {
 
     public static bool IsValidValue(string value)
     {
-      return FromString(value == null ? string.Empty : value.ToString(), out bool? _);
+      return FromString(value == null ? string.Empty : value, out bool? _);
     }
 
     static bool FromString(string s, out bool? result)
@@ -51,12 +56,12 @@ namespace ADIF.NET.Types {
 
       switch (s)
       {
-        case "Y":
+        case Values.ADIF_BOOLEAN_TRUE:
           result = true;
           success = true;
           break;
 
-        case "N":
+        case Values.ADIF_BOOLEAN_FALSE:
           result = false;
           success = true;
           break;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -56,7 +57,7 @@ namespace ADIF.NET.Tags {
       if (!string.IsNullOrEmpty(value))
       {
         if (value.Contains(ValueSeparator))
-          throw new ArgumentException("Value cannot contain the delimiter character.");
+          throw new MultiValueStringException("Value cannot contain the delimiter character.", value);
 
         if ((MaxValueCount > 0 && values.Count < MaxValueCount) || AllowValueCountOverMax || MaxValueCount <= 0)
           values.Add(value);
@@ -83,17 +84,29 @@ namespace ADIF.NET.Tags {
         yield return value;
     }
 
-    public override void SetValue(string value)
+    public override object ConvertValue(object value)
     {
       if (values == null)
         values = new List<string>();
 
-      if (ValidateValue(value))
+      var strVal = value is string ? (string)value : value != null ? value.ToString() : string.Empty;
+
+      try
       {
+        return SplitValue(strVal, !AllowValueCountOverMax);
+      }
+      catch (Exception ex)
+      {
+        throw new ValueConversionException(value, Name, ex);
+      }
+    }
+
+    public override void SetValue(string value)
+    {
+      if (ConvertValue(value) is string[] vals)
+      {
+        values.AddRange(vals);
         base.SetValue(value);
-        var splitVals = SplitValue(value, !AllowValueCountOverMax);
-        if (splitVals != null)
-          values.AddRange(splitVals);
       }
     }
 
@@ -125,17 +138,15 @@ namespace ADIF.NET.Tags {
           if (splitVals != null)
           {
             if (splitVals.Length > MaxValueCount && MaxValueCount > 0 && throwExceptionOnInvalidCount)
-              throw new Exception($"{GetValueCountExceptionText(splitVals.Length, true)}");
+              throw new MultiValueStringException($"{GetValueCountExceptionText(splitVals.Length, true)}", value);
             else if (splitVals.Length < MinValueCount && MinValueCount > 0 && throwExceptionOnInvalidCount)
-              throw new Exception($"{GetValueCountExceptionText(splitVals.Length, false)}");
+              throw new MultiValueStringException($"{GetValueCountExceptionText(splitVals.Length, false)}", value);
 
-            //values.AddRange(splitVals);
             return splitVals;
           }
         }
         else
         {
-          //values.Add(value);
           return new string[] { value };
         }
       }

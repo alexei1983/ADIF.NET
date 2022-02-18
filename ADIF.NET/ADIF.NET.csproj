@@ -77,6 +77,10 @@
     <Compile Include="Attributes\DisplayNameAttribute.cs" />
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Exceptions\MultiValueStringException.cs" />
+    <Compile Include="Exceptions\SponsoredAwardListException.cs" />
+    <Compile Include="Exceptions\ValueConversionException.cs" />
     <Compile Include="GridSquare.cs" />
     <Compile Include="Helpers\DXCCHelper.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />

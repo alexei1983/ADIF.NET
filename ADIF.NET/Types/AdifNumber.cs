@@ -3,7 +3,7 @@
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the Number ADIF type.
   /// </summary>
   public class ADIFNumber : ADIFType<double?> {
 

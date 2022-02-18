@@ -27,6 +27,8 @@ namespace ADIF.NET.Helpers {
         case DataTypes.Boolean:
           if (value is bool boolVal)
             return boolVal;
+          else if (value is bool?)
+            return (bool?)value;
           else
             return ADIFBoolean.Parse(value.ToString());
 
@@ -45,25 +47,58 @@ namespace ADIF.NET.Helpers {
             return ADIFLocation.Parse(value.ToString());
 
         case DataTypes.String:
-        case DataTypes.MultilineString:
-        case DataTypes.IntlMultilineString:
-        case DataTypes.IntlString:
-        case DataTypes.Enumeration:
-        case DataTypes.SponsoredAwardList:
           if (value is string strVal)
-            return strVal;
+            return ADIFString.Parse(strVal);
+          else 
+            return ADIFString.Parse(value.ToString());
+
+        case DataTypes.MultilineString:
+          if (value is string multilineStrVal)
+            return ADIFMultilineString.Parse(multilineStrVal);
+          else
+            return ADIFMultilineString.Parse(value.ToString());
+
+        case DataTypes.IntlMultilineString:
+          if (value is string intlMultilineStrVal)
+            return ADIFIntlMultilineString.Parse(intlMultilineStrVal);
+          else
+            return ADIFIntlMultilineString.Parse(value.ToString());
+
+        case DataTypes.IntlString:
+          if (value is string intlStrVal)
+            return ADIFIntlString.Parse(intlStrVal);
+          else
+            return ADIFIntlString.Parse(value.ToString());
+
+        case DataTypes.Enumeration:
+          if (value is ADIFEnumerationValue enumVal)
+            return enumVal.Code;
+          else if (value is string enumStrVal)
+            return enumStrVal;
           else
             return value.ToString();
+
+        case DataTypes.SponsoredAwardList:
+          if (value is string sponsoredAwardListStr)
+            return ADIFSponsoredAwardList.Parse(sponsoredAwardListStr);
+          else if (value.GetType().IsAssignableFrom(typeof(IEnumerable<string>)))
+            return new List<string>((IEnumerable<string>)value).ToArray();
+          else
+            return ADIFSponsoredAwardList.Parse(value.ToString());
 
         case DataTypes.Date:
           if (value is DateTime dateVal)
             return dateVal;
+          else if (value is DateTime?)
+            return (DateTime?)value;
           else
             return ADIFDate.Parse(value.ToString());
 
         case DataTypes.Time:
           if (value is DateTime timeVal)
             return timeVal;
+          else if (value is DateTime?)
+            return (DateTime?)value;
           else
             return ADIFTime.Parse(value.ToString());
 

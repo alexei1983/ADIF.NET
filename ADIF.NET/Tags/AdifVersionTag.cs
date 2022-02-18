@@ -1,4 +1,5 @@
 ﻿using System;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -7,29 +8,53 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class ADIFVersionTag : Tag<Version>, ITag {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string Name => TagNames.ADIFVer;
+
+    /// <summary>
+    /// 
+    /// </summary>
     public override bool Header => true;
 
-    public ADIFVersionTag() {
-      }
+    /// <summary>
+    /// 
+    /// </summary>
+    public ADIFVersionTag()
+    {
+    }
 
-    public ADIFVersionTag(Version value) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public ADIFVersionTag(Version value)
+    {
       base.SetValue(value);
-      }
+    }
 
-    public override object ConvertValue(object value) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public override object ConvertValue(object value)
+    {
 
-      if (!(value is null)) {
-
-        try {
+      if (!(value is null))
+      {
+        try
+        {
           var version = new Version(value.ToString());
           return version;
-          }
-        catch {
-          }
         }
+        catch (Exception ex)
+        {
+          throw new ValueConversionException(value, Name, ex);
+        }
+      }
 
       return null;
-      }
     }
   }
+}

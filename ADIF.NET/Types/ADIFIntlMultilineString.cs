@@ -2,7 +2,7 @@
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the IntlMultilineString ADIF type.
   /// </summary>
   public class ADIFIntlMultilineString : ADIFType<string>, IADIFType {
 

@@ -79,7 +79,6 @@ namespace ADIF.NET.Helpers {
     /// <param name="query"></param>
     public int ExecuteNonQuery(string commandText)
     {
-
       CheckConnection();
 
       using (var command = memoryConnection.CreateCommand())
@@ -95,7 +94,6 @@ namespace ADIF.NET.Helpers {
     /// <param name="table">Name of the table that will be dropped.</param>
     public int DropTable(string table)
     {
-
       CheckConnection();
 
       using (var command = memoryConnection.CreateCommand())
@@ -117,9 +115,15 @@ namespace ADIF.NET.Helpers {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Dispose() => Dispose(true);
 
-    /// <summary></summary>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="disposing"></param>
     void Dispose(bool disposing)
     {
       if (disposing)

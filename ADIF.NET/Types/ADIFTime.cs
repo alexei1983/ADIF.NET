@@ -4,7 +4,7 @@ using System.Globalization;
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the Time ADIF type.
   /// </summary>
   public class ADIFTime : ADIFType<DateTime> {
 
@@ -25,7 +25,7 @@ namespace ADIF.NET.Types {
 
     public static bool IsValidValue(object value)
     {
-      if (value is DateTime)
+      if (value is DateTime || value is DateTime?)
         return true;
 
       return FromString(value == null ? string.Empty : value.ToString(), out DateTime _);  

@@ -1,4 +1,6 @@
-﻿using ADIF.NET.Types;
+﻿using System;
+using ADIF.NET.Types;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -20,30 +22,52 @@ namespace ADIF.NET.Tags {
 
     public NumberTag(double value) : base(value) { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
       if (value is double || value is double?)
         return (double?)value;
-      else if (ADIFNumber.TryParse(value == null ? string.Empty : value.ToString(), out double? result))
-        return result;
-
-      return null;
+      else
+      {
+        try
+        {
+          return ADIFNumber.Parse(value == null ? string.Empty : value.ToString());
+        }
+        catch (Exception ex)
+        {
+          throw new ValueConversionException(value, Name, ex);
+        }
+      }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
       if (base.ValidateValue(value))
       {
-        var val = ConvertValue(value);
-
-        if (val is double dblVal)
+        try
         {
-          if (MinValue >= 0 && dblVal < MinValue)
-            return false;
-          else if (MaxValue > 0 && dblVal > MaxValue)
-            return false;
+          var val = ConvertValue(value);
 
-          return true;
+          if (val is double dblVal)
+          {
+            if (MinValue >= 0 && dblVal < MinValue)
+              return false;
+            else if (MaxValue > 0 && dblVal > MaxValue)
+              return false;
+
+            return true;
+          }
+        }
+        catch
+        {
+          return false;
         }
       }
 

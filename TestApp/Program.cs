@@ -390,7 +390,7 @@ namespace TestApp {
       adif.QSOs.Add(qso);
 
 
-      var str = adif.ToADIF(EmitFlags.LowercaseTagNames | EmitFlags.AddCreatedTimestampIfNotPresent | EmitFlags.AddProgramIdIfNotPresent | EmitFlags.MirrorOperatorAndStationCallSign);
+      var str = adif.ToADIF(EmitFlags.LowercaseTagNames | EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
       var countries = ADIFEnumeration.Get("Band");
 

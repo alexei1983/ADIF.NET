@@ -14,4 +14,4 @@ namespace ADIF.NET.Tags {
 
     public GuestOpTag(string value) : base(value) { }
   }
-  }
+}

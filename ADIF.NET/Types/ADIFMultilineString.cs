@@ -3,7 +3,7 @@
 namespace ADIF.NET.Types {
 
   /// <summary>
-  /// 
+  /// Represents the MultilineString ADIF type.
   /// </summary>
   public class ADIFMultilineString : ADIFType<string>, IADIFType {
 
@@ -61,7 +61,10 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      return !string.IsNullOrEmpty(s) && s.IsASCII();
+      if (s == null)
+        s = string.Empty;
+
+      return s.IsASCII();
     }
   }
 }
