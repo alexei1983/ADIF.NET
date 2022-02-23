@@ -8,6 +8,8 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.NrBursts;
 
+    public override double MinValue => 0;
+
     public NrBurstsTag() { }
 
     public NrBurstsTag(double value) : base(value) { }

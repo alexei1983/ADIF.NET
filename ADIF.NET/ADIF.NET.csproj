@@ -78,6 +78,7 @@
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Exceptions\GridSquareException.cs" />
     <Compile Include="Exceptions\MultiValueStringException.cs" />
     <Compile Include="Exceptions\SponsoredAwardListException.cs" />
     <Compile Include="Exceptions\ValueConversionException.cs" />
@@ -98,7 +99,9 @@
     <Compile Include="Tags\AddressIntlTag.cs" />
     <Compile Include="Tags\AwardGrantedTag.cs" />
     <Compile Include="Tags\AwardSubmittedTag.cs" />
+    <Compile Include="Tags\DARCDOKTag.cs" />
     <Compile Include="Tags\CreditGrantedTag.cs" />
+    <Compile Include="Tags\LocationTag.cs" />
     <Compile Include="Tags\SponsoredAwardListTag.cs" />
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Tags\MyVUCCGridsTag.cs" />
     <Compile Include="Tags\ForceInitTag.cs" />
     <Compile Include="Tags\MyUSACACountiesTag.cs" />
+    <Compile Include="Tags\ValuelessTag.cs" />
     <Compile Include="Tags\VUCCGridsTag.cs" />
     <Compile Include="Tags\VEProvTag.cs" />
     <Compile Include="Tags\USACACountiesTag.cs" />

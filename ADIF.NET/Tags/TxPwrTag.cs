@@ -8,6 +8,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.TxPwr;
 
+    public override double MinValue => 0;
+
+    public override double MaxValue => double.MaxValue;
+
     public TxPwrTag() { }
 
     public TxPwrTag(double value) : base(value) { }

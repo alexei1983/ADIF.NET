@@ -6,14 +6,30 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class CQZTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.CQZ;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public override double MinValue => 0;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public override double MaxValue => 40;
+
+    /// <summary>
+    /// Creates a new CQZ tag.
+    /// </summary>
     public CQZTag() { }
 
+    /// <summary>
+    /// Creates a new CQZ tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public CQZTag(double value) : base(value) { }
-
-    public override bool ValidateValue(object value) {
-      return base.ValidateValue(value);         
-      }
-    }
   }
+}

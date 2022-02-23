@@ -10,16 +10,35 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class NumberTag : Tag<double?>, ITag {
 
-    public virtual double MinValue { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public virtual double MinValue => ADIFType.MinValue;
 
-    public virtual double MaxValue { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public virtual double MaxValue => ADIFType.MaxValue;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override IADIFType ADIFType => new ADIFNumber();
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual bool AllowValuesOverMaxOnImport { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public NumberTag() { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public NumberTag(double value) : base(value) { }
 
     /// <summary>
@@ -57,7 +76,7 @@ namespace ADIF.NET.Tags {
 
           if (val is double dblVal)
           {
-            if (MinValue >= 0 && dblVal < MinValue)
+            if (dblVal < MinValue)
               return false;
             else if (MaxValue > 0 && dblVal > MaxValue)
               return false;

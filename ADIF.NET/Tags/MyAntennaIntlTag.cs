@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class MyAntennaIntlTag : IntlStringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.MyAntennaIntl;
 
+    /// <summary>
+    /// Creates a new MY_ANTENNA_INTL tag.
+    /// </summary>
     public MyAntennaIntlTag() { }
 
+    /// <summary>
+    /// Creates a new MY_ANTENNA_INTL tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public MyAntennaIntlTag(string value) : base(value) { }
   }
 }

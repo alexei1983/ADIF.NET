@@ -6,24 +6,40 @@ using ADIF.NET.Exceptions;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents an ADIF tag of type SponsoredAwardList.
   /// </summary>
   public class SponsoredAwardListTag : MultiValueStringTag, ITag {
 
+    /// <summary>
+    /// String that delimits values in a multivalued ADIF tag.
+    /// </summary>
     public override string ValueSeparator => Values.COMMA.ToString();
 
+    /// <summary>
+    /// ADIF type.
+    /// </summary>
     public override IADIFType ADIFType => new ADIFSponsoredAwardList();
 
+    /// <summary>
+    /// Valid sponsored award prefixes.
+    /// </summary>
     public string[] Prefixes => Values.SponsoredAwardPrefixes.GetValues();
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="SponsoredAwardListTag"/>.
+    /// </summary>
     public SponsoredAwardListTag() { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="SponsoredAwardListTag"/>.
+    /// </summary>
+    /// <param name="value"></param>
     public SponsoredAwardListTag(string value) : base(value) { }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the specified object is a valid value for the current ADIF tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Object to validate.</param>
     public override bool ValidateValue(object value)
     {
       if (value != null)
@@ -43,9 +59,9 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Converts the specified object to the appropriate type for the current ADIF tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Object to convert.</param>
     public override object ConvertValue(object value)
     {
       var strVal = string.Empty;
@@ -66,9 +82,9 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Adds a new sponsored award value to the tag.
     /// </summary>
-    /// <param name="award"></param>
+    /// <param name="award">Sponsored award to add.</param>
     public override void AddValue(string award)
     {
       if (string.IsNullOrEmpty(award))
@@ -81,9 +97,9 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Validates the specified sponsored awards.
     /// </summary>
-    /// <param name="award"></param>
+    /// <param name="awards">Array of awards to validate.</param>
     void ValidateAwards(params string[] awards)
     {
       if (awards == null || awards.Length == 0)

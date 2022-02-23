@@ -332,6 +332,7 @@ namespace ADIF.NET {
     public const string CreatedTimestamp = "CREATED_TIMESTAMP";
     public const string CreditSubmitted = "CREDIT_SUBMITTED";
     public const string CreditGranted = "CREDIT_GRANTED";
+    public const string DARCDOK = "DARC_DOK";
     public const string Distance = "DISTANCE";
     public const string DXCC = "DXCC";
     public const string Email = "EMAIL";

@@ -72,6 +72,8 @@ namespace ADIF.NET.Helpers {
     /// <param name="direction"></param>
     public static bool ValidateDirection(string direction)
     {
+      direction = (direction ?? string.Empty).ToUpper();
+
       switch (direction)
       {
         case "N":

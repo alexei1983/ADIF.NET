@@ -12,8 +12,15 @@ namespace ADIF.NET.Tags {
     public override double MinValue => 0d;
     public override bool AllowValuesOverMaxOnImport => true;
 
+    /// <summary>
+    /// Creates a new ANT_AZ tag.
+    /// </summary>
     public AntAzTag() { }
 
+    /// <summary>
+    /// Creates a new ANT_AZ tag.
+    /// </summary>
+    /// <param name="azimuth">Initial tag value.</param>
     public AntAzTag(double azimuth) {
 
       if (azimuth > MaxValue) {

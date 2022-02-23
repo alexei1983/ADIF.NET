@@ -9,8 +9,15 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.AddressIntl;
 
+    /// <summary>
+    /// Creates a new ADDRESS_INTL tag.
+    /// </summary>
     public AddressIntlTag() { }
 
+    /// <summary>
+    /// Creates a new ADDRESS_INTL tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public AddressIntlTag(string value) : base(value) { }
   }
 }

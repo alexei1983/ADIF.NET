@@ -242,14 +242,12 @@ namespace ADIF.NET.Helpers {
     /// <param name="query"></param>
     public ArrayList ReadData(string query, Dictionary<string, object> parameters)
     {
-
       CheckConnection();
 
       var result = new ArrayList();
 
       using (var command = memoryConnection.CreateCommand())
       {
-
         command.CommandText = query;
 
         if (parameters != null)
@@ -260,10 +258,8 @@ namespace ADIF.NET.Helpers {
 
         using (var dataReader = command.ExecuteReader())
         {
-
           while (dataReader.Read())
           {
-
             // get the number of values
             var valCnt = dataReader.VisibleFieldCount;
             dynamic dynObj = new ExpandoObject();

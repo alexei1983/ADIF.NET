@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
   public class ADIFVersionTag : Tag<Version>, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.ADIFVer;
 
@@ -19,16 +19,16 @@ namespace ADIF.NET.Tags {
     public override bool Header => true;
 
     /// <summary>
-    /// 
+    /// Creates a new ADIF_VER tag.
     /// </summary>
     public ADIFVersionTag()
     {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new ADIF_VER tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial tag value.</param>
     public ADIFVersionTag(Version value)
     {
       base.SetValue(value);

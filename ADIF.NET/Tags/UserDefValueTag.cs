@@ -1,9 +1,10 @@
-﻿using ADIF.NET.Helpers;
+﻿using System.Xml;
+using ADIF.NET.Helpers;
 
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents a user-defined QSO field along with its value.
+  /// Represents a user-defined QSO field and its value.
   /// </summary>
   public class UserDefValueTag : Tag<object> {
 
@@ -63,6 +64,21 @@ namespace ADIF.NET.Tags {
 
       return true;
       }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public override XmlElement ToXml(XmlDocument document)
+    {
+      if (document == null)
+        return null;
+
+      var el = document.CreateElement(TagNames.UserDef);
+      el.InnerText = TextValue;
+      el.SetAttribute("FIELDNAME", Name);
+
+      return el;
+    }
 
     UserDefTag field;
 

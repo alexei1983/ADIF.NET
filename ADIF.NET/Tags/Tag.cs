@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Xml;
 using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
@@ -40,8 +41,14 @@ namespace ADIF.NET.Tags {
     /// </summary>
     public virtual bool Header { get; }
 
+    /// <summary>
+    /// ADIF type.
+    /// </summary>
     public virtual IADIFType ADIFType { get; }
 
+    /// <summary>
+    /// ADIF data type indicator.
+    /// </summary>
     public virtual string DataType
     {
       get
@@ -51,7 +58,7 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// String that delimits values in a multivalued ADIF tag.
     /// </summary>
     public virtual string ValueSeparator { get; set; }
 
@@ -66,7 +73,7 @@ namespace ADIF.NET.Tags {
     public virtual T Value { get; private set; }
 
     /// <summary>
-    /// The value used to format the text value of the tag.
+    /// The string used to format the text value of the tag.
     /// </summary>
     public virtual string FormatString { get; set; }
 
@@ -205,7 +212,7 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the current tag has a value.
     /// </summary>
     public virtual bool HasValue()
     {
@@ -231,7 +238,7 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Clones the current instance.
     /// </summary>
     public virtual object Clone()
     {
@@ -239,7 +246,7 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Calculates the hash code for the current instance.
     /// </summary>
     public override int GetHashCode()
     {
@@ -365,6 +372,20 @@ namespace ADIF.NET.Tags {
         default:
           throw new FormatException($"Format string '{format}' is not valid for type {GetType().Name}.");
       }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public virtual XmlElement ToXml(XmlDocument document)
+    {
+      if (document == null)
+        return null;
+
+      var el = document.CreateElement(Name);
+      el.InnerText = TextValue;
+      return el;
     }
   }
 }

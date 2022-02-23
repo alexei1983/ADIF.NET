@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Xml;
 using ADIF.NET.Tags;
 using ADIF.NET.Helpers;
 
@@ -101,6 +102,70 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="flags"></param>
+    public string ToADX(EmitFlags flags = EmitFlags.None)
+    {
+      HandleFlags(flags);
+
+      var doc = new XmlDocument();
+      var rootEl = doc.CreateElement("ADX");
+
+      if (Header != null)
+      {
+        var headerEl = doc.CreateElement("HEADER");
+
+        var headerText = ToString("H", CultureInfo.CurrentCulture);
+
+        if (!string.IsNullOrEmpty(headerText))
+          headerEl.AppendChild(doc.CreateComment(headerText));
+
+        foreach (var tag in Header)
+          headerEl.AppendChild(tag.ToXml(doc));
+
+        rootEl.AppendChild(headerEl);
+      }
+
+      var recordEl = doc.CreateElement("RECORDS");
+
+      if (QSOs != null)
+      {
+        foreach (var qso in QSOs)
+        {
+          var qsoRecordEl = doc.CreateElement("RECORD");
+
+          foreach (var tag in qso)
+            qsoRecordEl.AppendChild(tag.ToXml(doc));
+
+          recordEl.AppendChild(qsoRecordEl);
+        }
+      }
+
+      rootEl.AppendChild(recordEl);
+
+      doc.AppendChild(rootEl);
+
+      return doc.OuterXml;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="outputFile"></param>
+    /// <param name="flags"></param>
+    public void ToADX(string outputFile, EmitFlags flags = EmitFlags.None)
+    {
+      if (string.IsNullOrEmpty(outputFile))
+        throw new ArgumentException("Output file is required.", nameof(outputFile));
+
+      var adx = ToADX(flags);
+
+      if (!string.IsNullOrEmpty(adx))
+        File.WriteAllText(outputFile, adx);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="outputFile"></param>
     /// <param name="flags"></param>
     public void ToADIF(string outputFile, EmitFlags flags = EmitFlags.None)
@@ -120,7 +185,17 @@ namespace ADIF.NET {
     public string ToADIF(EmitFlags flags = EmitFlags.None)
     {
       var formatString = (flags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";
+      HandleFlags(flags);
 
+      return ToString(formatString, CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="flags"></param>
+    void HandleFlags(EmitFlags flags)
+    {
       if ((flags & EmitFlags.MirrorOperatorAndStationCallSign) == EmitFlags.MirrorOperatorAndStationCallSign)
       {
         if (QSOs != null)
@@ -137,7 +212,8 @@ namespace ADIF.NET {
                 var operatorTag = qso.GetTag(TagNames.Operator);
                 stationCallSignTag.SetValue(operatorTag.Value);
                 QSOs[q].Insert(QSOs[q].IndexOf(TagNames.Operator), stationCallSignTag);
-              } else if (!qso.Contains(TagNames.Operator) && qso.Contains(TagNames.StationCallSign))
+              }
+              else if (!qso.Contains(TagNames.Operator) && qso.Contains(TagNames.StationCallSign))
               {
                 var operatorTag = new OperatorTag();
                 var stationCallSignTag = qso.GetTag(TagNames.StationCallSign);
@@ -169,8 +245,6 @@ namespace ADIF.NET {
           }
         }
       }
-
-      return ToString(formatString, CultureInfo.CurrentCulture);
     }
 
     /// <summary>

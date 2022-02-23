@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class MyCountryTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.MyCountry;
 
+    /// <summary>
+    /// Creates a new MY_COUNTRY tag.
+    /// </summary>
     public MyCountryTag() { }
 
+    /// <summary>
+    /// Creates a new MY_COUNTRY tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public MyCountryTag(string value) : base(value) { }
   }
 }

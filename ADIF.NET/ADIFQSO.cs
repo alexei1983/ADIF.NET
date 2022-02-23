@@ -215,6 +215,10 @@ namespace ADIF.NET {
       Add(new ModeTag(mode));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mode"></param>
     public void SetMode(string mode)
     {
       if (!Values.Modes.IsValid(mode))
@@ -492,6 +496,42 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="decimalLatitude"></param>
+    public void AddLat(decimal decimalLatitude)
+    {
+      Add(new LatTag(ADIFLocation.FromDecimalDegrees(decimalLatitude, LocationType.Latitude).ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="decimalLongitude"></param>
+    public void AddLon(decimal decimalLongitude)
+    {
+      Add(new LonTag(ADIFLocation.FromDecimalDegrees(decimalLongitude, LocationType.Longitude).ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="decimalMyLatitude"></param>
+    public void AddMyLat(decimal decimalMyLatitude)
+    {
+      Add(new MyLatTag(ADIFLocation.FromDecimalDegrees(decimalMyLatitude, LocationType.Latitude).ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="decimalMyLongitude"></param>
+    public void AddMyLon(decimal decimalMyLongitude)
+    {
+      Add(new MyLonTag(ADIFLocation.FromDecimalDegrees(decimalMyLongitude, LocationType.Longitude).ToString()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="operatorName"></param>
     /// <param name="streetAddress"></param>
     /// <param name="city"></param>
@@ -617,29 +657,18 @@ namespace ADIF.NET {
     /// <param name="via"></param>
     public void MarkQSLReceived(DateTime receivedOn, string via)
     {
-      if (Contains(TagNames.QSLRcvd))
-        Remove(TagNames.QSLRcvd);
-
-      Add(new QSLRcvdTag("Y"));
+      AddOrReplace(new QSLRcvdTag(Values.ADIF_BOOLEAN_TRUE));
 
       if (!string.IsNullOrEmpty(via))
       {
         if (!Values.Via.IsValid(via))
           throw new ArgumentException($"'{via}' is not a valid QSL means.");
 
-        if (Contains(TagNames.QSLRcvdVia))
-          Remove(TagNames.QSLRcvdVia);
-
-        Add(new QSLRcvdViaTag(via));
+        AddOrReplace(new QSLRcvdViaTag(via));
       }
 
       if (receivedOn != DateTime.MinValue)
-      {
-        if (Contains(TagNames.QSLRcvdDate))
-          Remove(TagNames.QSLRcvdDate);
-
-        Add(new QSLRvcdDateTag(receivedOn));
-      }
+        AddOrReplace(new QSLRvcdDateTag(receivedOn));
     }
 
     /// <summary>
@@ -666,29 +695,18 @@ namespace ADIF.NET {
     /// <param name="sentVia"></param>
     public void MarkQSLSent(DateTime sentOn, string sentVia)
     {
-      if (Contains(TagNames.QSLSent))
-        Remove(TagNames.QSLSent);
-
-      Add(new QSLSentTag("Y"));
+      AddOrReplace(new QSLSentTag(Values.ADIF_BOOLEAN_TRUE));
 
       if (!string.IsNullOrEmpty(sentVia))
       {
         if (!Values.Via.IsValid(sentVia))
           throw new ArgumentException($"'{sentVia}' is not a valid QSL means.");
 
-        if (Contains(TagNames.QSLSentVia))
-          Remove(TagNames.QSLSentVia);
-
-        Add(new QSLSentViaTag(sentVia));
+        AddOrReplace(new QSLSentViaTag(sentVia));
       }
 
       if (sentOn != DateTime.MinValue)
-      {
-        if (Contains(TagNames.QSLSentDate))
-          Remove(TagNames.QSLSentDate);
-
-        Add(new QSLSentDateTag(sentOn));
-      }
+        AddOrReplace(new QSLSentDateTag(sentOn));
     }
 
     /// <summary>

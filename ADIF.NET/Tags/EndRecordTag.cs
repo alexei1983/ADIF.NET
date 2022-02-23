@@ -1,14 +1,14 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class EndRecordTag : StringTag, ITag {
 
-    public override string Name => TagNames.EndRecord;
-    public override bool SuppressLength => true;
+  /// <summary>
+  /// 
+  /// </summary>
+  public class EndRecordTag : ValuelessTag, ITag {
 
-    public override void SetValue(object value) {
-      }
-
-    public override void SetValue(string value) {
-      }
-    }
+    /// <summary>
+    /// Tag name.
+    /// </summary>
+    public override string Name => TagNames.EndRecord;  
   }
+}

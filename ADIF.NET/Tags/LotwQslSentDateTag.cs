@@ -1,13 +1,27 @@
 ﻿using System;
 
 namespace ADIF.NET.Tags {
-  public class LotwQSLSentDateTag : DateTag, ITag {
 
+  /// <summary>
+  /// 
+  /// </summary>
+  public class LOTWQSLSentDateTag : DateTag, ITag {
+
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.LOTWQSLSentDate;
 
-    public LotwQSLSentDateTag() { }
+    /// <summary>
+    /// Creates a new LOTW_QSLSDATE tag.
+    /// </summary>
+    public LOTWQSLSentDateTag() { }
 
-    public LotwQSLSentDateTag(DateTime value) : base(value) { }
+    /// <summary>
+    /// Creates a new LOTW_QSLSDATE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public LOTWQSLSentDateTag(DateTime value) : base(value) { }
 
   }
 }

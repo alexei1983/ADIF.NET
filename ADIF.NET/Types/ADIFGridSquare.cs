@@ -1,4 +1,6 @@
 ﻿using System;
+using ADIF.NET.Exceptions;
+using Unclassified.Util;
 
 namespace ADIF.NET.Types {
 
@@ -8,7 +10,7 @@ namespace ADIF.NET.Types {
   public class ADIFGridSquare : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// 
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => string.Empty;
 
@@ -18,10 +20,24 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public static string Parse(string s)
     {
-      if (IsValidValue(s))
-        return s;
+      if (string.IsNullOrEmpty(s))
+        return s ?? string.Empty;
 
-      throw new Exception($"Invalid GridSquare: '{s}'");
+      var len = s.Length;
+
+      if (len != 2 && len != 4 && len != 6 && len != 8)
+        throw new GridSquareException("Invalid GridSquare length.", s);
+
+      try
+      {
+        MaidenheadLocator.LocatorToLatLng(s);
+      }
+      catch (Exception ex)
+      {
+        throw new GridSquareException($"Invalid GridSquare: {s}", s, ex);
+      }
+
+      return s;
     }
 
     /// <summary>
@@ -58,15 +74,15 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public static bool IsValidValue(string s)
     {
-      if (s == null)
-        s = string.Empty;
-
-      var len = s.Length;
-
-      if (len != 0 && len != 2 && len != 4 && len != 6 && len != 8)
+      try
+      {
+        Parse(s);
+        return true;
+      }
+      catch
+      {
         return false;
-
-      return true;
+      }
     }
   }
 }

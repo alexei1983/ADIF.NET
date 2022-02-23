@@ -8,6 +8,10 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.RxPwr;
 
+    public override double MinValue => 0;
+
+    public override double MaxValue => double.MaxValue;
+
     public RxPwrTag() { }
 
     public RxPwrTag(double value) : base(value) { }

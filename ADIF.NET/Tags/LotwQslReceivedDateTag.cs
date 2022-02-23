@@ -5,13 +5,23 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// 
   /// </summary>
-  public class LotwQSLReceivedDateTag : DateTag, ITag {
+  public class LOTWQSLReceivedDateTag : DateTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.LOTWQSLReceivedDate;
 
-    public LotwQSLReceivedDateTag() { }
+    /// <summary>
+    /// Creates a new LOTW_QSLRDATE tag.
+    /// </summary>
+    public LOTWQSLReceivedDateTag() { }
 
-    public LotwQSLReceivedDateTag(DateTime value) : base(value) { }
+    /// <summary>
+    /// Creates a new LOTW_QSLRDATE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public LOTWQSLReceivedDateTag(DateTime value) : base(value) { }
 
   }
 }

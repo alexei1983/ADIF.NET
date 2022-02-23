@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class AwardGrantedTag : SponsoredAwardListTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.AwardGranted;
 
+    /// <summary>
+    /// Creates a new AWARD_GRANTED tag.
+    /// </summary>
     public AwardGrantedTag() { }
 
+    /// <summary>
+    /// Creates a new AWARD_GRANTED tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public AwardGrantedTag(string value) : base(value) { }
   }
 }

@@ -4,9 +4,24 @@ using ADIF.NET.Helpers;
 
 namespace ADIF.NET.Types {
 
+  /// <summary>
+  /// Location type (e.g. latitude or longitude).
+  /// </summary>
   public enum LocationType {
+
+    /// <summary>
+    /// Unspecified location type.
+    /// </summary>
     Unspecified,
+
+    /// <summary>
+    /// Latitude.
+    /// </summary>
     Latitude,
+
+    /// <summary>
+    /// Longitude.
+    /// </summary>
     Longitude,
   }
 
@@ -16,7 +31,7 @@ namespace ADIF.NET.Types {
   public class ADIFLocation : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// 
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Location;
 
@@ -65,7 +80,6 @@ namespace ADIF.NET.Types {
     /// <param name="result"></param>
     public static bool TryParse(string s, out Location result)
     {
-      result = null;
       try
       {
         result = Parse(s);
@@ -73,23 +87,24 @@ namespace ADIF.NET.Types {
       }
       catch
       {
+        result = null;
         return false;
       }
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the specified string is a valid ADIF Location value.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">String to check for validity.</param>
     public static bool IsValidValue(string value)
     {
       return TryParse(value, out Location _);
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the specified object is a valid ADIF Location value.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Value to check for validity.</param>
     public static bool IsValidValue(object value)
     {
       if (value is Location)
@@ -99,9 +114,27 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Creates new <see cref="Location"/> instances from the specified latitude and longitude 
+    /// decimal degree values.
     /// </summary>
-    /// <param name="decimalDegrees"></param>
+    /// <param name="latitude">Decimal degree value representing latitude.</param>
+    /// <param name="longitude">Decimal degree value representing longitude.</param>
+    /// <param name="latitudeLocation"><see cref="Location"/> instance created from the latitude decimal degrees.</param>
+    /// <param name="longitudeLocation"><see cref="Location"/> instance created from the longitude decimal degrees.</param>
+    public static void FromDecimalDegrees(decimal latitude,
+                                          decimal longitude, 
+                                          out Location latitudeLocation,
+                                          out Location longitudeLocation)
+    {
+      latitudeLocation = FromDecimalDegrees(latitude, LocationType.Latitude);
+      longitudeLocation = FromDecimalDegrees(longitude, LocationType.Longitude);
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Location"/> instance from the specified decimal degrees.
+    /// </summary>
+    /// <param name="decimalDegrees">Decimal degrees representing the location.</param>
+    /// <param name="type">The type of the location (e.g. whether latitude or longitude).</param>
     public static Location FromDecimalDegrees(decimal decimalDegrees, LocationType type)
     {
       if (type == LocationType.Latitude && (decimalDegrees < -90 || decimalDegrees > 90) )
@@ -135,32 +168,32 @@ namespace ADIF.NET.Types {
   }
 
   /// <summary>
-  /// 
+  /// Represents the value of an ADIF Location type.
   /// </summary>
   public class Location : IFormattable {
 
     /// <summary>
-    /// 
+    /// The type of the location (e.g. whether latitude or longitude).
     /// </summary>
     public LocationType LocationType { get; private set; }
 
     /// <summary>
-    /// 
+    /// Directional indicator for the location.
     /// </summary>
     public string Direction { get; }
 
     /// <summary>
-    /// 
+    /// Degrees for the location.
     /// </summary>
     public int Degrees { get; }
 
     /// <summary>
-    /// 
+    /// Minutes for the location.
     /// </summary>
     public decimal Minutes { get; }
 
     /// <summary>
-    /// 
+    /// Sets the appropriate location type.
     /// </summary>
     void SetLocationType()
     {
@@ -171,9 +204,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="Location"/> class.
     /// </summary>
-    /// <param name="location"></param>
+    /// <param name="location">ADIF string location.</param>
     public Location(string location)
     {
       if (!ADIFLocation.TryParse(location, out Location result))
@@ -187,11 +220,11 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="Location"/> class.
     /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="degrees"></param>
-    /// <param name="minutes"></param>
+    /// <param name="direction">Directional indicator.</param>
+    /// <param name="degrees">Degrees.</param>
+    /// <param name="minutes">Minutes.</param>
     public Location(string direction,
                     int degrees,
                     decimal minutes)
@@ -216,13 +249,32 @@ namespace ADIF.NET.Types {
     /// 
     /// </summary>
     /// <param name="decimalDegrees"></param>
+    /// <param name="type"></param>
+    public Location(decimal decimalDegrees, LocationType type)
+    {
+      var location = ADIFLocation.FromDecimalDegrees(decimalDegrees, type);
+
+      if (location != null)
+      {
+        Direction = location.Direction;
+        Degrees = location.Degrees;
+        Minutes = location.Minutes;
+        LocationType = location.LocationType;
+      }
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="Location"/> instance from the specified decimal degrees.
+    /// </summary>
+    /// <param name="decimalDegrees">Decimal degrees representing the location.</param>
+    /// <param name="type">The type of the location (e.g. whether latitude or longitude).</param>
     public static Location FromDecimalDegrees(decimal decimalDegrees, LocationType type)
     {
       return ADIFLocation.FromDecimalDegrees(decimalDegrees, type);
     }
 
     /// <summary>
-    /// 
+    /// Converts the current <see cref="Location"/> instance to decimal degrees.
     /// </summary>
     public decimal ToDecimalDegrees()
     {
@@ -234,7 +286,7 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns a string representation of the current <see cref="Location"/> instance.
     /// </summary>
     public override string ToString()
     {
@@ -242,19 +294,19 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns a string representation of the current <see cref="Location"/> instance.
     /// </summary>
-    /// <param name="format"></param>
+    /// <param name="format">Format string.</param>
     public string ToString(string format)
     {
       return ToString(format, CultureInfo.CurrentCulture);
     }
 
     /// <summary>
-    /// 
+    /// Returns a string representation of the current <see cref="Location"/> instance.
     /// </summary>
-    /// <param name="format"></param>
-    /// <param name="provider"></param>
+    /// <param name="format">Format string.</param>
+    /// <param name="provider">Culture-specific format provider.</param>
     public string ToString(string format, IFormatProvider provider)
     {
       if (string.IsNullOrEmpty(format))

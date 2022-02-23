@@ -1,15 +1,14 @@
 ﻿
 namespace ADIF.NET.Tags {
-  public class EndHeaderTag : StringTag, ITag {
 
+  /// <summary>
+  /// 
+  /// </summary>
+  public class EndHeaderTag : ValuelessTag, ITag {
+
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.EndHeader;
-    public override bool SuppressLength => true;
-    public override bool Header => true;
-
-    public override void SetValue(object value) {
-      }
-
-    public override void SetValue(string value) {
-      }
-    }
   }
+}

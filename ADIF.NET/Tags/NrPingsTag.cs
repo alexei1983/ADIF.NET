@@ -8,6 +8,8 @@ namespace ADIF.NET.Tags {
 
     public override string Name => TagNames.NrPings;
 
+    public override double MinValue => 0;
+
     public NrPingsTag() { }
 
     public NrPingsTag(double value) : base(value) { }

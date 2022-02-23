@@ -11,19 +11,19 @@ namespace ADIF.NET.Tags {
   public class IntlStringTag : Tag<string>, ITag {
 
     /// <summary>
-    /// 
+    /// ADIF type.
     /// </summary>
     public override IADIFType ADIFType => new ADIFIntlString();
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="IntlStringTag"/> class.
     /// </summary>
     public IntlStringTag() { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="IntlStringTag"/> class.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial value for the tag.</param>
     public IntlStringTag(string value) : base(value) { }
 
     /// <summary>

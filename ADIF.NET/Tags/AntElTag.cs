@@ -7,14 +7,35 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class AntElTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.AntEl;
 
-    public override double MaxValue => 360d;
-    public override double MinValue => 0d;
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
+    public override double MaxValue => 90;
+
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
+    public override double MinValue => -90d;
+
+    /// <summary>
+    /// Whether or not to allow values over the maximum on import.
+    /// </summary>
     public override bool AllowValuesOverMaxOnImport => true;
 
+    /// <summary>
+    /// Creates a new ANT_EL tag.
+    /// </summary>
     public AntElTag() { }
 
+    /// <summary>
+    /// Creates a new ANT_EL tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public AntElTag(double value) : base(value) { }
 
     public override void SetValue(double? value) {

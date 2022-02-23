@@ -11,6 +11,10 @@ namespace ADIF.NET {
   /// </summary>
   public class ADIFTagCollection : ICollection<ITag>, IEnumerable, IEnumerable<ITag>, IList<ITag> {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
     public virtual ITag this[int index] {
       get {
         return tags[index];
