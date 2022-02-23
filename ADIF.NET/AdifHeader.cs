@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ADIF.NET.Tags;
 
 namespace ADIF.NET {
@@ -14,13 +15,16 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public override ITag this[int index] {
+    public override ITag this[int index]
+    {
 
-      get {
+      get
+      {
         return base[index];
-        }
+      }
 
-      set {
+      set
+      {
 
         if (value is null)
           return;
@@ -29,8 +33,8 @@ namespace ADIF.NET {
           throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
         base[index] = value;
-        }
       }
+    }
 
     /// <summary>
     /// Creates a new instance of the <see cref="ADIFHeader"/> class.
@@ -41,25 +45,28 @@ namespace ADIF.NET {
     /// Creates a new instance of the <see cref="ADIFHeader"/> class.
     /// </summary>
     /// <param name="tags">Initial <see cref="ITag"/> options to add to the collection.</param>
-    public ADIFHeader(params ITag[] tags) : this() {
+    public ADIFHeader(params ITag[] tags) : this()
+    {
       AddRange(tags);
-      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="tags"></param>
-    public override void AddRange(params ITag[] tags) {
+    public override void AddRange(params ITag[] tags)
+    {
       if (tags != null)
         foreach (var tag in tags)
           this.Add(tag);
-      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="tag"></param>
-    public override void Add(ITag tag) {
+    public override void Add(ITag tag)
+    {
 
       if (tag is null)
         return;
@@ -68,14 +75,15 @@ namespace ADIF.NET {
         throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
       base.Add(tag);
-      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="index"></param>
     /// <param name="tag"></param>
-    public override void Insert(int index, ITag tag) {
+    public override void Insert(int index, ITag tag)
+    {
 
       if (tag is null)
         return;
@@ -84,6 +92,28 @@ namespace ADIF.NET {
         throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
       base.Insert(index, tag);
-      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    public UserDefTag GetUserDefinedTag(string fieldName)
+    {
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("User-defined field name is required.", nameof(fieldName));
+
+      return this.FirstOrDefault(f => f is UserDefTag userDefTag && 
+                                      fieldName.Equals(userDefTag.FieldName, StringComparison.OrdinalIgnoreCase)) as UserDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    public bool IsUserDefinedTag(string fieldName)
+    {
+      return GetUserDefinedTag(fieldName) != null;
     }
   }
+}

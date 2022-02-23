@@ -71,6 +71,11 @@ namespace TestApp {
 
       //Console.WriteLine(latlng.ToString());
 
+      var xparser = new ADXParser();
+      xparser.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0226-20220220-4.xml");
+      var resx = xparser.Parse();
+
+      return;
 
       var lat = "S033 51.516";
       var lng = "E151 12.850";

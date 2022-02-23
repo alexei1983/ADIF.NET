@@ -69,6 +69,7 @@
     <Compile Include="ADIFQSOCollection.cs" />
     <Compile Include="ADIFDataSet.cs" />
     <Compile Include="AdifTagCollection.cs" />
+    <Compile Include="ADXParser.cs" />
     <Compile Include="Attributes\DefaultValueAttribute.cs" />
     <Compile Include="Attributes\DeprecatedTagAttribute.cs" />
     <Compile Include="Attributes\SubOptionAttribute.cs" />
