@@ -484,6 +484,24 @@ namespace ADIF.NET {
   }
 
   /// <summary>
+  /// 
+  /// </summary>
+  public static class ADXValues {
+
+    public const string ADX_ROOT_ELEMENT = "ADX";
+    public const string ADX_RECORDS_ELEMENT = "RECORDS";
+    public const string ADX_RECORD_ELEMENT = "RECORD";
+    public const string ADX_HEADER_ELEMENT = "HEADER";
+    public const string ADX_ENUM_ATTRIBUTE = "ENUM";
+    public const string ADX_RANGE_ATTRIBUTE = "RANGE";
+    public const string ADX_FIELDID_ATTRIBUTE = "FIELDID";
+    public const string ADX_TYPE_ATTRIBUTE = "TYPE";
+    public const string ADX_PROGRAMID_ATTRIBUTE = "PROGRAMID";
+    public const string ADX_APP_ELEMENT = "APP";
+    public const string ADX_FIELDNAME_ATTRIBUTE = "FIELDNAME";
+  }
+
+  /// <summary>
   /// Represents an ADIF enumeration.
   /// </summary>
   public class ADIFEnumeration : List<ADIFEnumerationValue> {

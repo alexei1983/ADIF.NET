@@ -75,7 +75,7 @@ namespace ADIF.NET.Tags {
 
       var el = document.CreateElement(TagNames.UserDef);
       el.InnerText = TextValue;
-      el.SetAttribute("FIELDNAME", Name);
+      el.SetAttribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE, Name);
 
       return el;
     }

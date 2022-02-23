@@ -60,13 +60,13 @@ namespace ADIF.NET.Tags {
       if (document == null)
         return null;
 
-      var el = document.CreateElement("APP");
+      var el = document.CreateElement(ADXValues.ADX_APP_ELEMENT);
       el.InnerText = TextValue;
-      el.SetAttribute("PROGRAMID", ProgramId);
-      el.SetAttribute("FIELDNAME", FieldName);
+      el.SetAttribute(ADXValues.ADX_PROGRAMID_ATTRIBUTE, ProgramId);
+      el.SetAttribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE, FieldName);
 
       if (!string.IsNullOrEmpty(DataType))
-        el.SetAttribute("TYPE", DataType);
+        el.SetAttribute(ADXValues.ADX_TYPE_ATTRIBUTE, DataType);
 
       return el;
     }

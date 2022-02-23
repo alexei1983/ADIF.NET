@@ -74,10 +74,10 @@ namespace ADIF.NET.Tags {
 
       var el = document.CreateElement(Name);
       el.InnerText = FieldName;
-      el.SetAttribute("FIELDID", FieldId.ToString());
+      el.SetAttribute(ADXValues.ADX_FIELDID_ATTRIBUTE, FieldId.ToString());
 
       if (!string.IsNullOrEmpty(DataType))
-        el.SetAttribute("TYPE", DataType);
+        el.SetAttribute(ADXValues.ADX_TYPE_ATTRIBUTE, DataType);
 
       if (CustomOptions != null)
       {
@@ -88,11 +88,13 @@ namespace ADIF.NET.Tags {
           if ((x + 1) < CustomOptions.Length)
             enumStr += Values.COMMA.ToString();
         }
-        el.SetAttribute("ENUM", "{" + enumStr + "}");
+        el.SetAttribute(ADXValues.ADX_ENUM_ATTRIBUTE,
+                        $"{Values.CURLY_BRACE_OPEN}{enumStr}{Values.CURLY_BRACE_CLOSE}");
       }
 
       if (LowerBound < UpperBound)
-        el.SetAttribute("RANGE", "{" + LowerBound + ":" + UpperBound + "}");
+        el.SetAttribute(ADXValues.ADX_RANGE_ATTRIBUTE, 
+                        $"{Values.CURLY_BRACE_OPEN}{LowerBound}{Values.COLON}{UpperBound}{Values.CURLY_BRACE_CLOSE}");
 
       return el;
     }

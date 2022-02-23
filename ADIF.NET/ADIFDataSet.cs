@@ -108,11 +108,11 @@ namespace ADIF.NET {
       HandleFlags(flags);
 
       var doc = new XmlDocument();
-      var rootEl = doc.CreateElement("ADX");
+      var rootEl = doc.CreateElement(ADXValues.ADX_ROOT_ELEMENT);
 
       if (Header != null)
       {
-        var headerEl = doc.CreateElement("HEADER");
+        var headerEl = doc.CreateElement(ADXValues.ADX_HEADER_ELEMENT);
 
         var headerText = ToString("H", CultureInfo.CurrentCulture);
 
@@ -125,13 +125,13 @@ namespace ADIF.NET {
         rootEl.AppendChild(headerEl);
       }
 
-      var recordEl = doc.CreateElement("RECORDS");
+      var recordEl = doc.CreateElement(ADXValues.ADX_RECORDS_ELEMENT);
 
       if (QSOs != null)
       {
         foreach (var qso in QSOs)
         {
-          var qsoRecordEl = doc.CreateElement("RECORD");
+          var qsoRecordEl = doc.CreateElement(ADXValues.ADX_RECORD_ELEMENT);
 
           foreach (var tag in qso)
             qsoRecordEl.AppendChild(tag.ToXml(doc));
