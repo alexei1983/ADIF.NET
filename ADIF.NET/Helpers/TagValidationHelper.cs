@@ -137,7 +137,7 @@ namespace ADIF.NET.Helpers {
     /// <param name="adifVersion"></param>
     public static void ValidateTagVersion(ITag tag, Version adifVersion)
     {
-      if (tag == null)
+      if (tag == null || adifVersion == null)
         return;
       
       var tagName = tag.Name;
@@ -156,12 +156,12 @@ namespace ADIF.NET.Helpers {
     }
 
     /// <summary>
-    /// 
+    /// Validates the specified RST components.
     /// </summary>
-    /// <param name="readability"></param>
-    /// <param name="strength"></param>
-    /// <param name="tone"></param>
-    /// <param name="suffix"></param>
+    /// <param name="readability">The readability value (1-5)</param>
+    /// <param name="strength">The strength value (1-9)</param>
+    /// <param name="tone">The tone value (1-9)</param>
+    /// <param name="suffix">The suffix (A, C, K, M, S, X)</param>
     public static void ValidateRst(int readability, int strength, int tone, string suffix)
     {
       if (readability > 5 || readability < 1)

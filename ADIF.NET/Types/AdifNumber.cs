@@ -9,6 +9,10 @@ namespace ADIF.NET.Types {
 
     public override double MinValue => double.MinValue;
     public override double MaxValue => double.MaxValue;
+
+    /// <summary>
+    /// The ADIF data type indicator.
+    /// </summary>
     public override string Type => DataTypes.Number;
 
     public static double? Parse(string s)

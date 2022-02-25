@@ -554,7 +554,7 @@ namespace TestApp {
       var utag = new UserDefValueTag(null);
 
       var file = @"C:\Users\S017138\Desktop\K0UOG@K-2366-20211222.adi";
-      var parser = new Parser();
+      var parser = new ADIFParser();
       parser.LoadFile(file);
       var res = parser.Parse();
       //var coll = parser.GetQsoCollection();

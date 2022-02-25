@@ -10,7 +10,7 @@ namespace ADIF.NET.Types {
   public class ADIFSponsoredAwardList : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// 
+    /// The ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.SponsoredAwardList;
 

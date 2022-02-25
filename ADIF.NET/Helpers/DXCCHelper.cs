@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Helpers {
 
@@ -22,7 +23,7 @@ namespace ADIF.NET.Helpers {
     public static bool ValidatePrimarySubdivision(int dxcc, string primaryAdminSubdivisionCode)
     {
       if (dxcc < 1 || string.IsNullOrEmpty(primaryAdminSubdivisionCode))
-        throw new ArgumentException("Cannot validate primary administrative subdivision code: missing required parameter(s).");
+        throw new AdministrativeSubdivisionException("Cannot validate primary administrative subdivision code: missing required parameter(s).");
 
       if (!CountryHasPrimarySubdivision(dxcc))
         return true;
@@ -41,7 +42,7 @@ namespace ADIF.NET.Helpers {
     public static bool CountryHasPrimarySubdivision(int dxcc)
     {
       if (dxcc < 1)
-        throw new ArgumentException("Invalid DXCC entity.");
+        throw new DXCCException("Invalid DXCC entity.", dxcc.ToString());
 
       var result = SQLiteHelper.Instance.ExecuteScalar<long>(VALIDATE_DXCC_HAS_PRI_SUB_SQL,
                                                              new Dictionary<string, object>() { { "@DXCC", dxcc } });
@@ -56,7 +57,7 @@ namespace ADIF.NET.Helpers {
     public static bool CountryHasSecondarySubdivision(int dxcc)
     {
       if (dxcc < 1)
-        throw new ArgumentException("Invalid DXCC entity.");
+        throw new DXCCException("Invalid DXCC entity.", dxcc.ToString());
 
       var result = SQLiteHelper.Instance.ExecuteScalar<long>(VALIDATE_DXCC_HAS_SEC_SUB_SQL,
                                                              new Dictionary<string, object>() { { "@DXCC", dxcc } });
@@ -73,7 +74,7 @@ namespace ADIF.NET.Helpers {
                                                                  string primaryAdminSubdivisionCode)
     {
       if (dxcc < 1 || string.IsNullOrEmpty(primaryAdminSubdivisionCode))
-        throw new ArgumentException("Missing required parameter(s).");
+        throw new AdministrativeSubdivisionException("Missing required parameter(s).");
 
       var result = SQLiteHelper.Instance.ExecuteScalar<long>(VALIDATE_PRI_SUB_HAS_SEC_SUB_SQL,
                                                              new Dictionary<string, object>() { { "@DXCC", dxcc },
@@ -91,7 +92,7 @@ namespace ADIF.NET.Helpers {
     public static bool ValidateSecondarySubdivision(int dxcc, string primaryAdminSubdivisionCode, string secondaryAdminSubdivisionCode)
     {
       if (dxcc < 1 || string.IsNullOrEmpty(primaryAdminSubdivisionCode) || string.IsNullOrEmpty(secondaryAdminSubdivisionCode))
-        throw new ArgumentException("Cannot validate secondary administrative subdivision code: missing required parameter(s).");
+        throw new AdministrativeSubdivisionException("Cannot validate secondary administrative subdivision code: missing required parameter(s).");
 
       if (!PrimarySubdivisionHasSecondarySubdivision(dxcc, primaryAdminSubdivisionCode))
         return true;
@@ -111,10 +112,10 @@ namespace ADIF.NET.Helpers {
     public static int ConvertDXCC(string dxccCode)
     {
       if (!int.TryParse(dxccCode, out int dxcc))
-        throw new Exception("Invalid DXCC entity.");
+        throw new DXCCException("Invalid DXCC entity.", dxccCode);
 
       if (dxcc < 1)
-        throw new Exception("Invalid DXCC entity.");
+        throw new DXCCException("Invalid DXCC entity.", dxccCode);
 
       return dxcc;
     }

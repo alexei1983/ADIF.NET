@@ -22,10 +22,7 @@ namespace ADIF.NET {
 
       set
       {
-        if (string.IsNullOrEmpty(value))
-          headerText = null;
-        else
-          headerText = value;
+        headerText = string.IsNullOrWhiteSpace(value) ? null : value;
       }
     }
 
@@ -120,7 +117,11 @@ namespace ADIF.NET {
           headerEl.AppendChild(doc.CreateComment(headerText));
 
         foreach (var tag in Header)
-          headerEl.AppendChild(tag.ToXml(doc));
+        {
+          var xmlEl = tag.ToXml(doc);
+          if (xmlEl != null)
+            headerEl.AppendChild(xmlEl);
+        }
 
         rootEl.AppendChild(headerEl);
       }
@@ -134,7 +135,11 @@ namespace ADIF.NET {
           var qsoRecordEl = doc.CreateElement(ADXValues.ADX_RECORD_ELEMENT);
 
           foreach (var tag in qso)
-            qsoRecordEl.AppendChild(tag.ToXml(doc));
+          {
+            var xmlEl = tag.ToXml(doc);
+            if (xmlEl != null)
+              qsoRecordEl.AppendChild(xmlEl);
+          }
 
           recordEl.AppendChild(qsoRecordEl);
         }
@@ -257,7 +262,7 @@ namespace ADIF.NET {
         return;
 
       if (tag.Header)
-        throw new Exception("QSO tag cannot be a header tag.");
+        throw new Exception("Tag must not be a header tag.");
 
       for (var i = 0; i < QSOs.Count; i++)
       {
@@ -276,7 +281,7 @@ namespace ADIF.NET {
         return;
 
       if (tag.Header)
-        throw new Exception("QSO tag cannot be a header tag.");
+        throw new Exception("Tag must not be a header tag.");
 
       for (var i = 0; i < QSOs.Count; i++)
           QSOs[i].AddOrReplace(tag);
@@ -306,7 +311,7 @@ namespace ADIF.NET {
     public void CheckVersion(Version version)
     {
       if (version == null)
-        throw new ArgumentNullException(nameof(version), $"Cannot check tag version validity: no ADIF version specified.");
+        throw new ArgumentNullException(nameof(version), $"Cannot check tag version validity: no ADIF version was specified.");
 
       var exceptions = new List<Exception>();
       var checkedTags = new List<string>();
@@ -321,9 +326,11 @@ namespace ADIF.NET {
           if (tag == null)
             continue;
 
+          var alreadyChecked = checkedTags.Contains(tag.Name.ToUpper());
+
           try
           {
-            if (!checkedTags.Contains(tag.Name.ToUpper()))
+            if (!alreadyChecked)
               TagValidationHelper.ValidateTagVersion(tag, version);
           }
           catch (Exception ex)
@@ -332,7 +339,7 @@ namespace ADIF.NET {
           }
           finally
           {
-            if (!checkedTags.Contains(tag.Name.ToUpper()))
+            if (!alreadyChecked)
               checkedTags.Add(tag.Name.ToUpper());
           }
         }
@@ -343,9 +350,11 @@ namespace ADIF.NET {
         if (tag == null)
           continue;
 
+        var alreadyChecked = checkedTags.Contains(tag.Name.ToUpper());
+
         try
         {
-          if (!checkedTags.Contains(tag.Name.ToUpper()))
+          if (!alreadyChecked)
             TagValidationHelper.ValidateTagVersion(tag, version);
         }
         catch (Exception ex)
@@ -354,7 +363,7 @@ namespace ADIF.NET {
         }
         finally
         {
-          if (!checkedTags.Contains(tag.Name.ToUpper()))
+          if (!alreadyChecked)
             checkedTags.Add(tag.Name.ToUpper());
         }
       }
@@ -407,16 +416,18 @@ namespace ADIF.NET {
         case "A":
         case "a":
           var val = string.Empty;
+          var endRecordTag = new EndRecordTag();
 
           if (Header != null)
           {
             val += (string.IsNullOrEmpty(HeaderText) ? Values.DEFAULT_ADIF_HEADER_TEXT : HeaderText) + Environment.NewLine;
             foreach (var tag in Header)
-              val += $"{tag.ToString(format, provider)}{Environment.NewLine}";
+            {
+              if (!(tag is EndHeaderTag))
+                val += $"{tag.ToString(format, provider)}{Environment.NewLine}";
+            }
 
-            if (!Header.Contains(TagNames.EndHeader))
-              val += new EndHeaderTag().ToString(format, provider);
-
+            val += new EndHeaderTag().ToString(format, provider);
             val += Environment.NewLine;
           }
 
@@ -428,12 +439,11 @@ namespace ADIF.NET {
               {
                 foreach (var tag in qso)
                 {
-                  val += $"{tag.ToString(format, provider)}";
+                  if (!(tag is EndRecordTag))
+                    val += $"{tag.ToString(format, provider)}";
                 }
 
-                if (!qso.Contains(TagNames.EndRecord))
-                  val += new EndRecordTag().ToString(format, provider);
-
+                val += endRecordTag.ToString(format, provider);
                 val += Environment.NewLine;
               }
             }

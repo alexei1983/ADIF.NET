@@ -41,12 +41,20 @@ namespace ADIF.NET.Tags {
     /// </summary>
     public new string DataType { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public new void SetValue(object value)
     {
       var convertedVal = ConvertValue(value);
       base.SetValue(convertedVal);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
       return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
@@ -55,6 +63,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="document"></param>
     public override XmlElement ToXml(XmlDocument document)
     {
       if (document == null)

@@ -31,7 +31,7 @@ namespace ADIF.NET.Types {
   public class ADIFLocation : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// ADIF data type indicator.
+    /// The ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Location;
 
@@ -246,10 +246,10 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="Location"/> class.
     /// </summary>
-    /// <param name="decimalDegrees"></param>
-    /// <param name="type"></param>
+    /// <param name="decimalDegrees">Decimal degree value representing the location.</param>
+    /// <param name="type">The location type (e.g. whether latitude or longitude).</param>
     public Location(decimal decimalDegrees, LocationType type)
     {
       var location = ADIFLocation.FromDecimalDegrees(decimalDegrees, type);

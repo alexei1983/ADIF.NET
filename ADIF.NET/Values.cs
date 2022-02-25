@@ -527,7 +527,7 @@ namespace ADIF.NET {
     public const string ADX_APP_ELEMENT = "APP";
 
     /// <summary>
-    /// The FIELDNAME in ADX.
+    /// The FIELDNAME attribute in ADX.
     /// </summary>
     public const string ADX_FIELDNAME_ATTRIBUTE = "FIELDNAME";
   }

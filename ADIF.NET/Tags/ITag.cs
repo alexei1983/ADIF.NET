@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
   public interface ITag : IFormattable, ICloneable {
 
     /// <summary>
-    /// Name of the tag.
+    /// Tag name.
     /// </summary>
     string Name { get; }
 
@@ -24,17 +24,26 @@ namespace ADIF.NET.Tags {
     /// </summary>
     object Value { get; }
 
+    /// <summary>
+    /// String that determines how the tag's value will be formatted.
+    /// </summary>
     string FormatString { get; set; }
 
+    /// <summary>
+    /// String that separates values in a multivalued tag.
+    /// </summary>
     string ValueSeparator { get; set; }
 
     /// <summary>
-    /// ADIF data type indicator.
+    /// The ADIF data type indicator.
     /// </summary>
     string DataType { get; }
 
     IFormatProvider FormatProvider { get; set; }
 
+    /// <summary>
+    /// The underlying <see cref="Type"/> of the tag's value.
+    /// </summary>
     Type ExpectedValueType { get; }
 
     /// <summary>
@@ -47,10 +56,19 @@ namespace ADIF.NET.Tags {
     /// </summary>
     IADIFType ADIFType { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     ADIFEnumeration Options { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     bool RestrictOptions { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     bool SuppressLength { get; }
 
     /// <summary>
@@ -69,12 +87,25 @@ namespace ADIF.NET.Tags {
     /// <param name="value">Tag value to set.</param>
     void SetValue(object value);
 
+    /// <summary>
+    /// Clears the value of the tag.
+    /// </summary>
     void ClearValue();
 
+    /// <summary>
+    /// Determines whether or not the specified value is valid for the tag.
+    /// </summary>
+    /// <param name="value">Value to validate.</param>
     bool ValidateValue(object value);
 
+    /// <summary>
+    /// Determines whether or not the current tag value is valid.
+    /// </summary>
     bool ValidateValue();
 
+    /// <summary>
+    /// Retrieves the current value of the tag.
+    /// </summary>
     object GetValue();
 
     /// <summary>
@@ -82,10 +113,22 @@ namespace ADIF.NET.Tags {
     /// </summary>
     bool HasValue();
 
+    /// <summary>
+    /// Converts the specified value to the appropriate type for the tag.
+    /// </summary>
+    /// <param name="value">Value to convert.</param>
     object ConvertValue(object value);
 
+    /// <summary>
+    /// Returns a string representation of the current tag.
+    /// </summary>
+    /// <param name="format">String format.</param>
     string ToString(string format);
 
+    /// <summary>
+    /// Returns the current tag represented as an instance of the <see cref="XmlElement"/> class.
+    /// </summary>
+    /// <param name="document"><see cref="XmlDocument"/> object to which the tag will be appended.</param>
     XmlElement ToXml(XmlDocument document);
 
     }

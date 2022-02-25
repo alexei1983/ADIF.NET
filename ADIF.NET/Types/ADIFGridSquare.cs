@@ -10,7 +10,7 @@ namespace ADIF.NET.Types {
   public class ADIFGridSquare : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// ADIF data type indicator.
+    /// The ADIF data type indicator.
     /// </summary>
     public override string Type => string.Empty;
 

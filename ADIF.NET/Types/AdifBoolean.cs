@@ -13,7 +13,7 @@ namespace ADIF.NET.Types {
     public override bool IsEnumeration => true;
 
     /// <summary>
-    /// ADIF data type indicator.
+    /// The ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Boolean;
 

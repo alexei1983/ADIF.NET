@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 
 namespace ADIF.NET.Tags {
 
@@ -56,6 +57,15 @@ namespace ADIF.NET.Tags {
     public override bool ValidateValue(object value)
     {
       return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="document"></param>
+    public override XmlElement ToXml(XmlDocument document)
+    {
+      return null;
     }
   }
 }

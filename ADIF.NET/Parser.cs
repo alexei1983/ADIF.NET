@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using ADIF.NET.Tags;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET {
 
   /// <summary>
   /// Parses a file, a stream, or plain text in the ADIF format.
   /// </summary>
-  public class Parser {
+  public class ADIFParser {
 
-    public Parser() { 
+    public ADIFParser() { 
       }
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="text"></param>
     public void Load(string text) {
-      this.data = text ?? string.Empty;
+      data = text ?? string.Empty;
       }
 
     /// <summary>
@@ -116,7 +117,7 @@ namespace ADIF.NET {
       headerInternal = new ADIFHeader();
 
       if (string.IsNullOrWhiteSpace(this.data))
-        throw new InvalidOperationException("No ADIF data found.");
+        throw new ADIFParseException("No ADIF data found.");
 
       Initialize();
       var qsoCount = -1;
@@ -184,7 +185,7 @@ namespace ADIF.NET {
                                               StringComparison.OrdinalIgnoreCase);
 
       if (headerEndingPos < 0)
-        throw new InvalidOperationException("No header ending tag was found.");
+        throw new ADIFParseException("No header ending tag was found.");
 
       this.i = 0;
       var tag = string.Empty;

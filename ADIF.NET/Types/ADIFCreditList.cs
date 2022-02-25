@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Types {
 
@@ -10,15 +11,30 @@ namespace ADIF.NET.Types {
   /// </summary>
   public class ADIFCreditList : ADIFType<string>, IADIFType {
 
+    /// <summary>
+    /// The ADIF data type indicator.
+    /// </summary>
     public override string Type => DataTypes.CreditList;
 
+    /// <summary>
+    /// Whether or not the type is multivalued.
+    /// </summary>
     public override bool MultiValue => true;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
     public static CreditList Parse(string s)
     {
       return ParseCreditList(s);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     public static bool TryParse(string s, out CreditList result)
     {
       try
@@ -288,51 +304,5 @@ namespace ADIF.NET.Types {
           throw new FormatException("Invalid format string.");
       }
     }
-  }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  public class CreditListException : Exception {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Value { get; set; }
- 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="value"></param>
-    public CreditListException(string message, string value) : base(message)
-    {
-      Value = value;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    public CreditListException(string message) : base(message) { }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="innerException"></param>
-    public CreditListException(string message, Exception innerException) : base(message, innerException) { }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="value"></param>
-    /// <param name="innerException"></param>
-    public CreditListException(string message, string value, Exception innerException) : base(message, innerException)
-    {
-      Value = value;
-    }
-
   }
 }

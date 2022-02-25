@@ -8,6 +8,9 @@ namespace ADIF.NET.Types {
   /// </summary>
   public class ADIFTime : ADIFType<DateTime> {
 
+    /// <summary>
+    /// The ADIF data type indicator.
+    /// </summary>
     public override string Type => DataTypes.Time;
 
     public static DateTime Parse(string s)

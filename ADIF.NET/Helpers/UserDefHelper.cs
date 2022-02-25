@@ -11,14 +11,15 @@ namespace ADIF.NET.Helpers {
   public static class UserDefHelper {
 
     /// <summary>
-    /// 
+    /// Converts the specified value to the appropriate type based on the 
+    /// specified ADIF data type indicator.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="adifType"></param>
+    /// <param name="value">Value to convert.</param>
+    /// <param name="adifType">ADIF data type indicator.</param>
     public static object ConvertValueByType(object value, string adifType)
     {
-      if (string.IsNullOrEmpty(adifType))
-        throw new Exception("Invalid ADIF data type.");
+      if (string.IsNullOrWhiteSpace(adifType))
+        adifType = string.Empty;
 
       value = value == null ? string.Empty : value;
 
@@ -147,7 +148,7 @@ namespace ADIF.NET.Helpers {
     /// </summary>
     /// <param name="fieldName">Name of the user-defined field to validate.</param>
     /// <param name="throwExceptions">Whether or not validation exceptions will be thrown.</param>
-    public static bool ValidateFieldName(string fieldName, bool throwExceptions = true)
+    public static bool ValidateFieldName(string fieldName, bool throwExceptions = true, bool validateTagNameMatch = true)
     {
       var exceptions = new List<Exception>();
 
@@ -171,8 +172,11 @@ namespace ADIF.NET.Helpers {
         if (fieldName.Contains(Values.COMMA.ToString()))
           exceptions.Add(new Exception("User-defined field name cannot contain a comma."));
 
-        if (TagNames.IsTagName(fieldName))
-          exceptions.Add(new Exception("User-defined field name cannot match the name of a standard ADIF field."));
+        if (validateTagNameMatch)
+        {
+          if (TagNames.IsTagName(fieldName))
+            exceptions.Add(new Exception("User-defined field name cannot match the name of a standard ADIF field."));
+        }
       }
 
       if (exceptions.Count > 0)

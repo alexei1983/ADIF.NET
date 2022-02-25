@@ -79,6 +79,11 @@
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Exceptions\ADIFParseException.cs" />
+    <Compile Include="Exceptions\ADXParseException.cs" />
+    <Compile Include="Exceptions\AdministrativeSubdivisionException.cs" />
+    <Compile Include="Exceptions\CreditListException.cs" />
+    <Compile Include="Exceptions\DXCCException.cs" />
     <Compile Include="Exceptions\GridSquareException.cs" />
     <Compile Include="Exceptions\MultiValueStringException.cs" />
     <Compile Include="Exceptions\SponsoredAwardListException.cs" />
