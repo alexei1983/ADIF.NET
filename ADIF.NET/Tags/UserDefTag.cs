@@ -4,21 +4,21 @@ using ADIF.NET.Helpers;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents the definition of a user-defined QSO field.
+  /// Represents the definition of a user QSO field.
   /// </summary>
   public class UserDefTag : StringTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.UserDef;
 
     /// <summary>
-    /// 
+    /// Name of the user-defined field.
     /// </summary>
     public string FieldName
     {
-      get { return fieldName; }
+      get { return fieldName ?? string.Empty; }
 
       set
       {
@@ -30,42 +30,43 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Whether or not the tag is a header tag.
     /// </summary>
     public override bool Header => true;
 
     /// <summary>
-    /// 
+    /// Whether or not the tag is a user-defined tag.
     /// </summary>
     public override bool IsUserDef => true;
 
     /// <summary>
-    /// 
+    /// ADIF data type indicator.
     /// </summary>
     public new string DataType { get; set; }
 
     /// <summary>
-    /// 
+    /// Numeric ID of the user-defined field.
     /// </summary>
     public int FieldId { get; set; }
 
     /// <summary>
-    /// 
+    /// User-defined enumeration values.
     /// </summary>
     public string[] CustomOptions { get; set; }
 
     /// <summary>
-    /// 
+    /// Minimum valid numeric value.
     /// </summary>
     public double LowerBound { get; set; }
 
     /// <summary>
-    /// 
+    /// Maximum valid numeric value.
     /// </summary>
     public double UpperBound { get; set; }
 
     /// <summary>
-    /// 
+    /// Retrieves the <see cref="XmlElement"/> representation of the current tag.
+    /// <paramref name="document">XML document object.</paramref>
     /// </summary>
     public override XmlElement ToXml(XmlDocument document)
     {

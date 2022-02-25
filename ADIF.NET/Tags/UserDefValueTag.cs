@@ -8,12 +8,24 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class UserDefValueTag : Tag<object> {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => field?.FieldName ?? string.Empty;
 
+    /// <summary>
+    /// Field ID.
+    /// </summary>
     public int FieldId => field?.FieldId ?? -1;
 
+    /// <summary>
+    /// ADIF data type indicator.
+    /// </summary>
     public override string DataType => field?.DataType ?? string.Empty;
 
+    /// <summary>
+    /// Whether or not the tag is a user-defined tag.
+    /// </summary>
     public override bool IsUserDef => true;
 
     public override bool RestrictOptions => field?.CustomOptions?.Length > 0;
@@ -36,6 +48,12 @@ namespace ADIF.NET.Tags {
     public override object ConvertValue(object value)
     {
       return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
+    }
+
+    public new void SetValue(object value)
+    {
+      var convertedVal = ConvertValue(value);
+      base.SetValue(convertedVal);
     }
 
     public override bool ValidateValue(object value) {

@@ -11,6 +11,10 @@ namespace ADIF.NET {
   /// </summary>
   public class ADIFQSO : ADIFTagCollection {
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
     public override ITag this[int index] {
 
       get => base[index];

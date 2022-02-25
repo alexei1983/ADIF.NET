@@ -7,7 +7,7 @@ namespace ADIF.NET.Tags {
   public class USACACountiesTag : MultiValueStringTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.USACACounties;
 
@@ -27,14 +27,14 @@ namespace ADIF.NET.Tags {
     public override int MinValueCount => 2;
 
     /// <summary>
-    /// 
+    /// Creates a new USACA_COUNTIES tag.
     /// </summary>
     public USACACountiesTag() : base() { }
 
     /// <summary>
-    /// 
+    /// Creates a new USACA_COUNTIES tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial tag value.</param>
     public USACACountiesTag(string value) : base(value) {
     }
   }

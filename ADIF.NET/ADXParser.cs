@@ -12,8 +12,9 @@ namespace ADIF.NET {
   /// </summary>
   public class ADXParser {
 
-    string data;
-
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADXParser"/> class.
+    /// </summary>
     public ADXParser()
     {
     }
@@ -22,13 +23,12 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="encoding"></param>
     public void LoadFile(string path)
     {
-      if (!string.IsNullOrWhiteSpace(path))
-      {
-        data = File.ReadAllText(path);
-      }
+      if (string.IsNullOrWhiteSpace(path))
+        throw new ArgumentException("File path is required.", nameof(path));
+
+      data = File.ReadAllText(path);
     }
 
     /// <summary>
@@ -63,8 +63,13 @@ namespace ADIF.NET {
 
       var doc = XDocument.Parse(data);
 
-      XElement root = doc.Root;
-      XNamespace ns = root.GetDefaultNamespace();
+      if (doc.Root == null)
+        throw new Exception("No XML document root found.");
+
+      if (doc.Root.Name.LocalName != ADXValues.ADX_ROOT_ELEMENT)
+        throw new Exception("Invalid ADX document.");
+
+      XNamespace ns = doc.Root.GetDefaultNamespace();
 
       foreach (var headerElement in doc.Descendants(ns + ADXValues.ADX_HEADER_ELEMENT)?.Elements())
       {
@@ -75,16 +80,21 @@ namespace ADIF.NET {
 
         if (headerTag is UserDefTag userDefTag)
         {
+          if (string.IsNullOrEmpty(headerElement.Value))
+            throw new Exception("Field name is required for all user-defined fields.");
+
           userDefTag.FieldName = headerElement.Value;
 
           XAttribute fieldIdAttr = headerElement.Attribute(ADXValues.ADX_FIELDID_ATTRIBUTE);
-          if (fieldIdAttr != null)
-          {
-            if (!int.TryParse(fieldIdAttr.Value, out int fieldId))
-              throw new Exception("Invalid user-defined field ID.");
 
-            userDefTag.FieldId = fieldId;
-          }
+          if (fieldIdAttr == null || string.IsNullOrEmpty(fieldIdAttr.Value))
+            throw new Exception($"No field ID specified for user-defined field {userDefTag.FieldName}.");
+
+          // convert to integer
+          if (!int.TryParse(fieldIdAttr.Value, out int fieldId))
+            throw new Exception($"Invalid field ID in user-defined field {userDefTag.FieldName}.");
+
+          userDefTag.FieldId = fieldId;
 
           // get the data type indicator
           XAttribute typeAttr = headerElement.Attribute(ADXValues.ADX_TYPE_ATTRIBUTE);
@@ -97,7 +107,7 @@ namespace ADIF.NET {
 
           if (enumAttr != null)
           {
-            var enumStr = (enumAttr.Value ?? string.Empty).Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
+            var enumStr = (enumAttr.Value ?? string.Empty).Trim().Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
             var customOptions = enumStr.Split(Values.COMMA);
             if (customOptions != null && customOptions.Length > 0)
               userDefTag.CustomOptions = customOptions;
@@ -108,19 +118,21 @@ namespace ADIF.NET {
 
           if (rangeAttr != null)
           {
-            var rangeStr = (rangeAttr.Value ?? string.Empty).Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
+            var rangeStr = (rangeAttr.Value ?? string.Empty).Trim().Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
             var ranges = rangeStr.Split(Values.COLON);
             if (ranges != null && ranges.Length == 2)
             {
               if (!double.TryParse(ranges[0], out double lowerBound))
-                throw new Exception("Invalid lower bound numeric value for user-defined field.");
+                throw new Exception($"Invalid lower bound numeric value for user-defined field {userDefTag.FieldName}.");
 
               if (!double.TryParse(ranges[1], out double upperBound))
-                throw new Exception("Invalid upper bound numeric value for user-defined field.");
+                throw new Exception($"Invalid upper bound numeric value for user-defined field {userDefTag.FieldName}.");
 
               userDefTag.LowerBound = lowerBound;
               userDefTag.UpperBound = upperBound;
             }
+            else
+              throw new Exception($"Invalid range in user-defined field {userDefTag.FieldName}.");
           }
 
           dataSet.Header.Add(userDefTag);
@@ -140,7 +152,7 @@ namespace ADIF.NET {
         {
           var qsoTag = TagFactory.TagFromName(qsoElement.Name.LocalName);
 
-          if (qsoTag == null)
+          if (qsoTag == null || TagNames.UserDef.Equals(qsoElement.Name.LocalName))
           {
             if (ADXValues.ADX_APP_ELEMENT.Equals(qsoElement.Name.LocalName))
             {
@@ -156,14 +168,18 @@ namespace ADIF.NET {
               // get the field name attribute, if present
               XAttribute fieldNameAttr = qsoElement.Attribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE);
 
-              if (fieldNameAttr != null)
-                appTag.FieldName = fieldNameAttr.Value;
+              if (fieldNameAttr == null || string.IsNullOrEmpty(fieldNameAttr.Value))
+                throw new Exception("Field name is required for all application-defined fields.");
+
+              appTag.FieldName = fieldNameAttr.Value;
 
               // get the program ID attribute, if present
               XAttribute progIdAttr = qsoElement.Attribute(ADXValues.ADX_PROGRAMID_ATTRIBUTE);
 
-              if (progIdAttr != null)
-                appTag.ProgramId = progIdAttr.Value;
+              if (progIdAttr == null || string.IsNullOrEmpty(progIdAttr.Value))
+                throw new Exception("Program ID is required for all application-defined fields.");
+
+              appTag.ProgramId = progIdAttr.Value;
 
               appTag.SetValue(qsoElement.Value);
               qso.Add(appTag);
@@ -199,5 +215,7 @@ namespace ADIF.NET {
 
       return dataSet;
     }
+
+    string data;
   }
 }

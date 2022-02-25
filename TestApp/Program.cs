@@ -72,10 +72,10 @@ namespace TestApp {
       //Console.WriteLine(latlng.ToString());
 
       var xparser = new ADXParser();
-      xparser.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0226-20220220-4.xml");
-      var resx = xparser.Parse();
+      //xparser.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0226-20220220-4.xml");
+     // var resx = xparser.Parse();
 
-      return;
+     // return;
 
       var lat = "S033 51.516";
       var lng = "E151 12.850";
@@ -114,25 +114,25 @@ namespace TestApp {
 
       var credits = Values.Credits;
 
-      var parse = new Parser();
-      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
+      var parse = new ADXParser();
+      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
       //parse.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212.adi");
       var result = parse.Parse();
 
-      result.Header.Add(new ADIFVersionTag(new Version(3, 1, 2)));
-      result.AddQSOTag(new MyNameTag("Alex"));
-      result.AddQSOTag(new MySigTag("POTA"));
-      result.AddQSOTag(new MySigInfoTag("K-0225"));
-      result.QSOs[0].SetRstSent(5, 9);
-      result.QSOs[0].SetRstRcvd(5, 3);
+      //result.Header.Add(new ADIFVersionTag(new Version(3, 1, 2)));
+      //result.AddQSOTag(new MyNameTag("Alex"));
+      //result.AddQSOTag(new MySigTag("POTA"));
+      //result.AddQSOTag(new MySigInfoTag("K-0225"));
+      //result.QSOs[0].SetRstSent(5, 9);
+      //result.QSOs[0].SetRstRcvd(5, 3);
 
-      result.QSOs[0].SetRstSent(5, 9);
-      result.QSOs[0].SetRstRcvd(5, 3);
+      //result.QSOs[0].SetRstSent(5, 9);
+      //result.QSOs[0].SetRstRcvd(5, 3);
 
       result.CheckVersion();
 
-      //result.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212-2.adi", EmitFlags.None);
-     // return;
+      result.ToADIF(@"C:\Users\S017138\Desktop\testadx2adif.adi", EmitFlags.None);
+      return;
 
       var qso12 = new ADIFQSO();
       qso12.AddCall("W7ZCO");
@@ -591,7 +591,7 @@ namespace TestApp {
       var is4 = System.Text.RegularExpressions.Regex.IsMatch("N0MTN", alaskaRegex);
       var is5 = System.Text.RegularExpressions.Regex.IsMatch("AL91B", alaskaRegex);
 
-      var band = Band.IsFrequencyInBand("20m", 14.101, 2);
+      var band = Band.IsFrequencyInBand("20m", 14.101);
 
      
 

@@ -9,14 +9,29 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class MultiValueStringTag : StringTag, ITag {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual int MaxValueCount { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual int MinValueCount { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual int ValueCount => values?.Count ?? 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual bool AllowValueCountOverMax { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string TextValue
     {
       get
@@ -38,12 +53,19 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public MultiValueStringTag()
     {
       if (values == null)
         values = new List<string>();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public MultiValueStringTag(string value) 
     {
       if (values == null)
@@ -52,6 +74,10 @@ namespace ADIF.NET.Tags {
       SetValue(value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public virtual void AddValue(string value)
     {
       if (!string.IsNullOrEmpty(value))
@@ -64,12 +90,19 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override void ClearValue()
     {
       values.Clear();
       base.ClearValue();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
     public virtual string GetValue(int index)
     {
        if (index < 1)
@@ -78,12 +111,19 @@ namespace ADIF.NET.Tags {
        return values.Count < index ? values[index] : throw new IndexOutOfRangeException("Invalid index.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual IEnumerable<string> GetValues()
     {
       foreach (var value in values)
         yield return value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
       if (values == null)
@@ -101,6 +141,10 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override void SetValue(string value)
     {
       if (ConvertValue(value) is string[] vals)
@@ -110,6 +154,10 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
       if (base.ValidateValue(value))
@@ -128,6 +176,11 @@ namespace ADIF.NET.Tags {
       return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="throwExceptionOnInvalidCount"></param>
     string[] SplitValue(string value, bool throwExceptionOnInvalidCount = true)
     {
       if (!string.IsNullOrEmpty(value))
@@ -154,6 +207,11 @@ namespace ADIF.NET.Tags {
       return null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="foundValueCount"></param>
+    /// <param name="minMax"></param>
     string GetValueCountExceptionText(int foundValueCount, bool minMax)
     {
        return minMax ? $"{Name} tag must not contain more than {MaxValueCount} {(MaxValueCount == 1 ? "value" : "values")}, " + 

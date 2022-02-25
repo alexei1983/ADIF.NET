@@ -12,18 +12,6 @@ namespace ADIF.NET {
 
   public static class Values {
 
-    public static byte ITU
-    {
-      get {  return ituRegion; }
-
-      set {
-        if (value < 1 || value > 3)
-          throw new ArgumentException("Invalid ITU region.");
-
-        ituRegion = value;
-      }
-    }
-
     /// <summary>
     /// ADIF date format.
     /// </summary>
@@ -488,16 +476,59 @@ namespace ADIF.NET {
   /// </summary>
   public static class ADXValues {
 
+    /// <summary>
+    /// The root ADX element.
+    /// </summary>
     public const string ADX_ROOT_ELEMENT = "ADX";
+
+    /// <summary>
+    /// The RECORDS element in ADX.
+    /// </summary>
     public const string ADX_RECORDS_ELEMENT = "RECORDS";
+
+    /// <summary>
+    /// The RECORD element in ADX.
+    /// </summary>
     public const string ADX_RECORD_ELEMENT = "RECORD";
+
+    /// <summary>
+    /// The HEADER element in ADX.
+    /// </summary>
     public const string ADX_HEADER_ELEMENT = "HEADER";
+
+    /// <summary>
+    /// The ENUM attribute in ADX.
+    /// </summary>
     public const string ADX_ENUM_ATTRIBUTE = "ENUM";
+
+    /// <summary>
+    /// The RANGE attribute in ADX.
+    /// </summary>
     public const string ADX_RANGE_ATTRIBUTE = "RANGE";
+
+    /// <summary>
+    /// The FIELDID attribute in ADX.
+    /// </summary>
     public const string ADX_FIELDID_ATTRIBUTE = "FIELDID";
+
+    /// <summary>
+    /// The TYPE attribute in ADX.
+    /// </summary>
     public const string ADX_TYPE_ATTRIBUTE = "TYPE";
+
+    /// <summary>
+    /// The PROGRAMID attribute in ADX.
+    /// </summary>
     public const string ADX_PROGRAMID_ATTRIBUTE = "PROGRAMID";
+
+    /// <summary>
+    /// The APP element in ADX.
+    /// </summary>
     public const string ADX_APP_ELEMENT = "APP";
+
+    /// <summary>
+    /// The FIELDNAME in ADX.
+    /// </summary>
     public const string ADX_FIELDNAME_ATTRIBUTE = "FIELDNAME";
   }
 
@@ -577,12 +608,7 @@ namespace ADIF.NET {
       if (type == DXCC_ENUM_STRING)
         query = RETRIEVE_COUNTRY_CODES_SQL;
       else if (type == BAND_ENUM_STRING)
-      {
-        if (Values.ITU <= 0)
-          Values.ITU = 2;
-
-        query = RETRIEVE_BANDS_SQL.Replace("{{ITU}}", Values.ITU.ToString());
-      }
+        query = RETRIEVE_BANDS_SQL;
       else if (type == CREDIT_ENUM_STRING)
         query = RETRIEVE_CREDIT_SQL;
       else if (type == nameof(ADIFBoolean))
@@ -649,7 +675,7 @@ namespace ADIF.NET {
   
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
     const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
-    const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\" WHERE ITU = {{ITU}}";
+    const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\"";
     const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
     const string CREDIT_ENUM_STRING = "Credit";
     const string BAND_ENUM_STRING = "Band";
@@ -883,11 +909,6 @@ namespace ADIF.NET {
     public double LowerFrequency { get; set; }
 
     /// <summary>
-    /// The ITU region.
-    /// </summary>
-    public int ITU { get; set; }
-
-    /// <summary>
     /// Creates a new instance of the <see cref="Band"/> class.
     /// </summary>
     /// <param name="value">Value from the database.</param>
@@ -903,24 +924,17 @@ namespace ADIF.NET {
 
         if (dict.ContainsKey(nameof(LowerFrequency)) && dict[nameof(LowerFrequency)] is double lowerFrequency)
           this.LowerFrequency = lowerFrequency;
-
-        if (dict.ContainsKey(nameof(ITU)) && dict[nameof(ITU)] is long itu)
-          this.ITU = itu < int.MaxValue ? (int)itu : 0;
       }
     }
 
     /// <summary>
-    /// Retrieves all amateur radio band.
+    /// Retrieves all amateur radio bands.
     /// </summary>
-    /// <param name="itu"></param>
-    public static List<Band> Get(int itu)
+    public static List<Band> Get()
     {
-      if (itu < 1 || itu > 3)
-        throw new ArgumentException("Invalid ITU region.");
-
       var bands = new List<Band>();
 
-      var data = SQLiteHelper.Instance.ReadData(GET_BANDS_SQL.Replace("{{ITU}}", itu.ToString()));
+      var data = SQLiteHelper.Instance.ReadData(GET_BANDS_SQL);
       foreach (var d in data)
       {
         var band = new Band(d);
@@ -932,25 +946,13 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// Retrieves all amateur radio band.
-    /// </summary>
-    public static List<Band> Get()
-    {
-      return Get(Values.ITU);
-    }
-
-    /// <summary>
     /// 
     /// </summary>
     /// <param name="frequency"></param>
-    /// <param name="itu"></param>
-    /// <returns></returns>
-    public static bool IsAmateurFrequency(double frequency, int itu)
+    public static bool IsAmateurFrequency(double frequency)
     {
-      if (itu < 1 || itu > 3)
-        throw new ArgumentException("Invalid ITU region.");
-
-      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString()).Replace("{{{FREQUENCY}}", frequency.ToString()));
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL,
+                                                new Dictionary<string, object>() { { "@Frequency", frequency } });
       return data.Count > 0;
     }
 
@@ -958,24 +960,10 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="frequency"></param>
-    public static bool IsAmateurFrequency(double frequency)
+    public static Band Get(double frequency)
     {
-      return IsAmateurFrequency(frequency, Values.ITU);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="frequency"></param>
-    /// <param name="itu"></param>
-    /// <returns></returns>
-    public static Band Get(double frequency, int itu)
-    {
-      if (itu < 1 || itu > 3)
-        throw new ArgumentException("Invalid ITU region.");
-
-      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL.Replace("{{ITU}}", itu.ToString())
-                                                    .Replace("{{FREQUENCY}}", frequency.ToString()));
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL,
+                                                new Dictionary<string, object>() { { "@Frequency", frequency } });
       if (data.Count > 0)
         return new Band(data[0]);
 
@@ -985,45 +973,23 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="frequency"></param>
-    public static Band Get(double frequency)
-    {
-      return Get(frequency, Values.ITU);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="band"></param>
     /// <param name="frequency"></param>
     /// <param name="itu"></param>
     /// <returns></returns>
-    public static bool IsFrequencyInBand(string band, double frequency, int itu)
+    public static bool IsFrequencyInBand(string band, double frequency)
     {
-      if (itu < 1 || itu > 3)
-        throw new ArgumentException("Invalid ITU region.");
-
-      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_BAND_SQL.Replace("{{ITU}}", itu.ToString())
-                                                          .Replace("{{FREQUENCY}}", frequency.ToString())
-                                                          .Replace("{{NAME}}", band));
+      var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_BAND_SQL, 
+                                                new Dictionary<string, object>() { { "@Frequency", frequency },
+                                                                                   { "@Name", band } });
       return data.Count > 0;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="band"></param>
-    /// <param name="frequency"></param>
-    public static bool IsFrequencyInBand(string band, double frequency)
-    {
-      return IsFrequencyInBand(band, frequency, Values.ITU);
-    }
-
-    const string GET_UPPER_FREQENCY_SQL = "SELECT UpperFrequency FROM \"Bands\" WHERE Name = '{{NAME}}' AND ITU = {{ITU}}";
-    const string GET_LOWER_FREQENCY_SQL = "SELECT LowerFrequency FROM \"Bands\" WHERE Name = '{{NAME}}' AND ITU = {{ITU}}";
-    const string GET_BANDS_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}}";
-    const string VALIDATE_FREQUENCY_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}} AND {{FREQUENCY}} >= LowerFrequency AND {{FREQUENCY}} <= UpperFrequency";
-    const string VALIDATE_FREQUENCY_BAND_SQL = "SELECT Name, LowerFrequency, UpperFrequency, ITU FROM \"Bands\" WHERE ITU = {{ITU}} AND {{FREQUENCY}} >= LowerFrequency AND {{FREQUENCY}} <= UpperFrequency AND Name = '{{NAME}}'";
+    const string GET_UPPER_FREQENCY_SQL = "SELECT UpperFrequency FROM \"Bands\" WHERE Name = @Name";
+    const string GET_LOWER_FREQENCY_SQL = "SELECT LowerFrequency FROM \"Bands\" WHERE Name = @Name";
+    const string GET_BANDS_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\"";
+    const string VALIDATE_FREQUENCY_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\" WHERE @Frequency >= LowerFrequency AND @Frequency <= UpperFrequency";
+    const string VALIDATE_FREQUENCY_BAND_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\" WHERE @Frequency >= LowerFrequency AND @Frequency <= UpperFrequency AND Name = @Name";
   }
 
 
