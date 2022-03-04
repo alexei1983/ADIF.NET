@@ -79,6 +79,9 @@ namespace ADIF.NET {
         if (headerTag == null)
           continue;
 
+        if (!headerTag.Header)
+          throw new ADXParseException($"Tag {headerTag.Name} is not a header tag.");
+
         if (headerTag is UserDefTag userDefTag)
         {
           if (string.IsNullOrEmpty(headerElement.Value))

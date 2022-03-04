@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ADIF.NET.Tags;
 using ADIF.NET.Helpers;
 using ADIF.NET.Types;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET {
 
@@ -279,7 +281,13 @@ namespace ADIF.NET {
     /// <param name="comment">Comment to add to the QSO.</param>
     public void AddComment(string comment)
     {
-      Add(new CommentTag(comment));
+      if (comment == null)
+        comment = string.Empty;
+
+      if (comment.IsASCII())
+        Add(new CommentTag(comment));
+      else
+        Add(new CommentIntlTag(comment));
     }
 
     /// <summary>
@@ -288,7 +296,13 @@ namespace ADIF.NET {
     /// <param name="comment"></param>
     public void SetComment(string comment)
     {
-      AddOrReplace(new CommentTag(comment));
+      if (comment == null)
+        comment = string.Empty;
+
+      if (comment.IsASCII())
+        AddOrReplace(new CommentTag(comment));
+      else
+        AddOrReplace(new CommentIntlTag(comment));
     }
 
     /// <summary>
@@ -554,25 +568,36 @@ namespace ADIF.NET {
       if (string.IsNullOrEmpty(operatorName) || string.IsNullOrEmpty(streetAddress) ||
         string.IsNullOrEmpty(city) || string.IsNullOrEmpty(state) || string.IsNullOrEmpty(postalCode) ||
         string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
-        throw new ArgumentException("Cannot add address: missing one or more required values.");
+        throw new ArgumentException("Cannot set address: missing one or more required values.");
 
       var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
 
       if (dxccEntity == null)
-        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+        throw new DXCCException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode);
 
       if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
-        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
+        throw new DXCCException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
 
       var addressValue = $"{operatorName}{Values.LINE_ENDING}{streetAddress}{Values.LINE_ENDING}{city}, {state} {postalCode}" +
                          $"{Values.LINE_ENDING}{countryName}";
 
-      var addressTag = new AddressTag(addressValue);
+      if (addressValue.IsASCII())
+        AddOrReplace(new AddressTag(addressValue));
+      else
+        AddOrReplace(new AddressIntlTag(addressValue));
 
       SetPrimaryAdminSubdivision(dxccCode, state, false);
-      AddOrReplace(addressTag);
-      AddOrReplace(new QTHTag(city));
-      AddOrReplace(new CountryTag(countryName));
+
+      if (city.IsASCII())
+        AddOrReplace(new QTHTag(city));
+      else
+        AddOrReplace(new QTHIntlTag(city));
+
+      if (countryName.IsASCII())
+        AddOrReplace(new CountryTag(countryName));
+      else
+        AddOrReplace(new CountryIntlTag(countryName));
+
       SetName(operatorName);
     }
 
@@ -586,10 +611,10 @@ namespace ADIF.NET {
       var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
 
       if (dxccEntity == null)
-        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+        throw new DXCCException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode);
 
       if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), primaryAdminSubdivisionCode))
-        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{primaryAdminSubdivisionCode}'");
+        throw new DXCCException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{primaryAdminSubdivisionCode}'");
 
       AddOrReplace(new StateTag(primaryAdminSubdivisionCode));
       AddOrReplace(new DXCCTag(dxccCode));
@@ -620,7 +645,7 @@ namespace ADIF.NET {
       var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
 
       if (dxccEntity == null)
-        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+        throw new DXCCException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode);
 
       SetAddress(operatorName, streetAddress, city, state, postalCode, dxccEntity.DisplayName, dxccCode);
     }
@@ -642,16 +667,29 @@ namespace ADIF.NET {
       var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
 
       if (dxccEntity == null)
-        throw new ArgumentException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", nameof(dxccCode));
+        throw new DXCCException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode);
 
       if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
-        throw new Exception($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
+        throw new DXCCException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
 
       AddOrReplace(new MyDXCCTag(dxccEntity.Code));
-      AddOrReplace(new MyCityTag(city));
+
+      if (city.IsASCII())
+        AddOrReplace(new MyCityTag(city));
+      else
+        AddOrReplace(new MyCityIntlTag(city));
+
       AddOrReplace(new MyStateTag(state));
-      AddOrReplace(new MyCountryTag(countryName));
-      AddOrReplace(new MyPostalCodeTag(postalCode));
+
+      if (countryName.IsASCII())
+        AddOrReplace(new MyCountryTag(countryName));
+      else
+        AddOrReplace(new MyCountryIntlTag(countryName));
+
+      if (postalCode.IsASCII())
+        AddOrReplace(new MyPostalCodeTag(postalCode));
+      else
+        AddOrReplace(new MyPostalCodeIntlTag(postalCode));
     }
 
     /// <summary>
@@ -737,7 +775,13 @@ namespace ADIF.NET {
     /// <param name="name">Personal name of the contacted station.</param>
     public void AddName(string name)
     {
-      Add(new NameTag(name));
+      if (string.IsNullOrEmpty(name))
+        return;
+
+      if (name.IsASCII())
+        Add(new NameTag(name));
+      else
+        Add(new NameIntlTag(name));
     }
 
     /// <summary>
@@ -746,7 +790,13 @@ namespace ADIF.NET {
     /// <param name="name"></param>
     public void SetName(string name)
     {
-      AddOrReplace(new NameTag(name));
+      if (string.IsNullOrEmpty(name))
+        return;
+
+      if (name.IsASCII())
+        AddOrReplace(new NameTag(name));
+      else
+        AddOrReplace(new NameIntlTag(name));
     }
 
     /// <summary>
@@ -758,9 +808,7 @@ namespace ADIF.NET {
       if (newCreditsGranted == null || newCreditsGranted.Count < 1)
         return;
 
-      var creditGranted = GetTag(TagNames.CreditGranted) as CreditListTag;
-
-      if (creditGranted == null)
+      if (!(GetTag(TagNames.CreditGranted) is CreditListTag creditGranted))
         creditGranted = new CreditListTag();
 
       var existingList = creditGranted.GetCreditList();
@@ -784,9 +832,218 @@ namespace ADIF.NET {
         return;
 
       if (!ADIFCreditList.TryParse(newCreditsGranted, out CreditList result))
-        throw new ArgumentException($"Invalid credit string: '{newCreditsGranted}'", nameof(newCreditsGranted));
+        throw new CreditListException($"Invalid credit string: '{newCreditsGranted}'", newCreditsGranted);
 
       MergeCreditGranted(result);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="awards"></param>
+    public void MergeAwardGranted(IEnumerable<string> awards)
+    {
+      if (awards == null)
+        return;
+
+      if (!(GetTag(TagNames.AwardGranted) is SponsoredAwardListTag awardsGranted))
+        awardsGranted = new SponsoredAwardListTag();
+
+      var existingList = awardsGranted.GetValues()?.ToList();
+
+      foreach (var award in awards)
+      {
+        if (!existingList.Contains(award))
+          existingList.Add(award);
+      }
+
+      AddOrReplace(new AwardGrantedTag(existingList.ToArray()));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="awards"></param>
+    public void MergeAwardGranted(string awards)
+    {
+      if (string.IsNullOrWhiteSpace(awards))
+        return;
+
+      var awardsArr = ADIFSponsoredAwardList.Parse(awards);
+
+      MergeAwardGranted(awardsArr);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="uploadTime"></param>
+    /// <param name="status"></param>
+    public void SetClubLogUploaded(DateTime uploadTime, string status)
+    {
+      if (uploadTime != DateTime.MinValue)
+        AddOrReplace(new ClubLogQSOUploadDateTag(uploadTime));
+
+      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
+        AddOrReplace(new ClubLogQSOUploadStatusTag(status));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="uploadTime"></param>
+    /// <param name="status"></param>
+    public void SetHRDUploaded(DateTime uploadTime, string status)
+    {
+      if (uploadTime != DateTime.MinValue)
+        AddOrReplace(new HRDLogQSOUploadDateTag(uploadTime));
+
+      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
+        AddOrReplace(new HRDLogQSOUploadStatusTag(status));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="uploadTime"></param>
+    /// <param name="status"></param>
+    public void SetQRZUploaded(DateTime uploadTime, string status)
+    {
+      if (uploadTime != DateTime.MinValue)
+        AddOrReplace(new QRZQSOUploadDateTag(uploadTime));
+
+      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
+        AddOrReplace(new QRZQSOUploadStatusTag(status));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="showerName"></param>
+    /// <param name="bursts"></param>
+    /// <param name="pings"></param>
+    public void SetMeteorScatter(string showerName, int bursts, int pings, int maxBursts)
+    {
+      if (!string.IsNullOrEmpty(showerName))
+        AddOrReplace(new MsShowerTag(showerName));
+
+      if (bursts >= 0)
+        AddOrReplace(new NrBurstsTag(bursts));
+
+      if (pings >= 0)
+        AddOrReplace(new NrPingsTag(pings));
+
+      if (maxBursts >= 0)
+        AddOrReplace(new MaxBurstsTag(maxBursts));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rig"></param>
+    /// <param name="watts"></param>
+    public void SetEquipment(string rig, int watts)
+    {
+      if (!string.IsNullOrEmpty(rig))
+      {
+        if (rig.IsASCII())
+          AddOrReplace(new RigTag(rig));
+        else
+          AddOrReplace(new RigIntlTag(rig));
+      }
+
+      if (watts > 0)
+        AddOrReplace(new RxPwrTag(watts));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rig"></param>
+    /// <param name="antenna"></param>
+    /// <param name="watts"></param>
+    public void SetMyEquipment(string rig, string antenna, int watts)
+    {
+      if (!string.IsNullOrEmpty(rig))
+      {
+        if (rig.IsASCII())
+          AddOrReplace(new MyRigTag(rig));
+        else
+          AddOrReplace(new MyRigIntlTag(rig));
+      }
+
+      if (!string.IsNullOrEmpty(antenna))
+      {
+        if (antenna.IsASCII())
+          AddOrReplace(new MyAntennaTag(antenna));
+        else
+          AddOrReplace(new MyAntennaIntlTag(antenna));
+      }
+
+      if (watts > 0)
+        AddOrReplace(new TxPwrTag(watts));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sig"></param>
+    /// <param name="sigInfo"></param>
+    public void SetSIG(string sig, string sigInfo)
+    {
+      if (!string.IsNullOrEmpty(sig))
+      {
+        if (sig.IsASCII())
+          AddOrReplace(new SigTag(sig));
+        else
+          AddOrReplace(new SigIntlTag(sig));
+      }
+
+      if (!string.IsNullOrEmpty(sigInfo))
+      {
+        if (sigInfo.IsASCII())
+          AddOrReplace(new SigInfoTag(sigInfo));
+        else
+          AddOrReplace(new SigInfoIntlTag(sigInfo));
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sotaRef"></param>
+    /// <param name="mySotaRef"></param>
+    public void SetSummitToSummit(string sotaRef, string mySotaRef)
+    {
+      if (!string.IsNullOrEmpty(sotaRef))
+        AddOrReplace(new SOTARefTag(sotaRef));
+
+      if (!string.IsNullOrEmpty(mySotaRef))
+        AddOrReplace(new MySOTARefTag(mySotaRef));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mySig"></param>
+    /// <param name="mySigInfo"></param>
+    public void SetMySIG(string mySig, string mySigInfo)
+    {
+      if (!string.IsNullOrEmpty(mySig))
+      {
+        if (mySig.IsASCII())
+          AddOrReplace(new MySigTag(mySig));
+        else
+          AddOrReplace(new MySigIntlTag(mySig));
+      }
+
+      if (!string.IsNullOrEmpty(mySigInfo))
+      {
+        if (mySigInfo.IsASCII())
+          AddOrReplace(new MySigInfoTag(mySigInfo));
+        else
+          AddOrReplace(new MySigInfoIntlTag(mySigInfo));
+      }
     }
 
     /// <summary>
@@ -794,29 +1051,28 @@ namespace ADIF.NET {
     /// </summary>
     public DateTime? GetQSODateTimeOn()
     {
-      DateTime? result = null;
+      var qsoDateTag = GetTag(TagNames.QSODate);
+      var timeOnTag = GetTag(TagNames.TimeOn);
 
-      if (Contains(typeof(QSODateTag)))
+      if (qsoDateTag != null && timeOnTag != null)
       {
-        var qsoDate = this.FirstOrDefault(q => q.GetType().Equals(typeof(QSODateTag)))?
-                                                          .Value as DateTime?;
 
-        if (qsoDate.HasValue && Contains(typeof(TimeOnTag)))
+        var qsoDate = qsoDateTag.Value as DateTime?;
+        var timeOn = timeOnTag.Value as DateTime?;
+
+        if (qsoDate.HasValue && timeOn.HasValue)
         {
-          var timeOn = this.FirstOrDefault(q => q.GetType().Equals(typeof(TimeOnTag)))?
-                                                           .Value as DateTime?;
-          if (timeOn.HasValue)
-          {
-            result = new DateTime(qsoDate.Value.Year,
-                                  qsoDate.Value.Month,
-                                  qsoDate.Value.Day,
-                                  timeOn.Value.Hour,
-                                  timeOn.Value.Minute,
-                                  timeOn.Value.Second);
-          }
+          return new DateTime(qsoDate.Value.Year,
+                              qsoDate.Value.Month,
+                              qsoDate.Value.Day,
+                              timeOn.Value.Hour,
+                              timeOn.Value.Minute,
+                              timeOn.Value.Second,
+                              DateTimeKind.Utc);
         }
       }
-      return result;
+
+      return null;
     }
 
     /// <summary>
@@ -824,29 +1080,49 @@ namespace ADIF.NET {
     /// </summary>
     public DateTime? GetQSODateTimeOff()
     {
-      DateTime? result = null;
+      var qsoDateOffTag = GetTag(TagNames.QSODateOff);
+      var timeOffTag = GetTag(TagNames.TimeOff);
 
-      if (Contains(typeof(QSODateOffTag)))
+      if (qsoDateOffTag == null && timeOffTag != null)
+        qsoDateOffTag = GetTag(TagNames.QSODate);
+
+      if (qsoDateOffTag != null && timeOffTag != null)
       {
-        var qsoDate = this.FirstOrDefault(q => q.GetType().Equals(typeof(QSODateOffTag)))?
-                                                          .Value as DateTime?;
+        var qsoDateOff = qsoDateOffTag.Value as DateTime?;
+        var timeOff = timeOffTag.Value as DateTime?;
 
-        if (qsoDate.HasValue && Contains(typeof(TimeOffTag)))
+        if (qsoDateOff.HasValue && timeOff.HasValue)
         {
-          var timeOn = this.FirstOrDefault(q => q.GetType().Equals(typeof(TimeOffTag)))?
-                                                           .Value as DateTime?;
-          if (timeOn.HasValue)
-          {
-            result = new DateTime(qsoDate.Value.Year,
-                                  qsoDate.Value.Month,
-                                  qsoDate.Value.Day,
-                                  timeOn.Value.Hour,
-                                  timeOn.Value.Minute,
-                                  timeOn.Value.Second);
-          }
+          return new DateTime(qsoDateOff.Value.Year,
+                              qsoDateOff.Value.Month,
+                              qsoDateOff.Value.Day,
+                              timeOff.Value.Hour,
+                              timeOff.Value.Minute,
+                              timeOff.Value.Second,
+                              DateTimeKind.Utc);
         }
       }
-      return result;
+
+      return null;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public TimeSpan GetQSODuration()
+    {
+      var dateTimeOn = GetQSODateTimeOn();
+      var dateTimeOff = GetQSODateTimeOff();
+
+      if (dateTimeOn.HasValue && dateTimeOff.HasValue)
+      {
+        if (dateTimeOff.Value < dateTimeOn.Value)
+          throw new Exception("QSO ending time is less than QSO starting time.");
+
+        return dateTimeOff.Value - dateTimeOn.Value;
+      }
+
+      return TimeSpan.Zero;
     }
 
     /// <summary>
@@ -912,7 +1188,7 @@ namespace ADIF.NET {
       if (tag.Header)
         throw new ArgumentException("Cannot insert header tag into QSO.");
 
-      if (Contains(tag.GetType()))
+      if (Contains(tag.Name))
         throw new ArgumentException($"QSO already contains tag '{tag.Name}'");
 
       base.Insert(index, tag);

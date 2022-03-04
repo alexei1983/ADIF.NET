@@ -77,6 +77,19 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="values"></param>
+    public MultiValueStringTag(params string[] values)
+    {
+      if (values != null)
+      {
+        foreach (var value in values)
+          AddValue(value);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="value"></param>
     public virtual void AddValue(string value)
     {

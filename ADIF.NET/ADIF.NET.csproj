@@ -267,8 +267,8 @@
     <Compile Include="Tags\SOTARefTag.cs" />
     <Compile Include="Tags\MySotaRefTag.cs" />
     <Compile Include="Tags\QSODateOffTag.cs" />
-    <Compile Include="Tags\QSOSentDateTag.cs" />
-    <Compile Include="Tags\QSOReceivedDateTag.cs" />
+    <Compile Include="Tags\QSLSentDateTag.cs" />
+    <Compile Include="Tags\QSLRvcdDateTag.cs" />
     <Compile Include="Tags\QRZQSOUploadDateTag.cs" />
     <Compile Include="Tags\LotwQSLSentDateTag.cs" />
     <Compile Include="Tags\LotwQSLReceivedDateTag.cs" />

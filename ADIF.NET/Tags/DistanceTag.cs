@@ -18,11 +18,6 @@ namespace ADIF.NET.Tags {
     public override double MinValue => 0;
 
     /// <summary>
-    /// Maximum numeric value.
-    /// </summary>
-    public override double MaxValue => ADIFType.MaxValue;
-
-    /// <summary>
     /// Creates a new DISTANCE tag.
     /// </summary>
     public DistanceTag() { }

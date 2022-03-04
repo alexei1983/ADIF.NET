@@ -37,6 +37,12 @@ namespace ADIF.NET.Tags {
     public SponsoredAwardListTag(string value) : base(value) { }
 
     /// <summary>
+    /// Creates a new instance of the <see cref="SponsoredAwardListTag"/>.
+    /// </summary>
+    /// <param name="values"></param>
+    public SponsoredAwardListTag(params string[] values) : base(values) { }
+
+    /// <summary>
     /// Determines whether or not the specified object is a valid value for the current ADIF tag.
     /// </summary>
     /// <param name="value">Object to validate.</param>

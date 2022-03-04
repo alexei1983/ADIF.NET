@@ -39,29 +39,6 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static void SplitDouble(this double value, out double one, out double two) {
-
-      var values = value.ToString().Split('.');
-
-      one = 0d;
-      two = 0d;
-
-      if (values.Length == 2) {
-        one = double.Parse(values[0]);
-        two = double.Parse(values[1]);
-        }
-      else {
-        one = value;
-        }
-      
-      return;
-      }
-
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="unixTimeSeconds"></param>
     /// <param name="utc"></param>
     /// <returns></returns>

@@ -14,7 +14,7 @@ namespace ADIF.NET {
     None = 0,
 
     /// <summary>
-    /// Force tag names to be lowercase.
+    /// Force tag names to be lowercase in generated ADIF.
     /// </summary>
     LowercaseTagNames = 2,
 

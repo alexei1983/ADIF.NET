@@ -84,7 +84,6 @@ namespace ADIF.NET {
     /// <param name="tag"></param>
     public override void Insert(int index, ITag tag)
     {
-
       if (tag is null)
         return;
 
