@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class SigTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Sig;
 
+    /// <summary>
+    /// Creates a new SIG tag.
+    /// </summary>
     public SigTag() { }
 
+    /// <summary>
+    /// Creates a new SIG tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public SigTag(string value) : base(value) { }
   }
 }

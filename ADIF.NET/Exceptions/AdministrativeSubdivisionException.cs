@@ -3,47 +3,36 @@
 namespace ADIF.NET.Exceptions {
 
   /// <summary>
-  /// 
+  /// Represents an exception related to primary or secondary administrative subdivisions.
   /// </summary>
-  public class AdministrativeSubdivisionException : Exception {
+  public class AdministrativeSubdivisionException : ValueException {
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="AdministrativeSubdivisionException"/> class.
     /// </summary>
-    public string Value { get; }
+    /// <param name="message">Exception message.</param>
+    /// <param name="value">Value that caused the exception.</param>
+    public AdministrativeSubdivisionException(string message, string value) : base(message, value) { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="AdministrativeSubdivisionException"/> class.
     /// </summary>
-    /// <param name="message"></param>
-    /// <param name="value"></param>
-    public AdministrativeSubdivisionException(string message, string value) : base(message)
-    {
-      Value = value;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
+    /// <param name="message">Exception message.</param>
     public AdministrativeSubdivisionException(string message) : base(message) { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="AdministrativeSubdivisionException"/> class.
     /// </summary>
-    /// <param name="message"></param>
-    /// <param name="innerException"></param>
+    /// <param name="message">Exception message.</param>
+    /// <param name="innerException">Inner exception.</param>
     public AdministrativeSubdivisionException(string message, Exception innerException) : base(message, innerException) { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="AdministrativeSubdivisionException"/> class.
     /// </summary>
-    /// <param name="message"></param>
-    /// <param name="value"></param>
-    /// <param name="innerException"></param>
-    public AdministrativeSubdivisionException(string message, string value, Exception innerException) : base(message, innerException)
-    {
-      Value = value;
-    }
+    /// <param name="message">Exception message.</param>
+    /// <param name="value">Value that caused the exception.</param>
+    /// <param name="innerException">Inner exception.</param>
+    public AdministrativeSubdivisionException(string message, string value, Exception innerException) : base(message, value, innerException) { }
   }
 }

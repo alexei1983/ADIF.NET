@@ -11,34 +11,34 @@ namespace ADIF.NET.Tags {
   public class NumberTag : Tag<double?>, ITag {
 
     /// <summary>
-    /// 
+    /// Minimum numeric value.
     /// </summary>
     public virtual double MinValue => ADIFType.MinValue;
 
     /// <summary>
-    /// 
+    /// Maximum numeric value.
     /// </summary>
     public virtual double MaxValue => ADIFType.MaxValue;
 
     /// <summary>
-    /// 
+    /// ADIF type.
     /// </summary>
     public override IADIFType ADIFType => new ADIFNumber();
 
     /// <summary>
-    /// 
+    /// Whether or not values greater than the maximum are allowed during import.
     /// </summary>
     public virtual bool AllowValuesOverMaxOnImport { get; }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="NumberTag"/> class.
     /// </summary>
     public NumberTag() { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="NumberTag"/> class.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial tag value.</param>
     public NumberTag(double value) : base(value) { }
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
-      if (value is double || value is double?)
+      if (value is double || value is double? || (value != null && value.GetType().IsAssignableFrom(typeof(double?))))
         return (double?)value;
       else
       {
@@ -78,7 +78,7 @@ namespace ADIF.NET.Tags {
           {
             if (dblVal < MinValue)
               return false;
-            else if (MaxValue > 0 && dblVal > MaxValue)
+            else if (MaxValue != MinValue && dblVal > MaxValue)
               return false;
 
             return true;

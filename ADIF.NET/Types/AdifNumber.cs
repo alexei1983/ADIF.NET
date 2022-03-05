@@ -7,34 +7,48 @@ namespace ADIF.NET.Types {
   /// </summary>
   public class ADIFNumber : ADIFType<double?> {
 
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
     public override double MinValue => double.MinValue;
+
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
     public override double MaxValue => double.MaxValue;
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Number;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
     public static double? Parse(string s)
     {
-      var result = default(double?);
-
       try
       {
-        var dblResult = double.Parse(s);
-        result = dblResult;
+        if (!string.IsNullOrEmpty(s))
+          return double.Parse(s);
+        else
+          return null;
       }
       catch (Exception ex)
       {
         throw new InvalidOperationException($"Could not convert value to {nameof(ADIFNumber)}", ex);
       }
-
-      return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     public static bool TryParse(string s, out double? result)
     {
-      result = default(double?);
+      result = null;
 
       if (string.IsNullOrEmpty(s))
         return true;
@@ -48,6 +62,10 @@ namespace ADIF.NET.Types {
       return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(string value)
     {
       if (string.IsNullOrEmpty(value) || double.TryParse(value, out double _))
@@ -56,6 +74,10 @@ namespace ADIF.NET.Types {
       return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(object value)
     {
       if (value is double || value is double?)

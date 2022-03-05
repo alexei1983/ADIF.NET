@@ -5,22 +5,14 @@ namespace ADIF.NET.Exceptions {
   /// <summary>
   /// 
   /// </summary>
-  public class SponsoredAwardListException : Exception {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Award { get; }
+  public class SponsoredAwardListException : ValueException {
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="message"></param>
     /// <param name="award"></param>
-    public SponsoredAwardListException(string message, string award) : base(message)
-    {
-      Award = award;
-    }
+    public SponsoredAwardListException(string message, string award) : base(message, award) { }
 
     /// <summary>
     /// 
@@ -41,9 +33,6 @@ namespace ADIF.NET.Exceptions {
     /// <param name="message"></param>
     /// <param name="award"></param>
     /// <param name="innerException"></param>
-    public SponsoredAwardListException(string message, string award, Exception innerException) : base(message, innerException)
-    {
-      Award = award;
-    }
+    public SponsoredAwardListException(string message, string award, Exception innerException) : base(message, award, innerException) { }
   }
 }

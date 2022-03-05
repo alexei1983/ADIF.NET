@@ -3,7 +3,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the two-letter Canadian province or territory abbreviation of the contacted station.
   /// </summary>
   [DeprecatedTag(TagNames.State)]
   public class VEProvTag : StringTag, ITag {

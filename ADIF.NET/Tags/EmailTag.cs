@@ -11,11 +11,5 @@ namespace ADIF.NET.Tags {
     public EmailTag() { }
 
     public EmailTag(string value) : base(value) { }
-
-    public override bool ValidateValue(object value)
-    {
-      return base.ValidateValue(value) && value.ToString().IsEmailAddress();
-    }
-
   }
 }

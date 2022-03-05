@@ -248,6 +248,11 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration BooleanValues;
 
     /// <summary>
+    /// 
+    /// </summary>
+    public static readonly ADIFEnumeration DARCDOKs;
+
+    /// <summary>
     /// User configuration for ADIF.NET
     /// </summary>
     public static readonly Configuration Configuration;
@@ -278,10 +283,9 @@ namespace ADIF.NET {
       QSLSentStatuses = ADIFEnumeration.Get("QSLSent");
       QSLReceivedStatuses = ADIFEnumeration.Get("QSLRcvd");
       BooleanValues = ADIFEnumeration.Get(nameof(ADIFBoolean));
+      DARCDOKs = ADIFEnumeration.Get("DARCDOK");
       Configuration = new Configuration();
     }
-
-    static byte ituRegion;
   }
 
   /// <summary>
@@ -611,6 +615,8 @@ namespace ADIF.NET {
         query = RETRIEVE_BANDS_SQL;
       else if (type == CREDIT_ENUM_STRING)
         query = RETRIEVE_CREDIT_SQL;
+      else if (type == DARC_DOK_ENUM_STRING)
+        query = RETRIEVE_DARC_DOK_SQL;
       else if (type == nameof(ADIFBoolean))
         return new ADIFEnumeration(nameof(ADIFBoolean), new ADIFEnumerationValue(Values.ADIF_BOOLEAN_TRUE, Values.ADIF_BOOLEAN_TRUE_DISPLAY),
                                                         new ADIFEnumerationValue(Values.ADIF_BOOLEAN_FALSE, Values.ADIF_BOOLEAN_FALSE_DISPLAY));
@@ -677,9 +683,11 @@ namespace ADIF.NET {
     const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
     const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\"";
     const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
+    const string RETRIEVE_DARC_DOK_SQL = "SELECT Code, District || ' - ' || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"DarcDok\" ORDER BY Code";
     const string CREDIT_ENUM_STRING = "Credit";
     const string BAND_ENUM_STRING = "Band";
     const string DXCC_ENUM_STRING = "Countries";
+    const string DARC_DOK_ENUM_STRING = "DARCDOK";
   }
 
   /// <summary>

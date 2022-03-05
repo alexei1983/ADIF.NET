@@ -6,8 +6,14 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class AgeTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
     public override double MinValue => 0;
 
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
     public override double MaxValue => 120;
 
     /// <summary>

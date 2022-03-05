@@ -165,15 +165,15 @@ namespace ADIF.NET.Helpers {
     public static void ValidateRst(int readability, int strength, int tone, string suffix)
     {
       if (readability > 5 || readability < 1)
-        throw new ArgumentException($"Invalid readability value: {readability}");
+        throw new ArgumentException($"Invalid RST readability value: {readability}");
 
       if (strength > 9 || strength < 1)
-        throw new ArgumentException($"Invalid strength value: {strength}");
+        throw new ArgumentException($"Invalid RST strength value: {strength}");
 
       if (tone > 0)
       {
         if (tone > 9)
-          throw new ArgumentException($"Invalid tone value: {tone}");
+          throw new ArgumentException($"Invalid RST tone value: {tone}");
       }
 
       if (!string.IsNullOrEmpty(suffix))

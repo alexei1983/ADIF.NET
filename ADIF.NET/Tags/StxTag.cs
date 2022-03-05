@@ -6,10 +6,30 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class StxTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Stx;
 
+    /// <summary>
+    /// Creates a new STX tag.
+    /// </summary>
     public StxTag() { }
 
+    /// <summary>
+    /// Creates a new STX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public StxTag(double value) : base(value) { }
+
+    /// <summary>
+    /// Creates a new STX tag.
+    /// </summary>
+    /// <param name="serialGenerator">Serial number generator.</param>
+    public StxTag(SerialNumberGenerator serialGenerator)
+    {
+      if (serialGenerator != null)
+        SetValue(serialGenerator.Next());
+    }
   }
 }

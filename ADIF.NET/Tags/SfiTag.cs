@@ -6,14 +6,30 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class SFITag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Sfi;
 
-    public override double MaxValue => 300d;
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
+    public override double MaxValue => 300;
 
-    public override double MinValue => 0d;
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
+    public override double MinValue => 0;
 
+    /// <summary>
+    /// Creates a new SFI tag.
+    /// </summary>
     public SFITag() { }
 
+    /// <summary>
+    /// Creates a new SFI tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public SFITag(double value) : base(value) { }
 
   }

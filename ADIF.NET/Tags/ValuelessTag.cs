@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
   public class ValuelessTag : StringTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag value.
     /// </summary>
     public override string Value => string.Empty;
 

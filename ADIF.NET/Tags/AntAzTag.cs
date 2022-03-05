@@ -6,10 +6,24 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class AntAzTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.AntAz;
 
-    public override double MaxValue => 360d;
-    public override double MinValue => 0d;
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
+    public override double MaxValue => 360;
+
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
+    public override double MinValue => 0;
+
+    /// <summary>
+    /// Whether or not values over the maximum are allowed on import.
+    /// </summary>
     public override bool AllowValuesOverMaxOnImport => true;
 
     /// <summary>
@@ -31,11 +45,14 @@ namespace ADIF.NET.Tags {
       base.SetValue(azimuth);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override bool ValidateValue(object value) {
       return base.ValidateValue(value);         
       }
 
     double? importValue;
-
     }
   }

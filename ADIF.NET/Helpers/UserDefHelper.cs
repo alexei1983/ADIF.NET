@@ -115,6 +115,58 @@ namespace ADIF.NET.Helpers {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="adifType"></param>
+    public static IADIFType GetADIFType(string adifType)
+    {
+      if (string.IsNullOrEmpty(adifType))
+        return null;
+
+      switch (adifType.ToUpper())
+      {
+        case DataTypes.Boolean:
+          return new ADIFBoolean();
+
+        case DataTypes.CreditList:
+          return new ADIFCreditList();
+
+        case DataTypes.Date:
+          return new ADIFDate();
+
+        case DataTypes.Enumeration:
+          return new ADIFEnumerationType();
+
+        case DataTypes.IntlMultilineString:
+          return new ADIFIntlMultilineString();
+
+        case DataTypes.IntlString:
+          return new ADIFIntlString();
+
+        case DataTypes.Location:
+          return new ADIFLocation();
+
+        case DataTypes.MultilineString:
+          return new ADIFMultilineString();
+
+        case DataTypes.Number:
+          return new ADIFNumber();
+
+        case DataTypes.SponsoredAwardList:
+          return new ADIFSponsoredAwardList();
+
+        case DataTypes.String:
+          return new ADIFString();
+
+        case DataTypes.Time:
+          return new ADIFTime();
+
+        default:
+          return new ADIFIntlMultilineString();
+      }
+    }
+
+    /// <summary>
     /// Validates the uniqueness of the field IDs for the specified user-defined tags.
     /// </summary>
     /// <param name="throwExceptions">Whether or not to throw exceptions if invalid field IDs are found.</param>

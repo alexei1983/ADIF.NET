@@ -95,15 +95,35 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="name"></param>
+    public int GetSerialNumberGenerator(string name)
+    {
+      if (string.IsNullOrEmpty(name))
+        throw new ArgumentException("Name is required.", nameof(name));
+
+      var strVal = GetValue(values, $"serial_{name}");
+
+      if (!string.IsNullOrEmpty(strVal))
+      {
+        if (int.TryParse(strVal, out int serial))
+          return serial;
+      }
+
+      throw new ArgumentException($"No generator exists with name '{name}'");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="lines"></param>
     void ParseConfig(IEnumerable<string> lines)
     {
       if (lines != null)
       {
-        var values = lines.Where(line => !string.IsNullOrWhiteSpace(line) && 
-                                         !line.Trim().StartsWith(Values.COMMENT_INDICATOR.ToString()))
-                          .Select(line => line.Split(new char[] { '=' }, 2, 0))
-                          .ToDictionary(parts => parts[0].Trim(), parts => parts.Length > 1 ? CleanValue(parts[1].Trim()) : null);
+        values = lines.Where(line => !string.IsNullOrWhiteSpace(line) && 
+                                     !line.Trim().StartsWith(Values.COMMENT_INDICATOR.ToString()))
+                      .Select(line => line.Split(new char[] { '=' }, 2, 0))
+                      .ToDictionary(parts => parts[0].Trim(), parts => parts.Length > 1 ? CleanValue(parts[1].Trim()) : null);
 
         if (values.ContainsKey(MY_CALL_CONFIG))
           MyCall = values[MY_CALL_CONFIG];
@@ -189,6 +209,12 @@ namespace ADIF.NET {
       return value.Trim('"');
     }
 
+    string GetValue(IDictionary<string, string> values, string key)
+    {
+      var val = values.FirstOrDefault(kvp => kvp.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+      return val.Value;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -239,5 +265,7 @@ namespace ADIF.NET {
       else
         return $"{Values.DEFAULT_ADIF_HEADER_TEXT} for {MyCall}";
     }
+
+    IDictionary<string, string> values;
   }
 }

@@ -313,6 +313,5 @@ namespace ADIF.NET.Helpers {
 
     SQLiteConnection memoryConnection;
     string tempPath;
-
   }
 }

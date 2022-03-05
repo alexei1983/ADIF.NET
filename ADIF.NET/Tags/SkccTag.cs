@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class SKCCTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.SKCC;
 
+    /// <summary>
+    /// Creates a new SKCC tag.
+    /// </summary>
     public SKCCTag() { }
 
+    /// <summary>
+    /// Creates a new SKCC tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public SKCCTag(string value) : base(value) { }
   }
 }

@@ -88,6 +88,7 @@
     <Compile Include="Exceptions\MultiValueStringException.cs" />
     <Compile Include="Exceptions\SponsoredAwardListException.cs" />
     <Compile Include="Exceptions\ValueConversionException.cs" />
+    <Compile Include="Exceptions\ValueException.cs" />
     <Compile Include="GridSquare.cs" />
     <Compile Include="Helpers\DXCCHelper.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />
@@ -101,6 +102,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SerialNumberGenerator.cs" />
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
     <Compile Include="Tags\AwardGrantedTag.cs" />
@@ -108,6 +110,8 @@
     <Compile Include="Tags\DARCDOKTag.cs" />
     <Compile Include="Tags\CreditGrantedTag.cs" />
     <Compile Include="Tags\LocationTag.cs" />
+    <Compile Include="Tags\MyStreetIntlTag.cs" />
+    <Compile Include="Tags\MyStreetTag.cs" />
     <Compile Include="Tags\SponsoredAwardListTag.cs" />
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />

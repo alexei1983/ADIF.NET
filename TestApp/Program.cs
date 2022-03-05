@@ -131,6 +131,13 @@ namespace TestApp {
 
       result.CheckVersion();
 
+      var serial = new SerialNumberGenerator() { StringLength = 6 };
+
+      for (var x = 0; x < 1145; x++)
+        Console.WriteLine(serial.NextString());
+
+      return;
+
       //result.ToADIF(@"C:\Users\S017138\Desktop\testadx2adif.adi", EmitFlags.None);
       ///return;
 
@@ -732,7 +739,7 @@ namespace TestApp {
       //var loc = new ADIFLocation(locStr);
       //var decDeg = loc.ToDecimalDegrees();
 
-      var myGrid = new GridSquareHelper().GetGridSquareFromCall("K0UOG");
+      //var myGrid = new GridSquareHelper().GetGridSquareFromCall("K0UOG");
 
       //var r1 ="NA-009".IsSotaDesignator();
       //var r2 = "AN-999".IsSotaDesignator();

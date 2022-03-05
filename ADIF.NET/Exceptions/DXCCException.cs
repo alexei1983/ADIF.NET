@@ -5,22 +5,14 @@ namespace ADIF.NET.Exceptions {
   /// <summary>
   /// 
   /// </summary>
-  public class DXCCException : Exception {
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Value { get; }
+  public class DXCCException : ValueException {
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="message"></param>
     /// <param name="value"></param>
-    public DXCCException(string message, string value) : base(message)
-    {
-      Value = value;
-    }
+    public DXCCException(string message, string value) : base(message, value) { }
 
     /// <summary>
     /// 
@@ -41,9 +33,6 @@ namespace ADIF.NET.Exceptions {
     /// <param name="message"></param>
     /// <param name="value"></param>
     /// <param name="innerException"></param>
-    public DXCCException(string message, string value, Exception innerException) : base(message, innerException)
-    {
-      Value = value;
-    }
+    public DXCCException(string message, string value, Exception innerException) : base(message, value, innerException) { }
   }
 }

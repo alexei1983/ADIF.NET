@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ADIFVer;
 
     /// <summary>
-    /// 
+    /// Whether or not the tag is a header tag.
     /// </summary>
     public override bool Header => true;
 
@@ -40,12 +40,11 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
-
       if (!(value is null))
       {
         try
         {
-          var version = new Version(value.ToString());
+          var version = Version.Parse(value.ToString());
           return version;
         }
         catch (Exception ex)

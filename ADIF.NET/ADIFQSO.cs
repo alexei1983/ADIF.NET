@@ -651,62 +651,74 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Sets the logging station's address details.
     /// </summary>
-    /// <param name="city"></param>
-    /// <param name="state"></param>
-    /// <param name="postalCode"></param>
-    /// <param name="countryName"></param>
-    /// <param name="dxccCode"></param>
-    public void SetMyAddress(string city, string state, string postalCode, string countryName, string dxccCode)
+    /// <param name="myStreetAddress">The logging station's street.</param>
+    /// <param name="myCity">The logging station's city.</param>
+    /// <param name="myState">The logging station's primary administrative subdivision (e.g. state, province, territory, etc)</param>
+    /// <param name="myPostalCode">The logging station's postal code.</param>
+    /// <param name="myCountryName">The name of the logging station's country.</param>
+    /// <param name="myDxccCode">The logging station's DXCC entity code.</param>
+    public void SetMyAddress(string myStreetAddress, 
+                             string myCity,
+                             string myState,
+                             string myPostalCode,
+                             string myCountryName,
+                             string myDxccCode)
     {
-      if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(state) || string.IsNullOrEmpty(postalCode) ||
-        string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
+      if (string.IsNullOrEmpty(myStreetAddress) || string.IsNullOrEmpty(myCity) || 
+        string.IsNullOrEmpty(myState) || string.IsNullOrEmpty(myPostalCode) ||
+        string.IsNullOrEmpty(myCountryName) || string.IsNullOrEmpty(myDxccCode))
         throw new ArgumentException("Cannot set address: missing one or more required values.");
 
-      var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
+      var dxccEntity = Values.CountryCodes.GetValue(myDxccCode);
 
       if (dxccEntity == null)
-        throw new DXCCException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode);
+        throw new DXCCException($"Invalid DXCC entity: {myDxccCode ?? string.Empty}", myDxccCode);
 
-      if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
-        throw new DXCCException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
+      if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(myDxccCode), myState))
+        throw new DXCCException($"DXCC entity {myDxccCode} does not contain primary administrative subdivision '{myState}'");
 
       AddOrReplace(new MyDXCCTag(dxccEntity.Code));
 
-      if (city.IsASCII())
-        AddOrReplace(new MyCityTag(city));
+      if (myStreetAddress.IsASCII())
+        AddOrReplace(new MyStreetTag(myStreetAddress));
       else
-        AddOrReplace(new MyCityIntlTag(city));
+        AddOrReplace(new MyStreetIntlTag(myStreetAddress));
 
-      AddOrReplace(new MyStateTag(state));
-
-      if (countryName.IsASCII())
-        AddOrReplace(new MyCountryTag(countryName));
+      if (myCity.IsASCII())
+        AddOrReplace(new MyCityTag(myCity));
       else
-        AddOrReplace(new MyCountryIntlTag(countryName));
+        AddOrReplace(new MyCityIntlTag(myCity));
 
-      if (postalCode.IsASCII())
-        AddOrReplace(new MyPostalCodeTag(postalCode));
+      AddOrReplace(new MyStateTag(myState));
+
+      if (myCountryName.IsASCII())
+        AddOrReplace(new MyCountryTag(myCountryName));
       else
-        AddOrReplace(new MyPostalCodeIntlTag(postalCode));
+        AddOrReplace(new MyCountryIntlTag(myCountryName));
+
+      if (myPostalCode.IsASCII())
+        AddOrReplace(new MyPostalCodeTag(myPostalCode));
+      else
+        AddOrReplace(new MyPostalCodeIntlTag(myPostalCode));
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="receivedOn"></param>
-    /// <param name="via"></param>
-    public void MarkQSLReceived(DateTime receivedOn, string via)
+    /// <param name="receivedVia"></param>
+    public void MarkQSLReceived(DateTime receivedOn, string receivedVia)
     {
       AddOrReplace(new QSLRcvdTag(Values.ADIF_BOOLEAN_TRUE));
 
-      if (!string.IsNullOrEmpty(via))
+      if (!string.IsNullOrEmpty(receivedVia))
       {
-        if (!Values.Via.IsValid(via))
-          throw new ArgumentException($"'{via}' is not a valid QSL means.");
+        if (!Values.Via.IsValid(receivedVia))
+          throw new ArgumentException($"'{receivedVia}' is not a valid QSL means.");
 
-        AddOrReplace(new QSLRcvdViaTag(via));
+        AddOrReplace(new QSLRcvdViaTag(receivedVia));
       }
 
       if (receivedOn != DateTime.MinValue)
@@ -768,6 +780,186 @@ namespace ADIF.NET {
       MarkQSLSent(DateTime.MinValue, null);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sentOn"></param>
+    /// <param name="sentStatus"></param>
+    public void MarkLOTWSent(DateTime sentOn, bool addQSLSentTag = false)
+    {
+      if (sentOn != DateTime.MinValue)
+        AddOrReplace(new LOTWQSLSentDateTag(sentOn));
+
+      AddOrReplace(new LOTWQSLSentTag(Values.ADIF_BOOLEAN_TRUE));
+
+      if (addQSLSentTag)
+        MarkQSLSent(sentOn, "E");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="receivedOn"></param>
+    /// <param name="addQSLRcvdTag"></param>
+    public void MarkLOTWReceived(DateTime receivedOn, bool addQSLRcvdTag = false)
+    {
+      if (receivedOn != DateTime.MinValue)
+        AddOrReplace(new LOTWQSLReceivedDateTag(receivedOn));
+
+      AddOrReplace(new LOTWQSLRcvdTag(Values.ADIF_BOOLEAN_TRUE));
+
+      if (addQSLRcvdTag)
+        MarkQSLReceived(receivedOn, "E");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sentOn"></param>
+    /// <param name="addQSLSentTag"></param>
+    public void MarkEQSLSent(DateTime sentOn, bool addQSLSentTag = false)
+    {
+      if (sentOn != DateTime.MinValue)
+        AddOrReplace(new EQSLSentDateTag(sentOn));
+
+      AddOrReplace(new EQSLSentStatusTag(Values.ADIF_BOOLEAN_TRUE));
+
+      if (addQSLSentTag)
+        MarkQSLSent(sentOn, "E");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="receivedOn"></param>
+    /// <param name="addQSLRcvdTag"></param>
+    public void MarkEQSLReceived(DateTime receivedOn, bool addQSLRcvdTag = false)
+    {
+      if (receivedOn != DateTime.MinValue)
+        AddOrReplace(new EQSLReceivedDateTag(receivedOn));
+
+      AddOrReplace(new EQSLReceivedStatusTag(Values.ADIF_BOOLEAN_TRUE));
+
+      if (addQSLRcvdTag)
+        MarkQSLReceived(receivedOn, "E");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void MarkQSOModifiedSinceUpload()
+    {
+      if (Contains(TagNames.QRZQSOUploadStatus))
+        Replace(new QRZQSOUploadStatusTag("M"));
+
+      if (Contains(TagNames.ClubLogQSOUploadStatus))
+        Replace(new ClubLogQSOUploadStatusTag("M"));
+
+      if (Contains(TagNames.HrdLogQSOUploadStatus))
+        Replace(new HRDLogQSOUploadStatusTag("M"));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="programId"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public void AddAppDefinedField(string fieldName, string programId, string dataType, object value)
+    {
+      if (string.IsNullOrEmpty(programId))
+        throw new ArgumentException("Program ID is required.", nameof(programId));
+
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      if (dataType == null)
+        dataType = string.Empty;
+
+      Add(new AppDefTag(fieldName, programId, dataType, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public void AddAppDefinedField(string fieldName, string dataType, object value)
+    {
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      if (dataType == null)
+        dataType = string.Empty;
+
+      Add(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="value"></param>
+    public void AddAppDefinedField(string fieldName, object value)
+    {
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      Add(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, null, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="programId"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public void SetAppDefinedField(string fieldName, string programId, string dataType, object value)
+    {
+      if (string.IsNullOrEmpty(programId))
+        throw new ArgumentException("Program ID is required.", nameof(programId));
+
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      if (dataType == null)
+        dataType = string.Empty;
+
+      AddOrReplace(new AppDefTag(fieldName, programId, dataType, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public void SetAppDefinedField(string fieldName, string dataType, object value)
+    {
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      if (dataType == null)
+        dataType = string.Empty;
+
+      AddOrReplace(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="value"></param>
+    public void SetAppDefinedField(string fieldName, object value)
+    {
+      if (string.IsNullOrEmpty(fieldName))
+        throw new ArgumentException("Field name is required.", nameof(fieldName));
+
+      AddOrReplace(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, null, value));
+    }
 
     /// <summary>
     /// Adds a <see cref="NameTag"/> to the current QSO.
@@ -872,6 +1064,46 @@ namespace ADIF.NET {
       var awardsArr = ADIFSponsoredAwardList.Parse(awards);
 
       MergeAwardGranted(awardsArr);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SetClubLogDoNotUpload()
+    {
+      AddOrReplace(new ClubLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SetHRDDoNotUpload()
+    {
+      AddOrReplace(new HRDLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SetQRZDoNotUpload()
+    {
+      AddOrReplace(new QRZQSOUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="satelliteName"></param>
+    /// <param name="satelliteMode"></param>
+    public void SetSatellite(string satelliteName, string satelliteMode)
+    {
+      if (!string.IsNullOrEmpty(satelliteName))
+        AddOrReplace(new SatNameTag(satelliteName));
+
+      if (!string.IsNullOrEmpty(satelliteMode))
+        AddOrReplace(new SatModeTag(satelliteMode));
+
+      AddOrReplace(new PropModeTag("SAT"));
     }
 
     /// <summary>

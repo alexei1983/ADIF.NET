@@ -106,6 +106,8 @@ namespace ADIF.NET {
       { TagNames.MySigInfoIntl, typeof(MySigInfoIntlTag) },
       { TagNames.MySOTARef, typeof(MySOTARefTag) },
       { TagNames.MyState, typeof(MyStateTag) },
+      { TagNames.MyStreet, typeof(MyStreetTag) },
+      { TagNames.MyStreetIntl, typeof(MyStreetIntlTag) },
       { TagNames.MyUSACACounties, typeof(MyUSACACountiesTag) },
       { TagNames.MyVUCCGrids, typeof(MyVUCCGridsTag) },
       { TagNames.Name, typeof(NameTag) },

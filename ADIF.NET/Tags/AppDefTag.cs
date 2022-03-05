@@ -42,6 +42,36 @@ namespace ADIF.NET.Tags {
     public new string DataType { get; set; }
 
     /// <summary>
+    /// Creates a new application-defined field.
+    /// </summary>
+    public AppDefTag() { }
+
+    /// <summary>
+    /// Creates a new application-defined field.
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="programId"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public AppDefTag(string fieldName, string programId, string dataType, object value)
+    {
+      FieldName = fieldName;
+      ProgramId = programId;
+      DataType = dataType ?? string.Empty;
+
+      if (value != null)
+        SetValue(value);
+    }
+
+    /// <summary>
+    /// Creates a new application-defined field.
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="programId"></param>
+    /// <param name="dataType"></param>
+    public AppDefTag(string fieldName, string programId, string dataType) : this(fieldName, programId, dataType, null) { }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="value"></param>

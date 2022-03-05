@@ -20,7 +20,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => -90d;
+    public override double MinValue => -90;
 
     /// <summary>
     /// Whether or not to allow values over the maximum on import.

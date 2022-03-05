@@ -12,6 +12,16 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.AIndex;
 
     /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
+    public override double MinValue => 0;
+
+    /// <summary>
+    /// Maximum numeric value.
+    /// </summary>
+    public override double MaxValue => 400;
+
+    /// <summary>
     /// Creates a new A_INDEX tag.
     /// </summary>
     public AIndexTag() { }

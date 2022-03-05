@@ -8,7 +8,7 @@ namespace ADIF.NET.Types {
   public class ADIFString : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.String;
 
@@ -37,7 +37,6 @@ namespace ADIF.NET.Types {
     /// <param name="result"></param>
     public static bool TryParse(string s, out string result)
     {
-      result = null;
       try
       {
         result = Parse(s);
@@ -45,6 +44,7 @@ namespace ADIF.NET.Types {
       }
       catch
       {
+        result = null;
         return false;
       }
     }
