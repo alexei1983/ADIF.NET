@@ -962,6 +962,27 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="field"></param>
+    /// <param name="value"></param>
+    public void AddUserDefinedTag(UserDefTag field, object value)
+    {
+      Add(new UserDefValueTag(field, value));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="field"></param>
+    /// <param name="value"></param>
+    public void SetUserDefinedTag(UserDefTag field, object value)
+    {
+      AddOrReplace(new UserDefValueTag(field, value));
+    }
+
+
+    /// <summary>
     /// Adds a <see cref="NameTag"/> to the current QSO.
     /// </summary>
     /// <param name="name">Personal name of the contacted station.</param>

@@ -82,6 +82,7 @@
     <Compile Include="Exceptions\ADIFParseException.cs" />
     <Compile Include="Exceptions\ADXParseException.cs" />
     <Compile Include="Exceptions\AdministrativeSubdivisionException.cs" />
+    <Compile Include="Exceptions\InvalidEnumerationOptionException.cs" />
     <Compile Include="Exceptions\CreditListException.cs" />
     <Compile Include="Exceptions\DXCCException.cs" />
     <Compile Include="Exceptions\GridSquareException.cs" />

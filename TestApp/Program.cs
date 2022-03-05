@@ -136,6 +136,38 @@ namespace TestApp {
       for (var x = 0; x < 1145; x++)
         Console.WriteLine(serial.NextString());
 
+      var dataSet2 = new ADIFDataSet() { ADIFVersion = new Version(3, 1, 2) };
+      dataSet2.AddQSOTag(new NameTag("Alex"));
+
+      var qso1 = new ADIFQSO();
+      qso1.AddName("Bob");
+      qso1.SetQSODateTimeOn(DateTime.UtcNow);
+      qso1.SetRstRcvd(5, 8);
+      qso1.SetRstSent(5, 5);
+      qso1.SetMode("USB");
+      qso1.SetCall("W7GZP");
+      qso1.SetOperator("K0UOG");
+      qso1.SetMyAddress("14561 E Ford Pl Unit 15", "Aurora", "CO", "80012", "United States", "291");
+      qso1.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
+      qso1.SetFreq(14.320, true);
+      qso1.SetComment("Bob is cool.");
+      qso1.SetEquipment("ICOM 7100", 100);
+      qso1.SetSummitToSummit("W6/NS-0011", "W0C/FR-1099");
+      qso1.SetSatellite("Mother Ship", "K");
+      qso1.SetQRZUploaded(DateTime.UtcNow, "Y");
+      qso1.MarkEQSLSent(DateTime.UtcNow, true);
+      
+      dataSet2.AddQSOTag(new MyNameTag("Alex"));
+      dataSet2.AddUserDefinedTagDefinition("My_Birthday", "D");
+      
+
+      dataSet2.QSOs.Add(qso1);
+
+      Console.WriteLine(dataSet2.ToADX());
+
+
+
+
       return;
 
       //result.ToADIF(@"C:\Users\S017138\Desktop\testadx2adif.adi", EmitFlags.None);

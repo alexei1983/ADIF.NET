@@ -78,7 +78,7 @@ namespace ADIF.NET.Tags {
           {
             if (dblVal < MinValue)
               return false;
-            else if (MaxValue != MinValue && dblVal > MaxValue)
+            else if (MaxValue > MinValue && dblVal > MaxValue)
               return false;
 
             return true;

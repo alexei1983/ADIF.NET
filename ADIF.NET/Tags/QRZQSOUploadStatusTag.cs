@@ -6,7 +6,7 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class QRZQSOUploadStatusTag : RestrictedEnumerationTag, ITag {
 
-    public override string Name => TagNames.HrdLogQSOUploadStatus;
+    public override string Name => TagNames.QRZQSOUploadStatus;
 
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
 

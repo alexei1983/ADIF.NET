@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using ADIF.NET.Helpers;
 
 namespace ADIF.NET.Tags {
@@ -63,6 +64,51 @@ namespace ADIF.NET.Tags {
     /// Maximum valid numeric value.
     /// </summary>
     public double UpperBound { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public UserDefTag() { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="dataType"></param>
+    public UserDefTag(string fieldName, int fieldId, string dataType)
+    {
+      FieldName = fieldName;
+      FieldId = fieldId;
+      DataType = dataType;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="options"></param>
+    public UserDefTag(string fieldName, int fieldId, params string[] options) : this(fieldName, fieldId, DataTypes.Enumeration)
+    {
+      CustomOptions = options;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="upperBound"></param>
+    /// <param name="lowerBound"></param>
+    public UserDefTag(string fieldName, int fieldId, double upperBound, double lowerBound) : this(fieldName, fieldId, DataTypes.Number)
+    {
+      if (upperBound < lowerBound)
+        throw new ArgumentException("Upper bound numeric value cannot be less than lower bound numeric value.");
+
+      UpperBound = upperBound;
+      LowerBound = lowerBound;
+    }
 
     /// <summary>
     /// Retrieves the <see cref="XmlElement"/> representation of the current tag.
