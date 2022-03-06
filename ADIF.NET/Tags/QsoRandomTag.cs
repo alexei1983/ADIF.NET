@@ -7,19 +7,19 @@ namespace ADIF.NET.Tags {
   public class QSORandomTag : BooleanTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.QSORandom;
 
     /// <summary>
-    /// 
+    /// Creates a new QSO_RANDOM tag.
     /// </summary>
     public QSORandomTag() { }
 
     /// <summary>
-    /// 
+    /// Creates a new QSO_RANDOM tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial tag value.</param>
     public QSORandomTag(bool value) : base(value) { }
   }
 }

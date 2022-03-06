@@ -3,7 +3,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the time the QSO ended.
   /// </summary>
   public class TimeOffTag : TimeTag, ITag {
 

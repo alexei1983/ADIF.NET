@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class PfxTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Pfx;
 
+    /// <summary>
+    /// Creates a new PFX tag.
+    /// </summary>
     public PfxTag() { }
 
+    /// <summary>
+    /// Creates a new PFX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public PfxTag(string value) : base(value) { }
   }
 }

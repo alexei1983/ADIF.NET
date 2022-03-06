@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the logging station's power in watts.
   /// </summary>
   public class TxPwrTag : NumberTag, ITag {
 
@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => 0;
+    public override double MinValue => 1;
 
     /// <summary>
     /// Creates a new TX_PWR tag.

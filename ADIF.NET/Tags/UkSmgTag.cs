@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => 0;
+    public override double MinValue => 1;
 
     /// <summary>
     /// Creates a new UKSMG tag.

@@ -7,7 +7,7 @@ namespace ADIF.NET.Types {
   public class ADIFIntlMultilineString : ADIFType<string>, IADIFType {
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.IntlMultilineString;
 

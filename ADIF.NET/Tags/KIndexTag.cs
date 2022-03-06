@@ -12,12 +12,12 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.KIndex;
 
     /// <summary>
-    /// 
+    /// Minimum numeric value.
     /// </summary>
     public override double MinValue => 0;
 
     /// <summary>
-    /// 
+    /// Maximum numeric value.
     /// </summary>
     public override double MaxValue => 9;
 

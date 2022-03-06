@@ -7,19 +7,19 @@ namespace ADIF.NET.Tags {
   public class MyNameIntlTag : IntlStringTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.MyNameIntl;
 
     /// <summary>
-    /// Creates a new instance of the MY_NAME_INTL tag.
+    /// Creates a new MY_NAME_INTL tag.
     /// </summary>
     public MyNameIntlTag() { }
 
     /// <summary>
-    /// Creates a new instance of the MY_NAME_INTL tag.
+    /// Creates a new MY_NAME_INTL tag.
     /// </summary>
-    /// <param name="value">Logging operator's name.</param>
+    /// <param name="value">Initial tag value.</param>
     public MyNameIntlTag(string value) : base(value) { }
   }
 }

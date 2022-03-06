@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the contacted station's Ten-Ten number.
   /// </summary>
   public class TenTenTag : NumberTag, ITag {
 
@@ -10,6 +10,11 @@ namespace ADIF.NET.Tags {
     /// Tag name.
     /// </summary>
     public override string Name => TagNames.TenTen;
+
+    /// <summary>
+    /// Minimum numeric value.
+    /// </summary>
+    public override double MinValue => 1;
 
     /// <summary>
     /// Creates a new TEN_TEN tag.

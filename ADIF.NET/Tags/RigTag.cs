@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class RigTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Rig;
 
+    /// <summary>
+    /// Creates a new RIG tag.
+    /// </summary>
     public RigTag() { }
 
+    /// <summary>
+    /// Creates a new RIG tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public RigTag(string value) : base(value) { }
   }
 }

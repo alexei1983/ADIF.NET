@@ -60,9 +60,13 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override void SetValue(string value)
     {
-      
+      SetValue((object)value);
     }
 
     /// <summary>
@@ -93,6 +97,5 @@ namespace ADIF.NET.Tags {
     }
 
     Location location;
-
   }
 }

@@ -35,9 +35,9 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Converts the specified object to the expected value type for the tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Value to convert.</param>
     public override object ConvertValue(object value)
     {
       if (!(value is null))

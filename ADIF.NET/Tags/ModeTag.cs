@@ -6,12 +6,25 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class ModeTag : RestrictedEnumerationTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Mode;
 
+    /// <summary>
+    /// Valid enumeration values.
+    /// </summary>
     public override ADIFEnumeration Options => Values.Modes;
 
+    /// <summary>
+    /// Creates a new MODE tag.
+    /// </summary>
     public ModeTag() { }
 
+    /// <summary>
+    /// Creates a new MODE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public ModeTag(string value) : base(value) { }
   }
 }

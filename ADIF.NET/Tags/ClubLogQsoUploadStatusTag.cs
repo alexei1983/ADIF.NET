@@ -12,20 +12,19 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ClubLogQSOUploadStatus;
 
     /// <summary>
-    /// 
+    /// Valid enumeration values.
     /// </summary>
     public override ADIFEnumeration Options => Values.QSOUploadStatuses;
 
     /// <summary>
-    /// 
+    /// Creates a new CLUBLOG_QSO_UPLOAD_STATUS tag.
     /// </summary>
     public ClubLogQSOUploadStatusTag() { }
 
     /// <summary>
-    /// 
+    /// Creates a new CLUBLOG_QSO_UPLOAD_STATUS tag.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Initial tag value.</param>
     public ClubLogQSOUploadStatusTag(string value) : base(value) { }
-
   }
 }

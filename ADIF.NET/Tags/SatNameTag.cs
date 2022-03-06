@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class SatNameTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.SatName;
 
+    /// <summary>
+    /// Creates a new SAT_NAME tag.
+    /// </summary>
     public SatNameTag() { }
 
+    /// <summary>
+    /// Creates a new SAT_NAME tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public SatNameTag(string value) : base(value) { }
   }
 }

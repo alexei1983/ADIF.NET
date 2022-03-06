@@ -4,7 +4,7 @@ using System.Globalization;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// An ADIF.NET tag whose value represents a time in the format HHMM or HHMMSS.
   /// </summary>
   public class TimeTag : DateTag, ITag {
 

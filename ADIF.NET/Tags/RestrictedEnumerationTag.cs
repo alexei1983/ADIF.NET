@@ -26,6 +26,12 @@ namespace ADIF.NET.Tags {
     public RestrictedEnumerationTag(string value) : base(value) { }
 
     /// <summary>
+    /// Creates a new instance of the <see cref="RestrictedEnumerationTag"/> class.
+    /// </summary>
+    /// <param name="enumValue">Initial tag value.</param>
+    public RestrictedEnumerationTag(ADIFEnumerationValue enumValue) : base(enumValue) { }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="value"></param>

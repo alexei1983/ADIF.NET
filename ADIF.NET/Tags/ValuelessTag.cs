@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     public override string Value => string.Empty;
 
     /// <summary>
-    /// 
+    /// Value of the tag as a <see cref="string"/>.
     /// </summary>
     public override string TextValue => string.Empty;
 

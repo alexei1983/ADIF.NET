@@ -12,17 +12,17 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.USACACounties;
 
     /// <summary>
-    /// 
+    /// String that delimits values in a multi-valued tag.
     /// </summary>
     public override string ValueSeparator => Values.COLON.ToString();
 
     /// <summary>
-    /// 
+    /// Maximum number of values allowed in a multi-valued tag.
     /// </summary>
     public override int MaxValueCount => 2;
 
     /// <summary>
-    /// 
+    /// Minimum number of values allowed in a multi-valued tag.
     /// </summary>
     public override int MinValueCount => 2;
 

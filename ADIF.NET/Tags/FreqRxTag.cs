@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class FreqRxTag : NumberTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.FreqRx;
 
+    /// <summary>
+    /// Creates a new FREQ_RX tag.
+    /// </summary>
     public FreqRxTag() { }
 
+    /// <summary>
+    /// Creates a new FREQ_RX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public FreqRxTag(double value) : base(value) { }
   }
 }

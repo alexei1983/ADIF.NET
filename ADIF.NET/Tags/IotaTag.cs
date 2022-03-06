@@ -26,8 +26,9 @@ namespace ADIF.NET.Tags {
     /// 
     /// </summary>
     /// <param name="value"></param>
-    public override bool ValidateValue(object value) {
+    public override bool ValidateValue(object value)
+    {
       return base.ValidateValue(value) && value.ToString().IsIOTADesignator();
-      }
     }
   }
+}

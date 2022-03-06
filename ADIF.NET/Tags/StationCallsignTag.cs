@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class StationCallSignTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.StationCallSign;
 
+    /// <summary>
+    /// Creates a new STATION_CALLSIGN tag.
+    /// </summary>
     public StationCallSignTag() { }
 
+    /// <summary>
+    /// Creates a new STATION_CALLSIGN tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public StationCallSignTag(string value) : base(value) { }
   }
 }

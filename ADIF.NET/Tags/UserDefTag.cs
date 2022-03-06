@@ -66,16 +66,16 @@ namespace ADIF.NET.Tags {
     public double UpperBound { get; set; }
 
     /// <summary>
-    /// 
+    /// Creates a new USERDEF tag.
     /// </summary>
     public UserDefTag() { }
 
     /// <summary>
-    /// 
+    /// Creates a new USERDEF tag.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="fieldId"></param>
-    /// <param name="dataType"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="fieldId">Numeric ID of the user-defined field.</param>
+    /// <param name="dataType">ADIF data type indicator.</param>
     public UserDefTag(string fieldName, int fieldId, string dataType)
     {
       FieldName = fieldName;
@@ -84,23 +84,23 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new USERDEF tag.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="fieldId"></param>
-    /// <param name="options"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="fieldId">Numeric ID of the user-defined field.</param>
+    /// <param name="options">User-defined enumeration values.</param>
     public UserDefTag(string fieldName, int fieldId, params string[] options) : this(fieldName, fieldId, DataTypes.Enumeration)
     {
       CustomOptions = options;
     }
 
     /// <summary>
-    /// 
+    /// Creates a new USERDEF tag.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="fieldId"></param>
-    /// <param name="upperBound"></param>
-    /// <param name="lowerBound"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="fieldId">Numeric ID of the user-defined field.</param>
+    /// <param name="lowerBound">Minimum valid numeric value.</param>
+    /// <param name="upperBound">Maximum valid numeric value.</param>
     public UserDefTag(string fieldName, int fieldId, double lowerBound, double upperBound) : this(fieldName, fieldId, DataTypes.Number)
     {
       if (upperBound < lowerBound)

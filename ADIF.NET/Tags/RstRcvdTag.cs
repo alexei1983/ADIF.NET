@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class RstRcvdTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.RstRcvd;
 
+    /// <summary>
+    /// Creates a new RST_RCVD tag.
+    /// </summary>
     public RstRcvdTag() { }
 
+    /// <summary>
+    /// Creates a new RST_RCVD tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public RstRcvdTag(string value) : base(value) { }
   }
 }

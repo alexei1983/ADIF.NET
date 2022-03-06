@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 using ADIF.NET.Helpers;
 using ADIF.NET.Types;
@@ -18,7 +17,7 @@ namespace ADIF.NET.Tags {
     public override string Name => field.FieldName ?? string.Empty;
 
     /// <summary>
-    /// Field ID.
+    /// Numeric ID of the user-defined field.
     /// </summary>
     public int FieldId => field.FieldId;
 
@@ -28,15 +27,18 @@ namespace ADIF.NET.Tags {
     public override string DataType => field.DataType ?? string.Empty;
 
     /// <summary>
-    /// 
+    /// ADIF type.
     /// </summary>
-    public override IADIFType ADIFType => UserDefHelper.GetADIFType(DataType);
+    public override IADIFType ADIFType => UserDefHelper.GetADIFType(field.DataType);
 
     /// <summary>
     /// Whether or not the tag is a user-defined tag.
     /// </summary>
     public override bool IsUserDef => true;
 
+    /// <summary>
+    /// Value of the tag as a <see cref="string"/>.
+    /// </summary>
     public override string TextValue
     {
       get
@@ -95,12 +97,12 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// 
+    /// Whether or not the tag value is restricted to the list of enumeration values.
     /// </summary>
     public override bool RestrictOptions => field.CustomOptions?.Length > 0;
 
     /// <summary>
-    /// 
+    /// Valid enumeration values.
     /// </summary>
     public override ADIFEnumeration Options => ADIFEnumeration.FromUserDefinedTag(field);
 

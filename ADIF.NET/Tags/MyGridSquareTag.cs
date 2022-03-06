@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class MyGridSquareTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.MyGridSquare;
 
+    /// <summary>
+    /// Creates a new MY_GRIDSQUARE tag.
+    /// </summary>
     public MyGridSquareTag() { }
 
+    /// <summary>
+    /// Creates a new MY_GRIDSQUARE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public MyGridSquareTag(string value) : base(value) { }
   }
 }

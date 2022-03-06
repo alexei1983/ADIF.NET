@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents whether the Log of the World (LOTW) QSL has been received.
+  /// Represents the ARRL Logbook of the World QSL received status.
   /// </summary>
   public class LOTWQSLRcvdTag : RestrictedEnumerationTag, ITag {
 

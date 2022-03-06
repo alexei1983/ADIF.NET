@@ -3,7 +3,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the date the QSL was sent to ARRL Logbook of the World.
   /// </summary>
   public class LOTWQSLSentDateTag : DateTag, ITag {
 

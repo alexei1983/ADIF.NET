@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class MyPostalCodeTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.MyPostalCode;
 
+    /// <summary>
+    /// Creates a new MY_POSTAL_CODE tag.
+    /// </summary>
     public MyPostalCodeTag() { }
 
+    /// <summary>
+    /// Creates a new MY_POSTAL_CODE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public MyPostalCodeTag(string value) : base(value) { }
   }
 }

@@ -12,7 +12,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.MyUSACACounties;
 
     /// <summary>
-    /// 
+    /// String that delimits values in a multi-valued tag.
     /// </summary>
     public override string ValueSeparator => Values.COLON.ToString();
 

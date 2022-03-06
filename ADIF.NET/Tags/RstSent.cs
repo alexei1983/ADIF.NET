@@ -6,10 +6,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class RstSentTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.RstSent;
 
+    /// <summary>
+    /// Creates a new RST_SENT tag.
+    /// </summary>
     public RstSentTag() { }
 
+    /// <summary>
+    /// Creates a new RST_SENT tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public RstSentTag(string value) : base(value) { }
   }
 }

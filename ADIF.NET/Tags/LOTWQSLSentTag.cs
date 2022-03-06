@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the ARRL Logbook of the World QSL sent status.
   /// </summary>
   public class LOTWQSLSentTag : RestrictedEnumerationTag, ITag {
 

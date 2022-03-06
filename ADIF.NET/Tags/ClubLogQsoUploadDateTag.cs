@@ -7,11 +7,20 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class ClubLogQSOUploadDateTag : DateTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.ClubLogQSOUploadDate;
 
+    /// <summary>
+    /// Creates a new CLUBLOG_QSO_UPLOAD_DATE tag.
+    /// </summary>
     public ClubLogQSOUploadDateTag() { }
 
+    /// <summary>
+    /// Creates a new CLUBLOG_QSO_UPLOAD_DATE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public ClubLogQSOUploadDateTag(DateTime value) : base(value) { }
-
   }
 }

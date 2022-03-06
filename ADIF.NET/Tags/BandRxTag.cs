@@ -6,12 +6,25 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class BandRxTag : RestrictedEnumerationTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.BandRx;
 
+    /// <summary>
+    /// Valid enumeration values.
+    /// </summary>
     public override ADIFEnumeration Options => Values.Bands;
 
+    /// <summary>
+    /// Creates a new BAND_RX tag.
+    /// </summary>
     public BandRxTag() { }
 
+    /// <summary>
+    /// Creates a new BAND_RX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public BandRxTag(string value) : base(value) { }
   }
 }

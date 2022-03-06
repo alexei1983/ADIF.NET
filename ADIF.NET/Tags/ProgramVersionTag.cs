@@ -4,12 +4,12 @@ using ADIF.NET.Exceptions;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents the version of the program that generated the ADIF data.
+  /// Identifies the version of the logger, converter, or utility that created or processed the ADIF data set.
   /// </summary>
   public class ProgramVersionTag : Tag<Version>, ITag {
 
     /// <summary>
-    /// The name of the tag.
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.ProgramVersion;
 
@@ -19,38 +19,41 @@ namespace ADIF.NET.Tags {
     public override bool Header => true;
 
     /// <summary>
-    /// Creates a new instance of the <see cref="ProgramVersionTag"/>.
+    /// Creates a new PROGRAMVERSION tag.
     /// </summary>
-    public ProgramVersionTag() {
-      }
+    public ProgramVersionTag()
+    {
+    }
 
     /// <summary>
-    /// Creates a new instance of the <see cref="ProgramVersionTag"/>.
+    /// Creates a new PROGRAMVERSION tag.
     /// </summary>
-    /// <param name="value">Version of the program.</param>
-    public ProgramVersionTag(Version value) {
+    /// <param name="value">Initial tag value.</param>
+    public ProgramVersionTag(Version value)
+    {
       base.SetValue(value);
-      }
+    }
 
     /// <summary>
-    /// Converts the specified object to the expected value type for the current tag.
+    /// Converts the specified object to the expected value type for the tag.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public override object ConvertValue(object value) {
-      
-      if (!(value is null)) {
-
-        try {
-          var version = new Version(value.ToString());
+    /// <param name="value">Value to convert.</param>
+    public override object ConvertValue(object value)
+    {
+      if (!(value is null))
+      {
+        try
+        {
+          var version = Version.Parse(value.ToString());
           return version;
-          }
-        catch (Exception ex) {
-          throw new ValueConversionException(value, Name, ex);
-          }
         }
+        catch (Exception ex)
+        {
+          throw new ValueConversionException(value, Name, ex);
+        }
+      }
 
       return null;
-      }
     }
   }
+}

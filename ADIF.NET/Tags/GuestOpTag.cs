@@ -8,10 +8,20 @@ namespace ADIF.NET.Tags {
   [DeprecatedTag(TagNames.Operator)]
   public class GuestOpTag : StringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.GuestOp;
 
+    /// <summary>
+    /// Creates a new GUEST_OP tag.
+    /// </summary>
     public GuestOpTag() { }
 
+    /// <summary>
+    /// Creates a new GUEST_OP tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public GuestOpTag(string value) : base(value) { }
   }
 }

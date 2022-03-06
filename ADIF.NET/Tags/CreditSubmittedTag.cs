@@ -2,7 +2,7 @@
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// 
+  /// Represents the list of credits sought for the QSO.
   /// </summary>
   public class CreditSubmittedTag : CreditListTag, ITag {
 
