@@ -7,19 +7,19 @@ namespace ADIF.NET.Tags {
   public class NameTag : StringTag, ITag {
 
     /// <summary>
-    /// 
+    /// Tag name.
     /// </summary>
     public override string Name => TagNames.Name;
 
     /// <summary>
-    /// Creates a new instance of the NAME tag.
+    /// Creates a new NAME tag.
     /// </summary>
     public NameTag() { }
 
     /// <summary>
-    /// Creates a new instance of the NAME tag.
+    /// Creates a new NAME tag.
     /// </summary>
-    /// <param name="value">Contacted station's operator's name.</param>
+    /// <param name="value">Initial tag value.</param>
     public NameTag(string value) : base(value) { }
     }
   }

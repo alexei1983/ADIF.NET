@@ -29,7 +29,7 @@ namespace ADIF.NET {
         if (value.Header)
           throw new ArgumentException("Cannot insert header tag into QSO.");
 
-        if (Contains(value.GetType()))
+        if (Contains(value.Name))
           throw new ArgumentException($"QSO already contains tag '{value.Name}'");
 
         base[index] = value;
@@ -216,7 +216,7 @@ namespace ADIF.NET {
     public void AddMode(string mode)
     {
       if (!Values.Modes.IsValid(mode))
-        throw new ArgumentException($"Invalid mode: '{mode ?? string.Empty}'", nameof(mode));
+        throw new InvalidEnumerationOptionException($"Invalid mode: '{mode ?? string.Empty}'", mode);
 
       Add(new ModeTag(mode));
     }
@@ -228,7 +228,7 @@ namespace ADIF.NET {
     public void SetMode(string mode)
     {
       if (!Values.Modes.IsValid(mode))
-        throw new ArgumentException($"Invalid mode: '{mode ?? string.Empty}'", nameof(mode));
+        throw new InvalidEnumerationOptionException($"Invalid mode: '{mode ?? string.Empty}'", mode);
 
       AddOrReplace(new ModeTag(mode));
     }
@@ -578,8 +578,9 @@ namespace ADIF.NET {
       if (!DXCCHelper.ValidatePrimarySubdivision(DXCCHelper.ConvertDXCC(dxccCode), state))
         throw new DXCCException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
 
-      var addressValue = $"{operatorName}{Values.LINE_ENDING}{streetAddress}{Values.LINE_ENDING}{city}, {state} {postalCode}" +
-                         $"{Values.LINE_ENDING}{countryName}";
+      var addressValue = $"{operatorName}{Values.CARRIAGE_RETURN}{Values.NEWLINE}{streetAddress}" + 
+                         $"{Values.CARRIAGE_RETURN}{Values.NEWLINE}{city}, {state} {postalCode}" +
+                         $"{Values.CARRIAGE_RETURN}{Values.NEWLINE}{countryName}";
 
       if (addressValue.IsASCII())
         AddOrReplace(new AddressTag(addressValue));
@@ -1011,10 +1012,10 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the specified QSO matches the current QSO.
     /// </summary>
-    /// <param name="qso"></param>
-    /// <returns></returns>
+    /// <param name="qso">QSO to match against the current QSO.</param>
+    /// <param name="maxQsoDateTimeDiff">Maximum difference allowed between the current QSO date/time and the specified QSO date/time.</param>
     public bool IsMatch(ADIFQSO qso, TimeSpan maxQsoDateTimeDiff)
     {
       if (qso == null || qso.Count < 1)
@@ -1030,11 +1031,11 @@ namespace ADIF.NET {
         string.IsNullOrEmpty(mode) || !dateTimeOn.HasValue)
         throw new Exception("Not enough info to determine if QSO matches.");
 
-      var thisOp = qso.GetTagValue<string>(TagNames.Operator);
-      var thisDateTimeOn = qso.GetQSODateTimeOn();
-      var thisMode = qso.GetTagValue<string>(TagNames.Mode);
-      var thisCall = qso.GetTagValue<string>(TagNames.Call);
-      var thisBand = qso.GetTagValue<string>(TagNames.Band);
+      var thisOp = GetTagValue<string>(TagNames.Operator);
+      var thisDateTimeOn = GetQSODateTimeOn();
+      var thisMode = GetTagValue<string>(TagNames.Mode);
+      var thisCall = GetTagValue<string>(TagNames.Call);
+      var thisBand = GetTagValue<string>(TagNames.Band);
 
       if (string.IsNullOrEmpty(thisOp) || string.IsNullOrEmpty(thisCall) || string.IsNullOrEmpty(thisBand) ||
         string.IsNullOrEmpty(thisMode) || !thisDateTimeOn.HasValue)
@@ -1061,9 +1062,69 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the current QSO matches the specified QSO from the contacted station.
     /// </summary>
-    /// <param name="qso"></param>
+    /// <param name="qso">QSO from the contacted station.</param>
+    /// <param name="maxQsoDateTimeDiff">Maximum difference allowed between the current QSO date/time and 
+    /// the contacted station QSO date/time.</param>
+    public bool IsMatchReverse(ADIFQSO qso, TimeSpan maxQsoDateTimeDiff)
+    {
+      if (qso == null || qso.Count < 1)
+        return false;
+
+      var op = qso.GetTagValue<string>(TagNames.Operator);
+      var dateTimeOn = qso.GetQSODateTimeOn();
+      var mode = qso.GetTagValue<string>(TagNames.Mode);
+      var call = qso.GetTagValue<string>(TagNames.Call);
+      var band = qso.GetTagValue<string>(TagNames.Band);
+
+      if (string.IsNullOrEmpty(op) || string.IsNullOrEmpty(call) || string.IsNullOrEmpty(band) ||
+        string.IsNullOrEmpty(mode) || !dateTimeOn.HasValue)
+        throw new Exception("Not enough info to determine if QSO matches.");
+
+      var thisOp = GetTagValue<string>(TagNames.Operator);
+      var thisDateTimeOn = GetQSODateTimeOn();
+      var thisMode = GetTagValue<string>(TagNames.Mode);
+      var thisCall = GetTagValue<string>(TagNames.Call);
+      var thisBand = GetTagValue<string>(TagNames.Band);
+
+      if (string.IsNullOrEmpty(thisOp) || string.IsNullOrEmpty(thisCall) || string.IsNullOrEmpty(thisBand) ||
+        string.IsNullOrEmpty(thisMode) || !thisDateTimeOn.HasValue)
+        throw new Exception("Not enough info to determine if QSO matches.");
+
+      if (!string.Equals(thisCall, op, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(call, thisOp, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(mode, thisMode, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      var qsoDateTimeDiff = thisDateTimeOn.Value - dateTimeOn.Value;
+
+      if (qsoDateTimeDiff.TotalMilliseconds > maxQsoDateTimeDiff.TotalMilliseconds)
+        return false;
+
+      return true;
+    }
+
+    /// <summary>
+    /// Determines whether or not the current QSO matches the specified QSO from the contacted station.
+    /// </summary>
+    /// <param name="qso">QSO from the contacted station.</param>
+    public bool IsMatchReverse(ADIFQSO qso)
+    {
+      return IsMatchReverse(qso, TimeSpan.FromMinutes(30));
+    }
+
+    /// <summary>
+    /// Determines whether or not the specified QSO matches the current QSO.
+    /// </summary>
+    /// <param name="qso">QSO to match against the current QSO.</param>
     public bool IsMatch(ADIFQSO qso)
     {
       return IsMatch(qso, TimeSpan.FromMinutes(30));

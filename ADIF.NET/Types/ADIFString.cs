@@ -24,7 +24,7 @@ namespace ADIF.NET.Types {
       if (!s.IsASCII())
         throw new Exception("ADIF String cannot contain non-ASCII characters.");
 
-      if (s.Contains(Environment.NewLine) || s.Contains(Values.LINE_ENDING.ToString()))
+      if (s.Contains(Environment.NewLine) || s.Contains(Values.NEWLINE.ToString()) || s.Contains(Values.CARRIAGE_RETURN.ToString()))
         throw new Exception("ADIF String cannot contain line endings.");
 
       return s;
@@ -69,7 +69,8 @@ namespace ADIF.NET.Types {
 
       return s.IsASCII() && 
              !s.Contains(Environment.NewLine) && 
-             !s.Contains(Values.LINE_ENDING.ToString());
+             !s.Contains(Values.NEWLINE.ToString()) &&
+             !s.Contains(Values.CARRIAGE_RETURN.ToString());
     }
   }
 }

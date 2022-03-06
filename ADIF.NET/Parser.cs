@@ -200,7 +200,7 @@ namespace ADIF.NET {
         // skip comments
         if (this.data[this.i] == Values.COMMENT_INDICATOR) {
           while (this.i < headerEndingPos) {
-            if (this.data[this.i] == Values.LINE_ENDING) {
+            if (this.data[this.i] == Values.NEWLINE) {
               break;
               }
 
@@ -533,7 +533,7 @@ namespace ADIF.NET {
         // skip comments
         if (record[a] == Values.COMMENT_INDICATOR) {
           while (a < record.Length) {
-            if (record[a] == Values.LINE_ENDING) {
+            if (record[a] == Values.NEWLINE) {
               break;
               }
             a++;

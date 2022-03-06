@@ -48,9 +48,14 @@ namespace ADIF.NET {
     public const char COMMENT_INDICATOR = '#';
 
     /// <summary>
-    /// Character that represents the line-ending in an ADIF file.
+    /// Newline character.
     /// </summary>
-    public const char LINE_ENDING = '\n';
+    public const char NEWLINE = '\n';
+
+    /// <summary>
+    /// Carriage return character.
+    /// </summary>
+    public const char CARRIAGE_RETURN = '\r';
 
     /// <summary>
     /// Ampersand character.

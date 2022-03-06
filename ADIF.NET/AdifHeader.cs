@@ -17,7 +17,6 @@ namespace ADIF.NET {
     /// <returns></returns>
     public override ITag this[int index]
     {
-
       get
       {
         return base[index];
@@ -25,7 +24,6 @@ namespace ADIF.NET {
 
       set
       {
-
         if (value is null)
           return;
 
@@ -58,7 +56,7 @@ namespace ADIF.NET {
     {
       if (tags != null)
         foreach (var tag in tags)
-          this.Add(tag);
+          Add(tag);
     }
 
     /// <summary>
@@ -67,7 +65,6 @@ namespace ADIF.NET {
     /// <param name="tag"></param>
     public override void Add(ITag tag)
     {
-
       if (tag is null)
         return;
 
@@ -147,7 +144,7 @@ namespace ADIF.NET {
     public UserDefTag AddUserDefinedTag(string fieldName, double lowerBound, double upperBound)
     {
       var fieldId = GetMaxUserDefinedFieldId();
-      return AddUserDefinedTag(fieldName, ++fieldId, upperBound, lowerBound);
+      return AddUserDefinedTag(fieldName, ++fieldId, lowerBound, upperBound);
     }
 
     /// <summary>
@@ -185,7 +182,7 @@ namespace ADIF.NET {
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
 
-      var userDefTag = new UserDefTag(fieldName, fieldId, upperBound, lowerBound);
+      var userDefTag = new UserDefTag(fieldName, fieldId, lowerBound, upperBound);
 
       Add(userDefTag);
       return userDefTag;

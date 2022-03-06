@@ -109,7 +109,7 @@ namespace ADIF.NET.Tags {
     object GetValue();
 
     /// <summary>
-    /// Determines whether or not the current tag has a value.
+    /// Determines whether or not the tag has a value.
     /// </summary>
     bool HasValue();
 
@@ -120,13 +120,13 @@ namespace ADIF.NET.Tags {
     object ConvertValue(object value);
 
     /// <summary>
-    /// Returns a string representation of the current tag.
+    /// Returns a string representation of the tag.
     /// </summary>
     /// <param name="format">String format.</param>
     string ToString(string format);
 
     /// <summary>
-    /// Returns the current tag represented as an instance of the <see cref="XmlElement"/> class.
+    /// Returns the tag represented as an instance of the <see cref="XmlElement"/> class.
     /// </summary>
     /// <param name="document"><see cref="XmlDocument"/> object to which the tag will be appended.</param>
     XmlElement ToXml(XmlDocument document);
