@@ -234,6 +234,32 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mode"></param>
+    /// <param name="submode"></param>
+    public void AddMode(string mode, string submode)
+    {
+      AddMode(mode);
+
+      if (!string.IsNullOrEmpty(submode))
+        Add(new SubmodeTag(submode));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mode"></param>
+    /// <param name="submode"></param>
+    public void SetMode(string mode, string submode)
+    {
+      SetMode(mode);
+
+      if (!string.IsNullOrEmpty(submode))
+        AddOrReplace(new SubmodeTag(submode));
+    }
+
+    /// <summary>
     /// Adds a <see cref="BandTag"/> to the current QSO.
     /// </summary>
     /// <param name="band">Band to add to the current QSO.</param>
@@ -514,37 +540,263 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="decimalLatitude"></param>
-    public void AddLat(decimal decimalLatitude)
+    /// <param name="iota"></param>
+    /// <param name="islandId"></param>
+    public void AddIOTA(string iota, int islandId)
     {
-      Add(new LatTag(ADIFLocation.FromDecimalDegrees(decimalLatitude, LocationType.Latitude).ToString()));
+      if (!string.IsNullOrEmpty(iota))
+        Add(new IOTATag(iota));
+
+      if (islandId > 0)
+        Add(new IOTAIslandIdTag(islandId));
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="decimalLongitude"></param>
-    public void AddLon(decimal decimalLongitude)
+    /// <param name="iota"></param>
+    public void AddIOTA(string iota)
     {
-      Add(new LonTag(ADIFLocation.FromDecimalDegrees(decimalLongitude, LocationType.Longitude).ToString()));
+      AddIOTA(iota, 0);
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="decimalMyLatitude"></param>
-    public void AddMyLat(decimal decimalMyLatitude)
+    /// <param name="iota"></param>
+    /// <param name="islandId"></param>
+    public void SetIOTA(string iota, int islandId)
     {
-      Add(new MyLatTag(ADIFLocation.FromDecimalDegrees(decimalMyLatitude, LocationType.Latitude).ToString()));
+      if (!string.IsNullOrEmpty(iota))
+        AddOrReplace(new IOTATag(iota));
+
+      if (islandId > 0)
+        AddOrReplace(new IOTAIslandIdTag(islandId));
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="decimalMyLongitude"></param>
-    public void AddMyLon(decimal decimalMyLongitude)
+    /// <param name="iota"></param>
+    public void SetIOTA(string iota)
     {
-      Add(new MyLonTag(ADIFLocation.FromDecimalDegrees(decimalMyLongitude, LocationType.Longitude).ToString()));
+      SetIOTA(iota, 0);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myIota"></param>
+    /// <param name="myIslandId"></param>
+    public void AddMyIOTA(string myIota, int myIslandId)
+    {
+      if (!string.IsNullOrEmpty(myIota))
+        Add(new MyIOTATag(myIota));
+
+      if (myIslandId > 0)
+        Add(new MyIOTAIslandIdTag(myIslandId));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myIota"></param>
+    public void AddMyIOTA(string myIota)
+    {
+      AddMyIOTA(myIota, 0);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myIota"></param>
+    /// <param name="myIslandId"></param>
+    public void SetMyIOTA(string myIota, int myIslandId)
+    {
+      if (!string.IsNullOrEmpty(myIota))
+        AddOrReplace(new MyIOTATag(myIota));
+
+      if (myIslandId > 0)
+        AddOrReplace(new MyIOTAIslandIdTag(myIslandId));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myIota"></param>
+    public void SetMyIOTA(string myIota)
+    {
+      SetMyIOTA(myIota, 0);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cqZone"></param>
+    /// <param name="ituZone"></param>
+    public void AddITUCQZones(int ituZone, int cqZone)
+    {
+      var cqzTag = new CQZTag(cqZone);
+      if (cqzTag.ValidateValue())
+        Add(cqzTag);
+
+      var ituzTag = new ITUZTag(ituZone);
+      if (ituzTag.ValidateValue())
+        Add(ituzTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ituZone"></param>
+    /// <param name="cqZone"></param>
+    public void SetITUCQZones(int ituZone, int cqZone)
+    {
+      var cqzTag = new CQZTag(cqZone);
+      if (cqzTag.ValidateValue())
+        AddOrReplace(cqzTag);
+
+      var ituzTag = new ITUZTag(ituZone);
+      if (ituzTag.ValidateValue())
+        AddOrReplace(ituzTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myItuZone"></param>
+    /// <param name="myCqZone"></param>
+    public void AddMyITUCQZones(int myItuZone, int myCqZone)
+    {
+      var cqzTag = new MyCQZoneTag(myCqZone);
+      if (cqzTag.ValidateValue())
+        Add(cqzTag);
+
+      var ituzTag = new MyITUZoneTag(myItuZone);
+      if (ituzTag.ValidateValue())
+        Add(ituzTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myItuZone"></param>
+    /// <param name="myCqZone"></param>
+    public void SetMyITUCQZones(int myItuZone, int myCqZone)
+    {
+      var cqzTag = new MyCQZoneTag(myCqZone);
+      if (cqzTag.ValidateValue())
+        AddOrReplace(cqzTag);
+
+      var ituzTag = new MyITUZoneTag(myItuZone);
+      if (ituzTag.ValidateValue())
+        AddOrReplace(ituzTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
+    public void AddLatLon(decimal latitude, decimal longitude)
+    {
+      Add(new LatTag(latitude));
+      Add(new LonTag(longitude));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
+    public void SetLatLon(decimal latitude, decimal longitude)
+    {
+      AddOrReplace(new LatTag(latitude));
+      AddOrReplace(new LonTag(longitude));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myLatitude"></param>
+    /// <param name="myLongitude"></param>
+    public void AddMyLatLon(decimal myLatitude, decimal myLongitude)
+    {
+      Add(new MyLatTag(myLatitude));
+      Add(new MyLonTag(myLongitude));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="myLatitude"></param>
+    /// <param name="myLongitude"></param>
+    public void SetMyLatLon(decimal myLatitude, decimal myLongitude)
+    {
+      AddOrReplace(new MyLatTag(myLatitude));
+      AddOrReplace(new MyLonTag(myLongitude));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="antenna"></param>
+    /// <param name="azimuth"></param>
+    /// <param name="elevation"></param>
+    public void AddMyAntenna(string antenna, double azimuth, double elevation)
+    {
+      if (!string.IsNullOrEmpty(antenna))
+      {
+        if (antenna.IsASCII())
+          Add(new MyAntennaTag(antenna));
+        else
+          Add(new MyAntennaIntlTag(antenna));
+      }
+
+      if (azimuth >= -90)
+      {
+        var antAzTag = new AntAzTag(azimuth);
+        if (antAzTag.ValidateValue())
+          Add(antAzTag);
+      }
+
+      if (elevation >= 0)
+      {
+        var antElTag = new AntElTag(elevation);
+        if (antElTag.ValidateValue())
+          Add(antElTag);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="antenna"></param>
+    /// <param name="azimuth"></param>
+    /// <param name="elevation"></param>
+    public void SetMyAntenna(string antenna, double azimuth, double elevation)
+    {
+      if (!string.IsNullOrEmpty(antenna))
+      {
+        if (antenna.IsASCII())
+          AddOrReplace(new MyAntennaTag(antenna));
+        else
+          AddOrReplace(new MyAntennaIntlTag(antenna));
+      }
+
+      if (azimuth >= -90)
+      {
+        var antAzTag = new AntAzTag(azimuth);
+        if (antAzTag.ValidateValue())
+          AddOrReplace(antAzTag);
+      }
+
+      if (elevation >= 0)
+      {
+        var antElTag = new AntElTag(elevation);
+        if (antElTag.ValidateValue())
+          AddOrReplace(antElTag);
+      }
     }
 
     /// <summary>

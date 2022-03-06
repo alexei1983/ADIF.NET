@@ -5,7 +5,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the logging station's longitude.
   /// </summary>
-  public class MyLonTag : StringTag, ITag {
+  public class MyLonTag : LocationTag, ITag {
 
     /// <summary>
     /// Tag name.
@@ -24,11 +24,15 @@ namespace ADIF.NET.Tags {
     public MyLonTag(string value) : base(value) { }
 
     /// <summary>
-    /// 
+    /// Creates a new MY_LON tag.
     /// </summary>
-    /// <param name="value"></param>
-    public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
-      }
-    }
+    /// <param name="latitude">Decimal longitude.</param>
+    public MyLonTag(decimal longitude) : base(longitude, LocationType.Latitude) { }
+
+    /// <summary>
+    /// Creates a new MY_LON tag.
+    /// </summary>
+    /// <param name="location">Initial tag value.</param>
+    public MyLonTag(Location location) : base(location) { }
   }
+}

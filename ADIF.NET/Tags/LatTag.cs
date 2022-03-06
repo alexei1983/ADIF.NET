@@ -5,17 +5,12 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the contacted station's latitude.
   /// </summary>
-  public class LatTag : StringTag, ITag {
+  public class LatTag : LocationTag, ITag {
 
     /// <summary>
     /// Tag name.
     /// </summary>
     public override string Name => TagNames.Lat;
-
-    /// <summary>
-    /// ADIF type.
-    /// </summary>
-    public override IADIFType ADIFType => new ADIFLocation();
 
     /// <summary>
     /// Creates a new LAT tag.
@@ -32,19 +27,12 @@ namespace ADIF.NET.Tags {
     /// Creates a new LAT tag.
     /// </summary>
     /// <param name="latitude">Decimal latitude.</param>
-    public LatTag(decimal latitude)
-    {
-      var location = ADIFLocation.FromDecimalDegrees(latitude, LocationType.Latitude);
-      if (location != null)
-        SetValue(location.ToString());
-    }
+    public LatTag(decimal latitude) : base(latitude, LocationType.Latitude) { }
 
     /// <summary>
-    /// 
+    /// Creates a new LAT tag.
     /// </summary>
-    /// <param name="value"></param>
-    public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
-      }
-    }
+    /// <param name="location">Initial tag value.</param>
+    public LatTag(Location location) : base(location) { }
   }
+}

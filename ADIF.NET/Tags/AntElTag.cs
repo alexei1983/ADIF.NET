@@ -1,5 +1,4 @@
-﻿using ADIF.NET.Types;
-
+﻿
 namespace ADIF.NET.Tags {
 
   /// <summary>

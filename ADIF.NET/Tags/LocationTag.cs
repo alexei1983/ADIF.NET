@@ -9,12 +9,12 @@ namespace ADIF.NET.Tags {
   public class LocationTag : StringTag, ITag {
 
     /// <summary>
-    /// 
+    /// ADIF type.
     /// </summary>
     public override IADIFType ADIFType => new ADIFLocation();
 
     /// <summary>
-    /// 
+    /// Value of the tag as a <see cref="string"/>.
     /// </summary>
     public override string TextValue
     {
@@ -45,6 +45,15 @@ namespace ADIF.NET.Tags {
       var location = new Location(decimalDegrees, type);
       if (location != null)
         SetValue(location.ToString());
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="location"></param>
+    public LocationTag(Location location)
+    {
+      SetValue(location);
     }
 
     /// <summary>
@@ -86,6 +95,16 @@ namespace ADIF.NET.Tags {
       }
 
       return null;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public override bool ValidateValue(object value)
+    {
+      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
     }
 
     /// <summary>
