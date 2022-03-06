@@ -34,7 +34,6 @@ namespace ADIF.NET.Types {
     /// <param name="result"></param>
     public static bool TryParse(string s, out string result)
     {
-      result = null;
       try
       {
         result = Parse(s);
@@ -42,6 +41,7 @@ namespace ADIF.NET.Types {
       }
       catch
       {
+        result = null;
         return false;
       }
     }

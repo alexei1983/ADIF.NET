@@ -158,10 +158,33 @@ namespace TestApp {
       qso1.MarkEQSLSent(DateTime.UtcNow, true);
       
       dataSet2.AddQSOTag(new MyNameTag("Alex"));
-      dataSet2.AddUserDefinedTagDefinition("My_Birthday", "D");
-      
+      var user1 = dataSet2.AddUserDefinedTagDefinition("My_Birthday", "D");
+      var user2 = dataSet2.AddUserDefinedTagDefinition("Gift_Options", "Amazon", "B&N", "HRO", "Gigaparts");
+      var user3 = dataSet2.AddUserDefinedTagDefinition("Spending_Limits", 25, 150);
+
+      var qso2 = new ADIFQSO();
+      qso2.AddName("Tom");
+      qso2.SetQSODateTimeOn(DateTime.UtcNow);
+      qso2.SetRstRcvd(3, 3);
+      qso2.SetRstSent(5, 2);
+      qso2.SetMode("USB");
+      qso2.SetCall("W7GZP");
+      qso2.SetOperator("K0UOG");
+      qso2.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
+      qso1.SetEquipment("Yaesu FT-891", 10);
+      qso2.SetFreq(14.3255, true);
+      qso2.SetComment("Tom is also cool.");
+      qso2.SetHRDUploaded(DateTime.UtcNow, "Y");
+      qso2.MarkEQSLSent(DateTime.UtcNow, true);
+      qso2.AddUserDefinedTag(user1, new DateTime(1983, 3, 6));
+      qso2.AddUserDefinedTag(user2, "Gigaparts");
+      qso2.AddUserDefinedTag(user3, 100);
+
+
+      Console.WriteLine(qso1.IsMatch(qso2));
 
       dataSet2.QSOs.Add(qso1);
+      dataSet2.QSOs.Add(qso2);
 
       Console.WriteLine(dataSet2.ToADX());
 

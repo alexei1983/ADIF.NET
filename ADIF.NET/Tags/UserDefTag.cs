@@ -101,7 +101,7 @@ namespace ADIF.NET.Tags {
     /// <param name="fieldId"></param>
     /// <param name="upperBound"></param>
     /// <param name="lowerBound"></param>
-    public UserDefTag(string fieldName, int fieldId, double upperBound, double lowerBound) : this(fieldName, fieldId, DataTypes.Number)
+    public UserDefTag(string fieldName, int fieldId, double lowerBound, double upperBound) : this(fieldName, fieldId, DataTypes.Number)
     {
       if (upperBound < lowerBound)
         throw new ArgumentException("Upper bound numeric value cannot be less than lower bound numeric value.");

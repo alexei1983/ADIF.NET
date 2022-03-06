@@ -99,7 +99,7 @@ namespace ADIF.NET {
     /// <param name="fieldName"></param>
     /// <param name="fieldId"></param>
     /// <param name="dataType"></param>
-    public void AddUserDefinedTag(string fieldName, int fieldId, string dataType)
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, string dataType)
     {
       if (string.IsNullOrEmpty(fieldName))
         throw new ArgumentException("User-defined field name is required.", nameof(fieldName));
@@ -110,7 +110,10 @@ namespace ADIF.NET {
       if (dataType == null)
         dataType = string.Empty;
 
-      Add(new UserDefTag(fieldName, fieldId, dataType));
+      var userDefTag = new UserDefTag(fieldName, fieldId, dataType);
+
+      Add(userDefTag);
+      return userDefTag;
     }
 
     /// <summary>
@@ -118,10 +121,10 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="fieldName"></param>
     /// <param name="dataType"></param>
-    public void AddUserDefinedTag(string fieldName, string dataType)
+    public UserDefTag AddUserDefinedTag(string fieldName, string dataType)
     {
       var fieldId = GetMaxUserDefinedFieldId();
-      AddUserDefinedTag(fieldName, ++fieldId, dataType);
+      return AddUserDefinedTag(fieldName, ++fieldId, dataType);
     }
 
     /// <summary>
@@ -129,10 +132,10 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="fieldName"></param>
     /// <param name="options"></param>
-    public void AddUserDefinedTag(string fieldName, params string[] options)
+    public UserDefTag AddUserDefinedTag(string fieldName, params string[] options)
     {
       var fieldId = GetMaxUserDefinedFieldId();
-      AddUserDefinedTag(fieldName, ++fieldId, options);
+      return AddUserDefinedTag(fieldName, ++fieldId, options);
     }
 
     /// <summary>
@@ -141,10 +144,10 @@ namespace ADIF.NET {
     /// <param name="fieldName"></param>
     /// <param name="upperBound"></param>
     /// <param name="lowerBound"></param>
-    public void AddUserDefinedTag(string fieldName, double upperBound, double lowerBound)
+    public UserDefTag AddUserDefinedTag(string fieldName, double lowerBound, double upperBound)
     {
       var fieldId = GetMaxUserDefinedFieldId();
-      AddUserDefinedTag(fieldName, ++fieldId, upperBound, lowerBound);
+      return AddUserDefinedTag(fieldName, ++fieldId, upperBound, lowerBound);
     }
 
     /// <summary>
@@ -153,7 +156,7 @@ namespace ADIF.NET {
     /// <param name="fieldName"></param>
     /// <param name="fieldId"></param>
     /// <param name="options"></param>
-    public void AddUserDefinedTag(string fieldName, int fieldId, params string[] options)
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, params string[] options)
     {
       if (string.IsNullOrEmpty(fieldName))
         throw new ArgumentException("User-defined field name is required.", nameof(fieldName));
@@ -161,7 +164,10 @@ namespace ADIF.NET {
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
 
-      Add(new UserDefTag(fieldName, fieldId, options));
+      var userDefTag = new UserDefTag(fieldName, fieldId, options);
+
+      Add(userDefTag);
+      return userDefTag;
     }
 
     /// <summary>
@@ -171,7 +177,7 @@ namespace ADIF.NET {
     /// <param name="fieldId"></param>
     /// <param name="upperBound"></param>
     /// <param name="lowerBound"></param>
-    public void AddUserDefinedTag(string fieldName, int fieldId, double upperBound, double lowerBound)
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, double lowerBound, double upperBound)
     {
       if (string.IsNullOrEmpty(fieldName))
         throw new ArgumentException("User-defined field name is required.", nameof(fieldName));
@@ -179,7 +185,10 @@ namespace ADIF.NET {
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
 
-      Add(new UserDefTag(fieldName, fieldId, upperBound, lowerBound));
+      var userDefTag = new UserDefTag(fieldName, fieldId, upperBound, lowerBound);
+
+      Add(userDefTag);
+      return userDefTag;
     }
 
     /// <summary>

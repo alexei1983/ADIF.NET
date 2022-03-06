@@ -334,12 +334,12 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="fieldName"></param>
     /// <param name="dataType"></param>
-    public void AddUserDefinedTagDefinition(string fieldName, string dataType)
+    public UserDefTag AddUserDefinedTagDefinition(string fieldName, string dataType)
     {
       if (Header == null)
         Header = new ADIFHeader();
 
-      Header.AddUserDefinedTag(fieldName, dataType);
+      return Header.AddUserDefinedTag(fieldName, dataType);
     }
 
     /// <summary>
@@ -347,12 +347,12 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="fieldName"></param>
     /// <param name="options"></param>
-    public void AddUserDefinedTagDefinition(string fieldName, params string[] options)
+    public UserDefTag AddUserDefinedTagDefinition(string fieldName, params string[] options)
     {
       if (Header == null)
         Header = new ADIFHeader();
 
-      Header.AddUserDefinedTag(fieldName, options);
+      return Header.AddUserDefinedTag(fieldName, options);
     }
 
     /// <summary>
@@ -361,12 +361,12 @@ namespace ADIF.NET {
     /// <param name="fieldName"></param>
     /// <param name="upperBound"></param>
     /// <param name="lowerBound"></param>
-    public void AddUserDefinedTagDefinition(string fieldName, double upperBound, double lowerBound)
+    public UserDefTag AddUserDefinedTagDefinition(string fieldName, double lowerBound, double upperBound)
     {
       if (Header == null)
         Header = new ADIFHeader();
 
-      Header.AddUserDefinedTag(fieldName, upperBound, lowerBound);
+      return Header.AddUserDefinedTag(fieldName, lowerBound, upperBound);
     }
 
     /// <summary>

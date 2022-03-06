@@ -981,6 +981,93 @@ namespace ADIF.NET {
       AddOrReplace(new UserDefValueTag(field, value));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qso"></param>
+    public void Merge(ADIFQSO qso)
+    {
+      if (qso == null || qso.Count < 1)
+        return;
+
+      foreach (var tag in qso)
+      {
+        if (!Contains(tag.Name))
+          Add(tag);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qso"></param>
+    public void MergeAndReplace(ADIFQSO qso)
+    {
+      if (qso == null || qso.Count < 1)
+        return;
+
+      foreach (var tag in qso)
+        AddOrReplace(tag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qso"></param>
+    /// <returns></returns>
+    public bool IsMatch(ADIFQSO qso, TimeSpan maxQsoDateTimeDiff)
+    {
+      if (qso == null || qso.Count < 1)
+        return false;
+
+      var op = qso.GetTagValue<string>(TagNames.Operator);
+      var dateTimeOn  = qso.GetQSODateTimeOn();
+      var mode = qso.GetTagValue<string>(TagNames.Mode);
+      var call = qso.GetTagValue<string>(TagNames.Call);
+      var band = qso.GetTagValue<string>(TagNames.Band);
+
+      if (string.IsNullOrEmpty(op) || string.IsNullOrEmpty(call) || string.IsNullOrEmpty(band) ||
+        string.IsNullOrEmpty(mode) || !dateTimeOn.HasValue)
+        throw new Exception("Not enough info to determine if QSO matches.");
+
+      var thisOp = qso.GetTagValue<string>(TagNames.Operator);
+      var thisDateTimeOn = qso.GetQSODateTimeOn();
+      var thisMode = qso.GetTagValue<string>(TagNames.Mode);
+      var thisCall = qso.GetTagValue<string>(TagNames.Call);
+      var thisBand = qso.GetTagValue<string>(TagNames.Band);
+
+      if (string.IsNullOrEmpty(thisOp) || string.IsNullOrEmpty(thisCall) || string.IsNullOrEmpty(thisBand) ||
+        string.IsNullOrEmpty(thisMode) || !thisDateTimeOn.HasValue)
+        throw new Exception("Not enough info to determine if QSO matches.");
+
+      if (!string.Equals(op, thisOp, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(call, thisCall, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      if (!string.Equals(mode, thisMode, StringComparison.OrdinalIgnoreCase))
+        return false;
+
+      var qsoDateTimeDiff = thisDateTimeOn.Value - dateTimeOn.Value;
+
+      if (qsoDateTimeDiff.TotalMilliseconds > maxQsoDateTimeDiff.TotalMilliseconds)
+        return false;
+
+      return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qso"></param>
+    public bool IsMatch(ADIFQSO qso)
+    {
+      return IsMatch(qso, TimeSpan.FromMinutes(30));
+    }
 
     /// <summary>
     /// Adds a <see cref="NameTag"/> to the current QSO.
@@ -1307,23 +1394,31 @@ namespace ADIF.NET {
       var qsoDateTag = GetTag(TagNames.QSODate);
       var timeOnTag = GetTag(TagNames.TimeOn);
 
-      if (qsoDateTag != null && timeOnTag != null)
-      {
+      DateTime? qsoDate = null;
+      DateTime? timeOn = null;
 
-        var qsoDate = qsoDateTag.Value as DateTime?;
-        var timeOn = timeOnTag.Value as DateTime?;
+      if (qsoDateTag != null)
+        qsoDate = qsoDateTag.Value as DateTime?;
 
-        if (qsoDate.HasValue && timeOn.HasValue)
-        {
-          return new DateTime(qsoDate.Value.Year,
-                              qsoDate.Value.Month,
-                              qsoDate.Value.Day,
-                              timeOn.Value.Hour,
-                              timeOn.Value.Minute,
-                              timeOn.Value.Second,
-                              DateTimeKind.Utc);
-        }
-      }
+      if (timeOnTag != null)
+        timeOn = timeOnTag.Value as DateTime?;
+
+      if (qsoDate.HasValue && timeOn.HasValue)
+        return new DateTime(qsoDate.Value.Year,
+                            qsoDate.Value.Month,
+                            qsoDate.Value.Day,
+                            timeOn.Value.Hour,
+                            timeOn.Value.Minute,
+                            timeOn.Value.Second,
+                            DateTimeKind.Utc);
+      else if (qsoDate.HasValue)
+        return new DateTime(qsoDate.Value.Year,
+                            qsoDate.Value.Month,
+                            qsoDate.Value.Day,
+                            0,
+                            0,
+                            0,
+                            DateTimeKind.Utc);
 
       return null;
     }
@@ -1336,25 +1431,40 @@ namespace ADIF.NET {
       var qsoDateOffTag = GetTag(TagNames.QSODateOff);
       var timeOffTag = GetTag(TagNames.TimeOff);
 
-      if (qsoDateOffTag == null && timeOffTag != null)
-        qsoDateOffTag = GetTag(TagNames.QSODate);
+      DateTime? qsoDateOff = null;
+      DateTime? timeOff = null;
 
-      if (qsoDateOffTag != null && timeOffTag != null)
+      if (qsoDateOffTag != null)
+        qsoDateOff = qsoDateOffTag.Value as DateTime?;
+
+      if (timeOffTag != null)
       {
-        var qsoDateOff = qsoDateOffTag.Value as DateTime?;
-        var timeOff = timeOffTag.Value as DateTime?;
-
-        if (qsoDateOff.HasValue && timeOff.HasValue)
+        timeOff = timeOffTag.Value as DateTime?;
+        if (!qsoDateOff.HasValue)
         {
-          return new DateTime(qsoDateOff.Value.Year,
-                              qsoDateOff.Value.Month,
-                              qsoDateOff.Value.Day,
-                              timeOff.Value.Hour,
-                              timeOff.Value.Minute,
-                              timeOff.Value.Second,
-                              DateTimeKind.Utc);
+          qsoDateOffTag = GetTag(TagNames.QSODate);
+
+          if (qsoDateOffTag != null)
+            qsoDateOff = qsoDateOffTag.Value as DateTime?;
         }
       }
+
+      if (qsoDateOff.HasValue && timeOff.HasValue)
+        return new DateTime(qsoDateOff.Value.Year,
+                            qsoDateOff.Value.Month,
+                            qsoDateOff.Value.Day,
+                            timeOff.Value.Hour,
+                            timeOff.Value.Minute,
+                            timeOff.Value.Second,
+                            DateTimeKind.Utc);
+      else if (qsoDateOff.HasValue)
+        return new DateTime(qsoDateOff.Value.Year,
+                            qsoDateOff.Value.Month,
+                            qsoDateOff.Value.Day,
+                            0,
+                            0,
+                            0,
+                            DateTimeKind.Utc);
 
       return null;
     }
