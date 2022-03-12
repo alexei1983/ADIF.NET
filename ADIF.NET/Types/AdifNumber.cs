@@ -23,6 +23,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.Number;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Number;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="s"></param>

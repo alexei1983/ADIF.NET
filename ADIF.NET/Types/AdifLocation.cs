@@ -36,6 +36,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.Location;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Location;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="s"></param>

@@ -6,9 +6,9 @@ using ADIF.NET.Types;
 namespace ADIF.NET.Helpers {
 
   /// <summary>
-  /// Helper class for user-defined ADIF tags.
+  /// Helper class for user-defined and application-defined ADIF tags.
   /// </summary>
-  public static class UserDefHelper {
+  public static class AppUserDefHelper {
 
     /// <summary>
     /// Converts the specified value to the appropriate type based on the 
@@ -240,7 +240,26 @@ namespace ADIF.NET.Helpers {
       }
 
       return true;
+    }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fullFieldName"></param>
+    public static string[] SplitAppDefinedFieldName(string fullFieldName)
+    {
+      if (string.IsNullOrEmpty(fullFieldName))
+        throw new ArgumentException("Application-defined field name is required.", nameof(fullFieldName));
+
+      var parts = fullFieldName.Split(Values.UNDERSCORE);
+
+      if (parts.Length != 3)
+        throw new Exception($"Invalid application-defined field name: {fullFieldName}");
+
+      if (!TagNames.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE.ToString()}", StringComparison.OrdinalIgnoreCase))
+        throw new Exception($"Invalid application-defined field name: {fullFieldName}");
+
+      return parts;
     }
   }
 }

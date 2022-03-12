@@ -8,6 +8,11 @@ namespace ADIF.NET.Types {
   public class ADIFSOTARef : ADIFType<string>, IADIFType {
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.SOTARef;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="s"></param>

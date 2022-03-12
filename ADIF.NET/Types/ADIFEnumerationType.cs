@@ -13,6 +13,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.Enumeration;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Enumeration;
+
+    /// <summary>
     /// Whether or not the type is an enumeration.
     /// </summary>
     public override bool IsEnumeration => true;

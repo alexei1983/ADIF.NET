@@ -50,6 +50,53 @@ namespace TestApp {
 
     static void Main(string[] args) {
 
+      var columnMappings = ADIFColumnMappings.DefaultMinimum;
+      columnMappings.Add(new ADIFColumnMapping("MY_AMP", "MY_AMP", true, false));
+      columnMappings.Add(new ADIFColumnMapping("MY_AMP_INTL", "MY_AMP_INTL", true, false));
+      columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT_INTL", "QSO_TRANSCRIPT_INTL", true, false));
+      columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT", "QSO_TRANSCRIPT", true, false));
+      columnMappings.Add(new ADIFColumnMapping("STATE", "StateVal"));
+      columnMappings.Add(new ADIFColumnMapping("MY_STATE", "MyStateVal"));
+      columnMappings.Add(new ADIFColumnMapping("ARRL_SECT", "ARRL_SECT"));
+      columnMappings.Add(new ADIFColumnMapping("DXCC"));
+      columnMappings.Add(new ADIFColumnMapping("MY_DXCC"));
+      columnMappings.Add(new ADIFColumnMapping("LAT"));
+      columnMappings.Add(new ADIFColumnMapping("LON"));
+      columnMappings.Add(new ADIFColumnMapping("MY_LAT"));
+      columnMappings.Add(new ADIFColumnMapping("MY_LON"));
+      columnMappings.Add(new ADIFColumnMapping("SIG_INFO"));
+      columnMappings.Add(new ADIFColumnMapping("MY_SIG_INFO"));
+      columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY_INTL"));
+      columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY"));
+      columnMappings.Add(new ADIFColumnMapping("COUNTRY"));
+      columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
+
+
+      var parse = new ADXParser();
+      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
+      var result = parse.Parse();
+
+      var insertList = new List<ADIFQSO>();
+
+      using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
+      {
+        var adapter = new SQLAdapter(conn, "dbo.QSOs", result.Header) { ColumnMappings = columnMappings };
+        //foreach (var qsoInternal in result.QSOs)
+        //{
+        //  var retQso = adapter.Insert(qsoInternal);
+        //  if (retQso != null)
+        //    insertList.Add(retQso);
+        //}
+
+        var qsosNew = adapter.RetrieveByQSODateBetween(new DateTime(2021, 2, 17), new DateTime(2021, 2, 18));
+        Console.WriteLine(qsosNew.Count());
+
+      }
+
+      //Console.WriteLine(new ADIFDataSet() { Header = result.Header, QSOs = new ADIFQSOCollection(qsosNew.ToArray()) }.ToString("A"));
+
+
+      return;
       //var items = typeof(Via).GetValues().ToArray();
       //var optionValues = OptionValue.FromType(typeof(Mode), false, false);
 
@@ -114,10 +161,10 @@ namespace TestApp {
 
       var credits = Values.Credits;
 
-      var parse = new ADXParser();
-      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
+      //var parse = new ADXParser();
+      //parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
       //parse.LoadFile(@"C:\Users\S017138\Desktop\K0UOG@K-0225-20220212.adi");
-      var result = parse.Parse();
+      //var result = parse.Parse();
 
       //result.Header.Add(new ADIFVersionTag(new Version(3, 1, 2)));
       //result.AddQSOTag(new MyNameTag("Alex"));
@@ -131,62 +178,82 @@ namespace TestApp {
 
       result.CheckVersion();
 
-      var serial = new SerialNumberGenerator() { StringLength = 6 };
-
-      for (var x = 0; x < 1145; x++)
-        Console.WriteLine(serial.NextString());
-
-      var dataSet2 = new ADIFDataSet() { ADIFVersion = new Version(3, 1, 2) };
-      dataSet2.AddQSOTag(new NameTag("Alex"));
-
-      var qso1 = new ADIFQSO();
-      qso1.AddName("Bob");
-      qso1.SetQSODateTimeOn(DateTime.UtcNow);
-      qso1.SetRstRcvd(5, 8);
-      qso1.SetRstSent(5, 5);
-      qso1.SetMode("USB");
-      qso1.SetCall("W7GZP");
-      qso1.SetOperator("K0UOG");
-      qso1.SetMyAddress("14561 E Ford Pl Unit 15", "Aurora", "CO", "80012", "United States", "291");
-      qso1.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
-      qso1.SetFreq(14.320, true);
-      qso1.SetComment("Bob is cool.");
-      qso1.SetEquipment("ICOM 7100", 100);
-      qso1.SetSummitToSummit("W6/NS-0011", "W0C/FR-1099");
-      qso1.SetSatellite("Mother Ship", "K");
-      qso1.SetQRZUploaded(DateTime.UtcNow, "Y");
-      qso1.MarkEQSLSent(DateTime.UtcNow, true);
-      
-      dataSet2.AddQSOTag(new MyNameTag("Alex"));
-      var user1 = dataSet2.AddUserDefinedTagDefinition("My_Birthday", "D");
-      var user2 = dataSet2.AddUserDefinedTagDefinition("Gift_Options", "Amazon", "B&N", "HRO", "Gigaparts");
-      var user3 = dataSet2.AddUserDefinedTagDefinition("Spending_Limits", 25, 150);
+      var dataSet2 = new ADIFDataSet();
 
       var qso2 = new ADIFQSO();
-      qso2.AddName("Tom");
-      qso2.SetQSODateTimeOn(DateTime.UtcNow);
-      qso2.SetRstRcvd(3, 3);
-      qso2.SetRstSent(5, 2);
-      qso2.SetMode("USB");
-      qso2.SetCall("W7GZP");
+      qso2.SetCall("W7GZA");
       qso2.SetOperator("K0UOG");
-      qso2.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
-      qso1.SetEquipment("Yaesu FT-891", 10);
-      qso2.SetFreq(14.3255, true);
-      qso2.SetComment("Tom is also cool.");
-      qso2.SetHRDUploaded(DateTime.UtcNow, "Y");
-      qso2.MarkEQSLSent(DateTime.UtcNow, true);
-      qso2.AddUserDefinedTag(user1, new DateTime(1983, 3, 6));
-      qso2.AddUserDefinedTag(user2, "Gigaparts");
-      qso2.AddUserDefinedTag(user3, 100);
+      qso2.SetDateTimeOn(DateTime.UtcNow);
+      qso2.SetBand("20m");
+      qso2.SetMode("USB");
 
+      var qso3 = new ADIFQSO();
+      qso3.SetCall("W7GZA");
+      qso3.SetOperator("K0UOG");
+      qso3.SetDateTimeOn(DateTime.UtcNow);
+      qso3.SetBand("20m");
+      qso3.SetMode("USB");
 
-      Console.WriteLine(qso1.IsMatch(qso2));
-
-      dataSet2.QSOs.Add(qso1);
       dataSet2.QSOs.Add(qso2);
+      dataSet2.QSOs.Add(qso3);
 
-      Console.WriteLine(dataSet2.ToADX());
+
+
+
+
+
+
+
+      //dataSet2.AddQSOTag(new NameTag("Alex"));
+
+      //var qso1 = new ADIFQSO();
+      //qso1.AddName("Bob");
+      //qso1.SetQSODateTimeOn(DateTime.UtcNow);
+      //qso1.SetRstRcvd(5, 8);
+      //qso1.SetRstSent(5, 5);
+      //qso1.SetMode("USB");
+      //qso1.SetCall("W7GZP");
+      //qso1.SetOperator("K0UOG");
+      //qso1.SetMyAddress("14561 E Ford Pl Unit 15", "Aurora", "CO", "80012", "United States", "291");
+      //qso1.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
+      //qso1.SetFreq(14.320, true);
+      //qso1.SetComment("Bob is cool.");
+      //qso1.SetEquipment("ICOM 7100", 100);
+      //qso1.SetSummitToSummit("W6/NS-0011", "W0C/FR-1099");
+      //qso1.SetSatellite("Mother Ship", "K");
+      //qso1.SetQRZUploaded(DateTime.UtcNow, "Y");
+      //qso1.MarkEQSLSent(DateTime.UtcNow, true);
+      
+      //dataSet2.AddQSOTag(new MyNameTag("Alex"));
+      //var user1 = dataSet2.AddUserDefinedTagDefinition("My_Birthday", "D");
+      //var user2 = dataSet2.AddUserDefinedTagDefinition("Gift_Options", "Amazon", "B&N", "HRO", "Gigaparts");
+      //var user3 = dataSet2.AddUserDefinedTagDefinition("Spending_Limits", 25, 150);
+
+      //var qso2 = new ADIFQSO();
+      //qso2.AddName("Tom");
+      //qso2.SetQSODateTimeOn(DateTime.UtcNow);
+      //qso2.SetRstRcvd(3, 3);
+      //qso2.SetRstSent(5, 2);
+      //qso2.SetMode("USB");
+      //qso2.SetCall("W7GZP");
+      //qso2.SetOperator("K0UOG");
+      //qso2.SetMyEquipment("Yaesu FT-450D", "Alpha magloop 80m-10m", 100);
+      //qso1.SetEquipment("Yaesu FT-891", 10);
+      //qso2.SetFreq(14.3255, true);
+      //qso2.SetComment("Tom is also cool.");
+      //qso2.SetHRDUploaded(DateTime.UtcNow, "Y");
+      //qso2.MarkEQSLSent(DateTime.UtcNow, true);
+      //qso2.AddUserDefinedTag(user1, new DateTime(1983, 3, 6));
+      //qso2.AddUserDefinedTag(user2, "Gigaparts");
+      //qso2.AddUserDefinedTag(user3, 100);
+
+
+      //Console.WriteLine(qso1.IsMatch(qso2));
+
+      //dataSet2.QSOs.Add(qso1);
+      //dataSet2.QSOs.Add(qso2);
+
+      //Console.WriteLine(dataSet2.ToADX());
 
 
 

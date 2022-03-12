@@ -14,7 +14,8 @@ namespace ADIF.NET {
   public class ADIFDataSet : IFormattable {
 
     /// <summary>
-    /// Header text used on the first line of an emitted ADIF file.
+    /// Header text emitted on the first line of an ADIF file or used as an XML 
+    /// comment in an ADX file.
     /// </summary>
     public string HeaderText
     {
@@ -27,24 +28,24 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// Header tags.
+    /// Header tags belonging to the current data set.
     /// </summary>
     public ADIFHeader Header { get; set; }
 
     /// <summary>
-    /// QSO collection.
+    /// QSOs belonging to the current data set.
     /// </summary>
     public ADIFQSOCollection QSOs { get; set; }
 
     /// <summary>
-    /// 
+    /// ADIF version to target when generating the data set.
     /// </summary>
     public Version ADIFVersion
     {
       get
       {
         if (adifVer == null)
-          return Header?.GetTagValue<Version>(TagNames.ADIFVer);   
+          return Header?.GetTagValue<Version>(TagNames.ADIFVer);
         else
           return adifVer;
       }
@@ -56,21 +57,21 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFDataSet"/> class.
     /// </summary>
-    public ADIFDataSet() { }
+    public ADIFDataSet() {
+      Header = new ADIFHeader();
+      QSOs = new ADIFQSOCollection();
+    }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFDataSet"/> class.
     /// </summary>
-    /// <param name="values"></param>
-    public ADIFDataSet(IEnumerable<IDictionary<string, string>> values)
+    /// <param name="values">Tags and associated values to add to the data set.</param>
+    public ADIFDataSet(IEnumerable<IDictionary<string, string>> values) : this()
     {
       if (values != null)
       {
-        Header = new ADIFHeader();
-        QSOs = new ADIFQSOCollection();
-
         foreach (var value in values)
         {
           var qso = new ADIFQSO();
@@ -97,9 +98,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Converts the current <see cref="ADIFDataSet"/> to ADX.
     /// </summary>
-    /// <param name="flags"></param>
+    /// <param name="flags">Flags that determine how the ADX XML is generated.</param>
     public string ToADX(EmitFlags flags = EmitFlags.None)
     {
       HandleFlags(flags);
@@ -153,10 +154,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Converts the current <see cref="ADIFDataSet"/> to ADX and saves the resulting 
+    /// XML to the specified file.
     /// </summary>
-    /// <param name="outputFile"></param>
-    /// <param name="flags"></param>
+    /// <param name="outputFile">Destination file where the ADX XML will be saved.</param>
+    /// <param name="flags">Flags that determine how the ADX XML is generated.</param>
     public void ToADX(string outputFile, EmitFlags flags = EmitFlags.None)
     {
       if (string.IsNullOrEmpty(outputFile))
@@ -169,10 +171,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Converts the current <see cref="ADIFDataSet"/> to ADIF text and saves the resulting 
+    /// data to the specified file.
     /// </summary>
-    /// <param name="outputFile"></param>
-    /// <param name="flags"></param>
+    /// <param name="outputFile">Destination file where the ADIF text will be saved.</param>
+    /// <param name="flags">Flags that determine how the ADIF text is generated.</param>
     public void ToADIF(string outputFile, EmitFlags flags = EmitFlags.None)
     {
       if (string.IsNullOrEmpty(outputFile))
@@ -185,8 +188,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Converts the current <see cref="ADIFDataSet"/> to ADIF text.
     /// </summary>
+    /// <param name="flags">Flags that determine how the ADIF text is generated.</param>
     public string ToADIF(EmitFlags flags = EmitFlags.None)
     {
       var formatString = (flags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";
@@ -253,16 +257,50 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Executes the specified <paramref name="action"/> against each QSO in the current data set.
     /// </summary>
-    /// <param name="tag"></param>
+    /// <param name="action">Action to execute against each QSO.</param>
+    /// <param name="endOnException">Whether or not to stop processing QSOs when an exception is thrown.</param>
+    public void ForEachQSO(Action<ADIFQSO> action, bool endOnException = false)
+    {
+      if (action == null)
+        throw new ArgumentNullException(nameof(action), "Action is required.");
+
+      if (QSOs == null)
+        QSOs = new ADIFQSOCollection();
+
+      var exceptions = new List<Exception>();
+
+      foreach (var qso in QSOs)
+      {
+        try
+        {
+          action(qso);
+        }
+        catch (Exception ex)
+        {
+          if (endOnException)
+            throw ex;
+
+          exceptions.Add(ex);
+        }
+      }
+
+      if (exceptions.Count > 0)
+        throw new AggregateException(exceptions.ToArray());
+    }
+
+    /// <summary>
+    /// Adds the specified tag to each QSO in the current data set.
+    /// </summary>
+    /// <param name="tag">QSO tag to add.</param>
     public void AddQSOTag(ITag tag)
     {
       if (tag is null)
         return;
 
       if (tag.Header)
-        throw new Exception("Tag must not be a header tag.");
+        throw new ArgumentException("Tag must not be a header tag.", nameof(tag));
 
       if (QSOs == null)
         QSOs = new ADIFQSOCollection();
@@ -275,16 +313,16 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds or replaces the specified tag in each QSO in the current data set.
     /// </summary>
-    /// <param name="tag"></param>
+    /// <param name="tag">Tag to add or replace.</param>
     public void AddOrReplaceQSOTag(ITag tag)
     {
       if (tag is null)
         return;
 
       if (tag.Header)
-        throw new Exception("Tag must not be a header tag.");
+        throw new ArgumentException("Tag must not be a header tag.", nameof(tag));
 
       if (QSOs == null)
         QSOs = new ADIFQSOCollection();
@@ -294,16 +332,31 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds the specified QSO to the current data set.
     /// </summary>
-    /// <param name="tag"></param>
+    /// <param name="qso">QSO to add.</param>
+    public void AddQSO(ADIFQSO qso)
+    {
+      if (qso == null)
+        throw new ArgumentNullException(nameof(qso), "QSO is required.");
+
+      if (QSOs == null)
+        QSOs = new ADIFQSOCollection();
+
+      QSOs.Add(qso);
+    }
+
+    /// <summary>
+    /// Adds the specified tag to the header for the current data set.
+    /// </summary>
+    /// <param name="tag">Header tag to add.</param>
     public void AddHeaderTag(ITag tag)
     {
       if (tag is null)
         return;
 
       if (!tag.Header)
-        throw new Exception("Tag must be a header tag.");
+        throw new ArgumentException("Tag must be a header tag.", nameof(tag));
 
       if (Header == null)
         Header = new ADIFHeader();
@@ -312,16 +365,16 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds or replaces the specified tag in the header for the current data set.
     /// </summary>
-    /// <param name="tag"></param>
+    /// <param name="tag">Header tag to add or replace.</param>
     public void AddOrReplaceHeaderTag(ITag tag)
     {
       if (tag is null)
         return;
 
       if (!tag.Header)
-        throw new Exception("Tag must be a header tag.");
+        throw new ArgumentException("Tag must be a header tag.", nameof(tag));
 
       if (Header == null)
         Header = new ADIFHeader();
@@ -330,10 +383,10 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds a user-defined tag definition to the current data set.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="dataType"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="dataType">ADIF data type of the user-defined field.</param>
     public UserDefTag AddUserDefinedTagDefinition(string fieldName, string dataType)
     {
       if (Header == null)
@@ -343,10 +396,10 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds a user-defined tag definition to the current data set.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="options"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="options">Custom enumeration values for the user-defined field.</param>
     public UserDefTag AddUserDefinedTagDefinition(string fieldName, params string[] options)
     {
       if (Header == null)
@@ -356,11 +409,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Adds a user-defined tag definition to the current data set.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="upperBound"></param>
-    /// <param name="lowerBound"></param>
+    /// <param name="fieldName">Name of the user-defined field.</param>
+    /// <param name="lowerBound">Minimum valid numeric value.</param>
+    /// <param name="upperBound">Maximum valid numeric value.</param>
     public UserDefTag AddUserDefinedTagDefinition(string fieldName, double lowerBound, double upperBound)
     {
       if (Header == null)
@@ -370,7 +423,7 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Validates the tags in the current data set against the ADIF version specified in the ADIF_VER tag.
     /// </summary>
     public void CheckVersion()
     {
@@ -387,9 +440,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Validates the tags in the current data set against the specified ADIF version.
     /// </summary>
-    /// <param name="version"></param>
+    /// <param name="version">ADIF version to validate against.</param>
     public void CheckVersion(Version version)
     {
       if (version == null)
@@ -532,6 +585,10 @@ namespace ADIF.NET {
           }
 
           return val;
+
+        case "X":
+        case "x":
+          return ToADX();
 
         default:
           throw new FormatException($"Format string '{format}' is not valid.");

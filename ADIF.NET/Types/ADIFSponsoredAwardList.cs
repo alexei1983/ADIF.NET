@@ -15,6 +15,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.SponsoredAwardList;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.SponsoredAwardList;
+
+    /// <summary>
     /// 
     /// </summary>
     public override bool MultiValue => true;

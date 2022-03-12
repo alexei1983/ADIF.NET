@@ -101,7 +101,7 @@ namespace ADIF.NET {
     /// Adds a <see cref="QSODateTag"/> to the current QSO.
     /// </summary>
     /// <param name="qsoDate">Date to add as the QSO date.</param>
-    public void AddQSODate(DateTime qsoDate)
+    public void AddDateOn(DateTime qsoDate)
     {
       Add(new QSODateTag(qsoDate));
     }
@@ -110,7 +110,7 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDate"></param>
-    public void SetQSODate(DateTime qsoDate)
+    public void SetDateOn(DateTime qsoDate)
     {
       AddOrReplace(new QSODateTag(qsoDate));
     }
@@ -119,9 +119,9 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateTimeOn"></param>
-    public void AddQSODateTimeOn(DateTime qsoDateTimeOn)
+    public void AddDateTimeOn(DateTime qsoDateTimeOn)
     {
-      AddQSODate(qsoDateTimeOn);
+      AddDateOn(qsoDateTimeOn);
       AddTimeOn(qsoDateTimeOn);
     }
 
@@ -129,9 +129,9 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateTimeOn"></param>
-    public void SetQSODateTimeOn(DateTime qsoDateTimeOn)
+    public void SetDateTimeOn(DateTime qsoDateTimeOn)
     {
-      SetQSODate(qsoDateTimeOn);
+      SetDateOn(qsoDateTimeOn);
       SetTimeOn(qsoDateTimeOn);
     }
 
@@ -139,9 +139,9 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateTimeOff"></param>
-    public void SetQSODateTimeOff(DateTime qsoDateTimeOff)
+    public void SetDateTimeOff(DateTime qsoDateTimeOff)
     {
-      SetQSODateOff(qsoDateTimeOff);
+      SetDateOff(qsoDateTimeOff);
       SetTimeOff(qsoDateTimeOff);
     }
 
@@ -149,9 +149,9 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateTimeOff"></param>
-    public void AddQSODateTimeOff(DateTime qsoDateTimeOff)
+    public void AddDateTimeOff(DateTime qsoDateTimeOff)
     {
-      AddQSODateOff(qsoDateTimeOff);
+      AddDateOff(qsoDateTimeOff);
       AddTimeOff(qsoDateTimeOff);
     }
 
@@ -159,7 +159,7 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateOff"></param>
-    public void AddQSODateOff(DateTime qsoDateOff)
+    public void AddDateOff(DateTime qsoDateOff)
     {
       Add(new QSODateOffTag(qsoDateOff));
     }
@@ -168,7 +168,7 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="qsoDateOff"></param>
-    public void SetQSODateOff(DateTime qsoDateOff)
+    public void SetDateOff(DateTime qsoDateOff)
     {
       AddOrReplace(new QSODateOffTag(qsoDateOff));
     }
@@ -1572,6 +1572,42 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="sfi"></param>
+    /// <param name="aIndex"></param>
+    /// <param name="kIndex"></param>
+    public void AddBandConditions(int sfi, int aIndex, int kIndex)
+    {
+      if (sfi >= 0)
+        Add(new SFITag(sfi));
+
+      if (aIndex >= 0)
+        Add(new AIndexTag(aIndex));
+
+      if (kIndex >= 0)
+        Add(new KIndexTag(kIndex));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sfi"></param>
+    /// <param name="aIndex"></param>
+    /// <param name="kIndex"></param>
+    public void SetBandConditions(int sfi, int aIndex, int kIndex)
+    {
+      if (sfi >= 0)
+        AddOrReplace(new SFITag(sfi));
+
+      if (aIndex >= 0)
+        AddOrReplace(new AIndexTag(aIndex));
+
+      if (kIndex >= 0)
+        AddOrReplace(new KIndexTag(kIndex));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="showerName"></param>
     /// <param name="bursts"></param>
     /// <param name="pings"></param>
@@ -1673,6 +1709,24 @@ namespace ADIF.NET {
 
       if (!string.IsNullOrEmpty(mySotaRef))
         AddOrReplace(new MySOTARefTag(mySotaRef));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetSIG()
+    {
+      var sigIntl = GetTagValue<string>(TagNames.SigIntl);
+      return string.IsNullOrEmpty(sigIntl) ? GetTagValue<string>(TagNames.Sig) : sigIntl;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetSIGInfo()
+    {
+      var sigInfoIntl = GetTagValue<string>(TagNames.SigInfoIntl);
+      return string.IsNullOrEmpty(sigInfoIntl) ? GetTagValue<string>(TagNames.SigInfo) : sigInfoIntl;
     }
 
     /// <summary>
@@ -1919,5 +1973,7 @@ namespace ADIF.NET {
 
       return true;
     }
+
+
   }
 }

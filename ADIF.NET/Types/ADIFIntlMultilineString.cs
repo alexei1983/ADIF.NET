@@ -12,6 +12,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.IntlMultilineString;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.IntlMultilineString;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="s"></param>

@@ -15,9 +15,14 @@ namespace ADIF.NET.Types {
     public virtual Type UnderlyingType => typeof(T);
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public virtual string Type { get; }
+
+    /// <summary>
+    /// ADIF type name.
+    /// </summary>
+    public virtual string TypeName { get; }
 
     /// <summary>
     /// 

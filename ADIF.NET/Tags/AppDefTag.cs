@@ -26,15 +26,15 @@ namespace ADIF.NET.Tags {
 
       get {
         return programId;
-        }
+      }
 
       set {
         if (value != null && value.Contains(Values.UNDERSCORE.ToString()))
           throw new ArgumentException("Program ID cannot contain an underscore.");
 
         programId = value;
-        }
       }
+    }
 
     /// <summary>
     /// ADIF data type indicator.
@@ -72,6 +72,31 @@ namespace ADIF.NET.Tags {
     public AppDefTag(string fieldName, string programId, string dataType) : this(fieldName, programId, dataType, null) { }
 
     /// <summary>
+    /// Creates a new application-defined field.
+    /// </summary>
+    /// <param name="fullFieldName"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public AppDefTag(string fullFieldName, string dataType, object value)
+    {
+      var fieldParts = AppUserDefHelper.SplitAppDefinedFieldName(fullFieldName);
+
+      ProgramId = fieldParts[1];
+      FieldName = fieldParts[2];
+      DataType = dataType;
+
+      if (value != null)
+        SetValue(value);
+    }
+
+    /// <summary>
+    /// Creates a new application-defined field.
+    /// </summary>
+    /// <param name="fullFieldName"></param>
+    /// <param name="value"></param>
+    public AppDefTag(string fullFieldName, object value) : this(fullFieldName, null, value) { }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="value"></param>
@@ -87,7 +112,7 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
-      return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
+      return !(value is null) ? AppUserDefHelper.ConvertValueByType(value, DataType) : null;
     }
 
     /// <summary>

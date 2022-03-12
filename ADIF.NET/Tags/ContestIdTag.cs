@@ -12,7 +12,7 @@ namespace ADIF.NET.Tags {
     public override string Name => TagNames.ContestId;
 
     /// <summary>
-    /// Valid enumeration options.
+    /// Valid enumeration values.
     /// </summary>
     public override ADIFEnumeration Options => Values.Contests;
 

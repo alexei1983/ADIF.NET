@@ -9,10 +9,19 @@ namespace ADIF.NET.Types {
   public class ADIFTime : ADIFType<DateTime> {
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Time;
 
+    /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Time;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
     public static DateTime Parse(string s)
     {
       if (!FromString(s, out DateTime result))
@@ -21,11 +30,20 @@ namespace ADIF.NET.Types {
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     public static bool TryParse(string s, out DateTime result)
     {
       return FromString(s, out result);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(object value)
     {
       if (value is DateTime || value is DateTime?)
@@ -34,11 +52,20 @@ namespace ADIF.NET.Types {
       return FromString(value == null ? string.Empty : value.ToString(), out DateTime _);  
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(string value)
     {
       return FromString(value == null ? string.Empty : value.ToString(), out DateTime _);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     static bool FromString(string s, out DateTime result)
     {
       var success = false;

@@ -17,6 +17,11 @@ namespace ADIF.NET.Types {
     public override string Type => DataTypes.CreditList;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.CreditList;
+
+    /// <summary>
     /// Whether or not the type is multivalued.
     /// </summary>
     public override bool MultiValue => true;

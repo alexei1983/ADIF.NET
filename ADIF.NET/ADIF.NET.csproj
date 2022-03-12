@@ -79,6 +79,7 @@
     <Compile Include="Attributes\ImportOnlyAttribute.cs" />
     <Compile Include="Attributes\LegacyValueAttribute.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="CSVAdapter.cs" />
     <Compile Include="Exceptions\ADIFParseException.cs" />
     <Compile Include="Exceptions\ADXParseException.cs" />
     <Compile Include="Exceptions\AdministrativeSubdivisionException.cs" />
@@ -104,6 +105,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SerialNumberGenerator.cs" />
+    <Compile Include="SQLAdapter.cs" />
     <Compile Include="TagFactory.cs" />
     <Compile Include="Tags\AddressIntlTag.cs" />
     <Compile Include="Tags\AwardGrantedTag.cs" />

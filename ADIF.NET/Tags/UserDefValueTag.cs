@@ -29,7 +29,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// ADIF type.
     /// </summary>
-    public override IADIFType ADIFType => UserDefHelper.GetADIFType(field.DataType);
+    public override IADIFType ADIFType => AppUserDefHelper.GetADIFType(field.DataType);
 
     /// <summary>
     /// Whether or not the tag is a user-defined tag.
@@ -140,7 +140,7 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
-      return !(value is null) ? UserDefHelper.ConvertValueByType(value, DataType) : null;
+      return !(value is null) ? AppUserDefHelper.ConvertValueByType(value, DataType) : null;
     }
 
     /// <summary>

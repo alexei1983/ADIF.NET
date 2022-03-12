@@ -216,7 +216,7 @@ namespace ADIF.NET.Tags {
     /// </summary>
     public virtual bool HasValue()
     {
-      return Value == null || string.IsNullOrEmpty(TextValue);
+      return !(Value == null || string.IsNullOrEmpty(TextValue));
     }
 
     /// <summary>

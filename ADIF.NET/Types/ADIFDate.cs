@@ -9,9 +9,14 @@ namespace ADIF.NET.Types {
   public class ADIFDate : ADIFType<DateTime> {
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Date;
+
+    /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Date;
 
     /// <summary>
     /// 

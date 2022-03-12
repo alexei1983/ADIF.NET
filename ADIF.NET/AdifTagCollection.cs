@@ -29,18 +29,35 @@ namespace ADIF.NET {
         }
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public int Count => tags.Count;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public bool IsReadOnly => false;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public ADIFTagCollection() {
       tags = new List<ITag>();
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tags"></param>
     public ADIFTagCollection(params ITag[] tags) : this() {
       AddRange(tags);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
     public virtual void Add(ITag tag) {
       if (tag is null)
         return;
@@ -48,6 +65,10 @@ namespace ADIF.NET {
       tags.Add(tag);   
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tags"></param>
     public virtual void AddRange(params ITag[] tags) {
       if (tags != null) {
         foreach (var tag in tags)
@@ -55,15 +76,28 @@ namespace ADIF.NET {
         }
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
     public virtual bool Contains(ITag tag) {
       return tags.Contains(tag);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
     public virtual bool Contains(string tagName) {
       return tags.FirstOrDefault(t => t.Name.Equals(tagName, 
                                                     StringComparison.OrdinalIgnoreCase)) != null;
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="tag"></param>
     public virtual void Insert(int index, ITag tag) {
 
       if (tag is null)
@@ -72,6 +106,10 @@ namespace ADIF.NET {
       tags.Insert(index, tag);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
     public virtual bool Remove(ITag tag) {
 
       if (tag is null)
@@ -80,14 +118,25 @@ namespace ADIF.NET {
       return tags.Remove(tag);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
     public virtual void RemoveAt(int index) {
       tags.RemoveAt(index);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public virtual void Clear() {
       tags.Clear();
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tag"></param>
     public virtual int IndexOf(ITag tag) {
       if (tag is null)
         return -1;
@@ -95,6 +144,10 @@ namespace ADIF.NET {
       return tags.IndexOf(tag);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagName"></param>
     public virtual int IndexOf(string tagName)
     {
       if (string.IsNullOrEmpty(tagName))
@@ -209,18 +262,33 @@ namespace ADIF.NET {
       return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="arrayIndex"></param>
     public void CopyTo(ITag[] array, int arrayIndex) {
       tags.CopyTo(array, arrayIndex);
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public IEnumerator<ITag> GetEnumerator() {
       return tags.GetEnumerator();
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
     IEnumerator IEnumerable.GetEnumerator() {
       return tags.GetEnumerator();
       }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tagType"></param>
     public virtual bool Contains(Type tagType) {
       return this.FirstOrDefault(t => tagType.Equals(t.GetType())) != null;
       }

@@ -24,7 +24,7 @@ namespace ADIF.NET.Tags {
       set
       {
         if (value != null)
-          UserDefHelper.ValidateFieldName(value);
+          AppUserDefHelper.ValidateFieldName(value);
 
         fieldName = value;
       }

@@ -15,6 +15,11 @@ namespace ADIF.NET.Types {
     public override string Type => string.Empty;
 
     /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.GridSquare;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="s"></param>

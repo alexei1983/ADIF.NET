@@ -13,9 +13,14 @@ namespace ADIF.NET.Types {
     public override bool IsEnumeration => true;
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     public override string Type => DataTypes.Boolean;
+
+    /// <summary>
+    /// ADIF data type name.
+    /// </summary>
+    public override string TypeName => DataTypeNames.Boolean;
 
     /// <summary>
     /// 
@@ -29,11 +34,20 @@ namespace ADIF.NET.Types {
       return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     public static bool TryParse(string s, out bool? result)
     {
       return FromString(s, out result);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(object value)
     {
       if (value is bool || value is bool?)
@@ -42,11 +56,20 @@ namespace ADIF.NET.Types {
       return FromString(value == null ? string.Empty : value.ToString(), out bool? _);  
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public static bool IsValidValue(string value)
     {
-      return FromString(value == null ? string.Empty : value, out bool? _);
+      return FromString(value ?? string.Empty, out bool? _);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="result"></param>
     static bool FromString(string s, out bool? result)
     {
       var success = false;

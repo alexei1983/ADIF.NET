@@ -9,5 +9,12 @@ namespace ADIF.NET {
   public class ADIFQSOCollection : List<ADIFQSO>, IList<ADIFQSO>, ICollection<ADIFQSO>, 
                                    ICollection, IEnumerable, IEnumerable<ADIFQSO> {
 
+    public ADIFQSOCollection() { }
+
+    public ADIFQSOCollection(params ADIFQSO[] qsos)
+    {
+      if (qsos != null)
+        AddRange(qsos);
+    }
   }
 }

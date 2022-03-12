@@ -28,11 +28,6 @@ namespace ADIF.NET {
     public const string ADIF_TIME_FORMAT_SHORT = "HHmm";
 
     /// <summary>
-    /// Regex used for validating email addresses.
-    /// </summary>
-    public const string EMAIL_ADDRESS_REGEX = @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
-
-    /// <summary>
     /// Character that represents the opening of an ADIF tag.
     /// </summary>
     public const char TAG_OPENING = '<';
@@ -110,7 +105,7 @@ namespace ADIF.NET {
     /// <summary>
     /// Default program ID used in generated ADIF files.
     /// </summary>
-    public const string DEFAULT_PROGRAM_ID = "ADIF.NET";
+    public const string DEFAULT_PROGRAM_ID = "ADIFNET";
 
     /// <summary>
     /// Default header text on the first line of an ADIF file.
@@ -476,7 +471,21 @@ namespace ADIF.NET {
     {
       var names = GetTagNames().Where(c => c.Equals(name, StringComparison.OrdinalIgnoreCase))?.ToArray();
       return names != null && names.Length > 0;
-      
+    }
+
+    /// <summary>
+    /// Retrieves all ADIF QSO tag names.
+    /// </summary>
+    public static IEnumerable<string> GetQSOTagNames()
+    {
+      var constants = typeof(TagNames).GetConstants(typeof(string));
+      return constants.Select(c => c.GetRawConstantValue().ToString())
+                      .Where((c) =>
+      {
+        return !ADIFVer.Equals(c) && !CreatedTimestamp.Equals(c) &&
+               !UserDef.Equals(c) && !ProgramId.Equals(c) && !ProgramVersion.Equals(c) &&
+               !AppDef.Equals(c);
+      });
     }
   }
 
@@ -860,14 +869,10 @@ namespace ADIF.NET {
   [Enumeration]
   public static class DataTypes {
 
-    [DisplayName("Award List")]
-    [ImportOnly]
     public const string AwardList = "A";
 
-    [DisplayName("Credit List")]
     public const string CreditList = "C";
 
-    [DisplayName("Sponsored Award List")]
     public const string SponsoredAwardList = "P";
 
     public const string Boolean = "B";
@@ -878,7 +883,6 @@ namespace ADIF.NET {
 
     public const string Character = "S";
 
-    [DisplayName("International Character")]
     public const string IntlCharacter = "I";
 
     public const string Date = "D";
@@ -887,18 +891,148 @@ namespace ADIF.NET {
 
     public const string String = "S";
 
-    [DisplayName("International String")]
     public const string IntlString = "I";
 
-    [DisplayName("Multiline String")]
     public const string MultilineString = "M";
 
-    [DisplayName("International Multiline String")]
     public const string IntlMultilineString = "G";
 
     public const string Enumeration = "E";
 
     public const string Location = "L";
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class DataTypeNames {
+
+    /// <summary>
+    /// A comma-delimited list of members of the ADIF Award enumeration.
+    /// </summary>
+    public const string AwardList = "AwardList";
+
+    /// <summary>
+    /// A comma-delimited list where each list item is either: a member of the ADIF Credit enumeration or a member of the 
+    /// ADIF Credit enumeration followed by a colon and an ampersand-delimited list of members of the ADIF QSL_Medium enumeration.
+    /// </summary>
+    public const string CreditList = "CreditList";
+
+    /// <summary>
+    /// A comma-delimited list of members of the ADIF Sponsored_Award enumeration.
+    /// </summary>
+    public const string SponsoredAwardList = "SponsoredAwardList";
+
+    /// <summary>
+    /// An ADIF boolean value where <see cref="true"/> is represented by 'Y' or 'y' and <see cref="false"/> is 
+    /// represented by 'N' or 'n'.
+    /// </summary>
+    public const string Boolean = "Boolean";
+
+    /// <summary>
+    /// An ASCII character whose code lies in the range of 48 through 57, inclusive.
+    /// </summary>
+    public const string Digit = "Digit";
+
+    /// <summary>
+    /// A sequence of one or more Digits representing a decimal number, optionally preceded by a minus sign and optionally 
+    /// including a single decimal point.
+    /// </summary>
+    public const string Number = "Number";
+
+    /// <summary>
+    /// An ASCII character whose code lies in the range of 32 through 126, inclusive.
+    /// </summary>
+    public const string Character = "Character";
+
+    /// <summary>
+    /// A Unicode character (encoded with UTF-8) excluding line break CR (code 13) and LF (code 10) characters.
+    /// </summary>
+    public const string IntlCharacter = "IntlCharacter";
+
+    /// <summary>
+    /// ADIF Date type consisting of 8 Digits representing a UTC date in YYYYMMDD format.
+    /// </summary>
+    public const string Date = "Date";
+
+    /// <summary>
+    /// ADIF Time type consisting of 6 Digits representing a UTC time in HHMMSS format or 4 Digits 
+    /// representing a UTC time in HHMM format.
+    /// </summary>
+    public const string Time = "Time";
+
+    /// <summary>
+    /// ADIF String type consisting of a sequence of Characters.
+    /// </summary>
+    public const string String = "String";
+
+    /// <summary>
+    /// ADIF IntlString type consisting of a sequence of International Characters. 
+    /// </summary>
+    public const string IntlString = "IntlMultilineString";
+
+    /// <summary>
+    /// ADIF MultilineString type consisting of a sequence of Characters and line-breaks, where a line break is an ASCII CR (code 13) 
+    /// followed immediately by an ASCII LF (code 10).
+    /// </summary>
+    public const string MultilineString = "MultilineString";
+
+    /// <summary>
+    /// ADIF IntlMultilineString type consisting of a sequence of International Characters and line breaks. 
+    /// </summary>
+    public const string IntlMultilineString = "G";
+
+    /// <summary>
+    /// ADIF Enumeration type consisting of an explicit list of legal case-insensitive values represented in ASCII set 
+    /// forth in set notation, e.g. {A, B, C, D}, or defined in a table.
+    /// </summary>
+    public const string Enumeration = "Enumeration";
+
+    /// <summary>
+    /// ADIF Location type consisting of a sequence of 11 characters representing a latitude or longitude in XDDD MM.MMM format, 
+    /// where X is a directional character from the set {E, W, N, S}, DDD is a 3-digit degrees specifier, where 
+    /// 0 &lt;= DDD &lt;= 180, and MM.MMM is an unsigned Number minutes specifier with its decimal point 
+    /// in the third position, where 00.000 &lt;= MM.MMM &lt;= 59.999. 
+    /// </summary>
+    public const string Location = "Location";
+
+    /// <summary>
+    /// ADIF GridSquare type consisting of a case-insensitive 2-character, 4-character, 6-character, or 8-character Maidenhead locator.
+    /// </summary>
+    public const string GridSquare = "GridSquare";
+
+    /// <summary>
+    /// ADIF GridSquareList type consisting of a comma-delimited list of <see cref="GridSquare"/> items.
+    /// </summary>
+    public const string GridSquareList = "GridSquareList";
+
+    /// <summary>
+    /// ADIF PositiveInteger type: an unsigned sequence of one or more <see cref="Digit"/>s representing a decimal 
+    /// integer that has a value greater than 0.
+    /// </summary>
+    public const string PositiveInteger = "PositiveInteger";
+
+    /// <summary>
+    /// ADIF SecondarySubdivisionList type: a colon-delimited list of two or more members of the ADIF Secondary_Administrative_Subdivision enumeration.
+    /// </summary>
+    public const string SecondarySubdivisionList = "SecondarySubdivisionList";
+
+    /// <summary>
+    /// ADIF SOTARef type: a sequence of <see cref="Character"/>s representing an International SOTA Reference.
+    /// </summary>
+    public const string SOTARef = "SOTARef";
+
+    /// <summary>
+    /// ADIF IOTARefNo type: an IOTA designator, in format CC-XXX, where CC is a member of the ADIF Continent enumeration
+    /// and XXX is the island group designator, where 1 &lt= XXX &lt= 999 with leading zeros.
+    /// </summary>
+    public const string IOTARefNo = "IOTARefNo";
+
+    /// <summary>
+    /// ADIF Integer type: a sequence of one or more <see cref="Digit"/>s representing a decimal integer, optionally preceded 
+    /// by a minus sign (ASCII code 45).
+    /// </summary>
+    public const string Integer = "Integer";
   }
 
   /// <summary>
