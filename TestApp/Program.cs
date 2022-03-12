@@ -50,26 +50,26 @@ namespace TestApp {
 
     static void Main(string[] args) {
 
-      var columnMappings = ADIFColumnMappings.DefaultMinimum;
-      columnMappings.Add(new ADIFColumnMapping("MY_AMP", "MY_AMP", true, false));
-      columnMappings.Add(new ADIFColumnMapping("MY_AMP_INTL", "MY_AMP_INTL", true, false));
-      columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT_INTL", "QSO_TRANSCRIPT_INTL", true, false));
-      columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT", "QSO_TRANSCRIPT", true, false));
-      columnMappings.Add(new ADIFColumnMapping("STATE", "StateVal"));
-      columnMappings.Add(new ADIFColumnMapping("MY_STATE", "MyStateVal"));
-      columnMappings.Add(new ADIFColumnMapping("ARRL_SECT", "ARRL_SECT"));
-      columnMappings.Add(new ADIFColumnMapping("DXCC"));
-      columnMappings.Add(new ADIFColumnMapping("MY_DXCC"));
-      columnMappings.Add(new ADIFColumnMapping("LAT"));
-      columnMappings.Add(new ADIFColumnMapping("LON"));
-      columnMappings.Add(new ADIFColumnMapping("MY_LAT"));
-      columnMappings.Add(new ADIFColumnMapping("MY_LON"));
-      columnMappings.Add(new ADIFColumnMapping("SIG_INFO"));
-      columnMappings.Add(new ADIFColumnMapping("MY_SIG_INFO"));
-      columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY_INTL"));
-      columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY"));
-      columnMappings.Add(new ADIFColumnMapping("COUNTRY"));
-      columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
+      var columnMappings = ADIFColumnMappings.All;
+      //columnMappings.Add(new ADIFColumnMapping("MY_AMP", "MY_AMP", true, false));
+      //columnMappings.Add(new ADIFColumnMapping("MY_AMP_INTL", "MY_AMP_INTL", true, false));
+      //columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT_INTL", "QSO_TRANSCRIPT_INTL", true, false));
+      //columnMappings.Add(new ADIFColumnMapping("QSO_TRANSCRIPT", "QSO_TRANSCRIPT", true, false));
+      //columnMappings.Add(new ADIFColumnMapping("STATE", "StateVal"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_STATE", "MyStateVal"));
+      //columnMappings.Add(new ADIFColumnMapping("ARRL_SECT", "ARRL_SECT"));
+      //columnMappings.Add(new ADIFColumnMapping("DXCC"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_DXCC"));
+      //columnMappings.Add(new ADIFColumnMapping("LAT"));
+      //columnMappings.Add(new ADIFColumnMapping("LON"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_LAT"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_LON"));
+      //columnMappings.Add(new ADIFColumnMapping("SIG_INFO"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_SIG_INFO"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY_INTL"));
+      //columnMappings.Add(new ADIFColumnMapping("MY_COUNTRY"));
+      //columnMappings.Add(new ADIFColumnMapping("COUNTRY"));
+      //columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
 
 
       var parse = new ADXParser();
@@ -81,12 +81,12 @@ namespace TestApp {
       using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
       {
         var adapter = new SQLAdapter(conn, "dbo.QSOs", result.Header) { ColumnMappings = columnMappings };
-        //foreach (var qsoInternal in result.QSOs)
-        //{
-        //  var retQso = adapter.Insert(qsoInternal);
-        //  if (retQso != null)
-        //    insertList.Add(retQso);
-        //}
+        foreach (var qsoInternal in result.QSOs)
+        {
+          var retQso = adapter.Insert(qsoInternal);
+          if (retQso != null)
+            insertList.Add(retQso);
+        }
 
         var qsosNew = adapter.RetrieveByQSODateBetween(new DateTime(2021, 2, 17), new DateTime(2021, 2, 18));
         Console.WriteLine(qsosNew.Count());

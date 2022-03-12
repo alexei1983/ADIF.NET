@@ -6,6 +6,13 @@ using ADIF.NET.Tags;
 
 namespace ADIF.NET {
 
+  public enum ReservedFieldEscape {
+    Brackets,
+    DoubleQuotes,
+    SingleQuotes,
+    Backticks
+  }
+
   /// <summary>
   /// 
   /// </summary>
@@ -20,6 +27,11 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     public string QSOTable { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public ReservedFieldEscape ReservedFieldsEscapedBy { get; set; } = ReservedFieldEscape.Brackets;
 
     /// <summary>
     /// 
@@ -113,7 +125,7 @@ namespace ADIF.NET {
           qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, Values.DEFAULT_PROGRAM_ID, uniqueId);
         }
 
-        commandText += $"{UNIQ_ID_SQL_COL},";
+        commandText += $"{EscapeSQLColumn(UNIQ_ID_SQL_COL)},";
         parameterText += $"{ParameterPrefix}{UNIQ_ID_SQL_COL},";
         command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
 
@@ -127,7 +139,7 @@ namespace ADIF.NET {
           if (columnNameMapping == null || string.IsNullOrEmpty(columnNameMapping.ColumnName))
             continue;
 
-          commandText += $"{columnNameMapping.ColumnName},";
+          commandText += $"{EscapeSQLColumn(columnNameMapping.ColumnName)},";
           parameterText += $"{ParameterPrefix}{columnNameMapping.ColumnName},";
           command.Parameters.Add(GetParameter(command, tag, columnNameMapping));
         }
@@ -174,12 +186,12 @@ namespace ADIF.NET {
           if (columnNameMapping == null || string.IsNullOrEmpty(columnNameMapping.ColumnName))
             continue;
 
-          commandText += $"{columnNameMapping.ColumnName} = {ParameterPrefix}{columnNameMapping.ColumnName},";
+          commandText += $"{EscapeSQLColumn(columnNameMapping.ColumnName)} = {ParameterPrefix}{columnNameMapping.ColumnName},";
           command.Parameters.Add(GetParameter(command, tag, columnNameMapping));
         }
 
         commandText = commandText.Trim(',');
-        command.CommandText = $"{commandText} WHERE {UNIQ_ID_SQL_COL} = {ParameterPrefix}{UNIQ_ID_SQL_COL}";
+        command.CommandText = $"{commandText} WHERE {EscapeSQLColumn(UNIQ_ID_SQL_COL)} = {ParameterPrefix}{UNIQ_ID_SQL_COL}";
         command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
 
         if (command.Parameters.Count > 1)
@@ -189,7 +201,83 @@ namespace ADIF.NET {
       return false;
     }
 
+    /// <summary>
+    /// Deletes the specified QSO from the database.
+    /// </summary>
+    /// <param name="qso">QSO to delete.</param>
+    public bool Delete(ADIFQSO qso)
+    {
+      if (qso == null)
+        throw new ArgumentNullException(nameof(qso), "QSO cannot be null.");
+
+      if (qso.Count < 1)
+        return false;
+
+      var uniqueId = qso.GetTagValue<string>(UNIQ_ID_APP_DEF_FIELD);
+
+      if (string.IsNullOrEmpty(uniqueId))
+        throw new Exception("Cannot delete QSO: no unique ID found.");
+
+      Connect();
+
+      using (var command = Connection.CreateCommand())
+      {
+        command.CommandText = $"DELETE FROM {QSOTable} WHERE {EscapeSQLColumn(UNIQ_ID_SQL_COL)} = {ParameterPrefix}{UNIQ_ID_SQL_COL}";
+        command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
+
+        if (command.Parameters.Count > 0)
+          return command.ExecuteNonQuery() > 0;
+      }
+
+      return false;
+    }
+
     #region Generic Retrieve Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sqlQuery"></param>
+    /// <param name="parameters"></param>
+    public IEnumerable<ADIFQSO> RetrieveByQuery(string sqlQuery, params IDbDataParameter[] parameters)
+    {
+      if (string.IsNullOrEmpty(sqlQuery))
+        throw new ArgumentException("SQL query is required.", nameof(sqlQuery));
+
+      using (var command = Connection.CreateCommand())
+      {
+        command.CommandText = sqlQuery;
+
+        if (parameters != null)
+        {
+          foreach (var parameter in parameters)
+          {
+            if (parameter != null)
+              command.Parameters.Add(parameter);
+          }
+        }
+
+        using (var reader = command.ExecuteReader())
+        {
+          while (reader != null && reader.Read())
+          {
+            var qso = GetQSOFromReader(reader);
+
+            if (qso.Count > 0)
+              yield return qso;
+          }
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sqlQuery"></param>
+    public IEnumerable<ADIFQSO> RetrieveByQuery(string sqlQuery)
+    {
+      return RetrieveByQuery(sqlQuery, null);
+    }
 
     /// <summary>
     /// 
@@ -206,7 +294,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} = {ParameterPrefix}{columnMapping.ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} = {ParameterPrefix}{columnMapping.ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
         using (var reader = command.ExecuteReader())
@@ -252,12 +340,12 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMappings[0].ColumnName} = {ParameterPrefix}{columnMappings[0].ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMappings[0].ColumnName)} = {ParameterPrefix}{columnMappings[0].ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMappings[0].ColumnName, searchValues[0]));
 
         for (var c = 1; c < columnMappings.Length; c++)
         {
-          command.CommandText = $"{command.CommandText} AND {columnMappings[c].ColumnName} = {ParameterPrefix}{columnMappings[c].ColumnName}";
+          command.CommandText = $"{command.CommandText} AND {EscapeSQLColumn(columnMappings[c].ColumnName)} = {ParameterPrefix}{columnMappings[c].ColumnName}";
           command.Parameters.Add(GetParameter(command, columnMappings[c].ColumnName, searchValues[c]));
         }
 
@@ -289,7 +377,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} > {ParameterPrefix}{columnMapping.ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} > {ParameterPrefix}{columnMapping.ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
         using (var reader = command.ExecuteReader())
@@ -320,7 +408,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} < {ParameterPrefix}{columnMapping.ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} < {ParameterPrefix}{columnMapping.ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
         using (var reader = command.ExecuteReader())
@@ -351,7 +439,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} >= {ParameterPrefix}{columnMapping.ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} >= {ParameterPrefix}{columnMapping.ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
         using (var reader = command.ExecuteReader())
@@ -382,7 +470,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} <= {ParameterPrefix}{columnMapping.ColumnName}";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} <= {ParameterPrefix}{columnMapping.ColumnName}";
         command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
         using (var reader = command.ExecuteReader())
@@ -417,7 +505,7 @@ namespace ADIF.NET {
 
       using (var command = Connection.CreateCommand())
       {
-        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {columnMapping.ColumnName} BETWEEN {ParameterPrefix}{columnMapping.ColumnName}1 AND {ParameterPrefix}{columnMapping.ColumnName}2";
+        command.CommandText = $"SELECT * FROM {QSOTable} WHERE {EscapeSQLColumn(columnMapping.ColumnName)} BETWEEN {ParameterPrefix}{columnMapping.ColumnName}1 AND {ParameterPrefix}{columnMapping.ColumnName}2";
         command.Parameters.Add(GetParameter(command, $"{columnMapping.ColumnName}1", startSearchValue));
         command.Parameters.Add(GetParameter(command, $"{columnMapping.ColumnName}2", endSearchValue));
 
@@ -636,6 +724,47 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="columnName"></param>
+    string EscapeSQLColumn(string columnName)
+    {
+      //switch (columnName.ToUpper())
+      //{
+      //  case TagNames.State:
+      //  case TagNames.Name:
+      //  case TagNames.Check:
+      //  case TagNames.Class:
+      //  case TagNames.Address:
+      //  case TagNames.Call:
+      //  case TagNames.Comment:
+      //  case TagNames.Mode:
+      //  case TagNames.Operator:
+
+          switch (ReservedFieldsEscapedBy)
+          {
+            case ReservedFieldEscape.Brackets:
+              return $"[{columnName}]";
+
+            case ReservedFieldEscape.DoubleQuotes:
+              return $"\"{columnName}\"";
+
+            case ReservedFieldEscape.SingleQuotes:
+              return $"'{columnName}'";
+
+            case ReservedFieldEscape.Backticks:
+              return $"`{columnName}`";
+
+            default:
+              return columnName;
+          }
+
+        //default:
+        //  return columnName;
+     // }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="tag"></param>
     /// <param name="mapping"></param>
     object GetParameterValue(ITag tag, ADIFColumnMapping mapping)
@@ -644,7 +773,7 @@ namespace ADIF.NET {
         throw new ArgumentNullException("Missing tag or column mapping.");
 
       if (mapping.IsRequired && !tag.HasValue())
-        throw new Exception($"Tag {tag.Name} is marked as required but it has no value.");
+        throw new Exception($"Tag {tag.Name} is marked as required has no value.");
 
       return GetParameterValue(tag.Value);
     }
