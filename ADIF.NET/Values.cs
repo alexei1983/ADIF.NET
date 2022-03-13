@@ -969,7 +969,7 @@ namespace ADIF.NET {
     /// <summary>
     /// ADIF IntlString type consisting of a sequence of International Characters. 
     /// </summary>
-    public const string IntlString = "IntlMultilineString";
+    public const string IntlString = "IntlString";
 
     /// <summary>
     /// ADIF MultilineString type consisting of a sequence of Characters and line-breaks, where a line break is an ASCII CR (code 13) 
@@ -980,7 +980,7 @@ namespace ADIF.NET {
     /// <summary>
     /// ADIF IntlMultilineString type consisting of a sequence of International Characters and line breaks. 
     /// </summary>
-    public const string IntlMultilineString = "G";
+    public const string IntlMultilineString = "IntlMultilineString";
 
     /// <summary>
     /// ADIF Enumeration type consisting of an explicit list of legal case-insensitive values represented in ASCII set 
@@ -1024,7 +1024,7 @@ namespace ADIF.NET {
 
     /// <summary>
     /// ADIF IOTARefNo type: an IOTA designator, in format CC-XXX, where CC is a member of the ADIF Continent enumeration
-    /// and XXX is the island group designator, where 1 &lt= XXX &lt= 999 with leading zeros.
+    /// and XXX is the island group designator, where 1 &lt;= XXX &lt;= 999 with leading zeros.
     /// </summary>
     public const string IOTARefNo = "IOTARefNo";
 
