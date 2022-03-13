@@ -6,10 +6,29 @@ using ADIF.NET.Tags;
 
 namespace ADIF.NET {
 
-  public enum ReservedFieldEscape {
+  /// <summary>
+  /// Determines how reserved words are escaped in a specific database implementation.
+  /// </summary>
+  public enum ReservedWordEscape {
+
+    /// <summary>
+    /// Reserved words are escaped by brackets ([])
+    /// </summary>
     Brackets,
+
+    /// <summary>
+    /// Reserved words are escaped by double quotes (")
+    /// </summary>
     DoubleQuotes,
+
+    /// <summary>
+    /// Reserved words are escaped by single quotes (')
+    /// </summary>
     SingleQuotes,
+
+    /// <summary>
+    /// Reserved words are escaped by backticks (`)
+    /// </summary>
     Backticks
   }
 
@@ -19,40 +38,46 @@ namespace ADIF.NET {
   public class SQLAdapter : IDisposable {
 
     /// <summary>
-    /// 
+    /// Database connection.
     /// </summary>
     public IDbConnection Connection { get; private set; }
 
     /// <summary>
-    /// 
+    /// Name of the database table containing the ADIF QSOs.
     /// </summary>
     public string QSOTable { get; set; }
 
     /// <summary>
-    /// 
+    /// Determines how reserved words in SQL are escaped.
     /// </summary>
-    public ReservedFieldEscape ReservedFieldsEscapedBy { get; set; } = ReservedFieldEscape.Brackets;
+    public ReservedWordEscape ReservedWordsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
 
     /// <summary>
-    /// 
+    /// Character that denotes the start of a database parameter.
     /// </summary>
     public char ParameterPrefix { get; set; } = '@';
 
     /// <summary>
-    /// 
+    /// ADIF header containing any relevant user-defined fields stored in the database.
     /// </summary>
     public ADIFHeader Header { get; set; }
 
     /// <summary>
-    /// 
+    /// Mapping of ADIF tag names to database columns.
     /// </summary>
-    public ADIFColumnMappings ColumnMappings { get; set; }
+    public ADIFColumnMappings ColumnMappings
+    {
+      get => mapping ?? ADIFColumnMappings.DefaultMinimum;
+ 
+      set => mapping = value;
+    }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="SQLAdapter"/> class.
     /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="qsoTable"></param>
+    /// <param name="connection">Database connection.</param>
+    /// <param name="qsoTable">Name of the database table containing the ADIF QSOs.</param>
+    /// <param name="header">ADIF header containing any relevant user-defined fields stored in the database.</param>
     public SQLAdapter(IDbConnection connection, string qsoTable, ADIFHeader header)
     {
       if (string.IsNullOrEmpty(qsoTable))
@@ -68,14 +93,14 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="SQLAdapter"/> class.
     /// </summary>
-    /// <param name="connection"></param>
-    /// <param name="qsoTable"></param>
+    /// <param name="connection">Database connection.</param>
+    /// <param name="qsoTable">Name of the database table containing the ADIF QSOs.</param>
     public SQLAdapter(IDbConnection connection, string qsoTable) : this(connection, qsoTable, null) { }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs from the database.
     /// </summary>
     public IEnumerable<ADIFQSO> RetrieveAll()
     {
@@ -98,7 +123,7 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// Inserts a QSO into the database.
+    /// Inserts the specified QSO into the database.
     /// </summary>
     /// <param name="qso">QSO to insert.</param>
     public ADIFQSO Insert(ADIFQSO qso)
@@ -235,10 +260,10 @@ namespace ADIF.NET {
     #region Generic Retrieve Methods
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified SQL query text.
     /// </summary>
-    /// <param name="sqlQuery"></param>
-    /// <param name="parameters"></param>
+    /// <param name="sqlQuery">SQL query text to execute.</param>
+    /// <param name="parameters">Database parameters.</param>
     public IEnumerable<ADIFQSO> RetrieveByQuery(string sqlQuery, params IDbDataParameter[] parameters)
     {
       if (string.IsNullOrEmpty(sqlQuery))
@@ -271,19 +296,20 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified SQL query text.
     /// </summary>
-    /// <param name="sqlQuery"></param>
+    /// <param name="sqlQuery">SQL query text to execute.</param>
     public IEnumerable<ADIFQSO> RetrieveByQuery(string sqlQuery)
     {
       return RetrieveByQuery(sqlQuery, null);
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database column is equal to 
+    /// the specified value.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="searchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="searchValue">Value to compare for equality.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingEquals(ADIFColumnMapping columnMapping, object searchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -311,10 +337,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mappings where the database columns are equal to the 
+    /// specified values. The values are combined together using the AND logical operator.
     /// </summary>
-    /// <param name="columnMappings"></param>
-    /// <param name="searchValues"></param>
+    /// <param name="columnMappings">Mapping of ADIF tag names to database columns.</param>
+    /// <param name="searchValues">Values to compare for equality.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingEquals(ADIFColumnMapping[] columnMappings, object[] searchValues)
     {
       if (columnMappings == null || columnMappings.Length < 1)
@@ -363,10 +390,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database column is greater than
+    /// the specified value.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="searchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="searchValue">Value to compare.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingGreaterThan(ADIFColumnMapping columnMapping, object searchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -394,10 +422,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database column is less than  
+    /// the specified value.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="searchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="searchValue">Value to compare.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingLessThan(ADIFColumnMapping columnMapping, object searchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -425,10 +454,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database column is greater than 
+    /// or equal to the specified value.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="searchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="searchValue">Value to compare.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingGreaterThanOrEqualTo(ADIFColumnMapping columnMapping, object searchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -456,10 +486,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database column is less than 
+    /// or equal to the specified value.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="searchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="searchValue">Value to compare.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingLessThanOrEqualTo(ADIFColumnMapping columnMapping, object searchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -487,11 +518,12 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves QSOs from the database using the specified mapping where the database value is between 
+    /// the two specified values.
     /// </summary>
-    /// <param name="columnMapping"></param>
-    /// <param name="startSearchValue"></param>
-    /// <param name="endSearchValue"></param>
+    /// <param name="columnMapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="startSearchValue">First value to compare.</param>
+    /// <param name="endSearchValue">Second value to compare.</param>
     public IEnumerable<ADIFQSO> RetrieveByMappingBetween(ADIFColumnMapping columnMapping, object startSearchValue, object endSearchValue)
     {
       if (columnMapping == null || string.IsNullOrEmpty(columnMapping.ColumnName))
@@ -525,9 +557,9 @@ namespace ADIF.NET {
     #endregion
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs from the database for the specified callsign.
     /// </summary>
-    /// <param name="call"></param>
+    /// <param name="call">Callsign.</param>
     public IEnumerable<ADIFQSO> RetrieveByCall(string call)
     {
       if (string.IsNullOrEmpty(call))
@@ -542,9 +574,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs from the database for the specified operator callsign.
     /// </summary>
-    /// <param name="operatorCall"></param>
+    /// <param name="operatorCall">Operator callsign.</param>
     public IEnumerable<ADIFQSO> RetrieveByOperator(string operatorCall)
     {
       if (string.IsNullOrEmpty(operatorCall))
@@ -559,10 +591,10 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs from the database that occurred between the specified start and end dates.
     /// </summary>
-    /// <param name="qsoStartDate"></param>
-    /// <param name="qsoEndDate"></param>
+    /// <param name="qsoStartDate">QSO starting date.</param>
+    /// <param name="qsoEndDate">QSO ending date.</param>
     public IEnumerable<ADIFQSO> RetrieveByQSODateBetween(DateTime qsoStartDate, DateTime qsoEndDate)
     {
       if (qsoStartDate < SQL_MIN_DATE_TIME)
@@ -583,10 +615,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs for the specified <paramref name="band"/> from the database.
     /// </summary>
-    /// <param name="band"></param>
-    /// <returns></returns>
+    /// <param name="band">Amateur radio band.</param>
     public IEnumerable<ADIFQSO> RetrieveByBand(string band)
     {
       if (string.IsNullOrEmpty(band))
@@ -604,9 +635,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs for the specified <paramref name="mode"/> from the database.
     /// </summary>
-    /// <param name="mode"></param>
+    /// <param name="mode">Amateur radio mode.</param>
     public IEnumerable<ADIFQSO> RetrieveByMode(string mode)
     {
       if (string.IsNullOrEmpty(mode))
@@ -624,11 +655,11 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSOs for the specified <paramref name="band"/> with the specified 
+    /// <paramref name="mode"/> from the database.
     /// </summary>
-    /// <param name="band"></param>
-    /// <param name="mode"></param>
-    /// <returns></returns>
+    /// <param name="band">Amateur radio band.</param>
+    /// <param name="mode">Amateur radio mode.</param>
     public IEnumerable<ADIFQSO> RetrieveByBandMode(string band, string mode)
     {
       if (string.IsNullOrEmpty(band))
@@ -657,9 +688,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new <see cref="ADIFQSO"/> using the contents of the specified data <paramref name="reader"/>.
     /// </summary>
-    /// <param name="reader"></param>
+    /// <param name="reader">Data reader containing QSO data.</param>
     ADIFQSO GetQSOFromReader(IDataReader reader)
     {
       var qso = new ADIFQSO();
@@ -722,51 +753,36 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Escapes the specified SQL column name.
     /// </summary>
-    /// <param name="columnName"></param>
+    /// <param name="columnName">Database column name.</param>
     string EscapeSQLColumn(string columnName)
     {
-      //switch (columnName.ToUpper())
-      //{
-      //  case TagNames.State:
-      //  case TagNames.Name:
-      //  case TagNames.Check:
-      //  case TagNames.Class:
-      //  case TagNames.Address:
-      //  case TagNames.Call:
-      //  case TagNames.Comment:
-      //  case TagNames.Mode:
-      //  case TagNames.Operator:
+      switch (ReservedWordsEscapedBy)
+      {
+        case ReservedWordEscape.Brackets:
+          return $"[{columnName}]";
 
-          switch (ReservedFieldsEscapedBy)
-          {
-            case ReservedFieldEscape.Brackets:
-              return $"[{columnName}]";
+        case ReservedWordEscape.DoubleQuotes:
+          return $"\"{columnName}\"";
 
-            case ReservedFieldEscape.DoubleQuotes:
-              return $"\"{columnName}\"";
+        case ReservedWordEscape.SingleQuotes:
+          return $"'{columnName}'";
 
-            case ReservedFieldEscape.SingleQuotes:
-              return $"'{columnName}'";
+        case ReservedWordEscape.Backticks:
+          return $"`{columnName}`";
 
-            case ReservedFieldEscape.Backticks:
-              return $"`{columnName}`";
-
-            default:
-              return columnName;
-          }
-
-        //default:
-        //  return columnName;
-     // }
+        default:
+          return columnName;
+      }
     }
 
     /// <summary>
-    /// 
+    /// Prepares the specified <paramref name="tag"/> for use as a database parameter value using 
+    /// the specified <paramref name="mapping"/>.
     /// </summary>
-    /// <param name="tag"></param>
-    /// <param name="mapping"></param>
+    /// <param name="tag">ADIF tag whose value will be used in the database parameter.</param>
+    /// <param name="mapping">Mapping of ADIF tag name to database column.</param>
     object GetParameterValue(ITag tag, ADIFColumnMapping mapping)
     {
       if (tag == null || mapping == null)
@@ -779,11 +795,9 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Prepares the specified <paramref name="value"/> for use as a database parameter value.
     /// </summary>
-    /// <param name="tagName"></param>
-    /// <param name="value"></param>
-    /// <param name="required"></param>
+    /// <param name="value">Value to prepare.</param>
     object GetParameterValue(object value)
     {
       if (value is DateTime dateTime)
@@ -802,12 +816,13 @@ namespace ADIF.NET {
 
 
     /// <summary>
-    /// 
+    /// Creates a database parameter for the specified ADIF <paramref name="tag"/> using the
+    /// specified <paramref name="mapping"/>.
     /// </summary>
-    /// <param name="command"></param>
-    /// <param name="tag"></param>
-    /// <param name="mapping"></param>
-    /// <param name="direction"></param>
+    /// <param name="command">Database command for which the parameter will be generated.</param>
+    /// <param name="tag">ADIF tag for the parameter.</param>
+    /// <param name="mapping">Mapping of ADIF tag name to database column.</param>
+    /// <param name="direction">Direction of the parameter.</param>
     IDbDataParameter GetParameter(IDbCommand command, 
                                   ITag tag,
                                   ADIFColumnMapping mapping,
@@ -826,12 +841,12 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Creates a database parameter with the specified name and value.
     /// </summary>
-    /// <param name="command"></param>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="direction"></param>
+    /// <param name="command">Database command for which the parameter will be generated.</param>
+    /// <param name="name">Name of the parameter.</param>
+    /// <param name="value">Value of the parameter.</param>
+    /// <param name="direction">Direction of the parameter.</param>
     IDbDataParameter GetParameter(IDbCommand command,
                                   string name,
                                   object value,
@@ -850,7 +865,7 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Validates the state of the database connection and connects if needed.
     /// </summary>
     void Connect()
     {
@@ -892,15 +907,16 @@ namespace ADIF.NET {
     const string SQL_INSERT_COMMAND_TEXT = "INSERT INTO {0} ({1}) VALUES ({2})";
     const string SQL_SELECT_COMMAND_TEXT = "SELECT * FROM {0}";
     static readonly DateTime SQL_MIN_DATE_TIME = new DateTime(1904, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    ADIFColumnMappings mapping;
   }
 
   /// <summary>
-  /// 
+  /// Contains the ADIF-to-database mappings for QSOs.
   /// </summary>
   public class ADIFColumnMappings : List<ADIFColumnMapping> {
 
     /// <summary>
-    /// 
+    /// Minimum set of ADIF tags mapped to a database.
     /// </summary>
     public static readonly ADIFColumnMappings DefaultMinimum = new ADIFColumnMappings(new ADIFColumnMapping(TagNames.Call),
                                                                                       new ADIFColumnMapping(TagNames.Operator),
@@ -910,21 +926,21 @@ namespace ADIF.NET {
                                                                                       new ADIFColumnMapping(TagNames.Mode));
 
     /// <summary>
-    /// 
+    /// All standard ADIF tags mapped to a database.
     /// </summary>
     public static readonly ADIFColumnMappings All = new ADIFColumnMappings(GetAllMappings().ToArray());
 
 
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFColumnMappings"/> class.
     /// </summary>
     public ADIFColumnMappings() { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFColumnMappings"/> class.
     /// </summary>
-    /// <param name="mappings"></param>
+    /// <param name="mappings">Mappings to add.</param>
     public ADIFColumnMappings(params ADIFColumnMapping[] mappings)
     {
       if (mappings != null)
@@ -933,43 +949,43 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the database column name for the specified ADIF tag name.
     /// </summary>
-    /// <param name="tagName"></param>
+    /// <param name="tagName">ADIF tag name.</param>
     public string GetColumnName(string tagName)
     {
       return GetColumnMappingFromTagName(tagName)?.ColumnName;
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the ADIF tag name for the specified database column name.
     /// </summary>
-    /// <param name="columnName"></param>
+    /// <param name="columnName">Database column name.</param>
     public string GetTagName(string columnName)
     {
       return GetColumnMappingFromColumnName(columnName)?.TagName;
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the mapping for the specified ADIF tag name.
     /// </summary>
-    /// <param name="tagName"></param>
+    /// <param name="tagName">ADIF tag name.</param>
     public ADIFColumnMapping GetColumnMappingFromTagName(string tagName)
     {
       return this.FirstOrDefault(c => c.TagName.Equals(tagName, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the mapping for the specified database column name.
     /// </summary>
-    /// <param name="columnName"></param>
+    /// <param name="columnName">Database column name.</param>
     public ADIFColumnMapping GetColumnMappingFromColumnName(string columnName)
     {
       return this.FirstOrDefault(c => c.ColumnName.Equals(columnName, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all standard ADIF tag names with associated database mapping.
     /// </summary>
     static IEnumerable<ADIFColumnMapping> GetAllMappings()
     {
@@ -979,25 +995,43 @@ namespace ADIF.NET {
   }
 
   /// <summary>
-  /// 
+  /// Contains the mapping for a single ADIF tag name and database column.
   /// </summary>
   public class ADIFColumnMapping {
 
+    /// <summary>
+    /// ADIF tag name.
+    /// </summary>
     public string TagName { get; }
+
+    /// <summary>
+    /// Database column name.
+    /// </summary>
     public string ColumnName { get; }
 
+    /// <summary>
+    /// Whether or not the mapping represents a user-defined QSO tag.
+    /// </summary>
     public bool IsUserDef { get; }
+
+    /// <summary>
+    /// Whether or not the mapping represents an application-defined QSO tag.
+    /// </summary>
     public bool IsAppDef { get; }
+
+    /// <summary>
+    /// Whether or not the QSO tag is required to be present and have a value.
+    /// </summary>
     public bool IsRequired { get; set; }
 
-    
+
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFColumnMapping"/> class.
     /// </summary>
-    /// <param name="tagName"></param>
-    /// <param name="columnName"></param>
-    /// <param name="isUserDef"></param>
-    /// <param name="isAppDef"></param>
+    /// <param name="tagName">ADIF tag name.</param>
+    /// <param name="columnName">Database column name.</param>
+    /// <param name="isUserDef">Whether or not the mapping represents a user-defined QSO tag.</param>
+    /// <param name="isAppDef">Whether or not the mapping represents an application-defined QSO tag.</param>
     public ADIFColumnMapping(string tagName, string columnName, bool isUserDef, bool isAppDef)
     {
       if (string.IsNullOrEmpty(tagName))
@@ -1020,16 +1054,16 @@ namespace ADIF.NET {
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFColumnMapping"/> class.
     /// </summary>
-    /// <param name="tagName"></param>
+    /// <param name="tagName">ADIF tag name.</param>
     public ADIFColumnMapping(string tagName) : this(tagName, tagName, false, false) { }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="ADIFColumnMapping"/> class.
     /// </summary>
-    /// <param name="tagName"></param>
-    /// <param name="columnName"></param>
+    /// <param name="tagName">ADIF tag name.</param>
+    /// <param name="columnName">Database column name.</param>
     public ADIFColumnMapping(string tagName, string columnName) : this(tagName, columnName, false, false) { }
   }
 }

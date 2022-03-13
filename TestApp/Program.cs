@@ -72,27 +72,35 @@ namespace TestApp {
       //columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
 
 
-      var parse = new ADXParser();
-      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
-      var result = parse.Parse();
+      var parse = new ADIFParser();
+      //parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
+      //var result = parse.Parse();
 
       var insertList = new List<ADIFQSO>();
 
       using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
       {
-        var adapter = new SQLAdapter(conn, "dbo.QSOs", result.Header) { ColumnMappings = columnMappings };
-        foreach (var qsoInternal in result.QSOs)
-        {
-          var retQso = adapter.Insert(qsoInternal);
-          if (retQso != null)
-            insertList.Add(retQso);
-        }
+        var adapter = new SQLAdapter(conn, "dbo.QSOs2") { ColumnMappings = columnMappings };
 
-        var qsosNew = adapter.RetrieveByQSODateBetween(new DateTime(2021, 2, 17), new DateTime(2021, 2, 18));
-        Console.WriteLine(qsosNew.Count());
+        foreach (var adiFile in System.IO.Directory.GetFiles(@"C:\Users\S017138\Desktop", "K0UOG@*.adi"))
+        {
+          parse.LoadFile(adiFile);
+          var result = parse.Parse();
+
+          foreach (var qsoInternal in result.QSOs)
+          {
+            var retQso = adapter.Insert(qsoInternal);
+            if (retQso != null)
+              insertList.Add(retQso);
+          }
+        }
 
       }
 
+      var qsoListNew = new ADIFDataSet() { QSOs = new ADIFQSOCollection(insertList.ToArray()) };
+      qsoListNew.ToADIF(@"C:\Users\S017138\Desktop\K0UOG-AllPota-20212022.adi", EmitFlags.AddProgramHeaderTags | EmitFlags.AddCreatedTimestamp);
+
+      return;
       //Console.WriteLine(new ADIFDataSet() { Header = result.Header, QSOs = new ADIFQSOCollection(qsosNew.ToArray()) }.ToString("A"));
 
 
@@ -176,7 +184,7 @@ namespace TestApp {
       //result.QSOs[0].SetRstSent(5, 9);
       //result.QSOs[0].SetRstRcvd(5, 3);
 
-      result.CheckVersion();
+      //result.CheckVersion();
 
       var dataSet2 = new ADIFDataSet();
 
