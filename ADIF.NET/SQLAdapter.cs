@@ -50,7 +50,7 @@ namespace ADIF.NET {
     /// <summary>
     /// Determines how reserved words in SQL are escaped.
     /// </summary>
-    public ReservedWordEscape ReservedWordsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
+    public ReservedWordEscape ReservedFieldsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
 
     /// <summary>
     /// Character that denotes the start of a database parameter.
@@ -758,7 +758,7 @@ namespace ADIF.NET {
     /// <param name="columnName">Database column name.</param>
     string EscapeSQLColumn(string columnName)
     {
-      switch (ReservedWordsEscapedBy)
+      switch (ReservedFieldsEscapedBy)
       {
         case ReservedWordEscape.Brackets:
           return $"[{columnName}]";
@@ -789,7 +789,7 @@ namespace ADIF.NET {
         throw new ArgumentNullException("Missing tag or column mapping.");
 
       if (mapping.IsRequired && !tag.HasValue())
-        throw new Exception($"Tag {tag.Name} is marked as required has no value.");
+        throw new Exception($"Tag {tag.Name} is marked as required but has no value.");
 
       return GetParameterValue(tag.Value);
     }

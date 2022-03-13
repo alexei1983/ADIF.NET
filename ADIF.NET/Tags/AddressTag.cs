@@ -5,8 +5,11 @@ namespace ADIF.NET.Tags {
   /// Represents the contacted station's complete mailing address: full name, 
   /// street address, city, postal code, and country.
   /// </summary>
-  public class AddressTag : StringTag, ITag {
+  public class AddressTag : MultilineStringTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.Address;
 
     /// <summary>

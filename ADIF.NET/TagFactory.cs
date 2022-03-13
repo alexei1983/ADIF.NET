@@ -112,6 +112,8 @@ namespace ADIF.NET {
       { TagNames.MyVUCCGrids, typeof(MyVUCCGridsTag) },
       { TagNames.Name, typeof(NameTag) },
       { TagNames.NameIntl, typeof(NameIntlTag) },
+      { TagNames.Notes, typeof(NotesTag) },
+      { TagNames.NotesIntl, typeof(NotesIntlTag) },
       { TagNames.NrBursts, typeof(NrBurstsTag) },
       { TagNames.NrPings, typeof(NrPingsTag) },
       { TagNames.Operator, typeof(OperatorTag) },

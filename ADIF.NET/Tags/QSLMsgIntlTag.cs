@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the QSL card message.
   /// </summary>
-  public class QSLMsgIntlTag : IntlStringTag, ITag {
+  public class QSLMsgIntlTag : IntlMultilineStringTag, ITag {
 
     /// <summary>
     /// Tag name.
