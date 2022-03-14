@@ -64,11 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADIFEmitSettings.cs" />
-    <Compile Include="AdifHeader.cs" />
+    <Compile Include="ADIFHeader.cs" />
     <Compile Include="ADIFQSO.cs" />
     <Compile Include="ADIFQSOCollection.cs" />
     <Compile Include="ADIFDataSet.cs" />
-    <Compile Include="AdifTagCollection.cs" />
+    <Compile Include="ADIFTagCollection.cs" />
     <Compile Include="ADXParser.cs" />
     <Compile Include="Attributes\DefaultValueAttribute.cs" />
     <Compile Include="Attributes\DeprecatedTagAttribute.cs" />
@@ -98,7 +98,7 @@
     <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Helpers\TagValidationHelper.cs" />
     <Compile Include="Helpers\UserDefHelper.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="ADIFParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -281,8 +281,8 @@
     <Compile Include="Tags\QSLSentDateTag.cs" />
     <Compile Include="Tags\QSLRvcdDateTag.cs" />
     <Compile Include="Tags\QRZQSOUploadDateTag.cs" />
-    <Compile Include="Tags\LotwQSLSentDateTag.cs" />
-    <Compile Include="Tags\LotwQSLReceivedDateTag.cs" />
+    <Compile Include="Tags\LOTWQSLSentDateTag.cs" />
+    <Compile Include="Tags\LOTWQSLReceivedDateTag.cs" />
     <Compile Include="Tags\HrdLogQSOUploadDateTag.cs" />
     <Compile Include="Tags\EQSLReceivedDateTag.cs" />
     <Compile Include="Tags\DateTag.cs" />

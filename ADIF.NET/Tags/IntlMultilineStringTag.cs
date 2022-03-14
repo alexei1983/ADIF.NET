@@ -5,7 +5,8 @@ using ADIF.NET.Exceptions;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents an ADIF.NET tag where the underlying value is of type <see cref="string"/>.
+  /// Represents an ADIF.NET tag where the underlying value is of type <see cref="string"/> with 
+  /// optional Unicode and line endings.
   /// </summary>
   public class IntlMultilineStringTag : Tag<string>, ITag {
 
@@ -15,7 +16,7 @@ namespace ADIF.NET.Tags {
     public override IADIFType ADIFType => new ADIFIntlMultilineString();
 
     /// <summary>
-    /// Converts the specified object to an ADIF String.
+    /// Converts the specified object to an ADIF IntlMultilineString.
     /// </summary>
     /// <param name="value">Value to convert.</param>
     public override object ConvertValue(object value)
@@ -32,7 +33,7 @@ namespace ADIF.NET.Tags {
     }
 
     /// <summary>
-    /// Determines whether or not the specified object can be represented as an ADIF String.
+    /// Determines whether or not the specified object can be represented as an ADIF IntlMultilineString.
     /// </summary>
     /// <param name="value">Value to validate.</param>
     public override bool ValidateValue(object value)

@@ -76,33 +76,131 @@ namespace TestApp {
       //parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
       //var result = parse.Parse();
 
-      var insertList = new List<ADIFQSO>();
+      //var insertList = new List<ADIFQSO>();
 
-      using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
-      {
-        var adapter = new SQLAdapter(conn, "dbo.QSOs2") { ColumnMappings = columnMappings };
+      //using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
+      //{
+      //  var adapter = new SQLAdapter(conn, "dbo.QSOs2") { ColumnMappings = columnMappings };
 
-        foreach (var adiFile in System.IO.Directory.GetFiles(@"C:\Users\S017138\Desktop", "K0UOG@*.adi"))
-        {
-          parse.LoadFile(adiFile);
-          var result = parse.Parse();
+      //  foreach (var adiFile in System.IO.Directory.GetFiles(@"C:\Users\S017138\Desktop", "K0UOG@*.adi"))
+      //  {
+      //    parse.LoadFile(adiFile);
+      //    var result = parse.Parse();
 
-          foreach (var qsoInternal in result.QSOs)
-          {
-            var retQso = adapter.Insert(qsoInternal);
-            if (retQso != null)
-              insertList.Add(retQso);
-          }
-        }
+      //    foreach (var qsoInternal in result.QSOs)
+      //    {
+      //      var retQso = adapter.Insert(qsoInternal);
+      //      if (retQso != null)
+      //        insertList.Add(retQso);
+      //    }
+      //  }
 
-      }
+      //}
 
-      var qsoListNew = new ADIFDataSet() { QSOs = new ADIFQSOCollection(insertList.ToArray()) };
-      qsoListNew.ToADIF(@"C:\Users\S017138\Desktop\K0UOG-AllPota-20212022.adi", EmitFlags.AddProgramHeaderTags | EmitFlags.AddCreatedTimestamp);
+      //var qsoListNew = new ADIFDataSet() { QSOs = new ADIFQSOCollection(insertList.ToArray()) };
+      //qsoListNew.ToADIF(@"C:\Users\S017138\Desktop\K0UOG-AllPota-20212022.adi", EmitFlags.AddProgramHeaderTags | EmitFlags.AddCreatedTimestamp);
 
-      return;
+      //return;
       //Console.WriteLine(new ADIFDataSet() { Header = result.Header, QSOs = new ADIFQSOCollection(qsosNew.ToArray()) }.ToString("A"));
 
+      var listTag2 = new List<Dictionary<string, string>>();
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AD0WN" }, { "TIME_ON", "2100" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-3791" }, { "RST_RCVD", "53" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AD0WN" }, { "TIME_ON", "2100" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-3341" }, { "RST_RCVD", "53" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N9AGK" }, { "TIME_ON", "2109" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-1038" }, { "RST_RCVD", "22" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N6ERS" }, { "TIME_ON", "2111" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-0189" }, { "RST_RCVD", "57" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W1RCP" }, { "TIME_ON", "2114" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-7882" }, { "RST_RCVD", "22" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KO4NLL" }, { "TIME_ON", "2115" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-7882" }, { "RST_RCVD", "22" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K9RVA" }, { "TIME_ON", "2120" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-1313" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W4TL" }, { "TIME_ON", "2122" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-3791" }, { "RST_RCVD", "33" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC0ZVN" }, { "TIME_ON", "2134" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VE3NNI" }, { "TIME_ON", "2134" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "56" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K6TQ" }, { "TIME_ON", "2135" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "57" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N4VEL" }, { "TIME_ON", "2136" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC6YPI" }, { "TIME_ON", "2137" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KE6YLH" }, { "TIME_ON", "2138" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W4JHO" }, { "TIME_ON", "2140" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "57" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W2FMB" }, { "TIME_ON", "2141" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC3RDV" }, { "TIME_ON", "2142" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N4BUN" }, { "TIME_ON", "2144" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AA5HH" }, { "TIME_ON", "2144" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "57" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VE1SK" }, { "TIME_ON", "2145" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "54" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AD1C" }, { "TIME_ON", "2145" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N6FAI" }, { "TIME_ON", "2146" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "58" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N4CWB" }, { "TIME_ON", "2147" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "58" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KB6ODH" }, { "TIME_ON", "2147" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "44" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KM5RL" }, { "TIME_ON", "2149" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KD9UDV" }, { "TIME_ON", "2150" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }, { "SIG_INFO", "K-5683" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W5RJR" }, { "TIME_ON", "2151" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W5JBF" }, { "TIME_ON", "2152" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "N9NFT" }, { "TIME_ON", "2201" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "43" }});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "W4FX" }, { "TIME_ON", "2210" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" }, { "SIG_INFO", "K-1880" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "K5MCK" }, { "TIME_ON", "2215" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "57" }});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "N4BUN" }, { "TIME_ON", "2216" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "W4MUP" }, { "TIME_ON", "2217" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "VE9RK" }, { "TIME_ON", "2218" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "KF4ECG" }, { "TIME_ON", "2219" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "56" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "N4DH" }, { "TIME_ON", "2221" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "55" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "K4HRM" }, { "TIME_ON", "2225" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "59" },});
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "17m" }, { "Call", "KO4DZZ" }, { "TIME_ON", "2226" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "56" },});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "12m" }, { "Call", "YV1SW" }, { "TIME_ON", "2245" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "43" },});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W6KC" }, { "TIME_ON", "2259" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "33" },{ "SIG_INFO", "K-3563" }});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "KG5UVU" }, { "TIME_ON", "2317" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" },});
+
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N3RT" }, { "TIME_ON", "2330" }, { "QSO_DATE", "2022-03-13" },
+          { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "33" },{ "SIG_INFO", "K-1744" }});
+
+      var k1209 = new ADIFDataSet(listTag2);
+      k1209.AddQSOTag(new MySigInfoTag("K-1209"));
+      //k1209.AddQSOTag(new MySigTag("POTA"));
+
+
+      k1209.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-1209-20220313.adi", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
       return;
       //var items = typeof(Via).GetValues().ToArray();
@@ -279,136 +377,136 @@ namespace TestApp {
 
 
       var listTag = new List<Dictionary<string, string>>();
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WE4DX" }, { "TIME_ON", "2130" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WE4DX" }, { "TIME_ON", "2130" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-4838" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N0YO" }, { "TIME_ON", "2136" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N0YO" }, { "TIME_ON", "2136" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "55" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2138" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2138" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "31" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AL7KC" }, { "TIME_ON", "2140" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AL7KC" }, { "TIME_ON", "2140" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "32" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AJ5C" }, { "TIME_ON", "2143" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AJ5C" }, { "TIME_ON", "2143" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "55" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W7GGA" }, { "TIME_ON", "2143" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W7GGA" }, { "TIME_ON", "2143" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "54" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KB0MPV" }, { "TIME_ON", "2144" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KB0MPV" }, { "TIME_ON", "2144" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "53" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W5FKN" }, { "TIME_ON", "2147" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W5FKN" }, { "TIME_ON", "2147" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "51" },});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KB0PVB" }, { "TIME_ON", "2207" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KB0PVB" }, { "TIME_ON", "2207" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "57" }, { "SIG_INFO", "K-0226" }});
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W7RTA" }, { "TIME_ON", "2219" }, { "QSO_DATE", "2022-03-01" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "W7RTA" }, { "TIME_ON", "2219" }, { "QSO_DATE", "2022-03-01" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "RST_RCVD", "44" }, { "SIG_INFO", "K-4576" }});
 
-      var K0041 = new ADIFDataSet(listTag);
+      var K0041 = new ADIFDataSet(listTag2);
       K0041.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-0041-20220301.adi", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
-      listTag.Clear();
+      listTag2.Clear();
 
       return;
 
 
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K0KPS" }, { "TIME_ON", "1948" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K0KPS" }, { "TIME_ON", "1948" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" } ,{ "RstRcvd", "57" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KK6JJZ" }, { "TIME_ON", "1949" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KK6JJZ" }, { "TIME_ON", "1949" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KG6B" }, { "TIME_ON", "1950" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KG6B" }, { "TIME_ON", "1950" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "SOTARef", "W6/NS-0420" }, { "Sig", "SOTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N6GR" }, { "TIME_ON", "1951" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N6GR" }, { "TIME_ON", "1951" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7PRS" }, { "TIME_ON", "1953" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7PRS" }, { "TIME_ON", "1953" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "33" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KI7JOM" }, { "TIME_ON", "1954" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KI7JOM" }, { "TIME_ON", "1954" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" }, { "Sig_Info", "K-3188" }, { "Sig", "POTA" } });
 
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K7DFL" }, { "TIME_ON", "2003" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "K7DFL" }, { "TIME_ON", "2003" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WD5AFR" }, { "TIME_ON", "2005" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WD5AFR" }, { "TIME_ON", "2005" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "54" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2012" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2012" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "31" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ6TSX" }, { "TIME_ON", "2016" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ6TSX" }, { "TIME_ON", "2016" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "58" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KK7BTT" }, { "TIME_ON", "2020" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KK7BTT" }, { "TIME_ON", "2020" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "44" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC5E" }, { "TIME_ON", "2021" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC5E" }, { "TIME_ON", "2021" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KW6SDW" }, { "TIME_ON", "2021" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KW6SDW" }, { "TIME_ON", "2021" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "59" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N7PIB" }, { "TIME_ON", "2022" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N7PIB" }, { "TIME_ON", "2022" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "59" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "CU3HY" }, { "TIME_ON", "2025" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "CU3HY" }, { "TIME_ON", "2025" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "50" } });
 
-      var k1130 = new ADIFDataSet(listTag);
+      var k1130 = new ADIFDataSet(listTag2);
       k1130.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-1130-20220227-4.xml", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
-      listTag.Clear();
+      listTag2.Clear();
 
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AK4MK" }, { "TIME_ON", "2123" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AK4MK" }, { "TIME_ON", "2123" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "59" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KD7ZPP" }, { "TIME_ON", "2128" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KD7ZPP" }, { "TIME_ON", "2128" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "54" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WD5AFR" }, { "TIME_ON", "2129" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WD5AFR" }, { "TIME_ON", "2129" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "57" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2131" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "2131" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "22" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "KK4OMJ" }, { "TIME_ON", "2140" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "KK4OMJ" }, { "TIME_ON", "2140" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "37" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "W8BI" }, { "TIME_ON", "2142" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "W8BI" }, { "TIME_ON", "2142" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "59" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "KB8UEY" }, { "TIME_ON", "2142" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "KB8UEY" }, { "TIME_ON", "2142" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "59" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "WJ8Y" }, { "TIME_ON", "2148" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "15m" }, { "Call", "WJ8Y" }, { "TIME_ON", "2148" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "44" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7DBJ" }, { "TIME_ON", "2159" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7DBJ" }, { "TIME_ON", "2159" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "52" }, { "sIG_iNFO", "VE-4069" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7OKW" }, { "TIME_ON", "2214" }, { "QSO_DATE", "2022-02-27" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7OKW" }, { "TIME_ON", "2214" }, { "QSO_DATE", "2022-02-27" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "53" }, { "sIG_iNFO", "K-3596" }, { "sIG", "POTA" } });
 
-      var k3568 = new ADIFDataSet(listTag);
+      var k3568 = new ADIFDataSet(listTag2);
       k3568.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-3568-20220227-4.xml", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
-      listTag.Clear();
+      listTag2.Clear();
 
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7DBJ" }, { "TIME_ON", "0000" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7DBJ" }, { "TIME_ON", "0000" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "33" }, { "sIG_iNFO", "VE-3660" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7UIO" }, { "TIME_ON", "0001" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7UIO" }, { "TIME_ON", "0001" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" }, { "sIG_iNFO", "K-0580" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC5CYY" }, { "TIME_ON", "0004" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KC5CYY" }, { "TIME_ON", "0004" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" }, { "sIG_iNFO", "K-0493" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7VZ" }, { "TIME_ON", "0008" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7VZ" }, { "TIME_ON", "0008" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "53" }, { "sIG_iNFO", "VE-0079" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7VZ" }, { "TIME_ON", "0008" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "VA7VZ" }, { "TIME_ON", "0008" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" }, { "sIG_iNFO", "VE-0060" }, { "sIG", "POTA" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7BJS" }, { "TIME_ON", "0010" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KJ7BJS" }, { "TIME_ON", "0010" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WF5TV" }, { "TIME_ON", "0014" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WF5TV" }, { "TIME_ON", "0014" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WB6KSU" }, { "TIME_ON", "0016" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "WB6KSU" }, { "TIME_ON", "0016" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "57" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KW2DX" }, { "TIME_ON", "0020" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KW2DX" }, { "TIME_ON", "0020" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "44" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "0021" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "NL7V" }, { "TIME_ON", "0021" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "31" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KH6PE" }, { "TIME_ON", "0033" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KH6PE" }, { "TIME_ON", "0033" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KI5NEQ" }, { "TIME_ON", "0036" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KI5NEQ" }, { "TIME_ON", "0036" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "42" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AJ5ZX" }, { "TIME_ON", "0040" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AJ5ZX" }, { "TIME_ON", "0040" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KE4DIS" }, { "TIME_ON", "0041" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "KE4DIS" }, { "TIME_ON", "0041" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K7PRA" }, { "TIME_ON", "0054" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K7PRA" }, { "TIME_ON", "0054" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "54" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "AK6DM" }, { "TIME_ON", "0055" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "AK6DM" }, { "TIME_ON", "0055" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "57" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K6REH" }, { "TIME_ON", "0056" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K6REH" }, { "TIME_ON", "0056" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "55" } });
-      listTag.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K7ZZQ" }, { "TIME_ON", "0106" }, { "QSO_DATE", "2022-02-28" },
+      listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "K7ZZQ" }, { "TIME_ON", "0106" }, { "QSO_DATE", "2022-02-28" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RstRcvd", "44" }, { "SIG_INFO", "K-3062" }, { "SIG", "POTA" } });
 
-      var k3526 = new ADIFDataSet(listTag);
+      var k3526 = new ADIFDataSet(listTag2);
       k3526.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-3526-20220227-4.xml", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
 
       return;
@@ -801,7 +899,7 @@ namespace TestApp {
 
 
 
-      var dataset = new ADIFDataSet(listTag);
+      var dataset = new ADIFDataSet(listTag2);
 
       var timeOn = dataset.QSOs[0].GetQSODateTimeOn();
       dataset.AddQSOTag(new MySigInfoTag("K-0226"));
