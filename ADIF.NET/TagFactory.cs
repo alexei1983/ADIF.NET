@@ -128,6 +128,7 @@ namespace ADIF.NET {
       { TagNames.QRZQSOUploadStatus, typeof(QRZQSOUploadStatusTag) },
       { TagNames.QSLVia, typeof(QSLViaTag) },
       { TagNames.QSLSent, typeof(QSLSentTag) },
+      { TagNames.QSLSentVia, typeof(QSLSentViaTag) },
       { TagNames.QSLRcvd, typeof(QSLRcvdTag) },
       { TagNames.QSLRcvdVia, typeof(QSLRcvdViaTag) },
       { TagNames.QSOComplete, typeof(QSOCompleteTag) },
@@ -170,6 +171,7 @@ namespace ADIF.NET {
       { TagNames.TxPwr, typeof(TxPwrTag) },
       { TagNames.UKSMG, typeof(UKSMGTag) },
       { TagNames.UserDef, typeof(UserDefTag) },
+      { TagNames.USACACounties, typeof(USACACountiesTag) },
       { TagNames.VUCCGrids, typeof(VUCCGridsTag) },
       { TagNames.VEProv, typeof(VEProvTag) },
       { TagNames.Web, typeof(WebTag) }};

@@ -38,6 +38,11 @@ namespace ADIF.NET {
     public ADIFQSOCollection QSOs { get; set; }
 
     /// <summary>
+    /// Total number of QSOs in the data set.
+    /// </summary>
+    public int TotalQSOs => QSOs?.Count ?? 0;
+
+    /// <summary>
     /// ADIF version to target when generating the data set.
     /// </summary>
     public Version ADIFVersion
@@ -254,6 +259,62 @@ namespace ADIF.NET {
           }
         }
       }
+    }
+
+    /// <summary>
+    /// Retrieves the total number of ADIF tags in the data set.
+    /// </summary>
+    /// <param name="excludeHeader">Whether or not to exclude header tags from the count.</param>
+    public int GetTagCount(bool excludeHeader = false)
+    {
+      var count = 0;
+
+      if (Header != null && !excludeHeader)
+        count += Header.Count;
+
+      if (QSOs != null)
+      {
+        foreach (var qso in QSOs)
+          if (qso != null)
+            count += qso.Count;
+      }
+
+      return count;
+    }
+
+    /// <summary>
+    /// Retrieves the total number of ADIF tags in the data set grouped by tag name.
+    /// </summary>
+    /// <param name="excludeHeader">Whether or not to exclude header tags from the count.</param>
+    public IDictionary<string, int> GetTagCounts(bool excludeHeader = false)
+    {
+      var counts = new SortedDictionary<string, int>();
+
+      if (Header != null && !excludeHeader)
+      {
+        foreach (var tag in Header)
+          if (counts.ContainsKey(tag.Name))
+            counts[tag.Name]++;
+          else
+            counts.Add(tag.Name, 1);
+      }
+
+      if (QSOs != null)
+      {
+        foreach (var qso in QSOs)
+        {
+          if (qso == null)
+            continue;
+
+          foreach (var tag in qso)
+            if (counts.ContainsKey(tag.Name))
+              counts[tag.Name]++;
+            else
+              counts.Add(tag.Name, 1);
+        }
+      }
+
+      return counts;
     }
 
     /// <summary>

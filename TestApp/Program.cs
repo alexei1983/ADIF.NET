@@ -73,8 +73,17 @@ namespace TestApp {
 
 
       var parse = new ADIFParser();
-      //parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adx");
-      //var result = parse.Parse();
+      parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
+      var result = parse.Parse();
+      Console.WriteLine(result.GetTagCount(true));
+      Console.WriteLine(result.GetTagCount(false));
+
+      var tagCounts = result.GetTagCounts(false);
+
+      foreach (var c in tagCounts)
+      {
+        Console.WriteLine($"{c.Key}                        {c.Value}");
+      }
 
       //var insertList = new List<ADIFQSO>();
 
@@ -102,13 +111,6 @@ namespace TestApp {
 
       //return;
       //Console.WriteLine(new ADIFDataSet() { Header = result.Header, QSOs = new ADIFQSOCollection(qsosNew.ToArray()) }.ToString("A"));
-
-      var cnties = ADIFEnumeration.Get("SecondarySubdivision");
-
-      var cnties2 = Values.SecondarySubdivisions;
-
-      var mycntytag = new MyCntyTag();
-
 
       var listTag2 = new List<Dictionary<string, string>>();
       listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AD0WN" }, { "TIME_ON", "2100" }, { "QSO_DATE", "2022-03-13" },
