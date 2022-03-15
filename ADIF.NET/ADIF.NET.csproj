@@ -118,6 +118,7 @@
     <Compile Include="Tags\LocationTag.cs" />
     <Compile Include="Tags\MyStreetIntlTag.cs" />
     <Compile Include="Tags\MyStreetTag.cs" />
+    <Compile Include="Tags\RegionTag.cs" />
     <Compile Include="Tags\SponsoredAwardListTag.cs" />
     <Compile Include="Tags\CreditSubmittedTag.cs" />
     <Compile Include="Tags\CreditListTag.cs" />

@@ -347,6 +347,27 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsoTags"></param>
+    public void AddQSO(params ITag[] qsoTags)
+    {
+      if (qsoTags == null || qsoTags.Length < 1)
+        throw new ArgumentException("At least one QSO tag is required.", nameof(qsoTags));
+
+      var qso = new ADIFQSO();
+      foreach (var tag in qsoTags)
+      {
+        if (tag.Header)
+          throw new Exception($"Tag {tag.Name} is a header tag and cannot be added to a QSO.");
+
+        qso.Add(tag);
+      }
+
+      AddQSO(qso);
+    }
+
+    /// <summary>
     /// Adds the specified tag to the header for the current data set.
     /// </summary>
     /// <param name="tag">Header tag to add.</param>

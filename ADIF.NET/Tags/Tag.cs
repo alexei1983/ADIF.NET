@@ -230,9 +230,19 @@ namespace ADIF.NET.Tags {
       if (tag is null)
         return false;
 
-      return (tag.Name ?? string.Empty).Equals(Name ?? string.Empty) &&
+      if (this is UserDefTag && tag is UserDefTag)
+      {
+        var thisUserDef = this as UserDefTag;
+        var userDef = tag as UserDefTag;
+
+        if (!thisUserDef.FieldId.Equals(userDef.FieldId) ||
+          !thisUserDef.FieldName.Equals(userDef.FieldName, StringComparison.OrdinalIgnoreCase))
+          return false;
+      }
+
+      return (tag.Name ?? string.Empty).Equals(Name ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&
              tag.GetType().Equals(GetType()) &&
-             (TextValue ?? string.Empty).Equals(TextValue ?? string.Empty) &&
+             (TextValue ?? string.Empty).Equals(TextValue ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&
              (tag.ValueLength ?? 0).Equals(ValueLength ?? 0);
 
     }
@@ -256,16 +266,16 @@ namespace ADIF.NET.Tags {
         const int hashingMultiplier = 16777619;
 
         var hash = hashingBase;
-        hash = (hash * hashingMultiplier) ^ (!(Name is null) ? Name.GetHashCode() : 0);
+        hash = (hash * hashingMultiplier) ^ (!(Name is null) ? Name.ToUpperInvariant().GetHashCode() : 0);
         hash = (hash * hashingMultiplier) ^ (GetType().GetHashCode());
-        hash = (hash * hashingMultiplier) ^ (!(TextValue is null) ? TextValue.GetHashCode() : 0);
+        hash = (hash * hashingMultiplier) ^ (!(TextValue is null) ? TextValue.ToUpperInvariant().GetHashCode() : 0);
         hash = (hash * hashingMultiplier) ^ (!(ValueLength is null) ? ValueLength.GetHashCode() : 0);
 
         if (this is UserDefTag)
         {
           var userDefTag = this as UserDefTag;
           hash = (hash * hashingMultiplier) ^ userDefTag.FieldId.GetHashCode();
-          hash = (hash * hashingMultiplier) ^ userDefTag.FieldName.GetHashCode();
+          hash = (hash * hashingMultiplier) ^ userDefTag.FieldName.ToUpperInvariant().GetHashCode();
         }
 
         return hash;

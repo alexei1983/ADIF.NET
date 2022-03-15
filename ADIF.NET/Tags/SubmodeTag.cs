@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Valid enumeration options.
     /// </summary>
-    public override ADIFEnumeration Options => Values.Modes;
+    public override ADIFEnumeration Options => Values.Submodes;
 
     /// <summary>
     /// Creates a new SUBMODE tag.

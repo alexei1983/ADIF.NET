@@ -140,6 +140,7 @@ namespace ADIF.NET {
       { TagNames.QSORandom, typeof(QSORandomTag) },
       { TagNames.QTH, typeof(QTHTag) },
       { TagNames.QTHIntl, typeof(QTHIntlTag) },
+      { TagNames.Region, typeof(RegionTag) },
       { TagNames.Rig, typeof(RigTag) },
       { TagNames.RigIntl, typeof(RigIntlTag) },
       { TagNames.RstRcvd, typeof(RstRcvdTag) },

@@ -208,6 +208,11 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration Modes;
 
     /// <summary>
+    /// Submode enumeration.
+    /// </summary>
+    public static readonly ADIFEnumeration Submodes;
+
+    /// <summary>
     /// Sponsored award prefix enumeration.
     /// </summary>
     public static readonly ADIFEnumeration SponsoredAwardPrefixes;
@@ -253,6 +258,21 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration DARCDOKs;
 
     /// <summary>
+    /// Primary administrative subdivisions.
+    /// </summary>
+    public static readonly ADIFEnumeration PrimarySubdivisions;
+
+    /// <summary>
+    /// Secondary administrative subdivisions.
+    /// </summary>
+    public static readonly ADIFEnumeration SecondarySubdivisions;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static readonly ADIFEnumeration Regions;
+
+    /// <summary>
     /// User configuration for ADIF.NET
     /// </summary>
     public static readonly Configuration Configuration;
@@ -275,8 +295,9 @@ namespace ADIF.NET {
       ARRLSections = ADIFEnumeration.Get("ARRLSection");
       Awards = ADIFEnumeration.Get("Award");
       Modes = ADIFEnumeration.Get("Mode");
+      Submodes = ADIFEnumeration.Get("Submode");
       SponsoredAwardPrefixes = ADIFEnumeration.Get("SponsoredAwardPrefix");
-      CountryCodes = ADIFEnumeration.Get("Countries");
+      CountryCodes = ADIFEnumeration.Get("DXCC");
       Contests = ADIFEnumeration.Get("ContestID");
       Bands = ADIFEnumeration.Get("Band");
       Credits = ADIFEnumeration.Get("Credit");
@@ -284,6 +305,9 @@ namespace ADIF.NET {
       QSLReceivedStatuses = ADIFEnumeration.Get("QSLRcvd");
       BooleanValues = ADIFEnumeration.Get(nameof(ADIFBoolean));
       DARCDOKs = ADIFEnumeration.Get("DARCDOK");
+      Regions = ADIFEnumeration.Get("Region");
+      PrimarySubdivisions = ADIFEnumeration.Get("PrimarySubdivision");
+      SecondarySubdivisions = ADIFEnumeration.Get("SecondarySubdivision");
       Configuration = new Configuration();
     }
   }
@@ -420,6 +444,7 @@ namespace ADIF.NET {
     public const string QSORandom = "QSO_RANDOM";
     public const string QTH = "QTH";
     public const string QTHIntl = "QTH_INTL";
+    public const string Region = "REGION";
     public const string Rig = "RIG";
     public const string RigIntl = "RIG_INTL";
     public const string RstRcvd = "RST_RCVD";
@@ -624,7 +649,7 @@ namespace ADIF.NET {
       var query = string.Empty;
 
       if (type == DXCC_ENUM_STRING)
-        query = RETRIEVE_COUNTRY_CODES_SQL;
+        query = RETRIEVE_DXCC_SQL;
       else if (type == BAND_ENUM_STRING)
         query = RETRIEVE_BANDS_SQL;
       else if (type == CREDIT_ENUM_STRING)
@@ -634,6 +659,10 @@ namespace ADIF.NET {
       else if (type == nameof(ADIFBoolean))
         return new ADIFEnumeration(nameof(ADIFBoolean), new ADIFEnumerationValue(Values.ADIF_BOOLEAN_TRUE, Values.ADIF_BOOLEAN_TRUE_DISPLAY),
                                                         new ADIFEnumerationValue(Values.ADIF_BOOLEAN_FALSE, Values.ADIF_BOOLEAN_FALSE_DISPLAY));
+      else if (type == PRIMARY_SUB_ENUM_STRING)
+        query = RETRIEVE_PRIMARY_SUB_SQL;
+      else if (type == SECONDARY_SUB_ENUM_STRING)
+        query = RETRIEVE_SECONDARY_SUB_SQL;
       else
         query = ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''"));
 
@@ -684,24 +713,51 @@ namespace ADIF.NET {
     /// <summary>
     /// Retrieves the enumeration values belonging to the specified parent.
     /// </summary>
-    /// <param name="parentCode">The code of the parent enumeration value.</param>
-    public IEnumerable<ADIFEnumerationValue> GetChildren(string parentCode)
+    /// <param name="type">The enumeration type of the parent.</param>
+    /// <param name="code">The code of the parent enumeration value.</param>
+    public IEnumerable<ADIFEnumerationValue> GetChildren(string type, string code)
     {
-      if (string.IsNullOrEmpty(parentCode))
-        throw new ArgumentException("Parent code is required.", nameof(parentCode));
+      if (string.IsNullOrEmpty(type))
+        throw new ArgumentException("Parent type is required.", nameof(type));
 
-      return this.Where(v => parentCode.Equals(v.Parent, StringComparison.OrdinalIgnoreCase));
+      if (string.IsNullOrEmpty(code))
+        throw new ArgumentException("Parent code is required.", nameof(code));
+
+      var query = ENUM_RETRIEVE_CHILDREN_SQL;
+
+      if (DXCC_ENUM_STRING.Equals(type))
+        query = RETRIEVE_DXCC_CHILDREN_SQL;
+      else if (PRIMARY_SUB_ENUM_STRING.Equals(type))
+        query = RETRIEVE_PRIMARY_SUB_CHILDREN_SQL;
+
+      var data = SQLiteHelper.Instance.ReadData(query, 
+                                                new Dictionary<string, object>() { { "@ParentType", type },
+                                                                                   { "@Parent", code } });
+
+      foreach (dynamic d in data)
+      {
+        var enumVal = new ADIFEnumerationValue(d);
+        if (!string.IsNullOrEmpty(enumVal.Code))
+          yield return enumVal;
+      }
     }
   
-    const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
-    const string RETRIEVE_COUNTRY_CODES_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
+    const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
+    const string RETRIEVE_DXCC_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
     const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\"";
     const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
     const string RETRIEVE_DARC_DOK_SQL = "SELECT Code, District || ' - ' || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"DarcDok\" ORDER BY Code";
+    const string ENUM_RETRIEVE_CHILDREN_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE ParentType = @ParentType AND Parent = @Parent ORDER BY DisplayName, Code";
+    const string RETRIEVE_DXCC_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CountryCode AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" WHERE CountryCode = @Parent AND '" + DXCC_ENUM_STRING + "' = @ParentType";
+    const string RETRIEVE_PRIMARY_SUB_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" WHERE PrimarySubdivisionCode = @Parent AND '" + PRIMARY_SUB_ENUM_STRING + "' = @ParentType";
+    const string RETRIEVE_PRIMARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CountryCode AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" ORDER BY CountryCode, Name, Code";
+    const string RETRIEVE_SECONDARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" ORDER BY CountryCode, PrimarySubdivisionCode, Name, Code" ;
     const string CREDIT_ENUM_STRING = "Credit";
     const string BAND_ENUM_STRING = "Band";
-    const string DXCC_ENUM_STRING = "Countries";
+    const string DXCC_ENUM_STRING = "DXCC";
     const string DARC_DOK_ENUM_STRING = "DARCDOK";
+    const string PRIMARY_SUB_ENUM_STRING = "PrimarySubdivision";
+    const string SECONDARY_SUB_ENUM_STRING = "SecondarySubdivision";
   }
 
   /// <summary>
@@ -735,6 +791,11 @@ namespace ADIF.NET {
     public string Parent { get; set; }
 
     /// <summary>
+    /// The enumeration type of the parent.
+    /// </summary>
+    public string ParentType { get; set; }
+
+    /// <summary>
     /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
     /// </summary>
     /// <param name="code">The code for the enumeration value.</param>
@@ -745,7 +806,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="code">The code for the enumeration value.</param>
     /// <param name="displayName">The display name of the enumeration value.</param>
-    public ADIFEnumerationValue(string code, string displayName) : this(code, displayName, false, false, null) { }
+    public ADIFEnumerationValue(string code, string displayName) : this(code, displayName, false, false, null, null) { }
 
     /// <summary>
     /// Creates a new instance of the <see cref="ADIFEnumerationValue"/> class.
@@ -755,13 +816,14 @@ namespace ADIF.NET {
     /// <param name="importOnly">Whether or not the enumeration value is only valid on import.</param>
     /// <param name="legacy">Whether or not the enumeration value is a legacy value.</param>
     /// <param name="parent">The parent code for the enumeration value.</param>
-    public ADIFEnumerationValue(string code, string displayName, bool importOnly, bool legacy, string parent = null)
+    public ADIFEnumerationValue(string code, string displayName, bool importOnly, bool legacy, string parent = null, string parentType = null)
     {
       this.DisplayName = displayName;
       this.Code = Code;
       this.ImportOnly = importOnly;
       this.Legacy = legacy;
       this.Parent = parent;
+      this.ParentType = parentType;
     }
 
     /// <summary>
@@ -775,7 +837,8 @@ namespace ADIF.NET {
         if (dict.ContainsKey(nameof(DisplayName)) && dict[nameof(DisplayName)] is string name)
           this.DisplayName = name;
 
-        if (dict.ContainsKey(nameof(Code))) {
+        if (dict.ContainsKey(nameof(Code)))
+        {
           if (dict[nameof(Code)] is string code)
             this.Code = code;
           else if (dict[nameof(Code)] is int intCode)
@@ -786,14 +849,35 @@ namespace ADIF.NET {
             this.Code = lngCode.ToString();
         }
 
-        if (dict.ContainsKey(nameof(ImportOnly)) && dict[nameof(ImportOnly)] is bool importOnly)
-          this.ImportOnly = importOnly;
+        if (dict.ContainsKey(nameof(ImportOnly)))
+        {
+          if (dict[nameof(ImportOnly)] is bool importOnly)
+            this.ImportOnly = importOnly;
+          else if (dict[nameof(ImportOnly)] is int intImportOnly)
+            this.ImportOnly = intImportOnly == 1;
+          else if (dict[nameof(ImportOnly)] is double dblImportOnly)
+            this.ImportOnly = dblImportOnly == 1;
+          else if (dict[nameof(ImportOnly)] is long lngImportOnly)
+            this.ImportOnly = lngImportOnly == 1;
+        }
 
-        if (dict.ContainsKey(nameof(Legacy)) && dict[nameof(Legacy)] is bool legacy)
-          this.Legacy = legacy;
+        if (dict.ContainsKey(nameof(Legacy)))
+        {
+          if (dict[nameof(Legacy)] is bool importOnly)
+            this.Legacy = importOnly;
+          else if (dict[nameof(Legacy)] is int intLegacy)
+            this.Legacy = intLegacy == 1;
+          else if (dict[nameof(Legacy)] is double dblLegacy)
+            this.Legacy = dblLegacy == 1;
+          else if (dict[nameof(Legacy)] is long lngLegacy)
+            this.Legacy = lngLegacy == 1;
+        }
 
         if (dict.ContainsKey(nameof(Parent)) && dict[nameof(Parent)] is string parent)
           this.Parent = parent;
+
+        if (dict.ContainsKey(nameof(ParentType)) && dict[nameof(ParentType)] is string parentType)
+          this.ParentType = parentType;
       }
     }
 

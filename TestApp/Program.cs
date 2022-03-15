@@ -103,6 +103,13 @@ namespace TestApp {
       //return;
       //Console.WriteLine(new ADIFDataSet() { Header = result.Header, QSOs = new ADIFQSOCollection(qsosNew.ToArray()) }.ToString("A"));
 
+      var cnties = ADIFEnumeration.Get("SecondarySubdivision");
+
+      var cnties2 = Values.SecondarySubdivisions;
+
+      var mycntytag = new MyCntyTag();
+
+
       var listTag2 = new List<Dictionary<string, string>>();
       listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "AD0WN" }, { "TIME_ON", "2100" }, { "QSO_DATE", "2022-03-13" },
           { "Mode", "USB" }, { "Operator", "K0UOG" },  { "SIG_INFO", "K-3791" }, { "RST_RCVD", "53" }});
@@ -190,7 +197,7 @@ namespace TestApp {
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "33" },{ "SIG_INFO", "K-3563" }});
 
       listTag2.Add(new Dictionary<string, string>() { { "Band", "40m" }, { "Call", "KG5UVU" }, { "TIME_ON", "2317" }, { "QSO_DATE", "2022-03-13" },
-          { "Mode", "USB" }, { "Operator", "K0UOG" },});
+          { "Mode", "LSB" }, { "Operator", "K0UOG" },});
 
       listTag2.Add(new Dictionary<string, string>() { { "Band", "20m" }, { "Call", "N3RT" }, { "TIME_ON", "2330" }, { "QSO_DATE", "2022-03-13" },
           { "Mode", "USB" }, { "Operator", "K0UOG" }, { "RST_RCVD", "33" },{ "SIG_INFO", "K-1744" }});
@@ -199,10 +206,17 @@ namespace TestApp {
       k1209.AddQSOTag(new MySigInfoTag("K-1209"));
       //k1209.AddQSOTag(new MySigTag("POTA"));
 
+      using (var conn = new System.Data.SqlClient.SqlConnection("Server=ddcicetstdb;Database=Ice;Integrated Security=true;"))
+      {
+        var adapter = new SQLAdapter(conn, "dbo.QSOs2") { ColumnMappings = columnMappings };
 
-      k1209.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-1209-20220313.adi", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
+        foreach (var qsoi in k1209.QSOs)
+          adapter.Insert(qsoi);
+      }
 
-      return;
+        //k1209.ToADIF(@"C:\Users\S017138\Desktop\K0UOG@K-1209-20220313.adi", EmitFlags.AddCreatedTimestamp | EmitFlags.AddProgramHeaderTags | EmitFlags.MirrorOperatorAndStationCallSign);
+
+        return;
       //var items = typeof(Via).GetValues().ToArray();
       //var optionValues = OptionValue.FromType(typeof(Mode), false, false);
 

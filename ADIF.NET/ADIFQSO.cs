@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ADIF.NET.Tags;
 using ADIF.NET.Helpers;
@@ -11,7 +12,7 @@ namespace ADIF.NET {
   /// <summary>
   /// Contains the ADIF tags describing a QSO.
   /// </summary>
-  public class ADIFQSO : ADIFTagCollection {
+  public class ADIFQSO : ADIFTagCollection, IFormattable {
 
     /// <summary>
     /// 
@@ -302,6 +303,33 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public string GetOperator()
+    {
+      var oper = GetTagValue<string>(TagNames.Operator);
+      return string.IsNullOrEmpty(oper) ? GetTagValue<string>(TagNames.GuestOp) : oper;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetOwnerCall()
+    {
+      var owner = GetTagValue<string>(TagNames.OwnerCallSign);
+      return string.IsNullOrEmpty(owner) ? GetTagValue<string>(TagNames.EqCall) : owner;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetState()
+    {
+      var state = GetTagValue<string>(TagNames.State);
+      return string.IsNullOrEmpty(state) ? GetTagValue<string>(TagNames.VEProv) : state;
+    }
+
+    /// <summary>
     /// Adds a <see cref="CommentTag"/> to the current QSO.
     /// </summary>
     /// <param name="comment">Comment to add to the QSO.</param>
@@ -329,6 +357,43 @@ namespace ADIF.NET {
         AddOrReplace(new CommentTag(comment));
       else
         AddOrReplace(new CommentIntlTag(comment));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetComment()
+    {
+      return CoalesceTagValues<string>(TagNames.CommentIntl, TagNames.Comment);
+    }
+
+    /// <summary>
+    /// Retrieves the value of the first tag in the list that has a non-null value.
+    /// </summary>
+    /// <typeparam name="T">Type of the tag values.</typeparam>
+    /// <param name="tagNames">Names of the tags whose values will be coalesced.</param>
+    public T CoalesceTagValues<T>(params string[] tagNames)
+    {
+      if (tagNames == null || tagNames.Length < 1)
+        throw new ArgumentException("At least one tag name is required.");
+
+      foreach (var tagName in tagNames)
+      {
+        var tag = GetTag(tagName);
+
+        if (tag == null)
+          continue;
+
+        if (!tag.HasValue())
+          continue;
+
+        if (tag.Value is T tagVal)
+          return tagVal;
+
+        continue;
+      }
+
+      return default(T);
     }
 
     /// <summary>
@@ -634,7 +699,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="cqZone"></param>
     /// <param name="ituZone"></param>
-    public void AddITUCQZones(int ituZone, int cqZone)
+    public void AddZones(int ituZone, int cqZone)
     {
       var cqzTag = new CQZTag(cqZone);
       if (cqzTag.ValidateValue())
@@ -650,7 +715,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="ituZone"></param>
     /// <param name="cqZone"></param>
-    public void SetITUCQZones(int ituZone, int cqZone)
+    public void SetZones(int ituZone, int cqZone)
     {
       var cqzTag = new CQZTag(cqZone);
       if (cqzTag.ValidateValue())
@@ -666,7 +731,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="myItuZone"></param>
     /// <param name="myCqZone"></param>
-    public void AddMyITUCQZones(int myItuZone, int myCqZone)
+    public void AddMyZones(int myItuZone, int myCqZone)
     {
       var cqzTag = new MyCQZoneTag(myCqZone);
       if (cqzTag.ValidateValue())
@@ -682,7 +747,7 @@ namespace ADIF.NET {
     /// </summary>
     /// <param name="myItuZone"></param>
     /// <param name="myCqZone"></param>
-    public void SetMyITUCQZones(int myItuZone, int myCqZone)
+    public void SetMyZones(int myItuZone, int myCqZone)
     {
       var cqzTag = new MyCQZoneTag(myCqZone);
       if (cqzTag.ValidateValue())
@@ -1874,7 +1939,7 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    public void ValidatePrimaryAdminSubdivision()
+    public void ValidatePrimarySubdivision()
     {
       var dxccTag = GetTag(TagNames.DXCC);
       var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
@@ -1890,7 +1955,23 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    public void ValidateSecondaryAdminSubdivision()
+    public void ValidateLatLon()
+    {
+      var latTag = GetTag(TagNames.Lat);
+      var lonTag = GetTag(TagNames.Lon);
+
+      TagValidationHelper.ValidateLatLong(latTag, lonTag);
+
+      var myLatTag = GetTag(TagNames.MyLat);
+      var myLonTag = GetTag(TagNames.MyLon);
+
+      TagValidationHelper.ValidateLatLong(myLatTag, myLonTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ValidateSecondarySubdivision()
     {
       var dxccTag = GetTag(TagNames.DXCC);
       var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
@@ -1974,6 +2055,58 @@ namespace ADIF.NET {
       return true;
     }
 
+    /// <summary>
+    /// Returns a string representation of the current <see cref="ADIFQSO"/>.
+    /// </summary>
+    public override string ToString()
+    {
+      return ToString("G", CultureInfo.CurrentCulture);
+    }
 
+    /// <summary>
+    /// Returns a string representation of the current <see cref="ADIFQSO"/>.
+    /// </summary>
+    /// <param name="format">Format string.</param>
+    public string ToString(string format)
+    {
+      return ToString(format, CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// Returns a string representation of the current <see cref="ADIFQSO"/>.
+    /// </summary>
+    /// <param name="format">Format string.</param>
+    /// <param name="provider">Culture-specific format provider.</param>
+    public string ToString(string format, IFormatProvider provider)
+    {
+      if (string.IsNullOrEmpty(format))
+        format = "G";
+
+      if (provider == null)
+        provider = CultureInfo.CurrentCulture;
+
+      switch (format)
+      {
+        case "G":
+        case "C":
+          return $"Tag/Field Count: {Count}";
+
+        case "A":
+        case "a":
+          var val = string.Empty;
+          foreach (var tag in this)
+          {
+            if (!(tag is EndRecordTag))
+              val += $"{tag.ToString(format, provider)}";      
+          }
+
+          val += new EndRecordTag().ToString(format, provider);
+
+          return val;
+
+        default:
+          throw new FormatException($"Format string '{format}' is not valid.");
+      }
+    }
   }
 }

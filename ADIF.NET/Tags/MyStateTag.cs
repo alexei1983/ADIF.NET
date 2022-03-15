@@ -11,7 +11,10 @@ namespace ADIF.NET.Tags {
     /// </summary>
     public override string Name => TagNames.MyState;
 
-    //public override ADIFEnumeration Options => Values.CountryCodes;
+    /// <summary>
+    /// Valid enumeration values.
+    /// </summary>
+    public override ADIFEnumeration Options => Values.PrimarySubdivisions;
 
     /// <summary>
     /// Creates a new MY_STATE tag.

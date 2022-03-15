@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using ADIF.NET.Tags;
@@ -256,6 +257,71 @@ namespace ADIF.NET {
 
       return false;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qsos"></param>
+    public IEnumerable<ADIFQSO> Insert(params ADIFQSO[] qsos)
+    {
+      if (qsos != null)
+      {
+        foreach (var qso in qsos)
+          yield return Insert(qso);
+      }
+    }
+
+    //public static DataTable CreateTable<T>()
+    //{
+    //  //
+    //  var entType = typeof(T);
+
+    //  // set the data table name as class name
+    //  var tbl = new DataTable(entType.Name);
+
+    //  // get the property list
+    //  var properties = TypeDescriptor.GetProperties(entType);
+    //  foreach (PropertyDescriptor prop in properties)
+    //  {
+    //    //
+    //    var colType = prop.PropertyType;
+    //    if ((colType.IsGenericType))
+    //    {
+    //      colType = colType.GetGenericArguments()[0];
+    //    }
+
+    //    // add each property as column of the table
+    //    tbl.Columns.Add(prop.Name, colType);
+    //  }
+
+    //  return tbl;
+    //}
+
+    //public static DataTable ConvertTo<T>(IEnumerable<T> lst)
+    //{
+
+    //  // create a data table structure based on the collection data type
+    //  var tbl = CreateTable<T>();
+    //  var entType = typeof(T);
+
+    //  var properties = TypeDescriptor.GetProperties(entType);
+
+    //  // get the list item and add into the list
+    //  foreach (var item in lst)
+    //  {
+    //    var row = tbl.NewRow();
+    //    foreach (PropertyDescriptor prop in properties)
+    //    {
+    //      //
+    //      var propertyValue = prop.GetValue(item) ?? DBNull.Value;
+    //      row[prop.Name] = propertyValue;
+    //    }
+
+    //    tbl.Rows.Add(row);
+    //  }
+
+    //  return tbl;
+    //}
 
     #region Generic Retrieve Methods
 

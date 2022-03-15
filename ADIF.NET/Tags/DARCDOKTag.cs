@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the contacted station's DARC DOK (District Location Code).
   /// </summary>
-  public class DARCDOKTag : EnumerationTag, ITag {
+  public class DARCDOKTag : RestrictedEnumerationTag, ITag {
 
     /// <summary>
     /// Tag name.

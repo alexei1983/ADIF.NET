@@ -6,12 +6,22 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class StateTag : RestrictedEnumerationTag, ITag {
 
+    /// <summary>
+    /// Tag name.
+    /// </summary>
     public override string Name => TagNames.State;
 
-    //public override ADIFEnumeration Options => Values.CountryCodes;
+    public override ADIFEnumeration Options => Values.PrimarySubdivisions;
 
+    /// <summary>
+    /// Creates a new STATE tag.
+    /// </summary>
     public StateTag() { }
 
+    /// <summary>
+    /// Creates a new STATE tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public StateTag(string value) : base(value) { }
   }
 }
