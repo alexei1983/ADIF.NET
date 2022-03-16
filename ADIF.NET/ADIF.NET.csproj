@@ -90,6 +90,7 @@
     <Compile Include="Exceptions\MultiValueStringException.cs" />
     <Compile Include="Exceptions\SponsoredAwardListException.cs" />
     <Compile Include="Exceptions\ValueConversionException.cs" />
+    <Compile Include="Exceptions\UserDefTagException.cs" />
     <Compile Include="Exceptions\ValueException.cs" />
     <Compile Include="GridSquare.cs" />
     <Compile Include="Helpers\DXCCHelper.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Helpers\SQLiteHelper.cs" />
     <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Helpers\TagValidationHelper.cs" />
-    <Compile Include="Helpers\UserDefHelper.cs" />
+    <Compile Include="Helpers\AppUserDefHelper.cs" />
     <Compile Include="ADIFParser.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

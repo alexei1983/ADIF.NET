@@ -29,9 +29,7 @@ namespace ADIF.NET.Tags {
       }
 
       set {
-        if (value != null && value.Contains(Values.UNDERSCORE.ToString()))
-          throw new ArgumentException("Program ID cannot contain an underscore.");
-
+        AppUserDefHelper.ValidateProgramId(value);
         programId = value;
       }
     }
@@ -49,10 +47,10 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Creates a new application-defined field.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="programId"></param>
-    /// <param name="dataType"></param>
-    /// <param name="value"></param>
+    /// <param name="fieldName">Application-defined field name.</param>
+    /// <param name="programId">Short name/ID of the program that defines the field (cannot contain an underscore).</param>
+    /// <param name="dataType">ADIF data type indicator.</param>
+    /// <param name="value">Field value.</param>
     public AppDefTag(string fieldName, string programId, string dataType, object value)
     {
       FieldName = fieldName;
@@ -66,17 +64,17 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Creates a new application-defined field.
     /// </summary>
-    /// <param name="fieldName"></param>
-    /// <param name="programId"></param>
-    /// <param name="dataType"></param>
+    /// <param name="fieldName">Application-defined field name.</param>
+    /// <param name="programId">Short name/ID of the program that defines the field (cannot contain an underscore).</param>
+    /// <param name="dataType">ADIF data type indicator.</param>
     public AppDefTag(string fieldName, string programId, string dataType) : this(fieldName, programId, dataType, null) { }
 
     /// <summary>
     /// Creates a new application-defined field.
     /// </summary>
-    /// <param name="fullFieldName"></param>
-    /// <param name="dataType"></param>
-    /// <param name="value"></param>
+    /// <param name="fullFieldName">Full application-defined field name, including the APP prefix, program ID, and field name.</param>
+    /// <param name="dataType">ADIF data type indicator.</param>
+    /// <param name="value">Field value.</param>
     public AppDefTag(string fullFieldName, string dataType, object value)
     {
       var fieldParts = AppUserDefHelper.SplitAppDefinedFieldName(fullFieldName);
@@ -92,14 +90,14 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Creates a new application-defined field.
     /// </summary>
-    /// <param name="fullFieldName"></param>
-    /// <param name="value"></param>
+    /// <param name="fullFieldName">Full application-defined field name, including the APP prefix, program ID, and field name.</param>
+    /// <param name="value">Field value.</param>
     public AppDefTag(string fullFieldName, object value) : this(fullFieldName, null, value) { }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Value to set.</param>
     public new void SetValue(object value)
     {
       var convertedVal = ConvertValue(value);
@@ -109,7 +107,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">Value to convert.</param>
     public override object ConvertValue(object value)
     {
       return !(value is null) ? AppUserDefHelper.ConvertValueByType(value, DataType) : null;

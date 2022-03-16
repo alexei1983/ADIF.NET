@@ -75,15 +75,18 @@ namespace TestApp {
       var parse = new ADIFParser();
       parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
       var result = parse.Parse();
-      Console.WriteLine(result.GetTagCount(true));
-      Console.WriteLine(result.GetTagCount(false));
 
-      var tagCounts = result.GetTagCounts(false);
+      //var parts = AppUserDefHelper.SplitAppDefinedFieldName("APP_ADIFNET_MY_NEW_APP_IS_HERE_");
 
-      foreach (var c in tagCounts)
-      {
-        Console.WriteLine($"{c.Key}                        {c.Value}");
-      }
+      //Console.WriteLine(result.GetTagCount(true));
+      //Console.WriteLine(result.GetTagCount(false));
+
+      //var tagCounts = result.GetTagCounts(false);
+
+      //foreach (var c in tagCounts)
+      //{
+      //  Console.WriteLine($"{c.Key}                        {c.Value}");
+      //}
 
       //var insertList = new List<ADIFQSO>();
 

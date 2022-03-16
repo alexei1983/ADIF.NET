@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ADIF.NET.Exceptions;
 using ADIF.NET.Tags;
 using ADIF.NET.Types;
 
@@ -15,15 +16,15 @@ namespace ADIF.NET.Helpers {
     /// specified ADIF data type indicator.
     /// </summary>
     /// <param name="value">Value to convert.</param>
-    /// <param name="adifType">ADIF data type indicator.</param>
-    public static object ConvertValueByType(object value, string adifType)
+    /// <param name="typeIndicator">ADIF data type indicator.</param>
+    public static object ConvertValueByType(object value, string typeIndicator)
     {
-      if (string.IsNullOrWhiteSpace(adifType))
-        adifType = string.Empty;
+      if (string.IsNullOrWhiteSpace(typeIndicator))
+        typeIndicator = string.Empty;
 
-      value = value == null ? string.Empty : value;
+      value = value ?? string.Empty;
 
-      switch (adifType.ToUpper())
+      switch (typeIndicator.ToUpper())
       {
         case DataTypes.Boolean:
           if (value is bool boolVal)
@@ -117,13 +118,13 @@ namespace ADIF.NET.Helpers {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="adifType"></param>
-    public static IADIFType GetADIFType(string adifType)
+    /// <param name="typeIndicator"></param>
+    public static IADIFType GetADIFType(string typeIndicator)
     {
-      if (string.IsNullOrEmpty(adifType))
+      if (string.IsNullOrEmpty(typeIndicator))
         return null;
 
-      switch (adifType.ToUpper())
+      switch (typeIndicator.ToUpper())
       {
         case DataTypes.Boolean:
           return new ADIFBoolean();
@@ -167,6 +168,64 @@ namespace ADIF.NET.Helpers {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="typeName"></param>
+    public static IADIFType GetADIFTypeByName(string typeName)
+    {
+      if (string.IsNullOrEmpty(typeName))
+        return null;
+
+      switch (typeName.ToUpper())
+      {
+        case DataTypeNames.Boolean:
+          return new ADIFBoolean();
+
+        case DataTypeNames.CreditList:
+          return new ADIFCreditList();
+
+        case DataTypeNames.Date:
+          return new ADIFDate();
+
+        case DataTypeNames.Enumeration:
+          return new ADIFEnumerationType();
+
+        case DataTypeNames.IntlMultilineString:
+          return new ADIFIntlMultilineString();
+
+        case DataTypeNames.IntlString:
+          return new ADIFIntlString();
+
+        case DataTypeNames.Location:
+          return new ADIFLocation();
+
+        case DataTypeNames.MultilineString:
+          return new ADIFMultilineString();
+
+        case DataTypeNames.Number:
+          return new ADIFNumber();
+
+        case DataTypeNames.SponsoredAwardList:
+          return new ADIFSponsoredAwardList();
+
+        case DataTypeNames.String:
+          return new ADIFString();
+
+        case DataTypeNames.Time:
+          return new ADIFTime();
+
+        case DataTypeNames.GridSquare:
+          return new ADIFGridSquare();
+
+        case DataTypeNames.SOTARef:
+          return new ADIFSOTARef();
+
+        default:
+          return null;
+      }
+    }
+
+    /// <summary>
     /// Validates the uniqueness of the field IDs for the specified user-defined tags.
     /// </summary>
     /// <param name="throwExceptions">Whether or not to throw exceptions if invalid field IDs are found.</param>
@@ -182,9 +241,9 @@ namespace ADIF.NET.Helpers {
       foreach (var tag in tags)
       {
         if (tag.FieldId < 1)
-          exceptions.Add(new Exception($"Field ID must be greater than zero for user-defined tag '{(tag.FieldName ?? string.Empty)}'."));
+          exceptions.Add(new UserDefTagException("Field ID must be greater than zero.", tag.FieldName));
         else if (tag.FieldId > 0 && numbers.Contains(tag.FieldId))
-          exceptions.Add(new Exception($"Field ID {tag.FieldId} has already been used."));
+          exceptions.Add(new UserDefTagException($"Field ID {tag.FieldId} has already been used.", tag.FieldName));
         else
           numbers.Add(tag.FieldId);
       }
@@ -206,28 +265,28 @@ namespace ADIF.NET.Helpers {
 
       if (string.IsNullOrWhiteSpace(fieldName))
       {
-        exceptions.Add(new Exception("User-defined field name cannot be null, empty string, or white space."));    
+        exceptions.Add(new UserDefTagException("User-defined field name cannot be null, empty string, or white space."));    
       } else
       { 
         if (fieldName[0] == ' ' || fieldName[fieldName.Length - 1] == ' ')
-          exceptions.Add(new Exception("User-defined field name cannot begin or end with a space."));
+          exceptions.Add(new UserDefTagException("User-defined field name cannot begin or end with a space.", fieldName));
 
         if (fieldName.Contains(Values.CURLY_BRACE_OPEN.ToString()) || fieldName.Contains(Values.CURLY_BRACE_CLOSE.ToString()))
-          exceptions.Add(new Exception("User-defined field name cannot contain curly braces."));
+          exceptions.Add(new UserDefTagException("User-defined field name cannot contain curly braces.", fieldName));
 
         if (fieldName.Contains(Values.TAG_OPENING.ToString()) || fieldName.Contains(Values.TAG_CLOSING.ToString()))
-          exceptions.Add(new Exception("User-defined field name cannot contain angle brackets (greater-than or less-than sign)."));
+          exceptions.Add(new UserDefTagException("User-defined field name cannot contain angle brackets (greater-than or less-than sign).", fieldName));
 
         if (fieldName.Contains(Values.COLON.ToString()))
-          exceptions.Add(new Exception("User-defined field name cannot contain a colon."));
+          exceptions.Add(new UserDefTagException("User-defined field name cannot contain a colon.", fieldName));
 
         if (fieldName.Contains(Values.COMMA.ToString()))
-          exceptions.Add(new Exception("User-defined field name cannot contain a comma."));
+          exceptions.Add(new UserDefTagException("User-defined field name cannot contain a comma.", fieldName));
 
         if (validateTagNameMatch)
         {
           if (TagNames.IsTagName(fieldName))
-            exceptions.Add(new Exception("User-defined field name cannot match the name of a standard ADIF field."));
+            exceptions.Add(new UserDefTagException("User-defined field name cannot match the name of a standard ADIF field.", fieldName));
         }
       }
 
@@ -253,13 +312,39 @@ namespace ADIF.NET.Helpers {
 
       var parts = fullFieldName.Split(Values.UNDERSCORE);
 
-      if (parts.Length != 3)
+      if (parts.Length < 3)
         throw new Exception($"Invalid application-defined field name: {fullFieldName}");
 
       if (!TagNames.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE.ToString()}", StringComparison.OrdinalIgnoreCase))
         throw new Exception($"Invalid application-defined field name: {fullFieldName}");
 
-      return parts;
+      var newParts = new List<string>() { parts[0], parts[1] };
+
+      var fieldName = string.Empty;
+      for (var p = 2; p < parts.Length; p++)
+      {
+        if (p > 2)
+          fieldName += Values.UNDERSCORE.ToString();
+
+        fieldName += parts[p];
+      }
+
+      newParts.Add(fieldName);
+
+      return newParts.ToArray();
+    }
+
+    /// <summary>
+    /// Validates the specified program ID to ensure no underscore character is present. The presence of an underscore 
+    /// in the program ID results in an ambigious application-defined field name (i.e. APP_ADIF_NET_MY_FIELD_NAME: where 
+    /// does the program ID portion end and the field name begin?)
+    /// </summary>
+    /// <param name="programId">Program ID to validate.</param>
+    public static void ValidateProgramId(string programId)
+    {
+      if (programId != null)
+        if (programId.Contains(Values.UNDERSCORE.ToString()))
+          throw new ArgumentException("Program ID cannot contain the underscore character.");
     }
   }
 }
