@@ -313,10 +313,10 @@ namespace ADIF.NET.Helpers {
       var parts = fullFieldName.Split(Values.UNDERSCORE);
 
       if (parts.Length < 3)
-        throw new Exception($"Invalid application-defined field name: {fullFieldName}");
+        throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
       if (!TagNames.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE.ToString()}", StringComparison.OrdinalIgnoreCase))
-        throw new Exception($"Invalid application-defined field name: {fullFieldName}");
+        throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
       var newParts = new List<string>() { parts[0], parts[1] };
 
@@ -336,7 +336,7 @@ namespace ADIF.NET.Helpers {
 
     /// <summary>
     /// Validates the specified program ID to ensure no underscore character is present. The presence of an underscore 
-    /// in the program ID results in an ambigious application-defined field name (i.e. APP_ADIF_NET_MY_FIELD_NAME: where 
+    /// in the program ID results in an ambigious application-defined field name (i.e. APP_PROGRAM_NAME_VENDOR_NAME: where 
     /// does the program ID portion end and the field name begin?)
     /// </summary>
     /// <param name="programId">Program ID to validate.</param>
@@ -344,7 +344,7 @@ namespace ADIF.NET.Helpers {
     {
       if (programId != null)
         if (programId.Contains(Values.UNDERSCORE.ToString()))
-          throw new ArgumentException("Program ID cannot contain the underscore character.");
+          throw new AppDefTagException("Program ID cannot contain the underscore character.");
     }
   }
 }
