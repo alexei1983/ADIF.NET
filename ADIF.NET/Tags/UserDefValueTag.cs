@@ -32,6 +32,17 @@ namespace ADIF.NET.Tags {
     public override IADIFType ADIFType => AppUserDefHelper.GetADIFType(field.DataType);
 
     /// <summary>
+    /// 
+    /// </summary>
+    public override string FormatString
+    {
+      get
+      {
+        return DataType == DataTypes.Date ? Values.ADIF_DATE_FORMAT : DataType == DataTypes.Time ? Values.ADIF_TIME_FORMAT_LONG : null;
+      }
+    }
+
+    /// <summary>
     /// Whether or not the tag is a user-defined tag.
     /// </summary>
     public override bool IsUserDef => true;
@@ -168,6 +179,9 @@ namespace ADIF.NET.Tags {
         try
         {
           convObj = ConvertValue(value);
+
+          if (convObj is string convStrVal && string.IsNullOrEmpty(convStrVal))
+            return true;
         }
         catch
         {

@@ -819,7 +819,7 @@ namespace ADIF.NET {
     public ADIFEnumerationValue(string code, string displayName, bool importOnly, bool legacy, string parent = null, string parentType = null)
     {
       this.DisplayName = displayName;
-      this.Code = Code;
+      this.Code = code;
       this.ImportOnly = importOnly;
       this.Legacy = legacy;
       this.Parent = parent;

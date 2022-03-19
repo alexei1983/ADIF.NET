@@ -220,6 +220,9 @@ namespace ADIF.NET.Helpers {
         case DataTypeNames.SOTARef:
           return new ADIFSOTARef();
 
+        case DataTypeNames.AwardList:
+          return new ADIFAwardList();
+
         default:
           return null;
       }

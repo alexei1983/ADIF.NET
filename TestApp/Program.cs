@@ -79,6 +79,14 @@ namespace TestApp {
       parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
       var result = parse.Parse();
 
+      var mypoweropts = result.Header.GetUserDefinedTag("MY_POWER_CATEGORY");
+
+      if (mypoweropts != null)
+      {
+        var userDef1 = new UserDefValueTag(mypoweropts);
+        Console.WriteLine(userDef1.Options);
+      }
+
       //var parts = AppUserDefHelper.SplitAppDefinedFieldName("APP_ADIFNET_MY_NEW_APP_IS_HERE_");
 
       //Console.WriteLine(result.GetTagCount(true));
