@@ -307,8 +307,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOperator()
     {
-      var oper = GetTagValue<string>(TagNames.Operator);
-      return string.IsNullOrEmpty(oper) ? GetTagValue<string>(TagNames.GuestOp) : oper;
+      return CoalesceTagValues<string>(TagNames.Operator, TagNames.GuestOp);
     }
 
     /// <summary>
@@ -316,8 +315,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOwnerCall()
     {
-      var owner = GetTagValue<string>(TagNames.OwnerCallSign);
-      return string.IsNullOrEmpty(owner) ? GetTagValue<string>(TagNames.EqCall) : owner;
+      return CoalesceTagValues<string>(TagNames.OwnerCallSign, TagNames.EqCall);
     }
 
     /// <summary>
@@ -325,8 +323,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetState()
     {
-      var state = GetTagValue<string>(TagNames.State);
-      return string.IsNullOrEmpty(state) ? GetTagValue<string>(TagNames.VEProv) : state;
+      return CoalesceTagValues<string>(TagNames.State, TagNames.VEProv);
     }
 
     /// <summary>
@@ -1781,8 +1778,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetSIG()
     {
-      var sigIntl = GetTagValue<string>(TagNames.SigIntl);
-      return string.IsNullOrEmpty(sigIntl) ? GetTagValue<string>(TagNames.Sig) : sigIntl;
+      return CoalesceTagValues<string>(TagNames.SigIntl, TagNames.Sig);
     }
 
     /// <summary>
@@ -1790,8 +1786,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetSIGInfo()
     {
-      var sigInfoIntl = GetTagValue<string>(TagNames.SigInfoIntl);
-      return string.IsNullOrEmpty(sigInfoIntl) ? GetTagValue<string>(TagNames.SigInfo) : sigInfoIntl;
+      return CoalesceTagValues<string>(TagNames.SigInfoIntl, TagNames.SigInfo);
     }
 
     /// <summary>

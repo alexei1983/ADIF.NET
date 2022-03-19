@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the contest QSO transmitted serial number.
   /// </summary>
-  public class StxTag : NumberTag, ITag {
+  public class StxTag : IntegerTag, ITag {
 
     /// <summary>
     /// Tag name.
@@ -21,6 +21,12 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="value">Initial tag value.</param>
     public StxTag(double value) : base(value) { }
+
+    /// <summary>
+    /// Creates a new STX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public StxTag(int value) : base(value) { }
 
     /// <summary>
     /// Creates a new STX tag.

@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the geomagnetic K index at the time of the QSO.
   /// </summary>
-  public class KIndexTag : NumberTag, ITag {
+  public class KIndexTag : IntegerTag, ITag {
 
     /// <summary>
     /// Tag name.
@@ -14,12 +14,12 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => 0;
+    public override int MinValue => 0;
 
     /// <summary>
     /// Maximum numeric value.
     /// </summary>
-    public override double MaxValue => 9;
+    public override int MaxValue => 9;
 
     /// <summary>
     /// Creates a new K_INDEX tag.
@@ -31,5 +31,11 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="value">Initial tag value.</param>
     public KIndexTag(double value) : base(value) { }
+
+    /// <summary>
+    /// Creates a new K_INDEX tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public KIndexTag(int value) : base(value) { }
   }
 }

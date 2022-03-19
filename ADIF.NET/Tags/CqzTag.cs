@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the contacted station's CQ zone.
   /// </summary>
-  public class CQZTag : NumberTag, ITag {
+  public class CQZTag : PositiveIntegerTag, ITag {
 
     /// <summary>
     /// Tag name.
@@ -14,12 +14,12 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => 1;
+    public override int MinValue => 1;
 
     /// <summary>
     /// Maximum numeric value.
     /// </summary>
-    public override double MaxValue => 40;
+    public override int MaxValue => 40;
 
     /// <summary>
     /// Creates a new CQZ tag.
@@ -31,5 +31,11 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="value">Initial tag value.</param>
     public CQZTag(double value) : base(value) { }
+
+    /// <summary>
+    /// Creates a new CQZ tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public CQZTag(int value) : base(value) { }
   }
 }

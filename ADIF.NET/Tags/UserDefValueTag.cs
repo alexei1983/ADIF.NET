@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents a user-defined QSO field and its value.
   /// </summary>
-  public class UserDefValueTag : Tag<object> {
+  public class UserDefValueTag : Tag<object>, ITag {
 
     /// <summary>
     /// Tag name.
@@ -121,9 +121,11 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="field"><see cref="UserDefTag"/> representing the definition of the user-defined QSO tag.</param>
     /// <param name="value">Initial tag value.</param>
-    public UserDefValueTag(UserDefTag field, object value) : base(value)
+    public UserDefValueTag(UserDefTag field, object value)
     {
       this.field = field ?? throw new ArgumentNullException(nameof(field), "User-defined tag definition is required.");
+      if (value != null)
+        SetValue(value);
     }
 
     /// <summary>

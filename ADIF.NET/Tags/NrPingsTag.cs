@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the number of meteor scatter pings heard by the logging station.
   /// </summary>
-  public class NrPingsTag : NumberTag, ITag {
+  public class NrPingsTag : IntegerTag, ITag {
 
     /// <summary>
     /// Tag name.
@@ -14,7 +14,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Minimum numeric value.
     /// </summary>
-    public override double MinValue => 0;
+    public override int MinValue => 0;
 
     /// <summary>
     /// Creates a new NR_PINGS tag.
@@ -26,5 +26,11 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="value">Initial tag value.</param>
     public NrPingsTag(double value) : base(value) { }
+
+    /// <summary>
+    /// Creates a new NR_PINGS tag.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
+    public NrPingsTag(int value) : base(value) { }
   }
 }

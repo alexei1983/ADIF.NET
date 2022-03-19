@@ -824,19 +824,63 @@ namespace ADIF.NET {
     /// <param name="columnName">Database column name.</param>
     string EscapeSQLColumn(string columnName)
     {
+      if (columnName == null)
+        throw new ArgumentNullException(nameof(columnName), "Database column name is required.");
+
+      string[] colParts = null;
+
+      if (columnName.Contains("."))
+        colParts = columnName.Split('.');
+
       switch (ReservedFieldsEscapedBy)
       {
         case ReservedWordEscape.Brackets:
-          return $"[{columnName}]";
+          if (colParts != null)
+          {
+            var val = string.Empty;
+            foreach (var p in colParts)
+              val += $"[{p}]";
+
+            return val;
+          }
+          else
+            return $"[{columnName}]";
 
         case ReservedWordEscape.DoubleQuotes:
-          return $"\"{columnName}\"";
+          if (colParts != null)
+          {
+            var val = string.Empty;
+            foreach (var p in colParts)
+              val += $"\"{p}\"";
+
+            return val;
+          }
+          else
+            return $"\"{columnName}\"";
 
         case ReservedWordEscape.SingleQuotes:
-          return $"'{columnName}'";
+          if (colParts != null)
+          {
+            var val = string.Empty;
+            foreach (var p in colParts)
+              val += $"'{p}'";
+
+            return val;
+          }
+          else
+            return $"'{columnName}'";
 
         case ReservedWordEscape.Backticks:
-          return $"`{columnName}`";
+          if (colParts != null)
+          {
+            var val = string.Empty;
+            foreach (var p in colParts)
+              val += $"`{p}`";
+
+            return val;
+          }
+          else
+            return $"`{columnName}`";
 
         default:
           return columnName;

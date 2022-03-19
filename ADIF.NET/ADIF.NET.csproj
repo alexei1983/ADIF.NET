@@ -120,6 +120,8 @@
     <Compile Include="Tags\LocationTag.cs" />
     <Compile Include="Tags\MyStreetIntlTag.cs" />
     <Compile Include="Tags\MyStreetTag.cs" />
+    <Compile Include="Tags\IntegerTag.cs" />
+    <Compile Include="Tags\PositiveIntegerTag.cs" />
     <Compile Include="Tags\RegionTag.cs" />
     <Compile Include="Tags\SponsoredAwardListTag.cs" />
     <Compile Include="Tags\CreditSubmittedTag.cs" />
@@ -259,6 +261,9 @@
     <Compile Include="Tags\AppDefTag.cs" />
     <Compile Include="Tags\UserDefTag.cs" />
     <Compile Include="Tags\UserDefValueTag.cs" />
+    <Compile Include="Types\ADIFAwardList.cs" />
+    <Compile Include="Types\ADIFInteger.cs" />
+    <Compile Include="Types\ADIFPositiveInteger.cs" />
     <Compile Include="Types\ADIFSponsoredAwardList.cs" />
     <Compile Include="Types\ADIFEnumerationType.cs" />
     <Compile Include="Types\ADIFGridSquare.cs" />

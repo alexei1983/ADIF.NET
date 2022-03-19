@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -9,6 +10,8 @@ namespace ADIF.NET.Tags {
   public class TimeTag : DateTag, ITag {
 
     public override string FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;
+
+    public override IADIFType ADIFType => new ADIFTime();
 
     public bool ConvertToUTC { get; }
 

@@ -72,6 +72,9 @@ namespace TestApp {
       //columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
 
 
+      //Console.WriteLine(3.000.IsWhole());
+      //Console.WriteLine(ADIFPositiveInteger.Parse(3.4404d.ToString()));
+
       var parse = new ADIFParser();
       parse.LoadFile(@"C:\Users\S017138\Downloads\ADIF_312_released_test_QSOs_2021_04_17\ADIF_312_test_QSOs_2021_04_17.adi");
       var result = parse.Parse();

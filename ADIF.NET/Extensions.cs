@@ -13,24 +13,47 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="str"></param>
-    public static int ToInt32(this string str) {
+    public static int ToInt32(this string str)
+    {
       if (!string.IsNullOrWhiteSpace(str) && int.TryParse(str, out int intVal))
         return intVal;
 
       return 0;
-      }
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static double ToDouble(this string str) {
+    public static double ToDouble(this string str)
+    {
       if (!string.IsNullOrWhiteSpace(str) && double.TryParse(str, out double dblVal))
         return dblVal;
 
       return 0;
-      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="doubleVal"></param>
+    public static bool IsWhole(this double doubleVal)
+    {
+      return Math.Abs(doubleVal % 1) <= (double.Epsilon * 100);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="doubleVal"></param>
+    public static bool IsWhole(this double? doubleVal)
+    {
+      if (!doubleVal.HasValue)
+        return true;
+
+      return doubleVal.Value.IsWhole();
+    }
 
     /// <summary>
     /// 

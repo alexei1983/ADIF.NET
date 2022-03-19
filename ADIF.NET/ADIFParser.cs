@@ -213,6 +213,7 @@ namespace ADIF.NET {
           {
             if (this.data[this.i] == Values.NEWLINE)
             {
+              lineNumber++;
               break;
             }
 
@@ -229,6 +230,9 @@ namespace ADIF.NET {
             // record the key
             while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR)
             {
+              if (this.data[this.i] == Values.NEWLINE)
+                lineNumber++;
+
               tag = $"{tag}{this.data[this.i]}"; //tag + this.data[this.i];
               this.i++;
 
@@ -241,6 +245,9 @@ namespace ADIF.NET {
                 // read the field ID
                 while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR)
                 {
+                  if (this.data[this.i] == Values.NEWLINE)
+                    lineNumber++;
+
                   fieldNumber = fieldNumber + this.data[this.i];
                   this.i++;
                 }
@@ -253,6 +260,9 @@ namespace ADIF.NET {
                 // read the value length
                 while (this.i < headerEndingPos && this.data[this.i] != Values.VALUE_LENGTH_CHAR)
                 {
+                  if (this.data[this.i] == Values.NEWLINE)
+                    lineNumber++;
+
                   valueLength = valueLength + this.data[this.i];
                   this.i++;
                 }
@@ -263,6 +273,9 @@ namespace ADIF.NET {
                 // read the data type
                 while (this.i < headerEndingPos && this.data[this.i] != Values.TAG_CLOSING)
                 {
+                  if (this.data[this.i] == Values.NEWLINE)
+                    lineNumber++;
+
                   userDefDataType = userDefDataType + this.data[this.i];
                   this.i++;
                 }
@@ -281,6 +294,9 @@ namespace ADIF.NET {
               // find out how long the value is
               while (this.i < headerEndingPos && this.data[this.i] != Values.TAG_CLOSING)
               {
+                if (this.data[this.i] == Values.NEWLINE)
+                  lineNumber++;
+
                 valueLength = valueLength + this.data[this.i];
                 this.i++;
               }
@@ -294,6 +310,9 @@ namespace ADIF.NET {
             // copy the value into the buffer
             while (len > 0 && this.i < headerEndingPos)
             {
+              if (this.data[this.i] == Values.NEWLINE)
+                lineNumber++;
+
               value = value + this.data[this.i];
               len--;
               this.i++;
@@ -314,6 +333,9 @@ namespace ADIF.NET {
               // read the field name
               while (userDefLen > 0 && value[x] != Values.COMMA)
               {
+                if (this.data[this.i] == Values.NEWLINE)
+                  lineNumber++;
+
                 fieldName = fieldName + value[x];
                 userDefLen--;
                 x++;
@@ -321,6 +343,9 @@ namespace ADIF.NET {
 
               while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_OPEN)
               {
+                if (this.data[this.i] == Values.NEWLINE)
+                  lineNumber++;
+
                 x++;
                 userDefLen--;
               }
@@ -332,6 +357,9 @@ namespace ADIF.NET {
                 // read the value between the curly braces
                 while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_CLOSE)
                 {
+                  if (this.data[this.i] == Values.NEWLINE)
+                    lineNumber++;
+
                   curlyBraceVal = curlyBraceVal + value[x];
                   userDefLen--;
                   x++;
@@ -393,6 +421,9 @@ namespace ADIF.NET {
 
       // iterate past the <EOH> header ending tag
       this.i = headerEndingPos + 5;
+
+      if (this.data[this.i] == Values.NEWLINE)
+        lineNumber++;
 
       // parse the header tags into ITag objects
       foreach (var header in headers)
@@ -594,6 +625,7 @@ namespace ADIF.NET {
 
     string data;
     int i;
+    int lineNumber;
     Dictionary<string, string> headers;
     Dictionary<int, Dictionary<string, string>> body;
     List<UserDefTag> userDefinedFields;
