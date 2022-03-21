@@ -77,26 +77,31 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
-      if (base.ValidateValue(value))
+      if (value is null)
+        return true;
+
+      if (value is string strVal && string.IsNullOrEmpty(strVal))
+        return true;
+
+      try
       {
-        try
-        {
-          var val = ConvertValue(value);
+        var val = ConvertValue(value);
 
-          if (val is int intVal)
-          {
-            if (intVal < MinValue)
-              return false;
-            else if (MaxValue > MinValue && intVal > MaxValue)
-              return false;
-
-            return true;
-          }
-        }
-        catch
+        if (val is int intVal)
         {
-          return false;
+          if (intVal < MinValue)
+            return false;
+          else if (MaxValue > MinValue && intVal > MaxValue)
+            return false;
+
+          return true;
         }
+        else if (val is int?)
+          return true;
+      }
+      catch
+      {
+        return false;
       }
 
       return false;

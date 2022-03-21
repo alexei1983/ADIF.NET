@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using ADIF.NET.Types;
 
 namespace ADIF.NET.Tags {
 
@@ -8,12 +9,31 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class DateTag : Tag<DateTime> {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string FormatString { get; set; } = Values.ADIF_DATE_FORMAT;
 
+    /// <summary>
+    /// ADIF type.
+    /// </summary>
+    public override IADIFType ADIFType => new ADIFDate();
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="DateTag"/> class.
+    /// </summary>
     public DateTag() { }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="DateTag"/> class.
+    /// </summary>
+    /// <param name="value">Initial tag value.</param>
     public DateTag(DateTime value) : base(value) { }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override object ConvertValue(object value) {
 
       if (!(value is null)) {
@@ -21,7 +41,7 @@ namespace ADIF.NET.Tags {
         if (value is DateTime dateTime)
           return dateTime;
         else if (DateTime.TryParseExact(value.ToString(),
-                                       Values.ADIF_DATE_FORMAT,
+                                       FormatString,
                                        FormatProvider,
                                        DateTimeStyles.AllowInnerWhite | 
                                        DateTimeStyles.AllowLeadingWhite | 

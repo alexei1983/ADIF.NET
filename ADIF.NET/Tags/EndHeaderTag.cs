@@ -10,5 +10,10 @@ namespace ADIF.NET.Tags {
     /// Tag name.
     /// </summary>
     public override string Name => TagNames.EndHeader;
+
+    /// <summary>
+    /// Whether or not the tag is a header tag.
+    /// </summary>
+    public override bool Header => true;
   }
 }

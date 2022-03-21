@@ -47,7 +47,7 @@ namespace ADIF.NET.Tags {
       if (ADIFCreditList.TryParse(value, out CreditList list))
       {
         foreach (var item in list)
-          creditList.Add(item);
+          creditList.Add(item.Credit, item.Medium);
 
         base.SetValue(value);
       }

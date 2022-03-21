@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
@@ -155,28 +156,72 @@ namespace ADIF.NET.Types {
   /// <summary>
   /// Represents an ADIF CreditList value.
   /// </summary>
-  public class CreditList : List<CreditList.CreditListMember>, 
-                            IList<CreditList.CreditListMember>,
-                            IFormattable {
+  public class CreditList : IFormattable, IEnumerable<CreditList.CreditListMember>, IEnumerable {
  
+    List<CreditListMember> internalList;
+
+    public int Count => internalList.Count;
+
+    public CreditListMember this[int i]
+    {
+      get
+      {
+        return internalList[i];
+      }
+    }
+
+    public CreditList()
+    {
+      internalList = new List<CreditListMember>();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    /// <param name="medium"></param>
     public void Add(string credit, string medium)
     {
-      if (string.IsNullOrEmpty(credit) || string.IsNullOrEmpty(medium))
-        throw new CreditListException("Credit and medium are required.");
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
 
-      Add(new CreditListMember(credit, medium));
+      if (string.IsNullOrEmpty(medium))
+        throw new ArgumentException("QSL medium is required.", nameof(medium));
+
+      if (!HasMediumInCredit(credit, medium))
+        internalList.Add(new CreditListMember(credit, medium));
+
+      var member = GetCreditWithNoMedium(credit);
+
+      if (!string.IsNullOrEmpty(member.Credit))
+        internalList.Remove(member);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
     public void Add(string credit)
     {
-      Add(new CreditListMember(credit));
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      if (!HasCredit(credit))
+        internalList.Add(new CreditListMember(credit));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
     public IEnumerable<string> GetMediums(string credit)
     {
-      return this.Where(c => !string.IsNullOrEmpty(c.Medium) && 
-                             c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase))?
-                 .Select(c => c.Medium);
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      return internalList.Where(c => !string.IsNullOrEmpty(c.Medium) && 
+                               (c.Credit ?? string.Empty).Equals(credit, StringComparison.OrdinalIgnoreCase))?
+                         .Select(c => c.Medium);
     }
 
     /// <summary>
@@ -184,9 +229,9 @@ namespace ADIF.NET.Types {
     /// </summary>
     public IEnumerable<string> GetCredits()
     {
-      return this.Where(c => !string.IsNullOrEmpty(c.Credit))?
-                 .Select(c => c.Credit)?
-                 .Distinct();
+      return internalList.Where(c => !string.IsNullOrEmpty(c.Credit))?
+                         .Select(c => c.Credit)?
+                         .Distinct();
     }
 
     /// <summary>
@@ -195,8 +240,11 @@ namespace ADIF.NET.Types {
     /// <param name="credit"></param>
     public bool HasCredit(string credit)
     {
-      return !string.IsNullOrEmpty(this.FirstOrDefault(c => c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase))
-                                                             .Credit);
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      return !string.IsNullOrEmpty(internalList.FirstOrDefault(c => (c.Credit ?? string.Empty).Equals(credit, StringComparison.OrdinalIgnoreCase))
+                                                                    .Credit);
     }
 
     /// <summary>
@@ -206,15 +254,93 @@ namespace ADIF.NET.Types {
     /// <param name="medium"></param>
     public bool HasMediumInCredit(string credit, string medium)
     {
-      return !string.IsNullOrEmpty(this.FirstOrDefault(c => c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase) &&
-                                                            c.Medium.Equals(medium, StringComparison.OrdinalIgnoreCase))
-                                                             .Medium);
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      if (string.IsNullOrEmpty(medium))
+        throw new ArgumentException("QSL medium is required.", nameof(medium));
+
+      return !string.IsNullOrEmpty(internalList.FirstOrDefault(c => (c.Credit ?? string.Empty).Equals(credit, StringComparison.OrdinalIgnoreCase) &&
+                                                                    (c.Medium ?? string.Empty).Equals(medium, StringComparison.OrdinalIgnoreCase))
+                                                                    .Medium);
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public struct CreditListMember {
+    /// <param name="credit"></param>
+    /// <param name="medium"></param>
+    public bool RemoveMedium(string credit, string medium)
+    {
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      if (string.IsNullOrEmpty(medium))
+        throw new ArgumentException("QSL medium is required.", nameof(medium));
+
+      var member = internalList.FirstOrDefault(m => (m.Credit ?? string.Empty).Equals(credit, StringComparison.OrdinalIgnoreCase) &&
+                                                    (m.Medium ?? string.Empty).Equals(medium, StringComparison.OrdinalIgnoreCase));
+
+      if (!string.IsNullOrEmpty(member.Credit) && !string.IsNullOrEmpty(member.Medium))
+        return internalList.Remove(member);
+
+      return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    public bool RemoveCredit(string credit)
+    {
+      if (string.IsNullOrEmpty(credit))
+        throw new ArgumentException("Credit is required.", nameof(credit));
+
+      var members = internalList.Where(m => (m.Credit ?? string.Empty).Equals(credit, StringComparison.OrdinalIgnoreCase)).ToList();
+
+      if (members != null && members.Count > 0)
+      {
+        foreach (var member in members)
+        {
+          if (!internalList.Remove(member))
+            return false;
+        }
+      }
+      return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    CreditListMember GetCreditWithNoMedium(string credit)
+    {
+      return internalList.FirstOrDefault(c => !string.IsNullOrEmpty(c.Credit) && 
+                                              string.IsNullOrEmpty(c.Medium) &&
+                                              c.Credit.Equals(credit, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IEnumerator<CreditListMember> GetEnumerator()
+    {
+      return internalList.GetEnumerator();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return internalList.GetEnumerator();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public struct CreditListMember : IEquatable<CreditListMember> {
 
       /// <summary>
       /// 
@@ -243,6 +369,54 @@ namespace ADIF.NET.Types {
       {
         Medium = medium;
         Credit = credit;
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <returns></returns>
+      public override int GetHashCode()
+      {
+        unchecked
+        {
+          const int hashingBase = (int)2166136261;
+          const int hashingMultiplier = 16777619;
+
+          var hash = hashingBase;
+          hash = (hash * hashingMultiplier) ^ (!string.IsNullOrEmpty(Credit) ? Credit.ToUpperInvariant().GetHashCode() : 0);
+          hash = (hash * hashingMultiplier) ^ (GetType().GetHashCode());
+          hash = (hash * hashingMultiplier) ^ (!string.IsNullOrEmpty(Medium) ? Medium.ToUpperInvariant().GetHashCode() : 0);
+
+          return hash;
+        }
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="obj"></param>
+      public override bool Equals(object obj)
+      {
+        if (obj is null)
+          return false;
+
+        if (obj is CreditListMember member)
+          return member.Equals(this);
+
+        return false;
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="member"></param>
+      /// <returns></returns>
+      public bool Equals(CreditListMember member)
+      {
+        if (!(member.Credit ?? string.Empty).Equals(this.Credit ?? string.Empty, StringComparison.OrdinalIgnoreCase))
+          return false;
+
+        return (member.Medium ?? string.Empty).Equals(this.Medium ?? string.Empty, StringComparison.OrdinalIgnoreCase);
       }
     }
 
@@ -274,13 +448,14 @@ namespace ADIF.NET.Types {
 
           var handled = new List<string>();
           var result = string.Empty;
+          var total = 0;
 
           for (var x = 0; x < Count; x++)
           {
             if (handled.Contains(this[x].Credit.ToUpper()))
               continue;
 
-            if (x >= 0 && (x + 1) < Count)
+            if (x > 0 && total < Count)
               result += Values.COMMA.ToString();
 
             result += this[x].Credit;
@@ -294,10 +469,13 @@ namespace ADIF.NET.Types {
               for (var y = 0; y < mediums.Length; y++)
               {
                 result += mediums[y];
+                total++;
                 if ((y + 1) < mediums.Length)
                   result += Values.AMPERSAND.ToString();
               }
             }
+            else
+              total++;
 
               handled.Add(this[x].Credit.ToUpper());
 

@@ -1491,7 +1491,7 @@ namespace ADIF.NET {
       foreach (var credit in newCreditsGranted)
       {
         if (!existingList.Contains(credit))
-          existingList.Add(credit);
+          existingList.Add(credit.Credit, credit.Medium);
       }
 
       AddOrReplace(new CreditGrantedTag(existingList.ToString()));
