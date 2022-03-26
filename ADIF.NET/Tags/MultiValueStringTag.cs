@@ -80,6 +80,9 @@ namespace ADIF.NET.Tags {
     /// <param name="values"></param>
     public MultiValueStringTag(params string[] values)
     {
+      if (this.values == null)
+        this.values = new List<string>();
+
       if (values != null)
       {
         foreach (var value in values)

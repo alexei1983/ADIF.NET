@@ -138,6 +138,11 @@ namespace ADIF.NET {
     public const string ADIF_NET_CONFIG_FILE_NAME = "adifnet.properties";
 
     /// <summary>
+    /// Regex used to match the ADIF SOTARef data type.
+    /// </summary>
+    public const string SOTA_REF_REGEX = @"[a-zA-Z0-9]{1,8}\/[a-zA-Z]{2}\-([0-9][0-9][1-9]|[0-9][1-9][0-9]|[1-9][0-9][0-9])";
+
+    /// <summary>
     /// ADIF version.
     /// </summary>
     public static readonly Version ADIFVersion = new Version(3, 1, 0);
@@ -748,10 +753,10 @@ namespace ADIF.NET {
     const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
     const string RETRIEVE_DARC_DOK_SQL = "SELECT Code, District || ' - ' || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"DarcDok\" ORDER BY Code";
     const string ENUM_RETRIEVE_CHILDREN_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE ParentType = @ParentType AND Parent = @Parent ORDER BY DisplayName, Code";
-    const string RETRIEVE_DXCC_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CountryCode AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" WHERE CountryCode = @Parent AND '" + DXCC_ENUM_STRING + "' = @ParentType";
-    const string RETRIEVE_PRIMARY_SUB_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" WHERE PrimarySubdivisionCode = @Parent AND '" + PRIMARY_SUB_ENUM_STRING + "' = @ParentType";
-    const string RETRIEVE_PRIMARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CountryCode AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" ORDER BY CountryCode, Name, Code";
-    const string RETRIEVE_SECONDARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" ORDER BY CountryCode, PrimarySubdivisionCode, Name, Code" ;
+    const string RETRIEVE_DXCC_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" WHERE CAST(CountryCode AS TEXT) = @Parent AND '" + DXCC_ENUM_STRING + "' = @ParentType";
+    const string RETRIEVE_PRIMARY_SUB_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" WHERE PrimarySubdivisionCode = @Parent AND '" + PRIMARY_SUB_ENUM_STRING + "' = @ParentType AND CAST(CountryCode AS TEXT) = @CountryCode";
+    const string RETRIEVE_PRIMARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" ORDER BY CountryCode, Name, Code";
+    const string RETRIEVE_SECONDARY_SUB_SQL = "SELECT s.Code, s.Name AS DisplayName, s.Deleted AS ImportOnly, s.Deleted AS Legacy, s.PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" s ORDER BY s.CountryCode, s.PrimarySubdivisionCode, s.Name, s.Code" ;
     const string CREDIT_ENUM_STRING = "Credit";
     const string BAND_ENUM_STRING = "Band";
     const string DXCC_ENUM_STRING = "DXCC";

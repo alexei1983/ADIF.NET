@@ -38,7 +38,7 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="doubleVal"></param>
-    public static bool IsWhole(this double doubleVal)
+    public static bool IsWholeNumber(this double doubleVal)
     {
       return Math.Abs(doubleVal % 1) <= (double.Epsilon * 100);
     }
@@ -46,13 +46,35 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="val"></param>
+    public static bool IsWholeNumber(this object val)
+    {
+      if (val is null)
+        return false;
+
+      if (!val.IsNumber(out Type type))
+        return false;
+
+      if (type == typeof(decimal) || type == typeof(double) || type == typeof(float))
+      {
+        return IsWholeNumber((double)val);
+      }
+      else
+      {
+        return true;
+      } 
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="doubleVal"></param>
-    public static bool IsWhole(this double? doubleVal)
+    public static bool IsWholeNumber(this double? doubleVal)
     {
       if (!doubleVal.HasValue)
         return true;
 
-      return doubleVal.Value.IsWhole();
+      return doubleVal.Value.IsWholeNumber();
     }
 
     /// <summary>
@@ -61,40 +83,82 @@ namespace ADIF.NET {
     /// <param name="obj"></param>
     /// <param name="allowEmpty"></param>
     /// <returns></returns>
-    public static bool IsADIFGridSquare(this object obj, bool allowEmpty = false) {
-
+    public static bool IsADIFGridSquare(this object obj, bool allowEmpty = false)
+    {
       var objStr = obj?.ToString() ?? string.Empty;
       var objStrLen = objStr.Length;
       var isNullOrEmpty = string.IsNullOrEmpty(objStr);
 
       if (isNullOrEmpty && !allowEmpty)
         return false;
-      
-      return objStrLen == 2 || objStrLen == 4 || objStrLen == 6 || objStrLen == 8 || isNullOrEmpty;
+
+      if (!isNullOrEmpty)
+      {
+        try
+        {
+          Unclassified.Util.MaidenheadLocator.LocatorToLatLng(objStr);
+          return true;
+        }
+        catch
+        {
+          return false;
+        }
       }
+
+      return isNullOrEmpty;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="obj"></param>
+    public static bool IsNumber(this object obj)
+    {
+      return IsNumber(obj, out Type _);
+    }
 
     /// <summary>
     /// Determines whether or not an <see cref="object"/> is a number.
     /// </summary>
     /// <param name="obj">The <see cref="object"/> to validate as a number.</param>
     /// <returns><see cref="true"/> if the <see cref="object"/> is a number, else <see cref="false"/>.</returns>
-    public static bool IsNumber(this object obj) {
+    public static bool IsNumber(this object obj, out Type type)
+    {
+      type = null;
 
       if (obj is null)
         return false;
 
-      return obj is sbyte
-                || obj is byte
-                || obj is short
-                || obj is ushort
-                || obj is int
-                || obj is uint
-                || obj is long
-                || obj is ulong
-                || obj is float
-                || obj is double
-                || obj is decimal;
+      type = obj.GetType();
+
+      if (obj is sbyte)
+        return true;
+      else if (obj is byte)
+        return true;
+      else if (obj is short)
+        return true;
+      else if (obj is ushort)
+        return true;
+      else if (obj is int)
+        return true;
+      else if (obj is uint)
+        return true;
+      else if (obj is long)
+        return true;
+      else if (obj is ulong)
+        return true;
+      else if (obj is float)
+        return true;
+      else if (obj is double)
+        return true;
+      else if (obj is decimal)
+        return true;
+      else
+      {
+        type = null;
+        return false;
       }
+    }
 
     /// <summary>
     /// 
@@ -153,9 +217,7 @@ namespace ADIF.NET {
     /// <param name="str">String to check.</param>
     /// <returns>True if the <see cref="string"/> is a SOTA designator, else false.</returns>
     public static bool IsSOTADesignator(this string str) {
-
-      var regex = @"[a-zA-Z0-9]{1,8}\/[a-zA-Z]{2}\-([0-9][0-9][1-9]|[0-9][1-9][0-9]|[1-9][0-9][0-9])";
-      return Regex.IsMatch(str ?? string.Empty, regex);
+      return Regex.IsMatch(str ?? string.Empty, Values.SOTA_REF_REGEX);
       }
     }
   }

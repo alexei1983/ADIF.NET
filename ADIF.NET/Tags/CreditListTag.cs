@@ -47,7 +47,12 @@ namespace ADIF.NET.Tags {
       if (ADIFCreditList.TryParse(value, out CreditList list))
       {
         foreach (var item in list)
-          creditList.Add(item.Credit, item.Medium);
+        {
+          if (!string.IsNullOrEmpty(item.Medium))
+            creditList.Add(item.Credit, item.Medium);
+          else
+            creditList.Add(item.Credit);
+        }
 
         base.SetValue(value);
       }

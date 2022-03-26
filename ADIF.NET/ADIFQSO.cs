@@ -307,7 +307,12 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOperator()
     {
-      return CoalesceTagValues<string>(TagNames.Operator, TagNames.GuestOp);
+      return CoalesceTagValues<string>(TagNames.Operator, TagNames.GuestOp, TagNames.StationCallSign, TagNames.OwnerCallSign);
+    }
+
+    public string GetCall()
+    {
+      return CoalesceTagValues<string>(TagNames.Call, TagNames.ContactedOp, TagNames.EqCall);
     }
 
     /// <summary>
@@ -315,7 +320,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOwnerCall()
     {
-      return CoalesceTagValues<string>(TagNames.OwnerCallSign, TagNames.EqCall);
+      return CoalesceTagValues<string>(TagNames.OwnerCallSign);
     }
 
     /// <summary>
@@ -372,7 +377,7 @@ namespace ADIF.NET {
     public T CoalesceTagValues<T>(params string[] tagNames)
     {
       if (tagNames == null || tagNames.Length < 1)
-        throw new ArgumentException("At least one tag name is required.");
+        throw new ArgumentException("At least one tag name is required.", nameof(tagNames));
 
       foreach (var tagName in tagNames)
       {
@@ -1326,6 +1331,66 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public string GetBand()
+    {
+      var band = GetTagValue<string>(TagNames.Band);
+
+      if (string.IsNullOrEmpty(band))
+      {
+        var freq = GetTagValue<double?>(TagNames.Freq);
+
+        if (freq.HasValue)
+          band = Band.Get(freq.Value)?.Name;
+      }
+
+      return band;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetBandRx()
+    {
+      var bandRx = GetTagValue<string>(TagNames.BandRx);
+
+      if (string.IsNullOrEmpty(bandRx))
+      {
+        var freqRx = GetTagValue<double?>(TagNames.FreqRx);
+
+        if (freqRx.HasValue)
+          bandRx = Band.Get(freqRx.Value)?.Name;
+      }
+
+      return bandRx;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool IsCrossBand()
+    {
+      try
+      {
+        ValidateFrequencyBand();
+      }
+      catch
+      {
+        throw new Exception("Cannot determine if QSO is cross-band: invalid band/frequency values.");
+      }
+
+      var band = GetBand();
+      var bandRx = GetBandRx();
+
+      if (!string.IsNullOrEmpty(bandRx) && !string.IsNullOrEmpty(band) && 
+          !string.Equals(band, bandRx, StringComparison.OrdinalIgnoreCase))
+        return true;
+
+      return false;
+    }
+
+    /// <summary>
     /// Determines whether or not the specified QSO matches the current QSO.
     /// </summary>
     /// <param name="qso">QSO to match against the current QSO.</param>
@@ -1335,21 +1400,21 @@ namespace ADIF.NET {
       if (qso == null || qso.Count < 1)
         return false;
 
-      var op = qso.GetTagValue<string>(TagNames.Operator);
+      var op = qso.GetOperator();
       var dateTimeOn  = qso.GetQSODateTimeOn();
       var mode = qso.GetTagValue<string>(TagNames.Mode);
-      var call = qso.GetTagValue<string>(TagNames.Call);
-      var band = qso.GetTagValue<string>(TagNames.Band);
+      var call = qso.GetCall();
+      var band = qso.GetBand();
 
       if (string.IsNullOrEmpty(op) || string.IsNullOrEmpty(call) || string.IsNullOrEmpty(band) ||
         string.IsNullOrEmpty(mode) || !dateTimeOn.HasValue)
         throw new Exception("Not enough info to determine if QSO matches.");
 
-      var thisOp = GetTagValue<string>(TagNames.Operator);
+      var thisOp = GetOperator();
       var thisDateTimeOn = GetQSODateTimeOn();
       var thisMode = GetTagValue<string>(TagNames.Mode);
-      var thisCall = GetTagValue<string>(TagNames.Call);
-      var thisBand = GetTagValue<string>(TagNames.Band);
+      var thisCall = GetCall();
+      var thisBand = GetBand();
 
       if (string.IsNullOrEmpty(thisOp) || string.IsNullOrEmpty(thisCall) || string.IsNullOrEmpty(thisBand) ||
         string.IsNullOrEmpty(thisMode) || !thisDateTimeOn.HasValue)
@@ -1386,21 +1451,21 @@ namespace ADIF.NET {
       if (qso == null || qso.Count < 1)
         return false;
 
-      var op = qso.GetTagValue<string>(TagNames.Operator);
+      var op = qso.GetOperator();
       var dateTimeOn = qso.GetQSODateTimeOn();
       var mode = qso.GetTagValue<string>(TagNames.Mode);
-      var call = qso.GetTagValue<string>(TagNames.Call);
-      var band = qso.GetTagValue<string>(TagNames.Band);
+      var call = qso.GetCall();
+      var band = qso.GetBand();
 
       if (string.IsNullOrEmpty(op) || string.IsNullOrEmpty(call) || string.IsNullOrEmpty(band) ||
         string.IsNullOrEmpty(mode) || !dateTimeOn.HasValue)
         throw new Exception("Not enough info to determine if QSO matches.");
 
-      var thisOp = GetTagValue<string>(TagNames.Operator);
+      var thisOp = GetOperator();
       var thisDateTimeOn = GetQSODateTimeOn();
       var thisMode = GetTagValue<string>(TagNames.Mode);
-      var thisCall = GetTagValue<string>(TagNames.Call);
-      var thisBand = GetTagValue<string>(TagNames.Band);
+      var thisCall = GetCall();
+      var thisBand = GetBand();
 
       if (string.IsNullOrEmpty(thisOp) || string.IsNullOrEmpty(thisCall) || string.IsNullOrEmpty(thisBand) ||
         string.IsNullOrEmpty(thisMode) || !thisDateTimeOn.HasValue)
@@ -1412,11 +1477,25 @@ namespace ADIF.NET {
       if (!string.Equals(call, thisOp, StringComparison.OrdinalIgnoreCase))
         return false;
 
-      if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
-        return false;
-
       if (!string.Equals(mode, thisMode, StringComparison.OrdinalIgnoreCase))
         return false;
+
+      if (IsCrossBand() && qso.IsCrossBand())
+      {
+        var bandRx = qso.GetBandRx();
+        var thisBandRx = GetBandRx();
+
+        if (!string.Equals(thisBandRx, band, StringComparison.OrdinalIgnoreCase))
+          return false;
+
+        if (!string.Equals(bandRx, thisBand, StringComparison.OrdinalIgnoreCase))
+          return false;
+      }
+      else
+      {
+        if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
+          return false;
+      }
 
       var qsoDateTimeDiff = thisDateTimeOn.Value - dateTimeOn.Value;
 
@@ -1491,7 +1570,12 @@ namespace ADIF.NET {
       foreach (var credit in newCreditsGranted)
       {
         if (!existingList.Contains(credit))
-          existingList.Add(credit.Credit, credit.Medium);
+        {
+          if (!string.IsNullOrEmpty(credit.Medium))
+            existingList.Add(credit.Credit, credit.Medium);
+          else
+            existingList.Add(credit.Credit);
+        }
       }
 
       AddOrReplace(new CreditGrantedTag(existingList.ToString()));
@@ -1913,6 +1997,14 @@ namespace ADIF.NET {
       }
 
       return TimeSpan.Zero;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public AppDefTag[] GetAppDefTags()
+    {
+      return this.Where(t => t is AppDefTag)?.Cast<AppDefTag>()?.ToArray();
     }
 
     /// <summary>

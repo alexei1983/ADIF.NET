@@ -19,6 +19,95 @@ namespace Unclassified.Util {
   /// </summary>
   public class MaidenheadLocator {
 
+    public static List<string> GetAllLocators()
+    {
+      var res = new List<string>();
+
+      for (var letter = (int)'A'; letter < (int)'S'; letter++)
+      {
+        for (var innerLetter = (int)'A'; innerLetter < (int)'S'; innerLetter++)
+        {
+          for (var number = 0; number < 100; number++)
+          {
+            res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}");
+
+            for (var letter1 = (int)'a'; letter1 < (int)'x'; letter1++)
+            {
+              for (var letter2 = (int)'a'; letter2 < (int)'x'; letter2++)
+              {
+                res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}");
+
+                for (var number1 = 0; number1 < 100; number1++)
+                {
+                  res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}{number1.ToString("00")}");
+
+                  for (var letter3 = (int)'a'; letter3 < (int)'x'; letter3++)
+                  {
+                    for (var letter4 = (int)'a'; letter4 < (int)'x'; letter4++)
+                    {
+                      res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}{number1.ToString("00")}{(char)letter3}{(char)letter4}");
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return res;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="startLetter1"></param>
+    /// <param name="startLetter2"></param>
+    /// <param name="startNumber1"></param>
+    /// <param name="maxLength"></param>
+    public static List<string> GetLocators(char startLetter1, char startLetter2, int startNumber1 = 0, int maxLength = 4)
+    {
+      var res = new List<string>();
+
+      for (var letter = (int)startLetter1; letter < (int)'S'; letter++)
+      {
+        for (var innerLetter = (int)'A'; innerLetter < (int)'S'; innerLetter++)
+        {
+          for (var number = startNumber1; number < 100; number++)
+          {
+            var grid = $"{(char)letter}{(char)innerLetter}{number.ToString("00")}";
+            if (grid.Length > maxLength)
+              return res;
+
+            res.Add(grid);
+
+            for (var letter1 = (int)'a'; letter1 < (int)'x'; letter1++)
+            {
+              for (var letter2 = (int)'a'; letter2 < (int)'x'; letter2++)
+              {
+                res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}");
+
+                for (var number1 = 0; number1 < 100; number1++)
+                {
+                  res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}{number1.ToString("00")}");
+
+                  for (var letter3 = (int)'a'; letter3 < (int)'x'; letter3++)
+                  {
+                    for (var letter4 = (int)'a'; letter4 < (int)'x'; letter4++)
+                    {
+                      res.Add($"{(char)letter}{(char)innerLetter}{number.ToString("00")}{(char)letter1}{(char)letter2}{number1.ToString("00")}{(char)letter3}{(char)letter4}");
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return res;
+    }
+
     /// <summary>
     /// Convert a locator to latitude and longitude in degrees
     /// </summary>

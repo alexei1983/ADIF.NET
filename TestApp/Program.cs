@@ -71,6 +71,22 @@ namespace TestApp {
       //columnMappings.Add(new ADIFColumnMapping("COUNTRY"));
       //columnMappings.Add(new ADIFColumnMapping("COUNTRY_INTL"));
 
+      //var locators = Unclassified.Util.MaidenheadLocator.GetAllLocators();
+
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue(1.00m));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue("-1"));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue(1.01m));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)null));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)-1));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)99));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue(99));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((double?)null));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((double?)-1));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue(string.Empty));
+      Console.WriteLine(ADIFPositiveInteger.IsValidValue((string)null));
+
+      return;
+
 
       //Console.WriteLine(3.000.IsWhole());
       //Console.WriteLine(ADIFPositiveInteger.Parse(3.4404d.ToString()));

@@ -89,7 +89,7 @@ namespace ADIF.NET.Types {
         return true;
 
       if (value is double dblVal)
-        return dblVal.IsWhole();
+        return dblVal.IsWholeNumber();
 
       return IsValidValue(value == null ? string.Empty : value.ToString());
     }

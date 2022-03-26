@@ -42,7 +42,7 @@ namespace ADIF.NET.Tags {
     /// <param name="value">Initial tag value.</param>
     public IntegerTag(double value)
     {
-      if (!value.IsWhole())
+      if (!value.IsWholeNumber())
         throw new ArgumentException($"Invalid {nameof(ADIFInteger)}: {value}");
 
       SetValue(value);
@@ -56,7 +56,7 @@ namespace ADIF.NET.Tags {
     {
       if (value is int || value is int? || (value != null && value.GetType().IsAssignableFrom(typeof(int?))))
         return (int?)value;
-      else if (value is double dblVal && dblVal.IsWhole())
+      else if (value is double dblVal && dblVal.IsWholeNumber())
         return Convert.ToInt32(dblVal);
       else
       {

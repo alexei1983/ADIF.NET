@@ -88,9 +88,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Parses the specified string as an ADIF CreditList object.
     /// </summary>
-    /// <param name="s"></param>
+    /// <param name="s">String to parse.</param>
     static CreditList ParseCreditList(string s)
     {
       if (s == null)
@@ -160,8 +160,15 @@ namespace ADIF.NET.Types {
  
     List<CreditListMember> internalList;
 
+    /// <summary>
+    /// Total number of credit/medium combinations in the CreditList object.
+    /// </summary>
     public int Count => internalList.Count;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="i">Zero-based index of the credit/medium combination to retrieve.</param>
     public CreditListMember this[int i]
     {
       get
@@ -170,16 +177,36 @@ namespace ADIF.NET.Types {
       }
     }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="CreditList"/> class.
+    /// </summary>
     public CreditList()
     {
       internalList = new List<CreditListMember>();
     }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of the <see cref="CreditList"/> class.
     /// </summary>
-    /// <param name="credit"></param>
-    /// <param name="medium"></param>
+    /// <param name="adifCreditListString">ADIF string representation of the CreditList object.</param>
+    public CreditList(string adifCreditListString) : this()
+    {
+      if (!string.IsNullOrEmpty(adifCreditListString))
+      {
+        if (ADIFCreditList.TryParse(adifCreditListString, out CreditList creditList))
+        {
+          foreach (var member in creditList)
+            internalList.Add(member);
+        }
+      }
+
+    }
+
+    /// <summary>
+    /// Adds a new credit/medium combination to the current <see cref="CreditList"/> instance.
+    /// </summary>
+    /// <param name="credit">Credit enumeration member.</param>
+    /// <param name="medium">QSL medium enumeration member.</param>
     public void Add(string credit, string medium)
     {
       if (string.IsNullOrEmpty(credit))
@@ -198,9 +225,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Adds a new credit to the current <see cref="CreditList"/> instance.
     /// </summary>
-    /// <param name="credit"></param>
+    /// <param name="credit">Credit enumeration member.</param>
     public void Add(string credit)
     {
       if (string.IsNullOrEmpty(credit))
@@ -211,9 +238,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves all QSL mediums for the specified credit.
     /// </summary>
-    /// <param name="credit"></param>
+    /// <param name="credit">Credit enumeration member for which QSL mediums will be retrieved.</param>
     public IEnumerable<string> GetMediums(string credit)
     {
       if (string.IsNullOrEmpty(credit))
@@ -225,7 +252,7 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the distinct list of credits in the current <see cref="CreditList"/> instance.
     /// </summary>
     public IEnumerable<string> GetCredits()
     {
@@ -235,9 +262,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the current <see cref="CreditList"/> instance contains the specified credit.
     /// </summary>
-    /// <param name="credit"></param>
+    /// <param name="credit">Credit enumeration member to search.</param>
     public bool HasCredit(string credit)
     {
       if (string.IsNullOrEmpty(credit))
@@ -248,10 +275,10 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Determines whether or not the current <see cref="CreditList"/> instance contains the specified credit and medium combination.
     /// </summary>
-    /// <param name="credit"></param>
-    /// <param name="medium"></param>
+    /// <param name="credit">Credit enumeration member to search.</param>
+    /// <param name="medium">QSL medium enumeration member to search.</param>
     public bool HasMediumInCredit(string credit, string medium)
     {
       if (string.IsNullOrEmpty(credit))
@@ -266,10 +293,10 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Removes the specified credit and QSL medium combination from the current <see cref="CreditList"/> instance.
     /// </summary>
-    /// <param name="credit"></param>
-    /// <param name="medium"></param>
+    /// <param name="credit">Credit enumeration member to remove.</param>
+    /// <param name="medium">QSL medium enumeration member to remove.</param>
     public bool RemoveMedium(string credit, string medium)
     {
       if (string.IsNullOrEmpty(credit))
@@ -288,9 +315,9 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Removes the specified credit (and all its QSL mediums, if any) from the current <see cref="CreditList"/> instance.
     /// </summary>
-    /// <param name="credit"></param>
+    /// <param name="credit">Credit enumeration member to remove.</param>
     public bool RemoveCredit(string credit)
     {
       if (string.IsNullOrEmpty(credit))
@@ -321,7 +348,7 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns an enumerator that iterates through the <see cref="CreditList"/>.
     /// </summary>
     public IEnumerator<CreditListMember> GetEnumerator()
     {
@@ -329,42 +356,41 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns an enumerator that iterates through the <see cref="CreditList"/>.
     /// </summary>
-    /// <returns></returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return internalList.GetEnumerator();
     }
 
     /// <summary>
-    /// 
+    /// Represents a single credit and QSL medium combination.
     /// </summary>
     public struct CreditListMember : IEquatable<CreditListMember> {
 
       /// <summary>
-      /// 
+      /// Credit enumeration member.
       /// </summary>
       public string Credit { get; }
 
       /// <summary>
-      /// 
+      /// QSL medium enumeration member.
       /// </summary>
       public string Medium { get; }
 
       /// <summary>
-      /// 
+      /// Creates a new <see cref="CreditListMember"/> instance.
       /// </summary>
-      /// <param name="credit"></param>
+      /// <param name="credit">Credit enumeration member.</param>
       public CreditListMember(string credit) : this(credit, null)
       {
       }
 
       /// <summary>
-      /// 
+      /// Creates a new <see cref="CreditListMember"/> instance.
       /// </summary>
-      /// <param name="credit"></param>
-      /// <param name="medium"></param>
+      /// <param name="credit">Credit enumeration member.</param>
+      /// <param name="medium">QSL medium enumeration member.</param>
       public CreditListMember(string credit, string medium)
       {
         Medium = medium;
@@ -372,15 +398,14 @@ namespace ADIF.NET.Types {
       }
 
       /// <summary>
-      /// 
+      /// Calculates the object's hash code.
       /// </summary>
-      /// <returns></returns>
       public override int GetHashCode()
       {
         unchecked
         {
           const int hashingBase = (int)2166136261;
-          const int hashingMultiplier = 16777619;
+          const int hashingMultiplier = 16924616;
 
           var hash = hashingBase;
           hash = (hash * hashingMultiplier) ^ (!string.IsNullOrEmpty(Credit) ? Credit.ToUpperInvariant().GetHashCode() : 0);
@@ -421,7 +446,7 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns a string representation of the current <see cref="CreditList"/> instance.
     /// </summary>
     public override string ToString()
     {
@@ -429,10 +454,10 @@ namespace ADIF.NET.Types {
     }
 
     /// <summary>
-    /// 
+    /// Returns a string representation of the current <see cref="CreditList"/> instance.
     /// </summary>
-    /// <param name="format"></param>
-    /// <param name="provider"></param>
+    /// <param name="format">Format string.</param>
+    /// <param name="provider">Format provider.</param>
     public string ToString(string format, IFormatProvider provider)
     {
       if (string.IsNullOrEmpty(format))
@@ -478,7 +503,6 @@ namespace ADIF.NET.Types {
               total++;
 
               handled.Add(this[x].Credit.ToUpper());
-
           }
 
           return result;

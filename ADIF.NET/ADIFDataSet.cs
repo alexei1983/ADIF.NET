@@ -23,7 +23,7 @@ namespace ADIF.NET {
 
       set
       {
-        headerText = string.IsNullOrWhiteSpace(value) ? null : value;
+        headerText = string.IsNullOrEmpty(value) ? null : value;
       }
     }
 

@@ -244,7 +244,6 @@ namespace ADIF.NET.Tags {
              tag.GetType().Equals(GetType()) &&
              (TextValue ?? string.Empty).Equals(TextValue ?? string.Empty, StringComparison.OrdinalIgnoreCase) &&
              (tag.ValueLength ?? 0).Equals(ValueLength ?? 0);
-
     }
 
     /// <summary>
@@ -346,7 +345,7 @@ namespace ADIF.NET.Tags {
           return GetType().Name;
 
         case "T":
-          return typeof(T).FullName;
+          return GetType().FullName;
 
         case "V":
           return TextValue ?? string.Empty;

@@ -6,7 +6,7 @@ namespace ADIF.NET.Types {
     Type UnderlyingType { get; }
 
     /// <summary>
-    /// The ADIF data type indicator.
+    /// ADIF data type indicator.
     /// </summary>
     string Type { get; }
 

@@ -58,7 +58,7 @@ namespace ADIF.NET.Types {
     public static bool IsValidValue(object o)
     {
       if (o is null) 
-        return false;
+        return true;
 
        return IsValidValue(o.ToString());
     }
@@ -70,7 +70,7 @@ namespace ADIF.NET.Types {
     public static bool IsValidValue(string s)
     {
       if (string.IsNullOrEmpty(s))
-        return false;
+        return true;
 
       try
       {

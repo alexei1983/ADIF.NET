@@ -91,11 +91,28 @@ namespace ADIF.NET.Types {
     /// <param name="value"></param>
     public static bool IsValidValue(object value)
     {
-      if (value is int || value is int?)
+      if (value is null)
         return true;
 
-      if (value is double dblVal)
-        return dblVal.IsWhole();
+      if (value.IsWholeNumber() && (long)value > 0)
+        return true;
+
+      //if (value is int intVal && intVal > 0)
+      //  return true;
+
+      //if (value is int?)
+      //{
+      //  var nullableIntVal = (int?)value;
+      //  return !nullableIntVal.HasValue || (nullableIntVal.HasValue && nullableIntVal.Value > 0);
+      //}
+
+      //if (value is double dblVal)
+      //  return dblVal.IsWholeNumber() && dblVal > 0;
+
+      //if (value.IsNumber())
+      //{
+
+      //}
 
       return IsValidValue(value == null ? string.Empty : value.ToString());
     }

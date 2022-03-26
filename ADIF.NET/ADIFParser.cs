@@ -13,10 +13,21 @@ namespace ADIF.NET {
   /// </summary>
   public class ADIFParser {
 
+    IProgress<int> progress;
+
     /// <summary>
     /// Creates a new instance of the <see cref="ADIFParser"/> class.
     /// </summary>
     public ADIFParser() { }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADIFParser"/> class.
+    /// </summary>
+    /// <param name="progress">Progress indicator.</param>
+    public ADIFParser(IProgress<int> progress)
+    {
+      this.progress = progress;
+    }
 
     /// <summary>
     /// Prepares the specified file for parsing.
@@ -126,6 +137,8 @@ namespace ADIF.NET {
 
       while (this.i < this.data.Length)
       {
+        ReportProgress();
+
         var qso = GetQSO();
 
         if (qso != null && qso.Count > 0)
@@ -206,6 +219,8 @@ namespace ADIF.NET {
 
       while (this.i < headerEndingPos)
       {
+        ReportProgress();
+
         // skip comments
         if (this.data[this.i] == Values.COMMENT_INDICATOR)
         {
@@ -621,6 +636,20 @@ namespace ADIF.NET {
         }
       }
       return retVal;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void ReportProgress()
+    {
+      if (progress == null)
+        return;
+
+      var progressRaw = (double)i / data.Length * 100.0;
+
+      if (progressRaw > 0)
+        progress.Report(progressRaw > int.MaxValue ? int.MaxValue : (int)progressRaw);
     }
 
     string data;
