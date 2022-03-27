@@ -47,7 +47,7 @@ namespace ADIF.NET.Types {
     public static Location Parse(string s)
     {
       if (string.IsNullOrEmpty(s))
-        throw new Exception("Location value cannot be null or empty string.");
+        return null;
 
       s = s.Trim().ToUpper();
 
@@ -103,7 +103,7 @@ namespace ADIF.NET.Types {
     /// <param name="value">String to check for validity.</param>
     public static bool IsValidValue(string value)
     {
-      return TryParse(value, out Location _);
+      return string.IsNullOrEmpty(value) || TryParse(value, out Location _);
     }
 
     /// <summary>
@@ -115,7 +115,7 @@ namespace ADIF.NET.Types {
       if (value is Location)
         return true;
 
-      return IsValidValue(value == null ? string.Empty : value.ToString());
+      return IsValidValue(value is null ? string.Empty : value.ToString());
     }
 
     /// <summary>

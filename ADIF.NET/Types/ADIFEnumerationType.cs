@@ -43,6 +43,9 @@ namespace ADIF.NET.Types {
     {
       var result = Parse(s);
 
+      if (string.IsNullOrEmpty(s))
+        return result;
+
       if (options != null)
       {
         if (!options.IsValid(result))
@@ -74,6 +77,12 @@ namespace ADIF.NET.Types {
     /// <param name="result">Result of the conversion or validation operation.</param>
     public static bool TryParse(string s, ADIFEnumeration options, out string result)
     {
+      if (string.IsNullOrEmpty(s))
+      {
+        result = string.Empty;
+        return true;
+      }
+
       if (TryParse(s, out result))
       {
         if (options != null)

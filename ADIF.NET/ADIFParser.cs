@@ -137,8 +137,6 @@ namespace ADIF.NET {
 
       while (this.i < this.data.Length)
       {
-        ReportProgress();
-
         var qso = GetQSO();
 
         if (qso != null && qso.Count > 0)
@@ -146,6 +144,8 @@ namespace ADIF.NET {
           body.Add(++qsoCount, qso);
         }
       }
+
+      ReportProgress(true);
 
       var result = new ADIFDataSet
       {
@@ -219,8 +219,6 @@ namespace ADIF.NET {
 
       while (this.i < headerEndingPos)
       {
-        ReportProgress();
-
         // skip comments
         if (this.data[this.i] == Values.COMMENT_INDICATOR)
         {
@@ -432,6 +430,7 @@ namespace ADIF.NET {
         }
 
         this.i++;
+        ReportProgress();
       }
 
       // iterate past the <EOH> header ending tag
@@ -456,6 +455,8 @@ namespace ADIF.NET {
       // add the user-defined fields to the headers
       foreach (var userDefined in userDefinedFields)
         headerInternal.Add(userDefined);
+
+      ReportProgress();
 
       if (this.i >= this.data.Length)
         throw new ADIFParseException("ADIF data contains no QSO records.");
@@ -485,6 +486,9 @@ namespace ADIF.NET {
       record = this.data.Substring(this.i, end - this.i);
 
       this.i = end + 5;
+
+      ReportProgress();
+
       return GetQSOArray(record);
     } // end method
 
@@ -641,15 +645,15 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
-    void ReportProgress()
+    void ReportProgress(bool done = false)
     {
       if (progress == null)
         return;
 
       var progressRaw = (double)i / data.Length * 100.0;
 
-      if (progressRaw > 0)
-        progress.Report(progressRaw > int.MaxValue ? int.MaxValue : (int)progressRaw);
+      if (progressRaw > 0 || done)
+        progress.Report(done ? int.MaxValue : progressRaw > int.MaxValue ? int.MaxValue : (int)progressRaw);
     }
 
     string data;

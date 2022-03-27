@@ -20,7 +20,7 @@ namespace ADIF.NET.Tags {
     {
       get
       {
-        return location != null ? location.ToString() : base.TextValue;
+        return location != null ? location.ToString() : string.Empty;
       }
     }
 
@@ -44,7 +44,7 @@ namespace ADIF.NET.Tags {
     {
       var location = new Location(decimalDegrees, type);
       if (location != null)
-        SetValue(location.ToString());
+        SetValue(location);
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ namespace ADIF.NET.Tags {
         return locationObj;
       else
       {
-        var valStr = value is string ? (string)value : value != null ? value.ToString() : string.Empty;
+        var valStr = value is string strLoc ? strLoc : value != null ? value.ToString() : string.Empty;
 
         if (!string.IsNullOrEmpty(valStr))
           return ADIFLocation.Parse(valStr);
@@ -104,7 +104,10 @@ namespace ADIF.NET.Tags {
     /// <returns></returns>
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) && ADIFLocation.TryParse(value.ToString(), out _);
+      if (value is Location)
+        return true;
+
+      return ADIFLocation.TryParse(value is null ? string.Empty : value.ToString(), out _);
     }
 
     /// <summary>

@@ -23,13 +23,12 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public static string Parse(string s)
     {
-      if (s == null)
-        s = string.Empty;
+      s = s ?? string.Empty;
 
       if (!s.IsASCII())
         throw new Exception("ADIF String cannot contain non-ASCII characters.");
 
-      if (s.Contains(Environment.NewLine) || s.Contains(Values.NEWLINE.ToString()) || s.Contains(Values.CARRIAGE_RETURN.ToString()))
+      if (s.HasLineEnding())
         throw new Exception("ADIF String cannot contain line endings.");
 
       return s;
@@ -69,13 +68,9 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     public bool IsValidValue(string s)
     {
-      if (s == null)
-        s = string.Empty;
-
+      s = s ?? string.Empty;
       return s.IsASCII() && 
-             !s.Contains(Environment.NewLine) && 
-             !s.Contains(Values.NEWLINE.ToString()) &&
-             !s.Contains(Values.CARRIAGE_RETURN.ToString());
+             !s.HasLineEnding();
     }
   }
 }

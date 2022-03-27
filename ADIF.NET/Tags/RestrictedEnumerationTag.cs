@@ -37,25 +37,19 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override object ConvertValue(object value)
     {
-      var enumVal = string.Empty;
+      if (value is ADIFEnumerationValue enumVal)
+      {
+        if (!Options.IsValid(enumVal.Code))
+          throw new ValueConversionException("Invalid enumeration value.", value.ToString());
 
-      if (value == null)
-        value = string.Empty;
-
-      if (value is ADIFEnumerationValue enumValObj)
-        enumVal = enumValObj.Code;
-      else if (value is string strVal)
-        enumVal = strVal;
+        return enumVal.Code;
+      }
       else
       {
-        if (!ADIFString.TryParse(value.ToString(), out enumVal))
-          throw new ValueConversionException("Invalid enumeration value.", value.ToString());
+        return ADIFEnumerationType.Parse(value is string strVal ? strVal : 
+                                         value is null ? string.Empty : 
+                                         value.ToString(), Options);
       }
-
-      if (!Options.IsValid(enumVal))
-        throw new InvalidEnumerationOptionException($"'{enumVal}' is not a valid enumeration option in tag {Name}.", enumVal);
-
-      return enumVal;
     }
 
     /// <summary>
@@ -64,8 +58,9 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) &&
-             Options.IsValid(value.ToString());
+      return value is null || (value is string strVal && string.IsNullOrEmpty(strVal)) ||
+             ADIFEnumerationType.TryParse(value is string enumStr ? enumStr : 
+                                          value.ToString(), Options, out _);
     }
   }
 }

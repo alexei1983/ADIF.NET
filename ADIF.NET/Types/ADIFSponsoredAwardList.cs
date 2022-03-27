@@ -90,7 +90,7 @@ namespace ADIF.NET.Types {
     /// <param name="s"></param>
     static string[] ParseAwardList(string s, bool throwExceptions)
     {
-      if (s == null)
+      if (string.IsNullOrEmpty(s))
         return null;
 
       var prefixes = Values.SponsoredAwardPrefixes.GetValues();

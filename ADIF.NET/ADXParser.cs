@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using ADIF.NET.Tags;
@@ -18,6 +19,15 @@ namespace ADIF.NET {
     /// </summary>
     public ADXParser()
     {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="ADXParser"/> class.
+    /// </summary>
+    /// <param name="progress">Progress indicator.</param>
+    public ADXParser(IProgress<int> progress)
+    {
+      this.progress = progress;
     }
 
     /// <summary>
@@ -70,10 +80,16 @@ namespace ADIF.NET {
       if (doc.Root.Name.LocalName != ADXValues.ADX_ROOT_ELEMENT)
         throw new ADXParseException("Invalid ADX document.");
 
+      elementCount = doc.Descendants().Count();
+
       XNamespace ns = doc.Root.GetDefaultNamespace();
+
+      var qsoList = new List<ADIFQSO>();
 
       foreach (var headerElement in doc.Descendants(ns + ADXValues.ADX_HEADER_ELEMENT)?.Elements())
       {
+        currentElementCount++;
+
         var headerTag = TagFactory.TagFromName(headerElement.Name.LocalName);
 
         if (headerTag == null)
@@ -146,14 +162,20 @@ namespace ADIF.NET {
           headerTag.SetValue(headerElement.Value);
           dataSet.Header.Add(headerTag);
         }
+        ReportProgress();
       }
 
       foreach (var recordElement in doc.Descendants(ns + ADXValues.ADX_RECORDS_ELEMENT)?.Elements())
       {
+        currentElementCount++;
+
         var qso = new ADIFQSO();
+        var qsoTags = new List<ITag>();
 
         foreach (var qsoElement in recordElement.Elements())
         {
+          currentElementCount++;
+
           var qsoTag = TagFactory.TagFromName(qsoElement.Name.LocalName);
 
           if (qsoTag == null || TagNames.UserDef.Equals(qsoElement.Name.LocalName))
@@ -186,7 +208,7 @@ namespace ADIF.NET {
               appTag.ProgramId = progIdAttr.Value;
 
               appTag.SetValue(qsoElement.Value);
-              qso.Add(appTag);
+              qsoTags.Add(appTag);
             }
             else if (TagNames.UserDef.Equals(qsoElement.Name.LocalName))
             {
@@ -203,24 +225,50 @@ namespace ADIF.NET {
 
               qsoTag = new UserDefValueTag(userDefHeaderTag);
               qsoTag.SetValue(qsoElement.Value);
-              qso.Add(qsoTag);
+              qsoTags.Add(qsoTag);
             }
           }
           else
           {
             qsoTag.SetValue(qsoElement.Value);
-            qso.Add(qsoTag);
+            qsoTags.Add(qsoTag);
           }
+
+          ReportProgress();
         }
 
-        if (qso.Count > 0)
-          dataSet.QSOs.Add(qso);
+        if (qsoTags.Count > 0)
+        {
+          qso.AddRange(qsoTags.ToArray());
+          qsoList.Add(qso);
+        }
       }
 
+      if (qsoList.Count > 0)
+        dataSet.QSOs.AddRange(qsoList.ToArray());
+
+      ReportProgress(true);
 
       return dataSet;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    void ReportProgress(bool done = false)
+    {
+      if (progress == null)
+        return;
+
+      var progressRaw = (double)currentElementCount / elementCount * 100.0;
+
+      if (progressRaw > 0 || done)
+        progress.Report(done ? int.MaxValue : progressRaw > int.MaxValue ? int.MaxValue : (int)progressRaw);
+    }
+
+    IProgress<int> progress;
     string data;
+    int elementCount;
+    int currentElementCount;
   }
 }

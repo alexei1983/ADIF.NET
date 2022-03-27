@@ -635,7 +635,7 @@ namespace ADIF.NET {
           var val = string.Empty;
           var endRecordTag = new EndRecordTag();
 
-          if (Header != null)
+          if (Header != null && Header.Count > 0)
           {
             val += (string.IsNullOrEmpty(HeaderText) ? Values.DEFAULT_ADIF_HEADER_TEXT : HeaderText) + Environment.NewLine;
             foreach (var tag in Header)

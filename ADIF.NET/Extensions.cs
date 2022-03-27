@@ -44,6 +44,16 @@ namespace ADIF.NET {
     }
 
     /// <summary>
+    /// Determines whether or not the specified string contains line ending characters.
+    /// </summary>
+    /// <param name="s">String to check.</param>
+    public static bool HasLineEnding(this string s)
+    {
+      s = s ?? string.Empty;
+      return s.Contains(Environment.NewLine) || s.Contains(Values.CARRIAGE_RETURN) || s.Contains(Values.NEWLINE);
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="val"></param>
