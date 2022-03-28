@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 using ADIF.NET.Helpers;
 
@@ -7,12 +8,30 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the definition of a user QSO field.
   /// </summary>
-  public class UserDefTag : StringTag, ITag {
+  public class UserDefTag : StringTag, ITag, IFormattable {
 
     /// <summary>
     /// Tag name.
     /// </summary>
     public override string Name => TagNames.UserDef;
+
+    /// <summary>
+    /// Value of the tag as a <see cref="string"/>.
+    /// </summary>
+    public override string TextValue
+    {
+      get
+      {
+        var value = $"{FieldName}";
+
+        if (CustomOptions != null && CustomOptions.Length > 0)
+          value = $"{value}{Values.COMMA}{Values.CURLY_BRACE_OPEN}{string.Join(Values.COMMA.ToString(), CustomOptions)}{Values.CURLY_BRACE_CLOSE}";
+        else if (UpperBound > LowerBound)
+          value = $"{value}{Values.COMMA}{Values.CURLY_BRACE_OPEN}{LowerBound}{Values.COLON}{UpperBound}{Values.CURLY_BRACE_CLOSE}";
+
+        return value;
+      }
+    }
 
     /// <summary>
     /// Name of the user-defined field.
@@ -108,6 +127,44 @@ namespace ADIF.NET.Tags {
 
       UpperBound = upperBound;
       LowerBound = lowerBound;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <param name="provider"></param>
+    public override string ToString(string format, IFormatProvider provider)
+    {
+      if (string.IsNullOrEmpty(format))
+        format = "G";
+
+      if (provider == null)
+        provider = CultureInfo.CurrentCulture;
+
+      switch (format)
+      {
+        case "A":
+        case "a":
+          var retVal = string.Empty;
+
+          if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(FieldName) && FieldId > 0)
+          {
+            retVal = $"{Values.TAG_OPENING}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}{ToString("I", provider)}";
+            retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpperInvariant()}" : string.Empty)}{Values.TAG_CLOSING}";
+            retVal = $"{retVal}{TextValue} ";
+          }
+          return retVal;
+
+        case "I":
+          return FieldId > 0 ? FieldId.ToString() : string.Empty;
+
+        case "F":
+          return FieldName;
+
+        default:
+          return base.ToString(format, provider);
+      }
     }
 
     /// <summary>
