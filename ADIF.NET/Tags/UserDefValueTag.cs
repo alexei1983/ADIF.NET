@@ -50,63 +50,8 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Value of the tag as a <see cref="string"/>.
     /// </summary>
-    public override string TextValue
-    {
-      get
-      {
-        switch (DataType.ToUpper())
-        {
-          case DataTypes.Boolean:
-            return Value != null && Value is bool boolVal ? boolVal ? Values.ADIF_BOOLEAN_TRUE : Values.ADIF_BOOLEAN_FALSE : string.Empty;
-
-          case DataTypes.Date:
-            return Value != null && Value is DateTime dateVal ? dateVal.ToString(Values.ADIF_DATE_FORMAT) : string.Empty;
-
-          case DataTypes.Time:
-            return Value != null && Value is DateTime timeVal ? timeVal.Second > 0 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_LONG) : 
-                   timeVal.Second < 1 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_SHORT) : string.Empty : string.Empty;
-
-          case DataTypes.String:
-          case DataTypes.MultilineString:
-          case DataTypes.IntlString:
-          case DataTypes.IntlMultilineString:
-            return Value != null && Value is string strVal ? strVal : string.Empty;
-
-          case DataTypes.Enumeration:
-            return Value is ADIFEnumerationValue enumVal ? enumVal.Code : Value is string enumStr ? enumStr : Value != null ? Value.ToString() : string.Empty;
-
-          case DataTypes.CreditList:
-            if (Value != null)
-            {
-              if (Value is CreditList creditList)
-                return creditList.ToString();
-              else if (Value is string creditStr)
-                return creditStr;
-            }
-            return string.Empty;
-
-          case DataTypes.SponsoredAwardList:
-            if (Value != null)
-            {
-              if (Value.GetType().IsAssignableFrom(typeof(IEnumerable<string>)))
-                return string.Join(Values.COMMA.ToString(), (IEnumerable<string>)Value);
-              else if (Value is string awardListStr)
-                return awardListStr;
-            }
-            return string.Empty;
-
-          case DataTypes.Location:
-            return Value is Location location ? location.ToString() : Value is string locStr ? locStr : string.Empty;
-
-          case DataTypes.Number:
-            return Value != null && Value.IsNumber() ? Value.ToString() : string.Empty;
-
-          default:
-            return Value is string genericStrVal ? genericStrVal : Value != null ? Value.ToString() : string.Empty;
-        }
-      }
-    }
-
+    public override string TextValue => AppUserDefHelper.GetTextValueByType(DataType, Value);
+    
     /// <summary>
     /// Whether or not the tag value is restricted to the list of enumeration values.
     /// </summary>

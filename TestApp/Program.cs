@@ -73,17 +73,26 @@ namespace TestApp {
 
       //var locators = Unclassified.Util.MaidenheadLocator.GetAllLocators();
 
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue(1.00m));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue("-1"));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue(1.01m));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)null));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)-1));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((int?)99));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue(99));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((double?)null));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((double?)-1));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue(string.Empty));
-      Console.WriteLine(ADIFPositiveInteger.IsValidValue((string)null));
+      var qso_1 = new ADIFQSO();
+      var qso_2 = new ADIFQSO();
+
+      // qso_1
+      qso_1.SetCall("K0UOG");
+      qso_1.SetBand("20m");
+      qso_1.Add(new BandRxTag("30m"));
+      qso_1.SetMode("SSB", "USB");
+      qso_1.SetOperator("W7ZCO");
+      qso_1.SetDateTimeOn(new DateTime(2022, 3, 16, 14, 33, 26));
+
+      // qso_2
+      qso_2.SetCall("W7ZCO");
+      qso_2.SetBand("30m");
+      qso_2.SetMode("SSB", "USB");
+      qso_2.Add(new BandRxTag("20m"));
+      qso_2.SetOperator("K0UOG");
+      qso_2.SetDateTimeOn(new DateTime(2022, 3, 16, 14, 34, 00));
+
+      Console.WriteLine(qso_1.IsMatchReverse(qso_2));
 
       return;
 

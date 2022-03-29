@@ -119,6 +119,68 @@ namespace ADIF.NET.Helpers {
     /// 
     /// </summary>
     /// <param name="typeIndicator"></param>
+    /// <param name="value"></param>
+    public static string GetTextValueByType(string typeIndicator, object value)
+    {
+      if (string.IsNullOrEmpty(typeIndicator))
+        return value is null ? string.Empty : value.ToString();
+
+      switch (typeIndicator.ToUpper())
+      {
+        case DataTypes.Boolean:
+          return value != null && value is bool boolVal ? boolVal ? Values.ADIF_BOOLEAN_TRUE : Values.ADIF_BOOLEAN_FALSE : string.Empty;
+
+        case DataTypes.Date:
+          return value != null && value is DateTime dateVal ? dateVal.ToString(Values.ADIF_DATE_FORMAT) : string.Empty;
+
+        case DataTypes.Time:
+          return value != null && value is DateTime timeVal ? timeVal.Second > 0 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_LONG) :
+                 timeVal.Second < 1 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_SHORT) : string.Empty : string.Empty;
+
+        case DataTypes.String:
+        case DataTypes.MultilineString:
+        case DataTypes.IntlString:
+        case DataTypes.IntlMultilineString:
+          return value != null && value is string strVal ? strVal : string.Empty;
+
+        case DataTypes.Enumeration:
+          return value is ADIFEnumerationValue enumVal ? enumVal.Code : value is string enumStr ? enumStr : value != null ? value.ToString() : string.Empty;
+
+        case DataTypes.CreditList:
+          if (value != null)
+          {
+            if (value is CreditList creditList)
+              return creditList.ToString();
+            else if (value is string creditStr)
+              return creditStr;
+          }
+          return string.Empty;
+
+        case DataTypes.SponsoredAwardList:
+          if (value != null)
+          {
+            if (value.GetType().IsAssignableFrom(typeof(IEnumerable<string>)))
+              return string.Join(Values.COMMA.ToString(), (IEnumerable<string>)value);
+            else if (value is string awardListStr)
+              return awardListStr;
+          }
+          return string.Empty;
+
+        case DataTypes.Location:
+          return value is Location location ? location.ToString() : value is string locStr ? locStr : string.Empty;
+
+        case DataTypes.Number:
+          return value != null && value.IsNumber() ? value.ToString() : string.Empty;
+
+        default:
+          return value is string genericStrVal ? genericStrVal : value != null ? value.ToString() : string.Empty;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="typeIndicator"></param>
     public static IADIFType GetADIFType(string typeIndicator)
     {
       if (string.IsNullOrEmpty(typeIndicator))

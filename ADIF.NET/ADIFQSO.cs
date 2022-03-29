@@ -310,6 +310,9 @@ namespace ADIF.NET {
       return CoalesceTagValues<string>(TagNames.Operator, TagNames.GuestOp, TagNames.StationCallSign, TagNames.OwnerCallSign);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string GetCall()
     {
       return CoalesceTagValues<string>(TagNames.Call, TagNames.ContactedOp, TagNames.EqCall);
@@ -1401,7 +1404,7 @@ namespace ADIF.NET {
         return false;
 
       var op = qso.GetOperator();
-      var dateTimeOn  = qso.GetQSODateTimeOn();
+      var dateTimeOn = qso.GetQSODateTimeOn();
       var mode = qso.GetTagValue<string>(TagNames.Mode);
       var call = qso.GetCall();
       var band = qso.GetBand();
@@ -1426,15 +1429,24 @@ namespace ADIF.NET {
       if (!string.Equals(call, thisCall, StringComparison.OrdinalIgnoreCase))
         return false;
 
-      if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
+      if (!string.Equals(mode, thisMode, StringComparison.OrdinalIgnoreCase))
         return false;
 
-      if (!string.Equals(mode, thisMode, StringComparison.OrdinalIgnoreCase))
+      if (IsCrossBand() && qso.IsCrossBand())
+      {
+        var bandRx = qso.GetBandRx();
+        var thisBandRx = GetBandRx();
+
+        if (!string.Equals(thisBandRx, bandRx, StringComparison.OrdinalIgnoreCase))
+          return false;
+      }
+
+      if (!string.Equals(band, thisBand, StringComparison.OrdinalIgnoreCase))
         return false;
 
       var qsoDateTimeDiff = thisDateTimeOn.Value - dateTimeOn.Value;
 
-      if (qsoDateTimeDiff.TotalMilliseconds > maxQsoDateTimeDiff.TotalMilliseconds)
+      if (Math.Abs(qsoDateTimeDiff.TotalMilliseconds) > Math.Abs(maxQsoDateTimeDiff.TotalMilliseconds))
         return false;
 
       return true;
@@ -1499,7 +1511,7 @@ namespace ADIF.NET {
 
       var qsoDateTimeDiff = thisDateTimeOn.Value - dateTimeOn.Value;
 
-      if (qsoDateTimeDiff.TotalMilliseconds > maxQsoDateTimeDiff.TotalMilliseconds)
+      if (Math.Abs(qsoDateTimeDiff.TotalMilliseconds) > Math.Abs(maxQsoDateTimeDiff.TotalMilliseconds))
         return false;
 
       return true;

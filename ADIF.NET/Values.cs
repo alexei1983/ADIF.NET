@@ -143,6 +143,11 @@ namespace ADIF.NET {
     public const string SOTA_REF_REGEX = @"[a-zA-Z0-9]{1,8}\/[a-zA-Z]{2}\-([0-9][0-9][1-9]|[0-9][1-9][0-9]|[1-9][0-9][0-9])";
 
     /// <summary>
+    /// Regex used to match callsigns.
+    /// </summary>
+    public const string CALLSIGN_REGEX = @"^((\d|[A-Z])+\/)?((\d|[A-Z]){3,})(\/(\d|[A-Z])+)?(\/(\d|[A-Z])+)?$";
+
+    /// <summary>
     /// ADIF version.
     /// </summary>
     public static readonly Version ADIFVersion = new Version(3, 1, 0);

@@ -112,6 +112,7 @@
     <Compile Include="Tags\AddressIntlTag.cs" />
     <Compile Include="Tags\AwardGrantedTag.cs" />
     <Compile Include="Tags\AwardSubmittedTag.cs" />
+    <Compile Include="Tags\BaseCallSignTag.cs" />
     <Compile Include="Tags\IntlMultilineStringTag.cs" />
     <Compile Include="Tags\NotesIntlTag.cs" />
     <Compile Include="Tags\NotesTag.cs" />

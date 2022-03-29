@@ -39,7 +39,7 @@ namespace ADIF.NET {
       if (string.IsNullOrWhiteSpace(path))
         throw new ArgumentException("File path is required.", nameof(path));
 
-      data = File.ReadAllText(path);
+      this.doc = XDocument.Parse(File.ReadAllText(path));
     }
 
     /// <summary>
@@ -48,7 +48,10 @@ namespace ADIF.NET {
     /// <param name="text"></param>
     public void Load(string text)
     {
-      data = text ?? string.Empty;
+      if (string.IsNullOrWhiteSpace(text))
+        throw new ArgumentException("Text is required.", nameof(text));
+
+      this.doc = XDocument.Parse(text);
     }
 
     /// <summary>
@@ -57,8 +60,10 @@ namespace ADIF.NET {
     /// <param name="stream"></param>
     public void LoadStream(Stream stream)
     {
-      //data = new XmlDocument();
-      //data.Load(stream);
+      if (stream == null)
+        throw new ArgumentNullException(nameof(stream), "Stream cannot be null.");
+
+      this.doc = XDocument.Load(stream);
     }
 
     /// <summary>
@@ -72,7 +77,7 @@ namespace ADIF.NET {
         QSOs = new ADIFQSOCollection()
       };
 
-      var doc = XDocument.Parse(data);
+      //var doc = XDocument.Parse(data);
 
       if (doc.Root == null)
         throw new ADXParseException("No XML document root found.");
@@ -267,8 +272,9 @@ namespace ADIF.NET {
     }
 
     IProgress<int> progress;
-    string data;
+    //string data;
     int elementCount;
     int currentElementCount;
+    XDocument doc;
   }
 }

@@ -4,7 +4,7 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the contacted station's callsign.
   /// </summary>
-  public class CallTag : StringTag, ITag {
+  public class CallTag : BaseCallSignTag, ITag {
 
     /// <summary>
     /// Tag name.

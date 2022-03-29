@@ -33,21 +33,12 @@ namespace ADIF.NET {
     /// Prepares the specified file for parsing.
     /// </summary>
     /// <param name="path">Full path to the ADIF file that will be parsed.</param>
-    /// <param name="encoding">Encoding of the file.</param>
-    public void LoadFile(string path, Encoding encoding = null)
+    public void LoadFile(string path)
     {
-      if (!string.IsNullOrWhiteSpace(path))
-      {
-        if (encoding == null)
-          encoding = Encoding.ASCII;
+      if (string.IsNullOrEmpty(path))
+        throw new ArgumentException("File path is required.", nameof(path));
 
-        var fi = new FileInfo(path);
-
-        if (fi.Exists)
-        {
-          LoadStream(fi.OpenRead(), encoding);
-        }
-      }
+      data = File.ReadAllText(path);
     }
 
     /// <summary>
@@ -63,35 +54,34 @@ namespace ADIF.NET {
     /// Prepares the specified stream for parsing.
     /// </summary>
     /// <param name="stream">Stream from which ADIF data will be read and parsed.</param>
-    /// <param name="encoding">Encoding of the text in the stream.</param>
-    public void LoadStream(Stream stream, Encoding encoding = null)
+    public void LoadStream(Stream stream)
     {
+      if (stream == null)
+        throw new ArgumentNullException(nameof(stream), "Stream cannot be null.");
+
+      if (!stream.CanRead)
+        throw new ArgumentException("Stream is not readable.", nameof(stream));
+
       this.data = null;
+      var byteLength = stream.Length;
+      var bytesRead = 0;
+      var bytesToRead = byteLength < 10 ? (int)byteLength : 10;
+      byte[] data = new byte[byteLength];
 
-      if (stream != null && stream.CanRead)
+      using (stream)
       {
-        if (encoding == null)
-          encoding = Encoding.ASCII;
+        stream.Seek(0, SeekOrigin.Begin);
 
-        var byteLength = (int)stream.Length;
-        var bytesRead = 0;
-        byte[] data = new byte[byteLength];
-
-        using (stream)
+        do
         {
-          stream.Seek(0, SeekOrigin.Begin);
-
-          do
-          {
-            var n = stream.Read(data, bytesRead, byteLength < 10 ? byteLength : 10);
-            bytesRead += n;
-            byteLength -= n;
-          } while (byteLength > 0);
-        }
-
-        if (data != null && data.Length > 0)
-          this.data = encoding.GetString(data);
+          var n = stream.Read(data, bytesRead, bytesToRead);
+          bytesRead += n;
+          byteLength -= n;
+        } while (byteLength > 0);
       }
+
+      if (data != null && data.Length > 0)
+        this.data = Encoding.UTF8.GetString(data);
     }
 
     /// <summary>

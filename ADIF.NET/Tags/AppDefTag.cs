@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 using ADIF.NET.Helpers;
 
@@ -7,12 +8,17 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents an application-defined ADIF field and value.
   /// </summary>
-  public class AppDefTag : Tag<object>, ITag, ICloneable {
+  public class AppDefTag : Tag<object>, ITag, ICloneable, IFormattable {
 
     /// <summary>
     /// Tag name.
     /// </summary>
     public override string Name => $"{TagNames.AppDef}{ProgramId ?? Values.DEFAULT_PROGRAM_ID}_{FieldName ?? string.Empty}";
+
+    /// <summary>
+    /// Value of the tag as a <see cref="string"/>.
+    /// </summary>
+    public override string TextValue => AppUserDefHelper.GetTextValueByType(DataType, Value);
 
     /// <summary>
     /// Field name.
@@ -112,6 +118,45 @@ namespace ADIF.NET.Tags {
     {
       return !(value is null) ? AppUserDefHelper.ConvertValueByType(value, DataType) : null;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <param name="provider"></param>
+    public override string ToString(string format, IFormatProvider provider)
+    {
+      if (string.IsNullOrEmpty(format))
+        format = "G";
+
+      if (provider == null)
+        provider = CultureInfo.CurrentCulture;
+
+      switch (format)
+      {
+        case "A":
+        case "a":
+          var retVal = string.Empty;
+
+          if (!string.IsNullOrEmpty(FieldName))
+          {
+            retVal = $"{Values.TAG_OPENING}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}";
+            retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpperInvariant()}" : string.Empty)}{Values.TAG_CLOSING}";
+            retVal = $"{retVal}{TextValue} ";
+          }
+          return retVal;
+
+        case "F":
+          return FieldName ?? string.Empty;
+
+        case "P":
+          return ProgramId ?? Values.DEFAULT_PROGRAM_ID;
+
+        default:
+          return base.ToString(format, provider);
+      }
+    }
+
 
     /// <summary>
     /// 
