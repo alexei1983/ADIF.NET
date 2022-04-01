@@ -38,7 +38,8 @@ namespace ADIF.NET.Tags {
     {
       get
       {
-        return DataType == DataTypes.Date ? Values.ADIF_DATE_FORMAT : DataType == DataTypes.Time ? Values.ADIF_TIME_FORMAT_LONG : null;
+        return DataType == DataTypes.Date ? Values.ADIF_DATE_FORMAT : 
+          DataType == DataTypes.Time ? Values.ADIF_TIME_FORMAT_LONG : null;
       }
     }
 

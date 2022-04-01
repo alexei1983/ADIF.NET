@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using ADIF.NET.Exceptions;
 
 namespace ADIF.NET.Tags {
 
@@ -18,6 +19,18 @@ namespace ADIF.NET.Tags {
     /// </summary>
     /// <param name="value">Initial tag value.</param>
     public BaseCallSignTag(string value) : base(value) { }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public override object ConvertValue(object value)
+    {
+      if (base.ConvertValue(value) is string strCall)
+        return strCall.ToUpper();
+
+      throw new ValueConversionException(value, Name);
+    }
 
     /// <summary>
     /// 
