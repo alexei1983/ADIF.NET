@@ -35,7 +35,7 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) && ADIFSOTARef.TryParse(value.ToString(), out _);
+      return ADIFSOTARef.TryParse(value is null ? string.Empty : value.ToString(), out _);
     }
   }
 }

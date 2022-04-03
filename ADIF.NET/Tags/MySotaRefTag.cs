@@ -32,8 +32,9 @@ namespace ADIF.NET.Tags {
     /// 
     /// </summary>
     /// <param name="value"></param>
-    public override bool ValidateValue(object value) {
-      return base.ValidateValue(value) && value.ToString().IsSOTADesignator();
-      }
+    public override bool ValidateValue(object value)
+    {
+      return ADIFSOTARef.TryParse(value is null ? string.Empty : value.ToString(), out _);
     }
   }
+}

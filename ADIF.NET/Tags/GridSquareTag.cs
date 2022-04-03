@@ -28,7 +28,17 @@ namespace ADIF.NET.Tags {
     /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) && value.IsADIFGridSquare();
+      if (value is null)
+        return true;
+
+      if (value is string strVal)
+      {
+        if (string.IsNullOrEmpty(strVal))
+          return true;
+
+        return strVal.IsADIFGridSquare();
+      }
+      return false;
     }
   }
 }

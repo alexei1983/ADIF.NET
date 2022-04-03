@@ -488,7 +488,7 @@ namespace ADIF.NET {
     /// <param name="db"></param>
     public void AddRstRcvd(int db)
     {
-      Add(new RstRcvdTag(db.ToString()));
+      Add(new RstRcvdTag($"{db:+#;-#;+0}"));
     }
 
     /// <summary>
@@ -497,7 +497,7 @@ namespace ADIF.NET {
     /// <param name="db"></param>
     public void SetRstRcvd(int db)
     {
-      AddOrReplace(new RstRcvdTag(db.ToString()));
+      AddOrReplace(new RstRcvdTag($"{db:+#;-#;+0}"));
     }
 
     /// <summary>
@@ -1307,6 +1307,92 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, string dataType, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, dataType);
+      AddUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="dataType"></param>
+    /// <param name="value"></param>
+    public UserDefTag SetUserDefinedTag(string fieldName, int fieldId, string dataType, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, dataType);
+      SetUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="options"></param>
+    /// <param name="value"></param>
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, string[] options, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, options);
+      AddUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="options"></param>
+    /// <param name="value"></param>
+    public UserDefTag SetUserDefinedTag(string fieldName, int fieldId, string[] options, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, options);
+      SetUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="lowerBound"></param>
+    /// <param name="upperBound"></param>
+    /// <param name="value"></param>
+    public UserDefTag AddUserDefinedTag(string fieldName, int fieldId, double lowerBound, double upperBound, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, lowerBound, upperBound);
+      AddUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fieldName"></param>
+    /// <param name="fieldId"></param>
+    /// <param name="lowerBound"></param>
+    /// <param name="upperBound"></param>
+    /// <param name="value"></param>
+    public UserDefTag SetUserDefinedTag(string fieldName, int fieldId, double lowerBound, double upperBound, object value)
+    {
+      var userDefTag = new UserDefTag(fieldName, fieldId, lowerBound, upperBound);
+      SetUserDefinedTag(userDefTag, value);
+      return userDefTag;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="qso"></param>
     public void Merge(ADIFQSO qso)
     {
@@ -1689,42 +1775,39 @@ namespace ADIF.NET {
     /// 
     /// </summary>
     /// <param name="uploadTime"></param>
-    /// <param name="status"></param>
-    public void SetClubLogUploaded(DateTime uploadTime, string status)
+    public void SetClubLogUploaded(DateTime uploadTime)
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new ClubLogQSOUploadDateTag(uploadTime));
 
-      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
-        AddOrReplace(new ClubLogQSOUploadStatusTag(status));
+      if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
+        AddOrReplace(new ClubLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="uploadTime"></param>
-    /// <param name="status"></param>
-    public void SetHRDUploaded(DateTime uploadTime, string status)
+    public void SetHRDUploaded(DateTime uploadTime)
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new HRDLogQSOUploadDateTag(uploadTime));
 
-      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
-        AddOrReplace(new HRDLogQSOUploadStatusTag(status));
+      if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
+        AddOrReplace(new HRDLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="uploadTime"></param>
-    /// <param name="status"></param>
-    public void SetQRZUploaded(DateTime uploadTime, string status)
+    public void SetQRZUploaded(DateTime uploadTime)
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new QRZQSOUploadDateTag(uploadTime));
 
-      if (!string.IsNullOrEmpty(status) && Values.QSOUploadStatuses.IsValid(status))
-        AddOrReplace(new QRZQSOUploadStatusTag(status));
+      if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
+        AddOrReplace(new QRZQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
     }
 
     /// <summary>
