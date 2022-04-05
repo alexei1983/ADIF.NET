@@ -506,7 +506,7 @@ namespace ADIF.NET {
     /// <param name="db"></param>
     public void AddRstSent(int db)
     {
-      Add(new RstSentTag(db.ToString()));
+      Add(new RstSentTag($"{db:+#;-#;+0}"));
     }
 
     /// <summary>
@@ -515,7 +515,7 @@ namespace ADIF.NET {
     /// <param name="db"></param>
     public void SetRstSent(int db)
     {
-      AddOrReplace(new RstSentTag(db.ToString()));
+      AddOrReplace(new RstSentTag($"{db:+#;-#;+0}"));
     }
 
     /// <summary>
