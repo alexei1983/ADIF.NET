@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.SilentKey;
+    public override string Name => ADIFTags.SilentKey;
 
     /// <summary>
     /// Creates a new SILENT_KEY tag.

@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyLat;
+    public override string Name => ADIFTags.MyLat;
 
     /// <summary>
     /// Creates a new MY_LAT tag.

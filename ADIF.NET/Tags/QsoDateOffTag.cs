@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSODateOff;
+    public override string Name => ADIFTags.QSODateOff;
 
     /// <summary>
     /// Creates a new QSO_DATE_OFF tag.

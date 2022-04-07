@@ -350,7 +350,7 @@ namespace ADIF.NET.Helpers {
 
         if (validateTagNameMatch)
         {
-          if (TagNames.IsTagName(fieldName))
+          if (ADIFTags.IsTagName(fieldName))
             exceptions.Add(new UserDefTagException("User-defined field name cannot match the name of a standard ADIF field.", fieldName));
         }
       }
@@ -380,7 +380,7 @@ namespace ADIF.NET.Helpers {
       if (parts.Length < 3)
         throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
-      if (!TagNames.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE.ToString()}", StringComparison.OrdinalIgnoreCase))
+      if (!ADIFTags.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE.ToString()}", StringComparison.OrdinalIgnoreCase))
         throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
       var newParts = new List<string>() { parts[0], parts[1] };

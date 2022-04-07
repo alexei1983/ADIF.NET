@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.CreditSubmitted;
+    public override string Name => ADIFTags.CreditSubmitted;
 
     /// <summary>
     /// Creates a new CREDIT_SUBMITTED tag.

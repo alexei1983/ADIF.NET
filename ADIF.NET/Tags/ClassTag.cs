@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Class;
+    public override string Name => ADIFTags.Class;
 
     /// <summary>
     /// Creates a new CLASS tag.

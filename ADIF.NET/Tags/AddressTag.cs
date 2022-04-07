@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Address;
+    public override string Name => ADIFTags.Address;
 
     /// <summary>
     /// Creates a new ADDRESS tag.

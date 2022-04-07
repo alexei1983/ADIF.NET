@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyPostalCode;
+    public override string Name => ADIFTags.MyPostalCode;
 
     /// <summary>
     /// Creates a new MY_POSTAL_CODE tag.

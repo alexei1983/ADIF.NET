@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.GridSquare;
+    public override string Name => ADIFTags.GridSquare;
 
     /// <summary>
     /// Creates a new GRIDSQUARE tag.

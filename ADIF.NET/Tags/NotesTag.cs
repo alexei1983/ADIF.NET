@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Notes;
+    public override string Name => ADIFTags.Notes;
 
     /// <summary>
     /// Creates a new NOTES tag.

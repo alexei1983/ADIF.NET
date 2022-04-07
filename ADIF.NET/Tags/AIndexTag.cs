@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.AIndex;
+    public override string Name => ADIFTags.AIndex;
 
     /// <summary>
     /// Minimum numeric value.

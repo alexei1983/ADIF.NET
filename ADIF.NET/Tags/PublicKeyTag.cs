@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.PublicKey;
+    public override string Name => ADIFTags.PublicKey;
 
     /// <summary>
     /// Creates a new PUBLIC_KEY tag.

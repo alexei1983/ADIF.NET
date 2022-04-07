@@ -13,7 +13,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.UserDef;
+    public override string Name => ADIFTags.UserDef;
 
     /// <summary>
     /// Value of the tag as a <see cref="string"/>.

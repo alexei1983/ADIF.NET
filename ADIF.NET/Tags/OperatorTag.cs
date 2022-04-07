@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Operator;
+    public override string Name => ADIFTags.Operator;
 
     /// <summary>
     /// Creates a new OPERATOR tag.

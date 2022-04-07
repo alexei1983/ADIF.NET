@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.ForceInit;
+    public override string Name => ADIFTags.ForceInit;
 
     /// <summary>
     /// Creates a new FORCE_INIT tag.

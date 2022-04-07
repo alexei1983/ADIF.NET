@@ -183,7 +183,7 @@ namespace ADIF.NET {
 
           var qsoTag = TagFactory.TagFromName(qsoElement.Name.LocalName);
 
-          if (qsoTag == null || TagNames.UserDef.Equals(qsoElement.Name.LocalName))
+          if (qsoTag == null || ADIFTags.UserDef.Equals(qsoElement.Name.LocalName))
           {
             if (ADXValues.ADX_APP_ELEMENT.Equals(qsoElement.Name.LocalName))
             {
@@ -215,7 +215,7 @@ namespace ADIF.NET {
               appTag.SetValue(qsoElement.Value);
               qsoTags.Add(appTag);
             }
-            else if (TagNames.UserDef.Equals(qsoElement.Name.LocalName))
+            else if (ADIFTags.UserDef.Equals(qsoElement.Name.LocalName))
             {
               // <USERDEF FIELDNAME="EPC">32123</USERDEF>
               XAttribute userDefFieldNameAttr = qsoElement.Attribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE);

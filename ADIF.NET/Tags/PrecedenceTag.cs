@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Precedence;
+    public override string Name => ADIFTags.Precedence;
 
     /// <summary>
     /// Creates a new PRECEDENCE tag.

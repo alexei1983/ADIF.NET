@@ -11,7 +11,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.ProgramVersion;
+    public override string Name => ADIFTags.ProgramVersion;
 
     /// <summary>
     /// Whether or not the tag is a header tag.

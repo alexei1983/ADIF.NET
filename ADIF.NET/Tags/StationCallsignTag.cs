@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.StationCallSign;
+    public override string Name => ADIFTags.StationCallSign;
 
     /// <summary>
     /// Creates a new STATION_CALLSIGN tag.

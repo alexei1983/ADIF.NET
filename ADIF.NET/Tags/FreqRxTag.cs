@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.FreqRx;
+    public override string Name => ADIFTags.FreqRx;
 
     /// <summary>
     /// Creates a new FREQ_RX tag.

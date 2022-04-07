@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Web;
+    public override string Name => ADIFTags.Web;
 
     /// <summary>
     /// Creates a new WEB tag.

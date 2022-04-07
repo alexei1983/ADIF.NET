@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.VUCCGrids;
+    public override string Name => ADIFTags.VUCCGrids;
 
     /// <summary>
     /// String that delimits values in a multi-valued tag.

@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSLVia;
+    public override string Name => ADIFTags.QSLVia;
 
     /// <summary>
     /// Creates a new QSL_VIA tag.

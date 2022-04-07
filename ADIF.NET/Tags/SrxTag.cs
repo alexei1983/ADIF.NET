@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Srx;
+    public override string Name => ADIFTags.Srx;
 
     /// <summary>
     /// Creates a new SRX tag.

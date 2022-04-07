@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.SigInfo;
+    public override string Name => ADIFTags.SigInfo;
 
     /// <summary>
     /// Creates a new SIG_INFO tag.

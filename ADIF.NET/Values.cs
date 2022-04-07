@@ -325,7 +325,7 @@ namespace ADIF.NET {
   /// <summary>
   /// Defines the names of ADIF tags.
   /// </summary>
-  public static class TagNames {
+  public static class ADIFTags {
 
     public const string Address = "ADDRESS";
     public const string AddressIntl = "ADDRESS_INTL";
@@ -494,7 +494,7 @@ namespace ADIF.NET {
     /// </summary>
     public static IEnumerable<string> GetTagNames()
     {
-      var constants = typeof(TagNames).GetConstants(typeof(string));
+      var constants = typeof(ADIFTags).GetConstants(typeof(string));
       return constants.Select(c => c.GetRawConstantValue().ToString());
     }
 
@@ -513,7 +513,7 @@ namespace ADIF.NET {
     /// </summary>
     public static IEnumerable<string> GetQSOTagNames()
     {
-      var constants = typeof(TagNames).GetConstants(typeof(string));
+      var constants = typeof(ADIFTags).GetConstants(typeof(string));
       return constants.Select(c => c.GetRawConstantValue().ToString())
                       .Where((c) =>
       {

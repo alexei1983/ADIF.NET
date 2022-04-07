@@ -191,7 +191,7 @@ namespace ADIF.NET {
     void Initialize()
     {
       // find the position of <EOH>
-      var headerEndingPos = this.data.IndexOf($"{Values.TAG_OPENING}{TagNames.EndHeader}{Values.TAG_CLOSING}",
+      var headerEndingPos = this.data.IndexOf($"{Values.TAG_OPENING}{ADIFTags.EndHeader}{Values.TAG_CLOSING}",
                                               StringComparison.OrdinalIgnoreCase);
 
       // if a header is not present, we can return from the method
@@ -240,7 +240,7 @@ namespace ADIF.NET {
               this.i++;
 
               // handle user-defined field definitions
-              if (tag.Equals(TagNames.UserDef, StringComparison.OrdinalIgnoreCase))
+              if (tag.Equals(ADIFTags.UserDef, StringComparison.OrdinalIgnoreCase))
               {
                 isUserFieldDef = true;
                 var fieldNumber = string.Empty;
@@ -463,7 +463,7 @@ namespace ADIF.NET {
 
       var record = string.Empty;
 
-      var end = this.data.IndexOf($"{Values.TAG_OPENING}{TagNames.EndRecord}{Values.TAG_CLOSING}",
+      var end = this.data.IndexOf($"{Values.TAG_OPENING}{ADIFTags.EndRecord}{Values.TAG_CLOSING}",
                                   this.i,
                                   StringComparison.OrdinalIgnoreCase);
 
@@ -519,7 +519,7 @@ namespace ADIF.NET {
             a++;
 
             // look for app-defined tag
-            if (tagName.Equals(TagNames.AppDef, StringComparison.OrdinalIgnoreCase))
+            if (tagName.Equals(ADIFTags.AppDef, StringComparison.OrdinalIgnoreCase))
             {
               isAppField = true;
 

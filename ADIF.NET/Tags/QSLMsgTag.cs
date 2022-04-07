@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSLMsg;
+    public override string Name => ADIFTags.QSLMsg;
 
     /// <summary>
     /// Creates a new QSLMSG tag.

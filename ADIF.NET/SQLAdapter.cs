@@ -631,10 +631,10 @@ namespace ADIF.NET {
       if (string.IsNullOrEmpty(call))
         throw new ArgumentException("Callsign is required.", nameof(call));
 
-      var callMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Call);
+      var callMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Call);
 
       if (callMapping == null || string.IsNullOrEmpty(callMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Call}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Call}");
       
       return RetrieveByMappingEquals(callMapping, call);
     }
@@ -648,10 +648,10 @@ namespace ADIF.NET {
       if (string.IsNullOrEmpty(operatorCall))
         throw new ArgumentException("Operator callsign is required.", nameof(operatorCall));
 
-      var operMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Operator);
+      var operMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Operator);
 
       if (operMapping == null || string.IsNullOrEmpty(operMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Operator}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Operator}");
 
       return RetrieveByMappingEquals(operMapping, operatorCall);
     }
@@ -672,10 +672,10 @@ namespace ADIF.NET {
       if (qsoStartDate > qsoEndDate)
         throw new ArgumentException("QSO starting date cannot be greater than QSO ending date.");
 
-      var dateMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.QSODate);
+      var dateMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.QSODate);
 
       if (dateMapping == null || string.IsNullOrEmpty(dateMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.QSODate}");
+        throw new Exception($"No mapping found for tag {ADIFTags.QSODate}");
 
       return RetrieveByMappingBetween(dateMapping, qsoStartDate.Date, qsoEndDate.Date);
     }
@@ -692,10 +692,10 @@ namespace ADIF.NET {
       if (!Values.Bands.IsValid(band))
         throw new ArgumentException($"Invalid band: {band}", nameof(band));
 
-      var bandMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Band);
+      var bandMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Band);
 
       if (bandMapping == null || string.IsNullOrEmpty(bandMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Band}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Band}");
 
       return RetrieveByMappingEquals(bandMapping, band);
     }
@@ -712,10 +712,10 @@ namespace ADIF.NET {
       if (!Values.Modes.IsValid(mode))
         throw new ArgumentException($"Invalid mode: {mode}", nameof(mode));
 
-      var modeMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Band);
+      var modeMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Band);
 
       if (modeMapping == null || string.IsNullOrEmpty(modeMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Mode}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Mode}");
 
       return RetrieveByMappingEquals(modeMapping, mode);
     }
@@ -740,15 +740,15 @@ namespace ADIF.NET {
       if (!Values.Modes.IsValid(mode))
         throw new ArgumentException($"Invalid mode: {mode}", nameof(mode));
 
-      var modeMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Band);
+      var modeMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Band);
 
       if (modeMapping == null || string.IsNullOrEmpty(modeMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Mode}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Mode}");
 
-      var bandMapping = ColumnMappings.GetColumnMappingFromTagName(TagNames.Band);
+      var bandMapping = ColumnMappings.GetColumnMappingFromTagName(ADIFTags.Band);
 
       if (bandMapping == null || string.IsNullOrEmpty(bandMapping.ColumnName))
-        throw new Exception($"No mapping found for tag {TagNames.Band}");
+        throw new Exception($"No mapping found for tag {ADIFTags.Band}");
 
       return RetrieveByMappingEquals(new ADIFColumnMapping[] { bandMapping, modeMapping }, new object[] { band, mode });
     }
@@ -1011,7 +1011,7 @@ namespace ADIF.NET {
     /// </summary>
     public void Dispose() => Dispose(true);
 
-    const string UNIQ_ID_APP_DEF_FIELD = TagNames.AppDef + Values.DEFAULT_PROGRAM_ID + "_" + UNIQ_ID_APP_DEF_FIELD_NAME;
+    const string UNIQ_ID_APP_DEF_FIELD = ADIFTags.AppDef + Values.DEFAULT_PROGRAM_ID + "_" + UNIQ_ID_APP_DEF_FIELD_NAME;
     const string UNIQ_ID_APP_DEF_FIELD_NAME = "QSOUNIQID";
     const string UNIQ_ID_SQL_COL = "ADIFNET_UNIQ_ID";
     const string SQL_INSERT_COMMAND_TEXT = "INSERT INTO {0} ({1}) VALUES ({2})";
@@ -1028,12 +1028,12 @@ namespace ADIF.NET {
     /// <summary>
     /// Minimum set of ADIF tags mapped to a database.
     /// </summary>
-    public static readonly ADIFColumnMappings DefaultMinimum = new ADIFColumnMappings(new ADIFColumnMapping(TagNames.Call),
-                                                                                      new ADIFColumnMapping(TagNames.Operator),
-                                                                                      new ADIFColumnMapping(TagNames.QSODate),
-                                                                                      new ADIFColumnMapping(TagNames.TimeOn),
-                                                                                      new ADIFColumnMapping(TagNames.Band),
-                                                                                      new ADIFColumnMapping(TagNames.Mode));
+    public static readonly ADIFColumnMappings DefaultMinimum = new ADIFColumnMappings(new ADIFColumnMapping(ADIFTags.Call),
+                                                                                      new ADIFColumnMapping(ADIFTags.Operator),
+                                                                                      new ADIFColumnMapping(ADIFTags.QSODate),
+                                                                                      new ADIFColumnMapping(ADIFTags.TimeOn),
+                                                                                      new ADIFColumnMapping(ADIFTags.Band),
+                                                                                      new ADIFColumnMapping(ADIFTags.Mode));
 
     /// <summary>
     /// All standard ADIF tags mapped to a database.
@@ -1099,7 +1099,7 @@ namespace ADIF.NET {
     /// </summary>
     static IEnumerable<ADIFColumnMapping> GetAllMappings()
     {
-      foreach (var tagName in TagNames.GetQSOTagNames())
+      foreach (var tagName in ADIFTags.GetQSOTagNames())
         yield return new ADIFColumnMapping(tagName);
     }
   }
@@ -1153,7 +1153,7 @@ namespace ADIF.NET {
       if (isUserDef && isAppDef)
         throw new ArgumentException("Mapping cannot represent both app-defined and user-defined field.");
 
-      if (!TagNames.IsTagName(tagName) && !isUserDef && !isAppDef)
+      if (!ADIFTags.IsTagName(tagName) && !isUserDef && !isAppDef)
         throw new ArgumentException($"Tag {tagName} is not valid.");
 
       IsUserDef = isUserDef;

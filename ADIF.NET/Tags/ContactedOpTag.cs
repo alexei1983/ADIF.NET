@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.ContactedOp;
+    public override string Name => ADIFTags.ContactedOp;
 
     /// <summary>
     /// Creates a new CONTACTED_OP tag.

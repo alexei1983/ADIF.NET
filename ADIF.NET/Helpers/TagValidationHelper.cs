@@ -142,10 +142,10 @@ namespace ADIF.NET.Helpers {
       
       var tagName = tag.Name;
       
-      if (tagName.StartsWith(TagNames.AppDef, StringComparison.OrdinalIgnoreCase))
-        tagName = TagNames.AppDef;
+      if (tagName.StartsWith(ADIFTags.AppDef, StringComparison.OrdinalIgnoreCase))
+        tagName = ADIFTags.AppDef;
       else if (tag.IsUserDef)
-        tagName = TagNames.UserDef;
+        tagName = ADIFTags.UserDef;
 
       var result = SQLiteHelper.Instance.ExecuteScalar<long>(TAG_VERSION_SQL,
                                                              new Dictionary<string, object>() { { "@TagName", tagName },

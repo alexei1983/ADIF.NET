@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.RigIntl;
+    public override string Name => ADIFTags.RigIntl;
 
     /// <summary>
     /// Creates a new RIG_INTL tag.

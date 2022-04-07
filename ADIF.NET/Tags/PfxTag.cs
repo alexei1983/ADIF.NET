@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Pfx;
+    public override string Name => ADIFTags.Pfx;
 
     /// <summary>
     /// Creates a new PFX tag.

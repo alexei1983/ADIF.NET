@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.EqCall;
+    public override string Name => ADIFTags.EqCall;
 
     /// <summary>
     /// Creates a new EQ_CALL tag.

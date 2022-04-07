@@ -154,7 +154,7 @@ namespace ADIF.NET.Tags {
       if (document == null)
         return null;
 
-      var el = document.CreateElement(TagNames.UserDef);
+      var el = document.CreateElement(ADIFTags.UserDef);
       el.InnerText = TextValue;
       el.SetAttribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE, Name);
 

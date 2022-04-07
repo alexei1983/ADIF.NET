@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.HrdLogQSOUploadDate;
+    public override string Name => ADIFTags.HrdLogQSOUploadDate;
 
     /// <summary>
     /// Creates a new HRDLOG_QSO_UPLOAD_DATE tag.

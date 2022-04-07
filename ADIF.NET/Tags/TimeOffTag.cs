@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.TimeOff;
+    public override string Name => ADIFTags.TimeOff;
 
     /// <summary>
     /// Creates a new TIME_OFF tag.

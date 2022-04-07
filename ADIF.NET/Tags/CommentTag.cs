@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Comment;
+    public override string Name => ADIFTags.Comment;
 
     /// <summary>
     /// Creates a new COMMENT tag.

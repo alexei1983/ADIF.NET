@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.RstSent;
+    public override string Name => ADIFTags.RstSent;
 
     /// <summary>
     /// Creates a new RST_SENT tag.

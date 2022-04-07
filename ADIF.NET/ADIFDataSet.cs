@@ -50,7 +50,7 @@ namespace ADIF.NET {
       get
       {
         if (adifVer == null)
-          return Header?.GetTagValue<Version>(TagNames.ADIFVer);
+          return Header?.GetTagValue<Version>(ADIFTags.ADIFVer);
         else
           return adifVer;
       }
@@ -220,19 +220,19 @@ namespace ADIF.NET {
             {
               var qso = QSOs[q];
 
-              if (qso.Contains(TagNames.Operator) && !qso.Contains(TagNames.StationCallSign))
+              if (qso.Contains(ADIFTags.Operator) && !qso.Contains(ADIFTags.StationCallSign))
               {
                 var stationCallSignTag = new StationCallSignTag();
-                var operatorTag = qso.GetTag(TagNames.Operator);
+                var operatorTag = qso.GetTag(ADIFTags.Operator);
                 stationCallSignTag.SetValue(operatorTag.Value);
-                QSOs[q].Insert(QSOs[q].IndexOf(TagNames.Operator), stationCallSignTag);
+                QSOs[q].Insert(QSOs[q].IndexOf(ADIFTags.Operator), stationCallSignTag);
               }
-              else if (!qso.Contains(TagNames.Operator) && qso.Contains(TagNames.StationCallSign))
+              else if (!qso.Contains(ADIFTags.Operator) && qso.Contains(ADIFTags.StationCallSign))
               {
                 var operatorTag = new OperatorTag();
-                var stationCallSignTag = qso.GetTag(TagNames.StationCallSign);
+                var stationCallSignTag = qso.GetTag(ADIFTags.StationCallSign);
                 operatorTag.SetValue(stationCallSignTag.Value);
-                QSOs[q].Insert(QSOs[q].IndexOf(TagNames.StationCallSign), operatorTag);
+                QSOs[q].Insert(QSOs[q].IndexOf(ADIFTags.StationCallSign), operatorTag);
               }
             }
           }
@@ -243,7 +243,7 @@ namespace ADIF.NET {
           if (Header == null)
             Header = new ADIFHeader();
 
-          if (!Header.Contains(TagNames.CreatedTimestamp))
+          if (!Header.Contains(ADIFTags.CreatedTimestamp))
             Header.Add(new CreatedTimestampTag(DateTime.UtcNow));
         }
 
@@ -252,7 +252,7 @@ namespace ADIF.NET {
           if (Header == null)
             Header = new ADIFHeader();
 
-          if (!Header.Contains(TagNames.ProgramId))
+          if (!Header.Contains(ADIFTags.ProgramId))
           {
             Header.Add(new ProgramIdTag(Values.DEFAULT_PROGRAM_ID));
             Header.AddOrReplace(new ProgramVersionTag(Values.ProgramVersion));
@@ -512,11 +512,11 @@ namespace ADIF.NET {
       if (Header == null)
         throw new Exception("Cannot check tag version validity: no header found.");
 
-      if (!(Header.GetTag(TagNames.ADIFVer) is ADIFVersionTag versionTag))
-        throw new Exception($"Cannot check tag version validity: no '{TagNames.ADIFVer}' tag found.");
+      if (!(Header.GetTag(ADIFTags.ADIFVer) is ADIFVersionTag versionTag))
+        throw new Exception($"Cannot check tag version validity: no '{ADIFTags.ADIFVer}' tag found.");
 
       if (versionTag.Value == null)
-        throw new Exception($"Cannot check tag version validity: no value found for '{TagNames.ADIFVer}' tag.");
+        throw new Exception($"Cannot check tag version validity: no value found for '{ADIFTags.ADIFVer}' tag.");
 
       CheckVersion(versionTag.Value);
     }

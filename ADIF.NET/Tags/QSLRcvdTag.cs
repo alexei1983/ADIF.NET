@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSLRcvd;
+    public override string Name => ADIFTags.QSLRcvd;
 
     /// <summary>
     /// Valid enumeration values.

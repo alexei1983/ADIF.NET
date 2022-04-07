@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyCity;
+    public override string Name => ADIFTags.MyCity;
 
     /// <summary>
     /// Creates a new MY_CITY tag.

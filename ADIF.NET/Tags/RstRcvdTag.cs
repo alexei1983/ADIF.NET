@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.RstRcvd;
+    public override string Name => ADIFTags.RstRcvd;
 
     /// <summary>
     /// Creates a new RST_RCVD tag.

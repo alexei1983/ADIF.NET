@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSORandom;
+    public override string Name => ADIFTags.QSORandom;
 
     /// <summary>
     /// Creates a new QSO_RANDOM tag.

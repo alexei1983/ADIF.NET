@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QRZQSOUploadDate;
+    public override string Name => ADIFTags.QRZQSOUploadDate;
 
     /// <summary>
     /// Creates a new QRZCOM_QSO_UPLOAD_DATE tag.

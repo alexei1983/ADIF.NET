@@ -5,13 +5,13 @@ namespace ADIF.NET.Tags {
   /// <summary>
   /// Represents the two-letter Canadian province or territory abbreviation of the contacted station.
   /// </summary>
-  [DeprecatedTag(TagNames.State)]
+  [DeprecatedTag(ADIFTags.State)]
   public class VEProvTag : StringTag, ITag {
 
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.VEProv;
+    public override string Name => ADIFTags.VEProv;
 
     /// <summary>
     /// Creates a new VE_PROV tag.

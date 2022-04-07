@@ -19,7 +19,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Age;
+    public override string Name => ADIFTags.Age;
 
     /// <summary>
     /// Creates a new AGE tag.

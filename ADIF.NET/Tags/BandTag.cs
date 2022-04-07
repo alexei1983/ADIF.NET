@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Band;
+    public override string Name => ADIFTags.Band;
 
     /// <summary>
     /// Valid enumeration values.

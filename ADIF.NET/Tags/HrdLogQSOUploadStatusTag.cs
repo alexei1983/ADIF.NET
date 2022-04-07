@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.HrdLogQSOUploadStatus;
+    public override string Name => ADIFTags.HrdLogQSOUploadStatus;
 
     /// <summary>
     /// Valid enumeration values.

@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QSLSentDate;
+    public override string Name => ADIFTags.QSLSentDate;
 
     /// <summary>
     /// Creates a new QSLSDATE tag.

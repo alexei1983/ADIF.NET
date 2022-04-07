@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.ClubLogQSOUploadDate;
+    public override string Name => ADIFTags.ClubLogQSOUploadDate;
 
     /// <summary>
     /// Creates a new CLUBLOG_QSO_UPLOAD_DATE tag.

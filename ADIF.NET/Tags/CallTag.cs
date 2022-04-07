@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Call;
+    public override string Name => ADIFTags.Call;
 
     /// <summary>
     /// Creates a new CALL tag.

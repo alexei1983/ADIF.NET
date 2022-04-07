@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyNameIntl;
+    public override string Name => ADIFTags.MyNameIntl;
 
     /// <summary>
     /// Creates a new MY_NAME_INTL tag.

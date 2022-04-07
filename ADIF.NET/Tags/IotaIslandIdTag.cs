@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.IOTAIslandId;
+    public override string Name => ADIFTags.IOTAIslandId;
 
     /// <summary>
     /// Creates a new IOTA_ISLAND_ID tag.

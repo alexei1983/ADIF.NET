@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.SatMode;
+    public override string Name => ADIFTags.SatMode;
 
     /// <summary>
     /// Creates a new SAT_MODE tag.

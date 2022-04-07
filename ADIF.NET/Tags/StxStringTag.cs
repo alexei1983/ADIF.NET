@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.StxString;
+    public override string Name => ADIFTags.StxString;
 
     /// <summary>
     /// Creates a new STX_STRING tag.

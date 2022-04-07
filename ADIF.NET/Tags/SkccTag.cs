@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.SKCC;
+    public override string Name => ADIFTags.SKCC;
 
     /// <summary>
     /// Creates a new SKCC tag.

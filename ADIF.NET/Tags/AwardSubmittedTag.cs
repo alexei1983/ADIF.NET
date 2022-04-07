@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.AwardSubmitted;
+    public override string Name => ADIFTags.AwardSubmitted;
 
     /// <summary>
     /// Creates a new AWARD_SUBMITTED tag.

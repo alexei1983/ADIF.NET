@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyAntenna;
+    public override string Name => ADIFTags.MyAntenna;
 
     /// <summary>
     /// Creates a new MY_ANTENNA tag.

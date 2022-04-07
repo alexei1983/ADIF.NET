@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.ContestId;
+    public override string Name => ADIFTags.ContestId;
 
     /// <summary>
     /// Valid enumeration values.

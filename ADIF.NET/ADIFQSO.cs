@@ -307,7 +307,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOperator()
     {
-      return CoalesceTagValues<string>(TagNames.Operator, TagNames.GuestOp, TagNames.StationCallSign, TagNames.OwnerCallSign);
+      return CoalesceTagValues<string>(ADIFTags.Operator, ADIFTags.GuestOp, ADIFTags.StationCallSign, ADIFTags.OwnerCallSign);
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetCall()
     {
-      return CoalesceTagValues<string>(TagNames.Call, TagNames.ContactedOp, TagNames.EqCall);
+      return CoalesceTagValues<string>(ADIFTags.Call, ADIFTags.ContactedOp, ADIFTags.EqCall);
     }
 
     /// <summary>
@@ -323,7 +323,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetOwnerCall()
     {
-      return CoalesceTagValues<string>(TagNames.OwnerCallSign);
+      return CoalesceTagValues<string>(ADIFTags.OwnerCallSign);
     }
 
     /// <summary>
@@ -331,7 +331,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetState()
     {
-      return CoalesceTagValues<string>(TagNames.State, TagNames.VEProv);
+      return CoalesceTagValues<string>(ADIFTags.State, ADIFTags.VEProv);
     }
 
     /// <summary>
@@ -369,7 +369,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetComment()
     {
-      return CoalesceTagValues<string>(TagNames.CommentIntl, TagNames.Comment);
+      return CoalesceTagValues<string>(ADIFTags.CommentIntl, ADIFTags.Comment);
     }
 
     /// <summary>
@@ -457,7 +457,7 @@ namespace ADIF.NET {
     /// <param name="suffix"></param>
     public void AddRstRcvd(int readability, int strength, int tone, string suffix)
     {
-      if (!Contains(TagNames.RstRcvd))
+      if (!Contains(ADIFTags.RstRcvd))
         SetRstRcvd(readability, strength, tone, suffix);
     }
 
@@ -561,7 +561,7 @@ namespace ADIF.NET {
     /// <param name="suffix"></param>
     public void AddRstSent(int readability, int strength, int tone, string suffix)
     {
-      if (!Contains(TagNames.RstSent))
+      if (!Contains(ADIFTags.RstSent))
         SetRstSent(readability, strength, tone, suffix);
     }
 
@@ -1172,13 +1172,13 @@ namespace ADIF.NET {
     /// </summary>
     public void MarkQSOModifiedSinceUpload()
     {
-      if (Contains(TagNames.QRZQSOUploadStatus))
+      if (Contains(ADIFTags.QRZQSOUploadStatus))
         Replace(new QRZQSOUploadStatusTag("M"));
 
-      if (Contains(TagNames.ClubLogQSOUploadStatus))
+      if (Contains(ADIFTags.ClubLogQSOUploadStatus))
         Replace(new ClubLogQSOUploadStatusTag("M"));
 
-      if (Contains(TagNames.HrdLogQSOUploadStatus))
+      if (Contains(ADIFTags.HrdLogQSOUploadStatus))
         Replace(new HRDLogQSOUploadStatusTag("M"));
     }
 
@@ -1424,11 +1424,11 @@ namespace ADIF.NET {
     /// </summary>
     public string GetBand()
     {
-      var band = GetTagValue<string>(TagNames.Band);
+      var band = GetTagValue<string>(ADIFTags.Band);
 
       if (string.IsNullOrEmpty(band))
       {
-        var freq = GetTagValue<double?>(TagNames.Freq);
+        var freq = GetTagValue<double?>(ADIFTags.Freq);
 
         if (freq.HasValue)
           band = Band.Get(freq.Value)?.Name;
@@ -1442,11 +1442,11 @@ namespace ADIF.NET {
     /// </summary>
     public string GetBandRx()
     {
-      var bandRx = GetTagValue<string>(TagNames.BandRx);
+      var bandRx = GetTagValue<string>(ADIFTags.BandRx);
 
       if (string.IsNullOrEmpty(bandRx))
       {
-        var freqRx = GetTagValue<double?>(TagNames.FreqRx);
+        var freqRx = GetTagValue<double?>(ADIFTags.FreqRx);
 
         if (freqRx.HasValue)
           bandRx = Band.Get(freqRx.Value)?.Name;
@@ -1491,7 +1491,7 @@ namespace ADIF.NET {
 
       var op = qso.GetOperator();
       var dateTimeOn = qso.GetQSODateTimeOn();
-      var mode = qso.GetTagValue<string>(TagNames.Mode);
+      var mode = qso.GetTagValue<string>(ADIFTags.Mode);
       var call = qso.GetCall();
       var band = qso.GetBand();
 
@@ -1501,7 +1501,7 @@ namespace ADIF.NET {
 
       var thisOp = GetOperator();
       var thisDateTimeOn = GetQSODateTimeOn();
-      var thisMode = GetTagValue<string>(TagNames.Mode);
+      var thisMode = GetTagValue<string>(ADIFTags.Mode);
       var thisCall = GetCall();
       var thisBand = GetBand();
 
@@ -1551,7 +1551,7 @@ namespace ADIF.NET {
 
       var op = qso.GetOperator();
       var dateTimeOn = qso.GetQSODateTimeOn();
-      var mode = qso.GetTagValue<string>(TagNames.Mode);
+      var mode = qso.GetTagValue<string>(ADIFTags.Mode);
       var call = qso.GetCall();
       var band = qso.GetBand();
 
@@ -1561,7 +1561,7 @@ namespace ADIF.NET {
 
       var thisOp = GetOperator();
       var thisDateTimeOn = GetQSODateTimeOn();
-      var thisMode = GetTagValue<string>(TagNames.Mode);
+      var thisMode = GetTagValue<string>(ADIFTags.Mode);
       var thisCall = GetCall();
       var thisBand = GetBand();
 
@@ -1660,7 +1660,7 @@ namespace ADIF.NET {
       if (newCreditsGranted == null || newCreditsGranted.Count < 1)
         return;
 
-      if (!(GetTag(TagNames.CreditGranted) is CreditListTag creditGranted))
+      if (!(GetTag(ADIFTags.CreditGranted) is CreditListTag creditGranted))
         creditGranted = new CreditListTag();
 
       var existingList = creditGranted.GetCreditList();
@@ -1703,7 +1703,7 @@ namespace ADIF.NET {
       if (awards == null)
         return;
 
-      if (!(GetTag(TagNames.AwardGranted) is SponsoredAwardListTag awardsGranted))
+      if (!(GetTag(ADIFTags.AwardGranted) is SponsoredAwardListTag awardsGranted))
         awardsGranted = new SponsoredAwardListTag();
 
       var existingList = awardsGranted.GetValues()?.ToList();
@@ -1957,7 +1957,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetSIG()
     {
-      return CoalesceTagValues<string>(TagNames.SigIntl, TagNames.Sig);
+      return CoalesceTagValues<string>(ADIFTags.SigIntl, ADIFTags.Sig);
     }
 
     /// <summary>
@@ -1965,7 +1965,7 @@ namespace ADIF.NET {
     /// </summary>
     public string GetSIGInfo()
     {
-      return CoalesceTagValues<string>(TagNames.SigInfoIntl, TagNames.SigInfo);
+      return CoalesceTagValues<string>(ADIFTags.SigInfoIntl, ADIFTags.SigInfo);
     }
 
     /// <summary>
@@ -1997,8 +1997,8 @@ namespace ADIF.NET {
     /// </summary>
     public DateTime? GetQSODateTimeOn()
     {
-      var qsoDateTag = GetTag(TagNames.QSODate);
-      var timeOnTag = GetTag(TagNames.TimeOn);
+      var qsoDateTag = GetTag(ADIFTags.QSODate);
+      var timeOnTag = GetTag(ADIFTags.TimeOn);
 
       DateTime? qsoDate = null;
       DateTime? timeOn = null;
@@ -2034,8 +2034,8 @@ namespace ADIF.NET {
     /// </summary>
     public DateTime? GetQSODateTimeOff()
     {
-      var qsoDateOffTag = GetTag(TagNames.QSODateOff);
-      var timeOffTag = GetTag(TagNames.TimeOff);
+      var qsoDateOffTag = GetTag(ADIFTags.QSODateOff);
+      var timeOffTag = GetTag(ADIFTags.TimeOff);
 
       DateTime? qsoDateOff = null;
       DateTime? timeOff = null;
@@ -2048,7 +2048,7 @@ namespace ADIF.NET {
         timeOff = timeOffTag.Value as DateTime?;
         if (!qsoDateOff.HasValue)
         {
-          qsoDateOffTag = GetTag(TagNames.QSODate);
+          qsoDateOffTag = GetTag(ADIFTags.QSODate);
 
           if (qsoDateOffTag != null)
             qsoDateOff = qsoDateOffTag.Value as DateTime?;
@@ -2107,13 +2107,13 @@ namespace ADIF.NET {
     /// </summary>
     public void ValidateFrequencyBand()
     {
-      var freqTag = GetTag(TagNames.Freq) as FreqTag;
-      var bandTag = GetTag(TagNames.Band) as BandTag;
+      var freqTag = GetTag(ADIFTags.Freq) as FreqTag;
+      var bandTag = GetTag(ADIFTags.Band) as BandTag;
 
       TagValidationHelper.ValidateFrequencyBand(freqTag, bandTag);
 
-      var freqRxTag = GetTag(TagNames.FreqRx) as FreqRxTag;
-      var bandRxTag = GetTag(TagNames.BandRx) as BandRxTag;
+      var freqRxTag = GetTag(ADIFTags.FreqRx) as FreqRxTag;
+      var bandRxTag = GetTag(ADIFTags.BandRx) as BandRxTag;
 
       TagValidationHelper.ValidateFrequencyBand(freqRxTag, bandRxTag);
     }
@@ -2123,13 +2123,13 @@ namespace ADIF.NET {
     /// </summary>
     public void ValidatePrimarySubdivision()
     {
-      var dxccTag = GetTag(TagNames.DXCC);
-      var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
+      var dxccTag = GetTag(ADIFTags.DXCC);
+      var primarySubTag = GetTag(ADIFTags.State) ?? GetTag(ADIFTags.VEProv);
 
       TagValidationHelper.ValidatePrimaryAdminSubdivision(dxccTag, primarySubTag);
 
-      var myDxccTag = GetTag(TagNames.MyDXCC);
-      var myPrimarySubTag = GetTag(TagNames.MyState);
+      var myDxccTag = GetTag(ADIFTags.MyDXCC);
+      var myPrimarySubTag = GetTag(ADIFTags.MyState);
 
       TagValidationHelper.ValidatePrimaryAdminSubdivision(myDxccTag, myPrimarySubTag);
     }
@@ -2139,13 +2139,13 @@ namespace ADIF.NET {
     /// </summary>
     public void ValidateLatLon()
     {
-      var latTag = GetTag(TagNames.Lat);
-      var lonTag = GetTag(TagNames.Lon);
+      var latTag = GetTag(ADIFTags.Lat);
+      var lonTag = GetTag(ADIFTags.Lon);
 
       TagValidationHelper.ValidateLatLong(latTag, lonTag);
 
-      var myLatTag = GetTag(TagNames.MyLat);
-      var myLonTag = GetTag(TagNames.MyLon);
+      var myLatTag = GetTag(ADIFTags.MyLat);
+      var myLonTag = GetTag(ADIFTags.MyLon);
 
       TagValidationHelper.ValidateLatLong(myLatTag, myLonTag);
     }
@@ -2155,15 +2155,15 @@ namespace ADIF.NET {
     /// </summary>
     public void ValidateSecondarySubdivision()
     {
-      var dxccTag = GetTag(TagNames.DXCC);
-      var primarySubTag = GetTag(TagNames.State) ?? GetTag(TagNames.VEProv);
-      var secondarySubTag = GetTag(TagNames.Cnty);
+      var dxccTag = GetTag(ADIFTags.DXCC);
+      var primarySubTag = GetTag(ADIFTags.State) ?? GetTag(ADIFTags.VEProv);
+      var secondarySubTag = GetTag(ADIFTags.Cnty);
 
       TagValidationHelper.ValidateAdminSubdivisions(dxccTag, primarySubTag, secondarySubTag);
 
-      var myDxccTag = GetTag(TagNames.MyDXCC);
-      var myPrimarySubTag = GetTag(TagNames.MyState);
-      var mySecondarySubTag = GetTag(TagNames.MyCnty);
+      var myDxccTag = GetTag(ADIFTags.MyDXCC);
+      var myPrimarySubTag = GetTag(ADIFTags.MyState);
+      var mySecondarySubTag = GetTag(ADIFTags.MyCnty);
 
       TagValidationHelper.ValidateAdminSubdivisions(myDxccTag, myPrimarySubTag, mySecondarySubTag);
     }

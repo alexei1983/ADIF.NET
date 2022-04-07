@@ -11,7 +11,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.SOTARef;
+    public override string Name => ADIFTags.SOTARef;
 
     /// <summary>
     /// ADIF type.

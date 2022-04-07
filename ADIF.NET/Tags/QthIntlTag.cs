@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.QTHIntl;
+    public override string Name => ADIFTags.QTHIntl;
 
     /// <summary>
     /// Creates a new QTH_INTL tag.

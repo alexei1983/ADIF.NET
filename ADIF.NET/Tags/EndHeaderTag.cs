@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.EndHeader;
+    public override string Name => ADIFTags.EndHeader;
 
     /// <summary>
     /// Whether or not the tag is a header tag.

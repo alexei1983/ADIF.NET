@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.PropMode;
+    public override string Name => ADIFTags.PropMode;
 
     /// <summary>
     /// Valid enumeration values.

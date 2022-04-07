@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MsShower;
+    public override string Name => ADIFTags.MsShower;
 
     /// <summary>
     /// Creates a new MS_SHOWER tag.

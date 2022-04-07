@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.FistsCc;
+    public override string Name => ADIFTags.FistsCc;
 
     /// <summary>
     /// Creates a new FISTS_CC tag.

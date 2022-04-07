@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MySig;
+    public override string Name => ADIFTags.MySig;
 
     /// <summary>
     /// Creates a new MY_SIG tag.

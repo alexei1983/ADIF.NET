@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.DARCDOK;
+    public override string Name => ADIFTags.DARCDOK;
 
     /// <summary>
     /// Valid enumeration values.

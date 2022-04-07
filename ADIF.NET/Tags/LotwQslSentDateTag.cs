@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.LOTWQSLSentDate;
+    public override string Name => ADIFTags.LOTWQSLSentDate;
 
     /// <summary>
     /// Creates a new LOTW_QSLSDATE tag.

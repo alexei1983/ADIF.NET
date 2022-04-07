@@ -10,7 +10,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.Lon;
+    public override string Name => ADIFTags.Lon;
 
     /// <summary>
     /// Creates a new LON tag.

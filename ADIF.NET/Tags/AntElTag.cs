@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.AntEl;
+    public override string Name => ADIFTags.AntEl;
 
     /// <summary>
     /// Maximum numeric value.

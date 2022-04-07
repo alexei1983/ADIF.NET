@@ -9,7 +9,7 @@ namespace ADIF.NET.Tags {
     /// <summary>
     /// Tag name.
     /// </summary>
-    public override string Name => TagNames.MyUSACACounties;
+    public override string Name => ADIFTags.MyUSACACounties;
 
     /// <summary>
     /// String that delimits values in a multi-valued tag.
