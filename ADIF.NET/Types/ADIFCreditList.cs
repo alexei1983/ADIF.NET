@@ -62,9 +62,12 @@ namespace ADIF.NET.Types {
     public static bool IsValidValue(object o)
     {
       if (o is null) 
-        return false;
+        return true;
 
-       return IsValidValue(o.ToString());
+      if (o is CreditList)
+        return true;
+
+       return IsValidValue(o is string strVal ? strVal : o.ToString());
     }
 
     /// <summary>
@@ -74,7 +77,7 @@ namespace ADIF.NET.Types {
     public static bool IsValidValue(string s)
     {
       if (string.IsNullOrEmpty(s))
-        return false;
+        return true;
 
       try
       {

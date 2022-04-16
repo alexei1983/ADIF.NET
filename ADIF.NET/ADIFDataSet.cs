@@ -437,7 +437,7 @@ namespace ADIF.NET {
       if (tag is null)
         return;
 
-      if (!tag.Header)
+      if (!tag.Header && !tag.IsAppDef)
         throw new ArgumentException("Tag must be a header tag.", nameof(tag));
 
       if (Header == null)
@@ -455,7 +455,7 @@ namespace ADIF.NET {
       if (tag is null)
         return;
 
-      if (!tag.Header)
+      if (!tag.Header && !tag.IsAppDef)
         throw new ArgumentException("Tag must be a header tag.", nameof(tag));
 
       if (Header == null)

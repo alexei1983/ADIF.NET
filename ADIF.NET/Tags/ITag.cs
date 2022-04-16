@@ -77,6 +77,11 @@ namespace ADIF.NET.Tags {
     bool IsUserDef { get; }
 
     /// <summary>
+    /// Whether or not the tag is application-defined.
+    /// </summary>
+    bool IsAppDef { get; }
+
+    /// <summary>
     /// Whether or not the tag is a header tag.
     /// </summary>
     bool Header { get; }

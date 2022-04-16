@@ -63,6 +63,9 @@ namespace ADIF.NET {
       if (stream == null)
         throw new ArgumentNullException(nameof(stream), "Stream cannot be null.");
 
+      if (!stream.CanRead)
+        throw new ArgumentException("Stream is not readable.", nameof(stream));
+
       this.doc = XDocument.Load(stream);
     }
 

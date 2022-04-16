@@ -23,6 +23,13 @@ namespace ADIF.NET.Helpers {
 
       if (tag.ExpectedValueType != expectedType)
         throw new Exception($"Value for tag '{tag.Name}' is not of the expected type.");
+
+      if (tag.HasValue())
+      {
+        if (tag.Value.GetType() != expectedType)
+          throw new Exception($"Value for tag '{tag.Name}' is not of the expected type.");
+      }
+
     }
 
     /// <summary>
@@ -51,9 +58,67 @@ namespace ADIF.NET.Helpers {
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="modeTag"></param>
+    /// <param name="submodeTag"></param>
+    public static void ValidateModes(ITag modeTag, ITag submodeTag)
+    {
+      if (modeTag == null && submodeTag == null)
+        return;
+
+      var hasMode = modeTag != null && modeTag.HasValue();
+      var hasSubmode = submodeTag != null && submodeTag.HasValue();
+      var modeVal = string.Empty;
+
+      if (modeTag != null)
+      {
+        ValidateExpectedValueType(modeTag, typeof(string));
+
+        if (hasMode)
+        {
+          modeVal = modeTag.Value as string;
+
+          if (!Values.Modes.IsValid(modeVal))
+          {
+            if (Values.Submodes.IsValid(modeVal))
+              throw new Exception($"'{modeVal.ToUpper()}' is a submode, not a mode.");
+            else
+              throw new Exception($"'{modeVal.ToUpper()}' is not a valid mode.");
+          }
+        }
+      }
+
+      if (submodeTag != null)
+      {
+        ValidateExpectedValueType(submodeTag, typeof(string));
+
+        if (hasSubmode)
+        {
+          var submodeVal = submodeTag.Value as string;
+
+          if (Values.Submodes.IsValid(submodeVal))
+          {
+            if (!hasMode)
+              throw new Exception($"Submode '{submodeVal.ToUpper()}' requires a mode to be specified.");
+
+            // is the right parent mode specified?
+            var parentMode = Values.Submodes.GetValue(submodeVal);
+
+            if (parentMode == null)
+              throw new Exception($"Submode {submodeVal.ToUpper()} has no associated mode.");
+
+            if (!modeVal.Equals(parentMode.Code, StringComparison.OrdinalIgnoreCase))
+              throw new Exception($"Submode '{submodeVal.ToUpper()}' does not belong to mode '{modeVal.ToUpper()}'");
+          } 
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="dxccTag"></param>
     /// <param name="primarySubDivTag"></param>
-    public static void ValidatePrimaryAdminSubdivision(ITag dxccTag, ITag primarySubDivTag)
+    public static void ValidatePrimarySubdivision(ITag dxccTag, ITag primarySubDivTag)
     {
       if (dxccTag == null || primarySubDivTag == null)
         return;
@@ -73,7 +138,7 @@ namespace ADIF.NET.Helpers {
     /// <param name="dxccTag"></param>
     /// <param name="primarySubDivTag"></param>
     /// <param name="secondarySubDivTag"></param>
-    public static void ValidateAdminSubdivisions(ITag dxccTag, ITag primarySubDivTag, ITag secondarySubDivTag)
+    public static void ValidateSubdivisions(ITag dxccTag, ITag primarySubDivTag, ITag secondarySubDivTag)
     {
       if (dxccTag == null || secondarySubDivTag == null || primarySubDivTag == null)
         return;
@@ -98,7 +163,8 @@ namespace ADIF.NET.Helpers {
     {
       if (latTag == null && longTag == null)
         return;
-      else if (latTag == null || longTag == null)
+
+      if (latTag == null || longTag == null)
         throw new Exception("Latitude and longitude are both required for validation.");
 
       if (!(latTag.Value is Location latVal) || !(longTag.Value is Location longVal))
@@ -142,7 +208,7 @@ namespace ADIF.NET.Helpers {
       
       var tagName = tag.Name;
       
-      if (tagName.StartsWith(ADIFTags.AppDef, StringComparison.OrdinalIgnoreCase))
+      if (tag.IsAppDef)
         tagName = ADIFTags.AppDef;
       else if (tag.IsUserDef)
         tagName = ADIFTags.UserDef;
@@ -184,6 +250,6 @@ namespace ADIF.NET.Helpers {
       }
     }
 
-    const string TAG_VERSION_SQL = "SELECT 1 FROM Tags WHERE Name = @TagName AND MinVersion <= @Version AND (MaxVersion IS NULL OR MaxVersion >= @Version)";
+    const string TAG_VERSION_SQL = "SELECT 1 FROM \"Tags\" WHERE \"Name\" = @TagName AND \"MinVersion\" <= @Version AND (\"MaxVersion\" IS NULL OR \"MaxVersion\" >= @Version)";
   }
 }

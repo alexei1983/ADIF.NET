@@ -6,7 +6,7 @@ using ADIF.NET.Helpers;
 namespace ADIF.NET.Tags {
 
   /// <summary>
-  /// Represents the definition of a user QSO field.
+  /// Represents the specification of a user-defined QSO field.
   /// </summary>
   public class UserDefTag : StringTag, ITag, IFormattable {
 

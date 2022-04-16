@@ -10,10 +10,19 @@ namespace ADIF.NET.Tags {
   /// </summary>
   public class CreditListTag : StringTag, ITag {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string ValueSeparator => Values.COMMA.ToString();
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override IADIFType ADIFType => new ADIFCreditList();
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override string TextValue
     {
       get {
@@ -24,21 +33,36 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public CreditListTag() { 
       if (creditList == null)
         creditList = new CreditList();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public CreditListTag(string value) : base(value) {
       if (creditList == null)
         creditList = new CreditList();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override bool ValidateValue(object value)
     {
-      return base.ValidateValue(value) && ADIFCreditList.TryParse(value.ToString(), out _);
+      return ADIFCreditList.IsValidValue(value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public override void SetValue(string value)
     {
       if (creditList == null)
@@ -58,6 +82,10 @@ namespace ADIF.NET.Tags {
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
     public void AddValue(string credit)
     {
       if (creditList == null)
@@ -66,6 +94,11 @@ namespace ADIF.NET.Tags {
       creditList.Add(credit);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    /// <param name="medium"></param>
     public void AddValue(string credit, string medium)
     {
       if (creditList == null)
@@ -74,12 +107,20 @@ namespace ADIF.NET.Tags {
       creditList.Add(credit, medium);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public override void ClearValue()
     {
       creditList = new CreditList();
       base.ClearValue();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="credit"></param>
+    /// <returns></returns>
     public IEnumerable<string> GetMediums(string credit)
     {
       if (creditList == null)
@@ -88,14 +129,21 @@ namespace ADIF.NET.Tags {
       return creditList.GetMediums(credit);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public IEnumerable<string> GetCredits()
     {
       if (creditList == null)
         creditList = new CreditList();
 
-      return creditList.Select(c => c.Credit);
+      return creditList.GetCredits();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public CreditList GetCreditList()
     {
       return creditList;

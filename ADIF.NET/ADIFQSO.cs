@@ -258,6 +258,8 @@ namespace ADIF.NET {
 
       if (!string.IsNullOrEmpty(submode))
         AddOrReplace(new SubmodeTag(submode));
+      else
+        Remove(ADIFTags.Submode);
     }
 
     /// <summary>
@@ -282,6 +284,30 @@ namespace ADIF.NET {
         throw new ArgumentException($"Invalid band: '{band}'");
 
       AddOrReplace(new BandTag(band));
+    }
+
+    /// <summary>
+    /// Adds the receiving band for the current cross-band QSO.
+    /// </summary>
+    /// <param name="bandRx">Receiving to add to the current QSO.</param>
+    public void AddBandRx(string bandRx)
+    {
+      if (!Values.Bands.IsValid(bandRx))
+        throw new ArgumentException($"Invalid band: '{bandRx}'");
+
+      Add(new BandRxTag(bandRx));
+    }
+
+    /// <summary>
+    /// Sets the receiving band for the current cross-band QSO.
+    /// </summary>
+    /// <param name="bandRx">Receiving to set for the current QSO.</param>
+    public void SetBandRx(string bandRx)
+    {
+      if (!Values.Bands.IsValid(bandRx))
+        throw new ArgumentException($"Invalid band: '{bandRx}'");
+
+      AddOrReplace(new BandRxTag(bandRx));
     }
 
     /// <summary>
@@ -340,8 +366,8 @@ namespace ADIF.NET {
     /// <param name="comment">Comment to add to the QSO.</param>
     public void AddComment(string comment)
     {
-      if (comment == null)
-        comment = string.Empty;
+      if (string.IsNullOrEmpty(comment))
+        return;
 
       if (comment.IsASCII())
         Add(new CommentTag(comment));
@@ -355,8 +381,12 @@ namespace ADIF.NET {
     /// <param name="comment"></param>
     public void SetComment(string comment)
     {
-      if (comment == null)
-        comment = string.Empty;
+      if (string.IsNullOrEmpty(comment))
+      {
+        Remove(ADIFTags.Comment);
+        Remove(ADIFTags.CommentIntl);
+        return;
+      }
 
       if (comment.IsASCII())
         AddOrReplace(new CommentTag(comment));
@@ -370,6 +400,14 @@ namespace ADIF.NET {
     public string GetComment()
     {
       return CoalesceTagValues<string>(ADIFTags.CommentIntl, ADIFTags.Comment);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string GetNotes()
+    {
+      return CoalesceTagValues<string>(ADIFTags.NotesIntl, ADIFTags.Notes);
     }
 
     /// <summary>
@@ -408,6 +446,9 @@ namespace ADIF.NET {
     /// <param name="setBand">Whether or not to set the band for the current QSO based on the frequency.</param>
     public void AddFreq(double frequency, bool addBand = false)
     {
+      if (frequency <= 0)
+        return;
+
       Add(new FreqTag(frequency));
 
       if (addBand)
@@ -415,6 +456,8 @@ namespace ADIF.NET {
         var band = Band.Get(frequency);
         if (band != null)
           AddBand(band.Name);
+        else
+          throw new Exception($"Frequency {frequency} does not belong to an amateur band.");
       }
     }
 
@@ -425,16 +468,79 @@ namespace ADIF.NET {
     /// <param name="setBand"></param>
     public void SetFreq(double frequency, bool setBand = false)
     {
+      if (frequency <= 0)
+      {
+        Remove(ADIFTags.Freq);
+
+        if (setBand)
+          Remove(ADIFTags.Band);
+
+        return;
+      }
+
       AddOrReplace(new FreqTag(frequency));
 
       if (setBand)
       {
         var band = Band.Get(frequency);
         if (band != null)
-          AddOrReplace(new BandTag(band.Name));
+          SetBand(band.Name);
+        else
+          throw new Exception($"Frequency {frequency} does not belong to an amateur band.");
       }
     }
-    
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequencyRx"></param>
+    /// <param name="addBandRx"></param>
+    public void AddFreqRx(double frequencyRx, bool addBandRx = false)
+    {
+      if (frequencyRx <= 0)
+        return;
+
+      Add(new FreqRxTag(frequencyRx));
+
+      if (addBandRx)
+      {
+        var band = Band.Get(frequencyRx);
+        if (band != null)
+          AddBandRx(band.Name);
+        else
+          throw new Exception($"Frequency {frequencyRx} does not belong to an amateur band.");
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequencyRx"></param>
+    /// <param name="setBandRx"></param>
+    public void SetFreqRx(double frequencyRx, bool setBandRx = false)
+    {
+      if (frequencyRx <= 0)
+      {
+        Remove(ADIFTags.FreqRx);
+
+        if (setBandRx)
+          Remove(ADIFTags.BandRx);
+
+        return;
+      }
+
+      AddOrReplace(new FreqRxTag(frequencyRx));
+
+      if (setBandRx)
+      {
+        var band = Band.Get(frequencyRx);
+        if (band != null)
+          SetBandRx(band.Name);
+        else
+          throw new Exception($"Frequency {frequencyRx} does not belong to an amateur band.");
+      }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -639,9 +745,13 @@ namespace ADIF.NET {
     {
       if (!string.IsNullOrEmpty(iota))
         AddOrReplace(new IOTATag(iota));
+      else
+        Remove(ADIFTags.IOTA);
 
       if (islandId > 0)
         AddOrReplace(new IOTAIslandIdTag(islandId));
+      else
+        Remove(ADIFTags.IOTAIslandId);
     }
 
     /// <summary>
@@ -685,9 +795,13 @@ namespace ADIF.NET {
     {
       if (!string.IsNullOrEmpty(myIota))
         AddOrReplace(new MyIOTATag(myIota));
+      else
+        Remove(ADIFTags.MyIOTA);
 
       if (myIslandId > 0)
         AddOrReplace(new MyIOTAIslandIdTag(myIslandId));
+      else
+        Remove(ADIFTags.MyIOTAIslandId);
     }
 
     /// <summary>
@@ -826,15 +940,19 @@ namespace ADIF.NET {
       if (azimuth >= -90)
       {
         var antAzTag = new AntAzTag(azimuth);
-        if (antAzTag.ValidateValue())
-          Add(antAzTag);
+        if (!antAzTag.ValidateValue())
+          throw new ValueException($"Invalid value for tag {antAzTag.Name}.", azimuth.ToString());
+
+        Add(antAzTag);
       }
 
       if (elevation >= 0)
       {
         var antElTag = new AntElTag(elevation);
-        if (antElTag.ValidateValue())
-          Add(antElTag);
+        if (!antElTag.ValidateValue())
+          throw new ValueException($"Invalid value for tag {antElTag.Name}.", elevation.ToString());
+
+        Add(antElTag);
       }
     }
 
@@ -853,20 +971,33 @@ namespace ADIF.NET {
         else
           AddOrReplace(new MyAntennaIntlTag(antenna));
       }
+      else
+      {
+        Remove(ADIFTags.MyAntenna);
+        Remove(ADIFTags.MyAntennaIntl);
+      }
 
       if (azimuth >= -90)
       {
         var antAzTag = new AntAzTag(azimuth);
-        if (antAzTag.ValidateValue())
-          AddOrReplace(antAzTag);
+        if (!antAzTag.ValidateValue())
+          throw new ValueException($"Invalid value for tag {antAzTag.Name}.", azimuth.ToString());
+
+        AddOrReplace(antAzTag);
       }
+      else
+        Remove(ADIFTags.AntAz);
 
       if (elevation >= 0)
       {
         var antElTag = new AntElTag(elevation);
-        if (antElTag.ValidateValue())
-          AddOrReplace(antElTag);
+        if (!antElTag.ValidateValue())
+          throw new ValueException($"Invalid value for tag {antElTag.Name}.", elevation.ToString());
+
+        AddOrReplace(antElTag);
       }
+      else
+        Remove(ADIFTags.AntEl);
     }
 
     /// <summary>
@@ -1043,9 +1174,13 @@ namespace ADIF.NET {
 
         AddOrReplace(new QSLRcvdViaTag(receivedVia));
       }
+      else
+        Remove(ADIFTags.QSLRcvdVia);
 
       if (receivedOn != DateTime.MinValue)
         AddOrReplace(new QSLRvcdDateTag(receivedOn));
+      else
+        Remove(ADIFTags.QSLRcvdDate);
     }
 
     /// <summary>
@@ -1081,9 +1216,13 @@ namespace ADIF.NET {
 
         AddOrReplace(new QSLSentViaTag(sentVia));
       }
+      else
+        Remove(ADIFTags.QSLSentVia);
 
       if (sentOn != DateTime.MinValue)
         AddOrReplace(new QSLSentDateTag(sentOn));
+      else
+        Remove(ADIFTags.QSLSentDate);
     }
 
     /// <summary>
@@ -1112,6 +1251,8 @@ namespace ADIF.NET {
     {
       if (sentOn != DateTime.MinValue)
         AddOrReplace(new LOTWQSLSentDateTag(sentOn));
+      else
+        Remove(ADIFTags.LOTWQSLSentDate);
 
       AddOrReplace(new LOTWQSLSentTag(Values.ADIF_BOOLEAN_TRUE));
 
@@ -1128,6 +1269,8 @@ namespace ADIF.NET {
     {
       if (receivedOn != DateTime.MinValue)
         AddOrReplace(new LOTWQSLReceivedDateTag(receivedOn));
+      else
+        Remove(ADIFTags.LOTWQSLReceivedDate);
 
       AddOrReplace(new LOTWQSLRcvdTag(Values.ADIF_BOOLEAN_TRUE));
 
@@ -1144,6 +1287,8 @@ namespace ADIF.NET {
     {
       if (sentOn != DateTime.MinValue)
         AddOrReplace(new EQSLSentDateTag(sentOn));
+      else
+        Remove(ADIFTags.EQSLSentDate);
 
       AddOrReplace(new EQSLSentStatusTag(Values.ADIF_BOOLEAN_TRUE));
 
@@ -1160,6 +1305,8 @@ namespace ADIF.NET {
     {
       if (receivedOn != DateTime.MinValue)
         AddOrReplace(new EQSLReceivedDateTag(receivedOn));
+      else
+        Remove(ADIFTags.EQSLReceivedDate);
 
       AddOrReplace(new EQSLReceivedStatusTag(Values.ADIF_BOOLEAN_TRUE));
 
@@ -1643,7 +1790,10 @@ namespace ADIF.NET {
     public void SetName(string name)
     {
       if (string.IsNullOrEmpty(name))
+      {
+        Remove(ADIFTags.Name);
         return;
+      }
 
       if (name.IsASCII())
         AddOrReplace(new NameTag(name));
@@ -1723,7 +1873,7 @@ namespace ADIF.NET {
     /// <param name="awards"></param>
     public void MergeAwardGranted(string awards)
     {
-      if (string.IsNullOrWhiteSpace(awards))
+      if (string.IsNullOrWhiteSpace(awards)) 
         return;
 
       var awardsArr = ADIFSponsoredAwardList.Parse(awards);
@@ -1764,9 +1914,13 @@ namespace ADIF.NET {
     {
       if (!string.IsNullOrEmpty(satelliteName))
         AddOrReplace(new SatNameTag(satelliteName));
+      else
+        Remove(ADIFTags.SatName);
 
       if (!string.IsNullOrEmpty(satelliteMode))
         AddOrReplace(new SatModeTag(satelliteMode));
+      else
+        Remove(ADIFTags.SatMode);
 
       AddOrReplace(new PropModeTag("SAT"));
     }
@@ -1779,6 +1933,8 @@ namespace ADIF.NET {
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new ClubLogQSOUploadDateTag(uploadTime));
+      else
+        Remove(ADIFTags.ClubLogQSOUploadDate);
 
       if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
         AddOrReplace(new ClubLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
@@ -1792,6 +1948,8 @@ namespace ADIF.NET {
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new HRDLogQSOUploadDateTag(uploadTime));
+      else
+        Remove(ADIFTags.HrdLogQSOUploadDate);
 
       if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
         AddOrReplace(new HRDLogQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
@@ -1805,6 +1963,8 @@ namespace ADIF.NET {
     {
       if (uploadTime != DateTime.MinValue)
         AddOrReplace(new QRZQSOUploadDateTag(uploadTime));
+      else
+        Remove(ADIFTags.QRZQSOUploadDate);
 
       if (Values.QSOUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
         AddOrReplace(new QRZQSOUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
@@ -1838,12 +1998,18 @@ namespace ADIF.NET {
     {
       if (sfi >= 0)
         AddOrReplace(new SFITag(sfi));
+      else
+        Remove(ADIFTags.Sfi);
 
       if (aIndex >= 0)
         AddOrReplace(new AIndexTag(aIndex));
+      else
+        Remove(ADIFTags.AIndex);
 
       if (kIndex >= 0)
         AddOrReplace(new KIndexTag(kIndex));
+      else
+        Remove(ADIFTags.KIndex);
     }
 
     /// <summary>
@@ -1856,15 +2022,23 @@ namespace ADIF.NET {
     {
       if (!string.IsNullOrEmpty(showerName))
         AddOrReplace(new MsShowerTag(showerName));
+      else
+        Remove(ADIFTags.MsShower);
 
       if (bursts >= 0)
         AddOrReplace(new NrBurstsTag(bursts));
+      else
+        Remove(ADIFTags.NrBursts);
 
       if (pings >= 0)
         AddOrReplace(new NrPingsTag(pings));
+      else
+        Remove(ADIFTags.NrPings);
 
       if (maxBursts >= 0)
         AddOrReplace(new MaxBurstsTag(maxBursts));
+      else
+        Remove(ADIFTags.MaxBursts);
     }
 
     /// <summary>
@@ -1881,9 +2055,16 @@ namespace ADIF.NET {
         else
           AddOrReplace(new RigIntlTag(rig));
       }
+      else
+      {
+        Remove(ADIFTags.Rig);
+        Remove(ADIFTags.RigIntl);
+      }
 
       if (watts > 0)
         AddOrReplace(new RxPwrTag(watts));
+      else
+        Remove(ADIFTags.RxPwr);
     }
 
     /// <summary>
@@ -1901,6 +2082,11 @@ namespace ADIF.NET {
         else
           AddOrReplace(new MyRigIntlTag(rig));
       }
+      else
+      {
+        Remove(ADIFTags.MyRig);
+        Remove(ADIFTags.MyRigIntl);
+      }
 
       if (!string.IsNullOrEmpty(antenna))
       {
@@ -1909,9 +2095,16 @@ namespace ADIF.NET {
         else
           AddOrReplace(new MyAntennaIntlTag(antenna));
       }
+      else
+      {
+        Remove(ADIFTags.MyAntenna);
+        Remove(ADIFTags.MyAntennaIntl);
+      }
 
       if (watts > 0)
         AddOrReplace(new TxPwrTag(watts));
+      else
+        Remove(ADIFTags.TxPwr);
     }
 
     /// <summary>
@@ -1928,6 +2121,11 @@ namespace ADIF.NET {
         else
           AddOrReplace(new SigIntlTag(sig));
       }
+      else
+      {
+        Remove(ADIFTags.Sig);
+        Remove(ADIFTags.SigIntl);
+      }
 
       if (!string.IsNullOrEmpty(sigInfo))
       {
@@ -1935,6 +2133,11 @@ namespace ADIF.NET {
           AddOrReplace(new SigInfoTag(sigInfo));
         else
           AddOrReplace(new SigInfoIntlTag(sigInfo));
+      }
+      else
+      {
+        Remove(ADIFTags.SigInfo);
+        Remove(ADIFTags.SigInfoIntl);
       }
     }
 
@@ -1947,9 +2150,13 @@ namespace ADIF.NET {
     {
       if (!string.IsNullOrEmpty(sotaRef))
         AddOrReplace(new SOTARefTag(sotaRef));
+      else
+        Remove(ADIFTags.SOTARef);
 
       if (!string.IsNullOrEmpty(mySotaRef))
         AddOrReplace(new MySOTARefTag(mySotaRef));
+      else
+        Remove(ADIFTags.MySOTARef);
     }
 
     /// <summary>
@@ -1982,6 +2189,11 @@ namespace ADIF.NET {
         else
           AddOrReplace(new MySigIntlTag(mySig));
       }
+      else
+      {
+        Remove(ADIFTags.MySig);
+        Remove(ADIFTags.MySigIntl);
+      }
 
       if (!string.IsNullOrEmpty(mySigInfo))
       {
@@ -1989,6 +2201,11 @@ namespace ADIF.NET {
           AddOrReplace(new MySigInfoTag(mySigInfo));
         else
           AddOrReplace(new MySigInfoIntlTag(mySigInfo));
+      }
+      else
+      {
+        Remove(ADIFTags.MySigInfo);
+        Remove(ADIFTags.MySigInfoIntl);
       }
     }
 
@@ -2121,17 +2338,28 @@ namespace ADIF.NET {
     /// <summary>
     /// 
     /// </summary>
+    public void ValidateModes()
+    {
+      var modeTag = GetTag(ADIFTags.Mode) as ModeTag;
+      var submodeTag = GetTag(ADIFTags.Submode) as SubmodeTag;
+
+      TagValidationHelper.ValidateModes(modeTag, submodeTag);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void ValidatePrimarySubdivision()
     {
       var dxccTag = GetTag(ADIFTags.DXCC);
       var primarySubTag = GetTag(ADIFTags.State) ?? GetTag(ADIFTags.VEProv);
 
-      TagValidationHelper.ValidatePrimaryAdminSubdivision(dxccTag, primarySubTag);
+      TagValidationHelper.ValidatePrimarySubdivision(dxccTag, primarySubTag);
 
       var myDxccTag = GetTag(ADIFTags.MyDXCC);
       var myPrimarySubTag = GetTag(ADIFTags.MyState);
 
-      TagValidationHelper.ValidatePrimaryAdminSubdivision(myDxccTag, myPrimarySubTag);
+      TagValidationHelper.ValidatePrimarySubdivision(myDxccTag, myPrimarySubTag);
     }
 
     /// <summary>
@@ -2159,13 +2387,13 @@ namespace ADIF.NET {
       var primarySubTag = GetTag(ADIFTags.State) ?? GetTag(ADIFTags.VEProv);
       var secondarySubTag = GetTag(ADIFTags.Cnty);
 
-      TagValidationHelper.ValidateAdminSubdivisions(dxccTag, primarySubTag, secondarySubTag);
+      TagValidationHelper.ValidateSubdivisions(dxccTag, primarySubTag, secondarySubTag);
 
       var myDxccTag = GetTag(ADIFTags.MyDXCC);
       var myPrimarySubTag = GetTag(ADIFTags.MyState);
       var mySecondarySubTag = GetTag(ADIFTags.MyCnty);
 
-      TagValidationHelper.ValidateAdminSubdivisions(myDxccTag, myPrimarySubTag, mySecondarySubTag);
+      TagValidationHelper.ValidateSubdivisions(myDxccTag, myPrimarySubTag, mySecondarySubTag);
     }
 
     /// <summary>

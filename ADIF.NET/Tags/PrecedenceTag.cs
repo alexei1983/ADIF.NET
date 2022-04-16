@@ -12,6 +12,11 @@ namespace ADIF.NET.Tags {
     public override string Name => ADIFTags.Precedence;
 
     /// <summary>
+    /// Enumeration values.
+    /// </summary>
+    public override ADIFEnumeration Options => Values.ARRLPrecedence;
+
+    /// <summary>
     /// Creates a new PRECEDENCE tag.
     /// </summary>
     public PrecedenceTag() { }

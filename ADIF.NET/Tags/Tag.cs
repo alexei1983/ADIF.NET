@@ -124,6 +124,11 @@ namespace ADIF.NET.Tags {
     public virtual bool IsUserDef { get; }
 
     /// <summary>
+    /// Whether or not the tag is an application-defined tag.
+    /// </summary>
+    public virtual bool IsAppDef { get; }
+
+    /// <summary>
     /// Creates a new instance of the <see cref="Tag{T}"/> class.
     /// </summary>
     public Tag()

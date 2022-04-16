@@ -283,6 +283,11 @@ namespace ADIF.NET {
     public static readonly ADIFEnumeration Regions;
 
     /// <summary>
+    /// 
+    /// </summary>
+    public static readonly ADIFEnumeration ARRLPrecedence;
+
+    /// <summary>
     /// User configuration for ADIF.NET
     /// </summary>
     public static readonly Configuration Configuration;
@@ -318,6 +323,7 @@ namespace ADIF.NET {
       Regions = ADIFEnumeration.Get("Region");
       PrimarySubdivisions = ADIFEnumeration.Get("PrimarySubdivision");
       SecondarySubdivisions = ADIFEnumeration.Get("SecondarySubdivision");
+      ARRLPrecedence = ADIFEnumeration.Get("ARRLPrecedence");
       Configuration = new Configuration();
     }
   }
@@ -519,9 +525,89 @@ namespace ADIF.NET {
       {
         return !ADIFVer.Equals(c) && !CreatedTimestamp.Equals(c) &&
                !UserDef.Equals(c) && !ProgramId.Equals(c) && !ProgramVersion.Equals(c) &&
-               !AppDef.Equals(c);
+               !AppDef.Equals(c) && !EndHeader.Equals(c);
       });
     }
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  public class ModeGrouping {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Mode { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string CabrilloMode { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Grouping { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
+    public ModeGrouping(dynamic value)
+    {
+      if (value is IDictionary<string, object> dict)
+      {
+        if (dict.ContainsKey(nameof(Mode)) && dict[nameof(Mode)] is string mode)
+          this.Mode = mode;
+
+        if (dict.ContainsKey(nameof(CabrilloMode)) && dict[nameof(CabrilloMode)] is string cabrilloMode)
+          this.CabrilloMode = cabrilloMode;
+
+        if (dict.ContainsKey(nameof(Grouping)) && dict[nameof(Grouping)] is string grouping)
+          this.Grouping = grouping;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerable<ModeGrouping> GetAll()
+    {
+      var list = new List<ModeGrouping>();
+      var sqlResult = SQLiteHelper.Instance.ReadData(GET_MODE_GROUPING_SQL);
+
+      if (sqlResult != null)
+      {
+        foreach (var result in sqlResult)
+        {
+          var grouping = new ModeGrouping(result);
+          if (grouping != null && !string.IsNullOrEmpty(grouping.Mode))
+            yield return grouping;
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mode"></param>
+    public static ModeGrouping Get(string mode)
+    {
+      if (string.IsNullOrEmpty(mode))
+        throw new ArgumentException("Mode is required.", nameof(mode));
+
+      var sqlResult = SQLiteHelper.Instance.ReadData(GET_MODE_GROUPING_BY_MODE_SQL, 
+                                                     new Dictionary<string, object>() { { "@Mode", mode } });
+
+      if (sqlResult != null && sqlResult.Count > 0)
+        return new ModeGrouping(sqlResult[0]);
+
+      throw new Exception($"No grouping found for mode {mode.ToUpper()}.");
+    }
+
+    const string GET_MODE_GROUPING_SQL = "SELECT \"Mode\", \"CabrilloMode\", \"Grouping\" FROM \"ModeGrouping\"";
+    const string GET_MODE_GROUPING_BY_MODE_SQL = GET_MODE_GROUPING_SQL + " WHERE \"Mode\" = @Mode";
   }
 
   /// <summary>
@@ -723,26 +809,24 @@ namespace ADIF.NET {
     /// <summary>
     /// Retrieves the enumeration values belonging to the specified parent.
     /// </summary>
-    /// <param name="type">The enumeration type of the parent.</param>
-    /// <param name="code">The code of the parent enumeration value.</param>
-    public IEnumerable<ADIFEnumerationValue> GetChildren(string type, string code)
+    /// <param name="parentType">The enumeration type of the parent.</param>
+    /// <param name="parentCode">The code of the parent enumeration value.</param>
+    public IEnumerable<ADIFEnumerationValue> GetChildren(string parentType, string parentCode)
     {
-      if (string.IsNullOrEmpty(type))
-        throw new ArgumentException("Parent type is required.", nameof(type));
+      if (string.IsNullOrEmpty(parentType))
+        throw new ArgumentException("Parent type is required.", nameof(parentType));
 
-      if (string.IsNullOrEmpty(code))
-        throw new ArgumentException("Parent code is required.", nameof(code));
+      if (string.IsNullOrEmpty(parentCode))
+        throw new ArgumentException("Parent code is required.", nameof(parentCode));
 
       var query = ENUM_RETRIEVE_CHILDREN_SQL;
 
-      if (DXCC_ENUM_STRING.Equals(type))
+      if (DXCC_ENUM_STRING.Equals(parentType))
         query = RETRIEVE_DXCC_CHILDREN_SQL;
-      else if (PRIMARY_SUB_ENUM_STRING.Equals(type))
-        query = RETRIEVE_PRIMARY_SUB_CHILDREN_SQL;
 
       var data = SQLiteHelper.Instance.ReadData(query, 
-                                                new Dictionary<string, object>() { { "@ParentType", type },
-                                                                                   { "@Parent", code } });
+                                                new Dictionary<string, object>() { { "@ParentType", parentType },
+                                                                                   { "@Parent", parentCode } });
 
       foreach (dynamic d in data)
       {
@@ -751,7 +835,34 @@ namespace ADIF.NET {
           yield return enumVal;
       }
     }
-  
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="countryCode"></param>
+    /// <param name="primarySubdivisionCode"></param>
+    public IEnumerable<ADIFEnumerationValue> GetSecondarySubdivisions(string countryCode, string primarySubdivisionCode)
+    {
+      if (string.IsNullOrEmpty(countryCode))
+        throw new ArgumentException("DXCC is required.", nameof(countryCode));
+
+      if (string.IsNullOrEmpty(primarySubdivisionCode))
+        throw new ArgumentException("Primary subdivision code is required.", nameof(primarySubdivisionCode));
+
+      var data = SQLiteHelper.Instance.ReadData(RETRIEVE_PRIMARY_SUB_CHILDREN_SQL,
+                                                new Dictionary<string, object>() { { "@ParentType", PRIMARY_SUB_ENUM_STRING },
+                                                                                   { "@Parent", primarySubdivisionCode },
+                                                                                   { "@CountryCode", countryCode } });
+
+      foreach (dynamic d in data)
+      {
+        var enumVal = new ADIFEnumerationValue(d);
+        if (!string.IsNullOrEmpty(enumVal.Code))
+          yield return enumVal;
+      }
+    }
+
+
     const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
     const string RETRIEVE_DXCC_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
     const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\"";

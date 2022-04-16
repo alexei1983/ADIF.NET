@@ -46,6 +46,11 @@ namespace ADIF.NET.Tags {
     public new string DataType { get; set; }
 
     /// <summary>
+    /// Whether or not the tag is application-defined.
+    /// </summary>
+    public override bool IsAppDef => true;
+
+    /// <summary>
     /// Creates a new application-defined field.
     /// </summary>
     public AppDefTag() { }

@@ -27,7 +27,7 @@ namespace ADIF.NET {
         if (value is null)
           return;
 
-        if (!value.Header)
+        if (!value.Header && !value.IsAppDef)
           throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
         base[index] = value;
@@ -68,7 +68,7 @@ namespace ADIF.NET {
       if (tag is null)
         return;
 
-      if (!tag.Header)
+      if (!tag.Header && !tag.IsAppDef)
         throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
       base.Add(tag);
@@ -84,7 +84,7 @@ namespace ADIF.NET {
       if (tag is null)
         return;
 
-      if (!tag.Header)
+      if (!tag.Header && !tag.IsAppDef)
         throw new ArgumentException("Cannot insert QSO tag into ADIF header.");
 
       base.Insert(index, tag);
@@ -103,6 +103,9 @@ namespace ADIF.NET {
 
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
+
+      if (IsUserDefinedTag(fieldName))
+        throw new ArgumentException($"Field name {fieldName} already exists.");
 
       if (dataType == null)
         dataType = string.Empty;
@@ -161,6 +164,9 @@ namespace ADIF.NET {
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
 
+      if (IsUserDefinedTag(fieldName))
+        throw new ArgumentException($"Field name {fieldName} already exists.");
+
       var userDefTag = new UserDefTag(fieldName, fieldId, options);
 
       Add(userDefTag);
@@ -181,6 +187,9 @@ namespace ADIF.NET {
 
       if (IsUserDefinedTag(fieldId))
         throw new ArgumentException($"Field ID {fieldId} already exists.");
+
+      if (IsUserDefinedTag(fieldName))
+        throw new ArgumentException($"Field name {fieldName} already exists.");
 
       var userDefTag = new UserDefTag(fieldName, fieldId, lowerBound, upperBound);
 

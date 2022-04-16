@@ -38,4 +38,4 @@ namespace ADIF.NET.Tags {
     /// <param name="value">Initial tag value.</param>
     public MyITUZoneTag(int value) : base(value) { }
   }
-  }
+}

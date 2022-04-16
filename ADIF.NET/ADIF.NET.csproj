@@ -94,6 +94,7 @@
     <Compile Include="Exceptions\UserDefTagException.cs" />
     <Compile Include="Exceptions\ValueException.cs" />
     <Compile Include="GridSquare.cs" />
+    <Compile Include="Helpers\CabrilloHelper.cs" />
     <Compile Include="Helpers\DXCCHelper.cs" />
     <Compile Include="Helpers\GridSquareHelper.cs" />
     <Compile Include="Helpers\SQLiteHelper.cs" />
