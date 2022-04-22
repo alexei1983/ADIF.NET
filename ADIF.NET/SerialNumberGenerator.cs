@@ -30,19 +30,31 @@ namespace ADIF.NET {
     /// <summary>
     /// Creates a new instance of the <see cref="SerialNumberGenerator"/> class.
     /// </summary>
-    public SerialNumberGenerator() : this(1) { }
+    public SerialNumberGenerator() : this(1, 1) { }
 
     /// <summary>
     /// Creates a new instance of the <see cref="SerialNumberGenerator"/> class.
     /// </summary>
     /// <param name="start">Starting serial number.</param>
-    public SerialNumberGenerator(int start)
+    /// <param name="current">Current serial number.</param>
+    public SerialNumberGenerator(int start, int current)
     {
-      if (start < 0)
+      if (start <= 0)
         throw new ArgumentException("Starting serial number must be greater than zero.", nameof(start));
 
+      if (current <= 0)
+        throw new ArgumentException("Current serial number must be greater than zero.", nameof(start));
+
       Start = start;
-      Current = Start;
+      Current = current;
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="SerialNumberGenerator"/> class.
+    /// </summary>
+    /// <param name="start">Starting serial number.</param>
+    public SerialNumberGenerator(int start) : this(start, start)
+    {
     }
 
     /// <summary>

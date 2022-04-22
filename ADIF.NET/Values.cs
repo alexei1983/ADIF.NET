@@ -574,7 +574,6 @@ namespace ADIF.NET {
     /// </summary>
     public static IEnumerable<ModeGrouping> GetAll()
     {
-      var list = new List<ModeGrouping>();
       var sqlResult = SQLiteHelper.Instance.ReadData(GET_MODE_GROUPING_SQL);
 
       if (sqlResult != null)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Dynamic;
 using System.IO;
@@ -149,9 +150,9 @@ namespace ADIF.NET.Helpers {
         try
         {
           var fi = new FileInfo(tempPath);
+          tempPath = null;
           if (fi.Exists)
             fi.Delete();
-          tempPath = null;
         }
         catch
         {
@@ -309,6 +310,9 @@ namespace ADIF.NET.Helpers {
     {
       if (memoryConnection == null)
         throw new InvalidOperationException("ADIF database connection has not been initialized.");
+
+      if (memoryConnection.State == ConnectionState.Closed || memoryConnection.State == ConnectionState.Broken)
+        throw new InvalidOperationException("ADIF database connection is invalid.");
     }
 
     SQLiteConnection memoryConnection;
