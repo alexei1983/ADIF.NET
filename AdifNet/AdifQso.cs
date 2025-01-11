@@ -2347,6 +2347,97 @@ namespace org.goodspace.Data.Radio.Adif
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        public void ApplyConfiguration(AdifCustomConfiguration configuration)
+        {
+            if (configuration.RemoveTags.Length > 0)
+            {
+                foreach (var removeTag in configuration.RemoveTags)
+                {
+                    var tagIndex = IndexOf(removeTag.TagName);
+
+                    if (tagIndex >= 0)
+                    {
+                        var tagToRemove = this[tagIndex];
+                        if (configuration.ShouldRemoveTag(tagToRemove))
+                            Remove(tagToRemove);
+                    }
+                }
+            }
+
+            if (configuration.AddTags.Length > 0)
+            {
+                foreach (var addTag in configuration.AddTags)
+                {
+                    if (configuration.ShouldAddTag(addTag.TagName, this))
+                    {
+                        var newTag = TagFactory.TagFromName(addTag.TagName);
+                        if (newTag == null || newTag.IsUserDef)
+                        {
+                            var userDefTag = configuration.GetUserDefTag(addTag.TagName) ??
+                                             throw new UserDefTagException($"No user-defined ADIF tag found with name: {addTag.TagName}"); ;
+                                            
+                            newTag = new UserDefValueTag(userDefTag);
+                        }
+
+                        if (addTag.Value != null)
+                            newTag.SetValue(addTag.Value);
+
+                        if (!newTag.Header)
+                            Add(newTag);
+                    }
+                }
+            }
+
+            if (configuration.ReplaceTags.Length > 0)
+            {
+                foreach (var replaceTag in configuration.ReplaceTags)
+                {
+                    var tagIndex = IndexOf(replaceTag.TagName);
+
+                    if (tagIndex >= 0)
+                    {
+                        var existingTag = this[tagIndex];
+
+                        var newTag = TagFactory.TagFromName(replaceTag.TagName);
+                        if (newTag == null || newTag.IsUserDef)
+                        {
+                            var userDefTag = configuration.GetUserDefTag(replaceTag.TagName) ?? 
+                                             throw new UserDefTagException($"No user-defined ADIF tag found with name: {replaceTag.TagName}");
+                            newTag = new UserDefValueTag(userDefTag);
+                        }
+
+                        if (replaceTag.Value != null)
+                            newTag.SetValue(replaceTag.Value);
+
+                        if (existingTag != null && newTag != null)
+                            Replace(existingTag, newTag);
+                    }
+                }
+            }
+
+            if (configuration.DefaultValues.Length > 0)
+            {
+                foreach (var defaultValue in configuration.DefaultValues)
+                {
+                    var tagIndex = IndexOf(defaultValue.TagName);
+
+                    if (tagIndex >= 0)
+                    {
+                        var existingTag = this[tagIndex];
+                        if (!existingTag.HasValue())
+                        {
+                            existingTag.SetValue(defaultValue.Value);
+                            Replace(existingTag);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Retrieves the date and time that the QSO started.
         /// </summary>
         public DateTime? GetQsoDateTimeOn()

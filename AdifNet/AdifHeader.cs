@@ -94,6 +94,15 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="tag"></param>
+        public void AddUserDefinedTag(UserDefTag tag)
+        {
+            Add(tag);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="fieldId"></param>
         /// <param name="dataType"></param>

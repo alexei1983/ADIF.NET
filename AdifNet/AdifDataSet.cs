@@ -101,6 +101,30 @@ namespace org.goodspace.Data.Radio.Adif
         }
 
         /// <summary>
+        /// Applies the specified configuration to the current <see cref="AdifDataSet"/>.
+        /// </summary>
+        /// <param name="configuration">Configuration to apply.</param>
+        public void ApplyConfiguration(AdifCustomConfiguration configuration)
+        {
+            Header ??= [];
+            foreach (var userDefTag in configuration.UserDefTags)
+                Header.AddUserDefinedTag(userDefTag);
+
+            emitFlags = configuration.EmitFlags;
+
+            ForEachQso((qso) =>
+            {
+                qso.ApplyConfiguration(configuration);
+            });
+
+            if (configuration.AdifTargetVersion != null)
+            {
+                CheckVersion(configuration.AdifTargetVersion);
+                AddOrReplaceHeaderTag(new AdifVersionTag(configuration.AdifTargetVersion));
+            }
+        }
+
+        /// <summary>
         /// Converts the current <see cref="AdifDataSet"/> to ADX.
         /// </summary>
         /// <param name="flags">Flags that determine how the ADX XML is generated.</param>
@@ -196,10 +220,20 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="flags">Flags that determine how the ADIF text is generated.</param>
         public string ToAdif(EmitFlags flags = EmitFlags.None)
         {
-            var formatString = (flags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";
+            var effectiveFlags = GetFlags(flags);
+            var formatString = (effectiveFlags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";
             HandleFlags(flags);
-
             return ToString(formatString, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        EmitFlags GetFlags(EmitFlags flags = EmitFlags.None)
+        {
+            return flags == EmitFlags.None ? emitFlags : flags;
         }
 
         /// <summary>
@@ -208,6 +242,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="flags"></param>
         void HandleFlags(EmitFlags flags)
         {
+            flags = GetFlags(flags);
+
             if ((flags & EmitFlags.MirrorOperatorAndStationCallSign) == EmitFlags.MirrorOperatorAndStationCallSign)
             {
                 if (Qsos != null)
@@ -659,5 +695,6 @@ namespace org.goodspace.Data.Radio.Adif
 
         string? headerText;
         Version? adifVer;
+        EmitFlags emitFlags = EmitFlags.None;
     }
 }

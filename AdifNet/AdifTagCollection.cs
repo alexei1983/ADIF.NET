@@ -122,7 +122,6 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="tag"></param>
         public virtual bool Remove(ITag tag)
         {
-
             if (tag is null)
                 return false;
 

@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using System.Xml.Linq;
-using org.goodspace.Data.Radio.Adif.Helpers;
+﻿using System.Xml.Linq;
+using org.goodspace.Data.Radio.Adif.Exceptions;
 using org.goodspace.Data.Radio.Adif.Tags;
-using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif
 {
@@ -76,6 +74,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// 
         /// </summary>
+        public UserDefTag[] UserDefTags { get; set; } = [];
+
+        /// <summary>
+        /// 
+        /// </summary>
         public AdifCustomConfiguration()
         {
             
@@ -92,6 +95,16 @@ namespace org.goodspace.Data.Radio.Adif
             if (obj != null)
                 return obj.Value;
             return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        public UserDefTag? GetUserDefTag(string tagName)
+        {
+            return UserDefTags.FirstOrDefault(d => d.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -124,6 +137,16 @@ namespace org.goodspace.Data.Radio.Adif
         public bool ShouldReplaceTag(ITag tag)
         {
             return ReplaceTags.Any(r => r.TagName.Equals(tag.Name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        public bool ShouldReplaceTag(string tagName)
+        {
+            return ReplaceTags.Any(r => r.TagName.Equals(tagName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -277,7 +300,7 @@ namespace org.goodspace.Data.Radio.Adif
             List<UserDefTag> userDefTags = [];
 
             // get user-defined tags
-            foreach (var element in xDoc.Descendants("UserDefTags"))
+            foreach (var element in xDoc.Descendants("UserDefTags").Elements())
             {
                 if (!element.Name.LocalName.Equals("UserDefTag"))
                     continue;
@@ -288,25 +311,26 @@ namespace org.goodspace.Data.Radio.Adif
                 var range = element.Attribute("Range")?.Value;
                 var fieldName = element.Value;
 
-                if (!string.IsNullOrEmpty(fieldName))
+                if (!string.IsNullOrEmpty(fieldName) && !string.IsNullOrEmpty(fieldId))
                 {
-                    var userDefTag = new UserDefTag()
+                    if (!int.TryParse(fieldId, out var _fieldId))
+                        throw new UserDefTagException($"Invalid user-defined field ID: {fieldId}");
+
+                    userDefTags.Add(new UserDefTag(fieldName, _fieldId, dataType ?? string.Empty)
                     {
-                        FieldName = fieldName,
-                    };
-
-                    if (!string.IsNullOrEmpty(fieldId) && int.TryParse(fieldId, out var _fieldId))
-                        userDefTag.FieldId = _fieldId;
-
-                    userDefTag.DataType = dataType ?? DataTypes.String;
-                    userDefTags.Add(userDefTag);
+                        CustomOptions = [],
+                        LowerBound = 0,
+                        UpperBound = 0,
+                    });
                 }
             }
+
+            config.UserDefTags = [.. userDefTags];
 
             List<AdifTagNameWithValue> defaults = [];
 
             // get defaults
-            foreach (var element in xDoc.Descendants("Defaults"))
+            foreach (var element in xDoc.Descendants("Defaults").Elements())
             {
                 if (!element.Name.LocalName.Equals("Tag"))
                     continue;
@@ -334,7 +358,7 @@ namespace org.goodspace.Data.Radio.Adif
             List<AdifTagNameWithValue> adds = [];
 
             // get tag adds
-            foreach (var element in xDoc.Descendants("AddTags"))
+            foreach (var element in xDoc.Descendants("AddTags").Elements())
             {
                 if (!element.Name.LocalName.Equals("Tag"))
                     continue;
@@ -350,10 +374,12 @@ namespace org.goodspace.Data.Radio.Adif
                               userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
                               throw new Exception($"Invalid ADIF tag: {tagName}");
 
-                    tag.SetValue(tagValue);
+                    if (tag.IsUserDef && tag is UserDefTag userDefTag)
+                        tag = new UserDefValueTag(userDefTag, tagValue);
+                    else
+                        tag.SetValue(tagValue);
 
-                    if (tag.Value != null)
-                        adds.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                    adds.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
                 }
             }
 
@@ -362,7 +388,7 @@ namespace org.goodspace.Data.Radio.Adif
             List<AdifTagNameWithValue> replace = [];
 
             // get tag replacements
-            foreach (var element in xDoc.Descendants("ReplaceTags"))
+            foreach (var element in xDoc.Descendants("ReplaceTags").Elements())
             {
                 if (!element.Name.LocalName.Equals("Tag"))
                     continue;
@@ -378,10 +404,12 @@ namespace org.goodspace.Data.Radio.Adif
                               userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
                               throw new Exception($"Invalid ADIF tag: {tagName}");
 
-                    tag.SetValue(tagValue);
+                    if (tag.IsUserDef && tag is UserDefTag userDefTag)
+                        tag = new UserDefValueTag(userDefTag, tagValue);
+                    else
+                        tag.SetValue(tagValue);
 
-                    if (tag.Value != null)
-                        replace.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                    replace.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
                 }
             }
 
@@ -390,7 +418,7 @@ namespace org.goodspace.Data.Radio.Adif
             List<AdifTagNameWithValue> remove = [];
 
             // get tag replacements
-            foreach (var element in xDoc.Descendants("RemoveTags"))
+            foreach (var element in xDoc.Descendants("RemoveTags").Elements())
             {
                 if (!element.Name.LocalName.Equals("Tag"))
                     continue;
@@ -406,20 +434,59 @@ namespace org.goodspace.Data.Radio.Adif
                               userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
                               throw new Exception($"Invalid ADIF tag: {tagName}");
 
-                    if (!string.IsNullOrEmpty(tagValue))
+                    if (tag.IsUserDef && tag is UserDefTag userDefTag)
+                        tag = new UserDefValueTag(userDefTag, tagValue);
+                    else if(!string.IsNullOrEmpty(tagValue))
                         tag.SetValue(tagValue);
 
-                    if (tag.Value != null)
-                        remove.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                    remove.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
                 }
             }
 
             config.RemoveTags = [.. remove];
 
+            List<SerialNumberGenerator> serialNumGens = [];
+
+            // get serial number generators
+            foreach (var element in xDoc.Descendants("SerialNumberGenerators").Elements())
+            {
+                if (!element.Name.LocalName.Equals("SerialNumberGenerator"))
+                    continue;
+
+                var startVal = element.Attribute("Start")?.Value;
+                var curVal = element.Attribute("Current")?.Value;
+                var strLenVal = element.Attribute("StringLength")?.Value;
+                var name = element.Value;
+
+                if (!string.IsNullOrEmpty(startVal))
+                {
+                    if (!int.TryParse(startVal, out var startNum))
+                        throw new Exception($"Invalid serial number starting value: {startVal}");
+
+                    int curNum = 1;
+
+                    if (!string.IsNullOrEmpty(curVal) && !int.TryParse(curVal, out curNum))
+                        throw new Exception($"Invalid serial number current value: {curVal}");
+
+                    int strLen = 0;
+
+                    if (!string.IsNullOrEmpty(strLenVal) && !int.TryParse(strLenVal, out strLen))
+                        throw new Exception($"Invalid serial number string length: {strLenVal}");
+
+                    serialNumGens.Add(new SerialNumberGenerator(startNum, curNum)
+                    {
+                        Name = name,
+                        StringLength = strLen > 0 ? strLen : 0,
+                    });
+                }
+            }
+
+            config.SerialNumberGenerators = [.. serialNumGens];
+
             var flags = EmitFlags.None;
 
             // get options
-            foreach (var element in xDoc.Descendants("Options"))
+            foreach (var element in xDoc.Descendants("Options").Elements())
             {
                 var value = element.Value;
                 bool isYes = Values.ADIF_BOOLEAN_TRUE.Equals(value);
