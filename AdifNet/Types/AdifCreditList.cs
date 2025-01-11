@@ -124,8 +124,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
                     {
                         var mediumSplit = creditQslSplit[1].Split(Values.AMPERSAND);
 
-                        if (mediumSplit == null)
-                            mediumSplit = [];
+                        mediumSplit ??= [];
 
                         foreach (var medium in mediumSplit)
                         {
@@ -164,7 +163,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
     public class CreditList : IFormattable, IEnumerable<CreditList.CreditListMember>, IEnumerable
     {
 
-        List<CreditListMember> internalList;
+        readonly List<CreditListMember> internalList;
 
         /// <summary>
         /// Total number of credit/medium combinations in the CreditList object.
@@ -188,7 +187,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         public CreditList()
         {
-            internalList = new List<CreditListMember>();
+            internalList = [];
         }
 
         /// <summary>

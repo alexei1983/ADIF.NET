@@ -221,10 +221,7 @@ namespace org.goodspace.Data.Radio.Adif
                             if (userDefFieldNameAttr == null || string.IsNullOrEmpty(userDefFieldNameAttr.Value))
                                 throw new AdxParseException("Field name is required for all user-defined fields.");
 
-                            var userDefHeaderTag = dataSet.Header.GetUserDefinedTag(userDefFieldNameAttr.Value);
-
-                            if (userDefHeaderTag == null)
-                                throw new AdxParseException($"No user-defined field was found with name {userDefFieldNameAttr.Value}");
+                            var userDefHeaderTag = dataSet.Header.GetUserDefinedTag(userDefFieldNameAttr.Value) ?? throw new AdxParseException($"No user-defined field was found with name {userDefFieldNameAttr.Value}");
 
                             qsoTag = new UserDefValueTag(userDefHeaderTag);
                             qsoTag.SetValue(qsoElement.Value);
@@ -242,13 +239,13 @@ namespace org.goodspace.Data.Radio.Adif
 
                 if (qsoTags.Count > 0)
                 {
-                    qso.AddRange(qsoTags.ToArray());
+                    qso.AddRange([.. qsoTags]);
                     qsoList.Add(qso);
                 }
             }
 
             if (qsoList.Count > 0)
-                dataSet.QSOs.AddRange(qsoList.ToArray());
+                dataSet.QSOs.AddRange([.. qsoList]);
 
             ReportProgress(true);
 
@@ -269,7 +266,7 @@ namespace org.goodspace.Data.Radio.Adif
                 progress.Report(done ? int.MaxValue : progressRaw > int.MaxValue ? int.MaxValue : (int)progressRaw);
         }
 
-        IProgress<int>? progress;
+        readonly IProgress<int>? progress;
         //string data;
         int elementCount;
         int currentElementCount;

@@ -73,8 +73,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         public override object? ConvertValue(object? value)
         {
             string? strVal;
-            if (value is string)
-                strVal = (string)value;
+            if (value is string strValue)
+                strVal = strValue;
             else
                 strVal = value != null ? value.ToString() : string.Empty;
 
@@ -86,7 +86,6 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 throw new ValueConversionException(value, Name, ex);
             }
-
         }
 
         /// <summary>

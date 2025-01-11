@@ -36,7 +36,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             try
             {
-                var strVal = value is string ? (string)value : value != null ? value.ToString() : string.Empty;
+                var strVal = value is string strValue ? strValue : value != null ? value.ToString() : string.Empty;
                 return AdifIntlString.Parse(strVal);
             }
             catch (Exception ex)

@@ -268,10 +268,10 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 const int hashingMultiplier = 16777619;
 
                 var hash = hashingBase;
-                hash = (hash * hashingMultiplier) ^ (!(Name is null) ? Name.ToUpperInvariant().GetHashCode() : 0);
+                hash = (hash * hashingMultiplier) ^ (Name is not null ? Name.ToUpperInvariant().GetHashCode() : 0);
                 hash = (hash * hashingMultiplier) ^ (GetType().GetHashCode());
-                hash = (hash * hashingMultiplier) ^ (!(TextValue is null) ? TextValue.ToUpperInvariant().GetHashCode() : 0);
-                hash = (hash * hashingMultiplier) ^ (!(ValueLength is null) ? ValueLength.GetHashCode() : 0);
+                hash = (hash * hashingMultiplier) ^ (TextValue is not null ? TextValue.ToUpperInvariant().GetHashCode() : 0);
+                hash = (hash * hashingMultiplier) ^ (ValueLength is not null ? ValueLength.GetHashCode() : 0);
 
                 if (this is UserDefTag userDefTag)
                 {

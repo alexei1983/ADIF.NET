@@ -138,8 +138,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             if (string.IsNullOrEmpty(format))
                 format = "G";
 
-            if (provider == null)
-                provider = CultureInfo.CurrentCulture;
+            provider ??= CultureInfo.CurrentCulture;
 
             switch (format)
             {

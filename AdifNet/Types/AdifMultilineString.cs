@@ -66,9 +66,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// <param name="s"></param>
         public bool IsValidValue(string? s)
         {
-            if (s == null)
-                s = string.Empty;
-
+            s ??= string.Empty;
             return s.IsAscii();
         }
     }

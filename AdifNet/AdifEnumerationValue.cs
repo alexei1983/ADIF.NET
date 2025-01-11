@@ -156,8 +156,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(format))
                 format = "G";
 
-            if (provider == null)
-                provider = CultureInfo.CurrentCulture;
+            provider ??= CultureInfo.CurrentCulture;
 
             return format switch
             {

@@ -209,6 +209,11 @@ namespace org.goodspace.Data.Radio.Adif
         public static readonly AdifEnumeration ArrlSections;
 
         /// <summary>
+        /// Morse key type enumeration.
+        /// </summary>
+        public static readonly AdifEnumeration MorseKeyTypes;
+
+        /// <summary>
         /// Award enumeration.
         /// </summary>
         public static readonly AdifEnumeration Awards;
@@ -325,6 +330,7 @@ namespace org.goodspace.Data.Radio.Adif
             PrimarySubdivisions = AdifEnumeration.Get("PrimarySubdivision") ?? [];
             SecondarySubdivisions = AdifEnumeration.Get("SecondarySubdivision") ?? [];
             ArrlPrecedence = AdifEnumeration.Get("ARRLPrecedence") ?? [];
+            MorseKeyTypes = AdifEnumeration.Get("MorseKeyType") ?? [];
             Configuration = new Configuration();
         }
     }

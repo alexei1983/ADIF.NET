@@ -42,7 +42,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             if (azimuth > MaxValue)
             {
                 importValue = azimuth;
-                azimuth = azimuth % MaxValue;
+                azimuth %= MaxValue;
             }
 
             base.SetValue(azimuth);

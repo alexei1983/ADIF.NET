@@ -108,8 +108,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (IsUserDefinedTag(fieldName))
                 throw new ArgumentException($"Field name {fieldName} already exists.");
 
-            if (dataType == null)
-                dataType = string.Empty;
+            dataType ??= string.Empty;
 
             var userDefTag = new UserDefTag(fieldName, fieldId, dataType);
 

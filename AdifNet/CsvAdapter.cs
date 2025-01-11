@@ -52,7 +52,7 @@ namespace org.goodspace.Data.Radio.Adif
 
         class CsvReader
         {
-            private CsvConfig m_config;
+            private readonly CsvConfig m_config;
 
             public CsvReader(CsvConfig? config = null)
             {

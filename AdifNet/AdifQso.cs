@@ -1021,10 +1021,7 @@ namespace org.goodspace.Data.Radio.Adif
               string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
                 throw new ArgumentException("Cannot set address: missing one or more required values.");
 
-            var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
-
-            if (dxccEntity == null)
-                throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            _ = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
 
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(dxccCode), state))
                 throw new DxccException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
@@ -1061,11 +1058,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="setCountryNameFromDxcc"></param>
         public void SetPrimaryAdminSubdivision(string dxccCode, string primaryAdminSubdivisionCode, bool setCountryNameFromDxcc = false)
         {
-            var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
-
-            if (dxccEntity == null)
-                throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
-
+            var dxccEntity = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(dxccCode), primaryAdminSubdivisionCode))
                 throw new DxccException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{primaryAdminSubdivisionCode}'");
 
@@ -1095,11 +1089,8 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(dxccCode))
                 throw new ArgumentException("DXCC code is required.", nameof(dxccCode));
 
-            var dxccEntity = Values.CountryCodes.GetValue(dxccCode);
-
-            if (dxccEntity == null)
-                throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
-
+            var dxccEntity = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            
             SetAddress(operatorName, streetAddress, city, state, postalCode, dxccEntity.DisplayName, dxccCode);
         }
 
@@ -1124,10 +1115,7 @@ namespace org.goodspace.Data.Radio.Adif
               string.IsNullOrEmpty(myCountryName) || string.IsNullOrEmpty(myDxccCode))
                 throw new ArgumentException("Cannot set address: missing one or more required values.");
 
-            var dxccEntity = Values.CountryCodes.GetValue(myDxccCode);
-
-            if (dxccEntity == null)
-                throw new DxccException($"Invalid DXCC entity: {myDxccCode ?? string.Empty}", myDxccCode ?? string.Empty);
+            var dxccEntity = Values.CountryCodes.GetValue(myDxccCode) ?? throw new DxccException($"Invalid DXCC entity: {myDxccCode ?? string.Empty}", myDxccCode ?? string.Empty);
 
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(myDxccCode), myState))
                 throw new DxccException($"DXCC entity {myDxccCode} does not contain primary administrative subdivision '{myState}'");
@@ -1359,8 +1347,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("Field name is required.", nameof(fieldName));
 
-            if (dataType == null)
-                dataType = string.Empty;
+            dataType ??= string.Empty;
 
             Add(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
         }
@@ -1393,8 +1380,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("Field name is required.", nameof(fieldName));
 
-            if (dataType == null)
-                dataType = string.Empty;
+            dataType ??= string.Empty;
 
             AddOrReplace(new AppDefTag(fieldName, programId, dataType, value));
         }
@@ -1410,8 +1396,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("Field name is required.", nameof(fieldName));
 
-            if (dataType == null)
-                dataType = string.Empty;
+            dataType ??= string.Empty;
 
             AddOrReplace(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
         }
@@ -2492,8 +2477,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(format))
                 format = "G";
 
-            if (provider == null)
-                provider = CultureInfo.CurrentCulture;
+            provider ??= CultureInfo.CurrentCulture;
 
             switch (format)
             {

@@ -35,7 +35,6 @@ namespace org.goodspace.Data.Radio.Adif
     /// </summary>
     public class AdifSqlAdapter : IDisposable
     {
-
         /// <summary>
         /// Database connection.
         /// </summary>
@@ -104,7 +103,7 @@ namespace org.goodspace.Data.Radio.Adif
         {
             using var command = Connection.CreateCommand();
             command.Connection = Connection;
-            command.CommandText = string.Format(SQL_SELECT_COMMAND_TEXT, QsoTable);
+            command.CommandText = string.Format(SQL_SELECT_COMMAND_TEXT, EscapeReservedWord(QsoTable));
 
             using var reader = command.ExecuteReader();
             while (reader != null && reader.Read())

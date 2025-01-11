@@ -98,10 +98,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                             throw new Exception($"Sub-mode '{subModeVal.ToUpper()}' requires a mode to be specified.");
 
                         // is the right parent mode specified?
-                        var parentMode = Values.SubModes.GetValue(subModeVal);
-
-                        if (parentMode == null)
-                            throw new Exception($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
+                        var parentMode = Values.SubModes.GetValue(subModeVal) ?? throw new Exception($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
 
                         if (!modeVal.Equals(parentMode.Code, StringComparison.OrdinalIgnoreCase))
                             throw new Exception($"Sub-mode '{subModeVal.ToUpper()}' does not belong to mode '{modeVal.ToUpper()}'");

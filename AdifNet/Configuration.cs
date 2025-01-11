@@ -170,21 +170,21 @@ namespace org.goodspace.Data.Radio.Adif
                 {
                     var addPrgDtsOnEmitStr = values[ADD_PROGRAM_HEADERS_CONFIG];
                     if (AdifBoolean.TryParse(addPrgDtsOnEmitStr, out bool? result) && result.HasValue && result.Value)
-                        emitSettings = emitSettings | EmitFlags.AddProgramHeaderTags;
+                        emitSettings |= EmitFlags.AddProgramHeaderTags;
                 }
 
                 if (values.ContainsKey(LOWERCASE_TAG_NAMES_CONFIG))
                 {
                     var lowercaseTagNamesStr = values[LOWERCASE_TAG_NAMES_CONFIG];
                     if (AdifBoolean.TryParse(lowercaseTagNamesStr, out bool? result) && result.HasValue && result.Value)
-                        emitSettings = emitSettings | EmitFlags.LowercaseTagNames;
+                        emitSettings |= EmitFlags.LowercaseTagNames;
                 }
 
                 if (values.ContainsKey(ADD_MY_GRIDSQUARE_CONFIG))
                 {
                     var addMyGridSqrStr = values[ADD_MY_GRIDSQUARE_CONFIG];
                     if (AdifBoolean.TryParse(addMyGridSqrStr, out bool? result) && result.HasValue && result.Value)
-                        emitSettings = emitSettings | EmitFlags.AddMyGridSquare;
+                        emitSettings |= EmitFlags.AddMyGridSquare;
                 }
 
                 EmitFlags = emitSettings;

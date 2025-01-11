@@ -167,6 +167,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string DarcDok = "DARC_DOK";
 
         /// <summary>
+        /// MY_DARC_DOK tag.
+        /// </summary>
+        public const string MyDarcDok = "MY_DARC_DOK";
+
+        /// <summary>
         /// DISTANCE tag.
         /// </summary>
         public const string Distance = "DISTANCE";
@@ -322,6 +327,16 @@ namespace org.goodspace.Data.Radio.Adif
         public const string Mode = "MODE";
 
         /// <summary>
+        /// MORSE_KEY_TYPE tag.
+        /// </summary>
+        public const string MorseKeyType = "MORSE_KEY_TYPE";
+
+        /// <summary>
+        /// MORSE_KEY_INFO tag.
+        /// </summary>
+        public const string MorseKeyInfo = "MORSE_KEY_INFO";
+
+        /// <summary>
         /// MS_SHOWER tag.
         /// </summary>
         public const string MsShower = "MS_SHOWER";
@@ -330,6 +345,16 @@ namespace org.goodspace.Data.Radio.Adif
         /// MY_ANTENNA tag.
         /// </summary>
         public const string MyAntenna = "MY_ANTENNA";
+
+        /// <summary>
+        /// MY_MORSE_KEY_TYPE tag.
+        /// </summary>
+        public const string MyMorseKeyType = "MY_MORSE_KEY_TYPE";
+
+        /// <summary>
+        /// MY_MORSE_KEY_INFO tag.
+        /// </summary>
+        public const string MyMorseKeyInfo = "MY_MORSE_KEY_INFO";
 
         /// <summary>
         /// MY_ANTENNA_INTL tag.
