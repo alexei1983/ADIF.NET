@@ -50,7 +50,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         public static IEnumerable<AdifModeGrouping> GetAll()
         {
-            var sqlResult = SQLiteHelper.Instance.ReadData(GET_MODE_GROUPING_SQL);
+            var sqlResult = SQLiteHelper.Instance.ReadData(Resources.SqlRetrieveModeGroupings);
 
             if (sqlResult != null)
             {
@@ -72,8 +72,8 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(mode))
                 throw new ArgumentException("Mode is required.", nameof(mode));
 
-            var sqlResult = SQLiteHelper.Instance.ReadData(GET_MODE_GROUPING_BY_MODE_SQL,
-                                                           new Dictionary<string, object?>() { { "@Mode", mode } });
+            var sqlResult = SQLiteHelper.Instance.ReadData(Resources.SqlRetrieveModeGrouping,
+                                                           new Dictionary<string, object?>() { { Resources.SqlParameterName, mode } });
 
             if (sqlResult != null && sqlResult.Count > 0)
             {
@@ -83,8 +83,5 @@ namespace org.goodspace.Data.Radio.Adif
 
             throw new Exception($"No grouping found for mode {mode.ToUpper()}.");
         }
-
-        const string GET_MODE_GROUPING_SQL = "SELECT \"Mode\", \"CabrilloMode\", \"Grouping\" FROM \"ModeGrouping\"";
-        const string GET_MODE_GROUPING_BY_MODE_SQL = GET_MODE_GROUPING_SQL + " WHERE \"Mode\" = @Mode";
     }
 }

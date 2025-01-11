@@ -4,7 +4,6 @@ using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Helpers
 {
-
     /// <summary>
     /// Helper class for user-defined and application-defined ADIF tags.
     /// </summary>

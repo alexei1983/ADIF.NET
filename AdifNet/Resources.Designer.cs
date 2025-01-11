@@ -305,6 +305,15 @@ namespace org.goodspace.Data.Radio.Adif {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT 1 FROM &quot;Tags&quot; WHERE &quot;Name&quot; = @TagName AND &quot;MinVersion&quot; &lt;= @Version AND (&quot;MaxVersion&quot; IS NULL OR &quot;MaxVersion&quot; &gt;= @Version).
+        /// </summary>
+        internal static string SqlCheckTagVersion {
+            get {
+                return ResourceManager.GetString("SqlCheckTagVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT Name, LowerFrequency, UpperFrequency FROM &quot;Bands&quot;.
         /// </summary>
         internal static string SqlGetBands {
@@ -373,6 +382,33 @@ namespace org.goodspace.Data.Radio.Adif {
         internal static string SqlParameterParentType {
             get {
                 return ResourceManager.GetString("SqlParameterParentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @SubdivisionCode.
+        /// </summary>
+        internal static string SqlParameterSubdivisionCode {
+            get {
+                return ResourceManager.GetString("SqlParameterSubdivisionCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @TagName.
+        /// </summary>
+        internal static string SqlParameterTagName {
+            get {
+                return ResourceManager.GetString("SqlParameterTagName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Version.
+        /// </summary>
+        internal static string SqlParameterVersion {
+            get {
+                return ResourceManager.GetString("SqlParameterVersion", resourceCulture);
             }
         }
         
@@ -449,6 +485,24 @@ namespace org.goodspace.Data.Radio.Adif {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT &quot;Mode&quot;, &quot;CabrilloMode&quot;, &quot;Grouping&quot; FROM &quot;ModeGrouping&quot; WHERE &quot;Mode&quot; = @Name.
+        /// </summary>
+        internal static string SqlRetrieveModeGrouping {
+            get {
+                return ResourceManager.GetString("SqlRetrieveModeGrouping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT &quot;Mode&quot;, &quot;CabrilloMode&quot;, &quot;Grouping&quot; FROM &quot;ModeGrouping&quot; ORDER BY &quot;Grouping&quot;, &quot;Mode&quot;.
+        /// </summary>
+        internal static string SqlRetrieveModeGroupings {
+            get {
+                return ResourceManager.GetString("SqlRetrieveModeGroupings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM &quot;PrimaryAdminSubdivisions&quot; ORDER BY CountryCode, Name, Code.
         /// </summary>
         internal static string SqlRetrievePrimarySubdivisionEnum {
@@ -467,6 +521,24 @@ namespace org.goodspace.Data.Radio.Adif {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT COUNT(Code) AS ItemCount FROM &quot;PrimaryAdminSubdivisions&quot; WHERE CountryCode = @CountryCode.
+        /// </summary>
+        internal static string SqlValidateDxccHasPrimarySubdivisions {
+            get {
+                return ResourceManager.GetString("SqlValidateDxccHasPrimarySubdivisions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT COUNT(Code) AS ItemCount FROM &quot;SecondaryAdminSubdivisions&quot; WHERE CountryCode = @CountryCode.
+        /// </summary>
+        internal static string SqlValidateDxccHasSecondarySubdivisions {
+            get {
+                return ResourceManager.GetString("SqlValidateDxccHasSecondarySubdivisions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT Name, LowerFrequency, UpperFrequency FROM &quot;Bands&quot; WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency.
         /// </summary>
         internal static string SqlValidateFrequency {
@@ -481,6 +553,33 @@ namespace org.goodspace.Data.Radio.Adif {
         internal static string SqlValidateFrequencyBand {
             get {
                 return ResourceManager.GetString("SqlValidateFrequencyBand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT 1 FROM &quot;CountryCodes&quot; c INNER JOIN &quot;PrimaryAdminSubdivisions&quot; p ON c.Code = p.CountryCode WHERE c.Code = @CountryCode AND p.Code = @SubdivisionCode.
+        /// </summary>
+        internal static string SqlValidatePrimarySubdivision {
+            get {
+                return ResourceManager.GetString("SqlValidatePrimarySubdivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT COUNT(Code) AS ItemCount FROM &quot;SecondaryAdminSubdivisions&quot; WHERE CountryCode = @CountryCode AND PrimarySubdivisionCode = @SubdivisionCode.
+        /// </summary>
+        internal static string SqlValidatePrimarySubdivisionHasSecondarySubdivisions {
+            get {
+                return ResourceManager.GetString("SqlValidatePrimarySubdivisionHasSecondarySubdivisions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT 1 FROM &quot;SecondaryAdminSubdivisions&quot; WHERE CountryCode = @CountryCode AND (PrimarySubdivisionCode = @Parent OR PrimarySubdivisionCode IS NULL) AND Code = @SubdivisionCode.
+        /// </summary>
+        internal static string SqlValidateSecondarySubdivision {
+            get {
+                return ResourceManager.GetString("SqlValidateSecondarySubdivision", resourceCulture);
             }
         }
     }

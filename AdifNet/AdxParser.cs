@@ -72,7 +72,7 @@ namespace org.goodspace.Data.Radio.Adif
             var dataSet = new AdifDataSet
             {
                 Header = [],
-                QSOs = []
+                Qsos = []
             };
 
             //var doc = XDocument.Parse(data);
@@ -245,7 +245,7 @@ namespace org.goodspace.Data.Radio.Adif
             }
 
             if (qsoList.Count > 0)
-                dataSet.QSOs.AddRange([.. qsoList]);
+                dataSet.Qsos.AddRange([.. qsoList]);
 
             ReportProgress(true);
 

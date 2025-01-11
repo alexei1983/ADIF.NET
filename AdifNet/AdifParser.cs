@@ -136,7 +136,7 @@ namespace org.goodspace.Data.Radio.Adif
             var result = new AdifDataSet
             {
                 Header = headerInternal,
-                QSOs = []
+                Qsos = []
             };
 
             foreach (var key in body.Keys)
@@ -165,7 +165,7 @@ namespace org.goodspace.Data.Radio.Adif
                     }
                 }
 
-                result.QSOs.Add(qso);
+                result.Qsos.Add(qso);
             }
 
             return result;

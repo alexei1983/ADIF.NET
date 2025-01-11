@@ -968,7 +968,6 @@ namespace org.goodspace.Data.Radio.Adif
         const string UNIQ_ID_APP_DEF_FIELD = AdifTags.AppDef + Values.DEFAULT_PROGRAM_ID + "_" + UNIQ_ID_APP_DEF_FIELD_NAME;
         const string UNIQ_ID_APP_DEF_FIELD_NAME = "QSOUNIQID";
         const string UNIQ_ID_SQL_COL = "ADIFNET_UNIQ_ID";
-        const string SQL_INSERT_COMMAND_TEXT = "INSERT INTO {0} ({1}) VALUES ({2})";
         const string SQL_SELECT_COMMAND_TEXT = "SELECT * FROM {0}";
         static readonly DateTime SQL_MIN_DATE_TIME = new(1904, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         AdifColumnMappings? mapping;

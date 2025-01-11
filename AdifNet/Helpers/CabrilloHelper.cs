@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Helpers
 {
-
     /// <summary>
     /// 
     /// </summary>
     public static class CabrilloHelper
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -18,14 +16,14 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// </summary>
         static CabrilloHelper()
         {
-            ModeGroupings = AdifModeGrouping.GetAll().ToList();
+            ModeGroupings = [.. AdifModeGrouping.GetAll()];
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="qso"></param>
-        public static string? GetQSOMode(AdifQso qso)
+        public static string? GetQsoMode(AdifQso qso)
         {
             var mode = qso.GetTagValue<string>(AdifTags.Mode);
 
@@ -43,14 +41,14 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (string.IsNullOrEmpty(mode))
                 throw new Exception("Cannot retrieve Cabrillo mode: no ADIF mode was found in the QSO.");
 
-            return GetQSOMode(mode);
+            return GetQsoMode(mode);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="adifMode"></param>
-        public static string? GetQSOMode(string adifMode)
+        public static string? GetQsoMode(string adifMode)
         {
             if (string.IsNullOrEmpty(adifMode))
                 throw new ArgumentException("ADIF mode is required.", nameof(adifMode));

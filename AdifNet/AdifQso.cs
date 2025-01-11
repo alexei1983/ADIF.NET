@@ -3,8 +3,6 @@ using org.goodspace.Data.Radio.Adif.Tags;
 using org.goodspace.Data.Radio.Adif.Helpers;
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
-using Microsoft.VisualBasic;
-using Microsoft.SqlServer.Server;
 
 namespace org.goodspace.Data.Radio.Adif
 {

@@ -199,6 +199,9 @@
   <data name="EnumNameVia" xml:space="preserve">
     <value>Via</value>
   </data>
+  <data name="SqlCheckTagVersion" xml:space="preserve">
+    <value>SELECT 1 FROM "Tags" WHERE "Name" = @TagName AND "MinVersion" &lt;= @Version AND ("MaxVersion" IS NULL OR "MaxVersion" &gt;= @Version)</value>
+  </data>
   <data name="SqlGetBands" xml:space="preserve">
     <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands"</value>
   </data>
@@ -222,6 +225,15 @@
   </data>
   <data name="SqlParameterParentType" xml:space="preserve">
     <value>@ParentType</value>
+  </data>
+  <data name="SqlParameterSubdivisionCode" xml:space="preserve">
+    <value>@SubdivisionCode</value>
+  </data>
+  <data name="SqlParameterTagName" xml:space="preserve">
+    <value>@TagName</value>
+  </data>
+  <data name="SqlParameterVersion" xml:space="preserve">
+    <value>@Version</value>
   </data>
   <data name="SqlRetrieveBandsEnum" xml:space="preserve">
     <value>SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM "Bands"</value>
@@ -247,16 +259,37 @@
   <data name="SqlRetrieveEnum" xml:space="preserve">
     <value>SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM "Enumerations" WHERE "Type" = @EnumType ORDER BY DisplayName, Code</value>
   </data>
+  <data name="SqlRetrieveModeGrouping" xml:space="preserve">
+    <value>SELECT "Mode", "CabrilloMode", "Grouping" FROM "ModeGrouping" WHERE "Mode" = @Name</value>
+  </data>
+  <data name="SqlRetrieveModeGroupings" xml:space="preserve">
+    <value>SELECT "Mode", "CabrilloMode", "Grouping" FROM "ModeGrouping" ORDER BY "Grouping", "Mode"</value>
+  </data>
   <data name="SqlRetrievePrimarySubdivisionEnum" xml:space="preserve">
     <value>SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM "PrimaryAdminSubdivisions" ORDER BY CountryCode, Name, Code</value>
   </data>
   <data name="SqlRetrieveSecondarySubdivisionEnum" xml:space="preserve">
     <value>SELECT s.Code, s.Name AS DisplayName, s.Deleted AS ImportOnly, s.Deleted AS Legacy, s.PrimarySubdivisionCode AS Parent, @ParentType AS ParentType FROM "SecondaryAdminSubdivisions" s ORDER BY s.CountryCode, s.PrimarySubdivisionCode, s.Name, s.Code</value>
   </data>
+  <data name="SqlValidateDxccHasPrimarySubdivisions" xml:space="preserve">
+    <value>SELECT COUNT(Code) AS ItemCount FROM "PrimaryAdminSubdivisions" WHERE CountryCode = @CountryCode</value>
+  </data>
+  <data name="SqlValidateDxccHasSecondarySubdivisions" xml:space="preserve">
+    <value>SELECT COUNT(Code) AS ItemCount FROM "SecondaryAdminSubdivisions" WHERE CountryCode = @CountryCode</value>
+  </data>
   <data name="SqlValidateFrequency" xml:space="preserve">
     <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands" WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency</value>
   </data>
   <data name="SqlValidateFrequencyBand" xml:space="preserve">
     <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands" WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency AND Name = @Name</value>
+  </data>
+  <data name="SqlValidatePrimarySubdivision" xml:space="preserve">
+    <value>SELECT 1 FROM "CountryCodes" c INNER JOIN "PrimaryAdminSubdivisions" p ON c.Code = p.CountryCode WHERE c.Code = @CountryCode AND p.Code = @SubdivisionCode</value>
+  </data>
+  <data name="SqlValidatePrimarySubdivisionHasSecondarySubdivisions" xml:space="preserve">
+    <value>SELECT COUNT(Code) AS ItemCount FROM "SecondaryAdminSubdivisions" WHERE CountryCode = @CountryCode AND PrimarySubdivisionCode = @SubdivisionCode</value>
+  </data>
+  <data name="SqlValidateSecondarySubdivision" xml:space="preserve">
+    <value>SELECT 1 FROM "SecondaryAdminSubdivisions" WHERE CountryCode = @CountryCode AND (PrimarySubdivisionCode = @Parent OR PrimarySubdivisionCode IS NULL) AND Code = @SubdivisionCode</value>
   </data>
 </root>

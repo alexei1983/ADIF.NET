@@ -207,9 +207,9 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             else if (tag.IsUserDef)
                 tagName = AdifTags.UserDef;
 
-            var result = SQLiteHelper.Instance.ExecuteScalar<long>(TAG_VERSION_SQL,
-                                                                   new Dictionary<string, object?>() { { "@TagName", tagName },
-                                                                                                { "@Version", adifVersion.ToString()} });
+            var result = SQLiteHelper.Instance.ExecuteScalar<long>(Resources.SqlCheckTagVersion,
+                                                                   new Dictionary<string, object?>() { { Resources.SqlParameterTagName, tagName },
+                                                                                                       { Resources.SqlParameterVersion, adifVersion.ToString()} });
 
             if (result != 1)
                 throw new Exception($"Tag '{tag.Name}' is not valid for ADIF version {adifVersion}.");
@@ -242,11 +242,17 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (!string.IsNullOrEmpty(suffix))
             {
                 suffix = suffix.ToUpper();
-                if (suffix != "A" && suffix != "C" && suffix != "K" && suffix != "M" && suffix != "S" && suffix != "X")
+                if (suffix != RST_SUFFIX_A && suffix != RST_SUFFIX_C && suffix != RST_SUFFIX_K && 
+                    suffix != RST_SUFFIX_M && suffix != RST_SUFFIX_S && suffix != RST_SUFFIX_X)
                     throw new ArgumentException($"Invalid RST suffix: {suffix}", nameof(suffix));
             }
         }
 
-        const string TAG_VERSION_SQL = "SELECT 1 FROM \"Tags\" WHERE \"Name\" = @TagName AND \"MinVersion\" <= @Version AND (\"MaxVersion\" IS NULL OR \"MaxVersion\" >= @Version)";
+        const string RST_SUFFIX_A = "A";
+        const string RST_SUFFIX_C = "C";
+        const string RST_SUFFIX_K = "K";
+        const string RST_SUFFIX_M = "M";
+        const string RST_SUFFIX_S = "S";
+        const string RST_SUFFIX_X = "X";
     }
 }

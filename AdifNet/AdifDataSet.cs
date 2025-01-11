@@ -32,12 +32,12 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// QSOs belonging to the current data set.
         /// </summary>
-        public AdifQsoCollection QSOs { get; set; }
+        public AdifQsoCollection Qsos { get; set; }
 
         /// <summary>
         /// Total number of QSOs in the data set.
         /// </summary>
-        public int TotalQSOs => QSOs?.Count ?? 0;
+        public int QsoCount => Qsos?.Count ?? 0;
 
         /// <summary>
         /// ADIF version to target when generating the data set.
@@ -64,7 +64,7 @@ namespace org.goodspace.Data.Radio.Adif
         public AdifDataSet()
         {
             Header = [];
-            QSOs = [];
+            Qsos = [];
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace org.goodspace.Data.Radio.Adif
                     }
 
                     if (qso.Count > 0)
-                        QSOs.Add(qso);
+                        Qsos.Add(qso);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// Converts the current <see cref="AdifDataSet"/> to ADX.
         /// </summary>
         /// <param name="flags">Flags that determine how the ADX XML is generated.</param>
-        public string ToADX(EmitFlags flags = EmitFlags.None)
+        public string ToAdx(EmitFlags flags = EmitFlags.None)
         {
             HandleFlags(flags);
 
@@ -132,9 +132,9 @@ namespace org.goodspace.Data.Radio.Adif
 
             var recordEl = doc.CreateElement(ADXValues.ADX_RECORDS_ELEMENT);
 
-            if (QSOs != null)
+            if (Qsos != null)
             {
-                foreach (var qso in QSOs)
+                foreach (var qso in Qsos)
                 {
                     var qsoRecordEl = doc.CreateElement(ADXValues.ADX_RECORD_ELEMENT);
 
@@ -162,12 +162,12 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         /// <param name="outputFile">Destination file where the ADX XML will be saved.</param>
         /// <param name="flags">Flags that determine how the ADX XML is generated.</param>
-        public void ToADX(string outputFile, EmitFlags flags = EmitFlags.None)
+        public void ToAdx(string outputFile, EmitFlags flags = EmitFlags.None)
         {
             if (string.IsNullOrEmpty(outputFile))
                 throw new ArgumentException("Output file is required.", nameof(outputFile));
 
-            var adx = ToADX(flags);
+            var adx = ToAdx(flags);
 
             if (!string.IsNullOrEmpty(adx))
                 File.WriteAllText(outputFile, adx);
@@ -179,12 +179,12 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         /// <param name="outputFile">Destination file where the ADIF text will be saved.</param>
         /// <param name="flags">Flags that determine how the ADIF text is generated.</param>
-        public void ToADIF(string outputFile, EmitFlags flags = EmitFlags.None)
+        public void ToAdif(string outputFile, EmitFlags flags = EmitFlags.None)
         {
             if (string.IsNullOrEmpty(outputFile))
                 throw new ArgumentException("Output file is required.", nameof(outputFile));
 
-            var adif = ToADIF(flags);
+            var adif = ToAdif(flags);
 
             if (!string.IsNullOrEmpty(adif))
                 File.WriteAllText(outputFile, adif);
@@ -194,7 +194,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// Converts the current <see cref="AdifDataSet"/> to ADIF text.
         /// </summary>
         /// <param name="flags">Flags that determine how the ADIF text is generated.</param>
-        public string ToADIF(EmitFlags flags = EmitFlags.None)
+        public string ToAdif(EmitFlags flags = EmitFlags.None)
         {
             var formatString = (flags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames ? "a" : "A";
             HandleFlags(flags);
@@ -210,27 +210,27 @@ namespace org.goodspace.Data.Radio.Adif
         {
             if ((flags & EmitFlags.MirrorOperatorAndStationCallSign) == EmitFlags.MirrorOperatorAndStationCallSign)
             {
-                if (QSOs != null)
+                if (Qsos != null)
                 {
-                    for (var q = 0; q < QSOs.Count; q++)
+                    for (var q = 0; q < Qsos.Count; q++)
                     {
-                        if (QSOs[q] != null)
+                        if (Qsos[q] != null)
                         {
-                            var qso = QSOs[q];
+                            var qso = Qsos[q];
 
                             if (qso.Contains(AdifTags.Operator) && !qso.Contains(AdifTags.StationCallSign))
                             {
                                 var stationCallSignTag = new StationCallSignTag();
                                 var operatorTag = qso.GetTag(AdifTags.Operator);
                                 stationCallSignTag.SetValue(operatorTag?.Value);
-                                QSOs[q].Insert(QSOs[q].IndexOf(AdifTags.Operator), stationCallSignTag);
+                                Qsos[q].Insert(Qsos[q].IndexOf(AdifTags.Operator), stationCallSignTag);
                             }
                             else if (!qso.Contains(AdifTags.Operator) && qso.Contains(AdifTags.StationCallSign))
                             {
                                 var operatorTag = new OperatorTag();
                                 var stationCallSignTag = qso.GetTag(AdifTags.StationCallSign);
                                 operatorTag.SetValue(stationCallSignTag?.Value);
-                                QSOs[q].Insert(QSOs[q].IndexOf(AdifTags.StationCallSign), operatorTag);
+                                Qsos[q].Insert(Qsos[q].IndexOf(AdifTags.StationCallSign), operatorTag);
                             }
                         }
                     }
@@ -268,9 +268,9 @@ namespace org.goodspace.Data.Radio.Adif
             if (Header != null && !excludeHeader)
                 count += Header.Count;
 
-            if (QSOs != null)
+            if (Qsos != null)
             {
-                foreach (var qso in QSOs)
+                foreach (var qso in Qsos)
                     if (qso != null)
                         count += qso.Count;
             }
@@ -295,9 +295,9 @@ namespace org.goodspace.Data.Radio.Adif
                         counts.Add(tag.Name, 1);
             }
 
-            if (QSOs != null)
+            if (Qsos != null)
             {
-                foreach (var qso in QSOs)
+                foreach (var qso in Qsos)
                 {
                     if (qso == null)
                         continue;
@@ -318,16 +318,16 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         /// <param name="action">Action to execute against each QSO.</param>
         /// <param name="endOnException">Whether or not to stop processing QSOs when an exception is thrown.</param>
-        public void ForEachQSO(Action<AdifQso> action, bool endOnException = false)
+        public void ForEachQso(Action<AdifQso> action, bool endOnException = false)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action), "Action is required.");
 
-            QSOs ??= [];
+            Qsos ??= [];
 
             var exceptions = new List<Exception>();
 
-            foreach (var qso in QSOs)
+            foreach (var qso in Qsos)
             {
                 try
                 {
@@ -350,7 +350,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// Adds the specified tag to each QSO in the current data set.
         /// </summary>
         /// <param name="tag">QSO tag to add.</param>
-        public void AddQSOTag(ITag tag)
+        public void AddQsoTag(ITag tag)
         {
             if (tag is null)
                 return;
@@ -358,12 +358,12 @@ namespace org.goodspace.Data.Radio.Adif
             if (tag.Header)
                 throw new ArgumentException("Tag must not be a header tag.", nameof(tag));
 
-            QSOs ??= [];
+            Qsos ??= [];
 
-            for (var i = 0; i < QSOs.Count; i++)
+            for (var i = 0; i < Qsos.Count; i++)
             {
-                if (!QSOs[i].Contains(tag.Name))
-                    QSOs[i].Add(tag);
+                if (!Qsos[i].Contains(tag.Name))
+                    Qsos[i].Add(tag);
             }
         }
 
@@ -371,7 +371,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// Adds or replaces the specified tag in each QSO in the current data set.
         /// </summary>
         /// <param name="tag">Tag to add or replace.</param>
-        public void AddOrReplaceQSOTag(ITag tag)
+        public void AddOrReplaceQsoTag(ITag tag)
         {
             if (tag is null)
                 return;
@@ -379,30 +379,30 @@ namespace org.goodspace.Data.Radio.Adif
             if (tag.Header)
                 throw new ArgumentException("Tag must not be a header tag.", nameof(tag));
 
-            QSOs ??= [];
+            Qsos ??= [];
 
-            for (var i = 0; i < QSOs.Count; i++)
-                QSOs[i].AddOrReplace(tag);
+            for (var i = 0; i < Qsos.Count; i++)
+                Qsos[i].AddOrReplace(tag);
         }
 
         /// <summary>
         /// Adds the specified QSO to the current data set.
         /// </summary>
         /// <param name="qso">QSO to add.</param>
-        public void AddQSO(AdifQso qso)
+        public void AddQso(AdifQso qso)
         {
             if (qso == null)
                 throw new ArgumentNullException(nameof(qso), "QSO is required.");
 
-            QSOs ??= [];
-            QSOs.Add(qso);
+            Qsos ??= [];
+            Qsos.Add(qso);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="qsoTags"></param>
-        public void AddQSO(params ITag[] qsoTags)
+        public void AddQso(params ITag[] qsoTags)
         {
             if (qsoTags == null || qsoTags.Length < 1)
                 throw new ArgumentException("At least one QSO tag is required.", nameof(qsoTags));
@@ -416,7 +416,7 @@ namespace org.goodspace.Data.Radio.Adif
                 qso.Add(tag);
             }
 
-            AddQSO(qso);
+            AddQso(qso);
         }
 
         /// <summary>
@@ -514,7 +514,7 @@ namespace org.goodspace.Data.Radio.Adif
             var exceptions = new List<Exception>();
             var checkedTags = new List<string>();
 
-            foreach (var qso in QSOs)
+            foreach (var qso in Qsos)
             {
                 if (qso == null)
                     continue;
@@ -605,7 +605,7 @@ namespace org.goodspace.Data.Radio.Adif
             {
                 case "G":
                 case "C":
-                    return $"Header Count: {(Header != null ? Header.Count : 0)}, QSO Count: {(QSOs != null ? QSOs.Count : 0)}";
+                    return $"Header Count: {(Header != null ? Header.Count : 0)}, QSO Count: {(Qsos != null ? Qsos.Count : 0)}";
 
                 case "H":
                     return HeaderText ?? string.Empty;
@@ -628,9 +628,9 @@ namespace org.goodspace.Data.Radio.Adif
                         val += Environment.NewLine;
                     }
 
-                    if (QSOs != null)
+                    if (Qsos != null)
                     {
-                        foreach (var qso in QSOs)
+                        foreach (var qso in Qsos)
                         {
                             if (qso != null)
                             {
@@ -650,7 +650,7 @@ namespace org.goodspace.Data.Radio.Adif
 
                 case "X":
                 case "x":
-                    return ToADX();
+                    return ToAdx();
 
                 default:
                     throw new FormatException($"Format string '{format}' is not valid.");
