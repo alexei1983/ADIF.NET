@@ -1,9 +1,38 @@
 ﻿using System.Reflection;
+using System.Xml.Linq;
 using org.goodspace.Data.Radio.Adif.Helpers;
+using org.goodspace.Data.Radio.Adif.Tags;
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// </remarks>
+    /// <param name="tagName"></param>
+    /// <param name="value"></param>
+    public class AdifTagNameWithValue(string tagName, object? value)
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string TagName { get; } = tagName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object? Value { get; } = value;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tagName"></param>
+        public AdifTagNameWithValue(string tagName) : this(tagName, null) { }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -12,42 +41,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// 
         /// </summary>
-        public EmitFlags EmitFlags { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string? ConfigFile { get; set; }
-
-        /// <summary>
-        /// Preset DXCC country code for the logging station.
-        /// </summary>
-        public int? MyDxcc { get; set; }
-
-        /// <summary>
-        /// Preset grid square for the logging station.
-        /// </summary>
-        public string? MyGridSquare { get; set; }
-
-        /// <summary>
-        /// Preset callsign for the logging station.
-        /// </summary>
-        public string? MyCall { get; set; }
-
-        /// <summary>
-        /// Preset personal name for the logging station.
-        /// </summary>
-        public string? MyName { get; set; }
-
-        /// <summary>
-        /// Preset primary administrative subdivision for the logging station.
-        /// </summary>
-        public string? MyState { get; set; }
-
-        /// <summary>
-        /// Whether or not to add PROGRAMID and PROGRAMVERSION header tags when generating ADIF or ADX.
-        /// </summary>
-        public bool AddProgramHeadersOnEmit { get; set; }
+        public EmitFlags EmitFlags { get; set; }
 
         /// <summary>
         /// Target ADIF version.
@@ -57,253 +51,408 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fullPath"></param>
-        public AdifCustomConfiguration(string fullPath)
-        {
-            ConfigFile = Path.GetFullPath(fullPath);
-            ParseConfig(GetLinesFromFile(ConfigFile));
-        }
+        public AdifTagNameWithValue[] DefaultValues { get; set; } = [];
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AdifTagNameWithValue[] AddTags { get; set; } = [];
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AdifTagNameWithValue[] ReplaceTags { get; set; } = [];
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AdifTagNameWithValue[] RemoveTags { get; set; } = [];
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public SerialNumberGenerator[] SerialNumberGenerators { get; set; } = [];
 
         /// <summary>
         /// 
         /// </summary>
         public AdifCustomConfiguration()
         {
-            var path = FindConfigurationFile(Values.ADIF_NET_CONFIG_FILE_NAME);
-            if (!string.IsNullOrEmpty(path))
-            {
-                ConfigFile = path;
-                ParseConfig(GetLinesFromFile(ConfigFile));
-            }
+            
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="file"></param>
-        static IEnumerable<string> GetLinesFromFile(string file)
-        {
-            var fi = new FileInfo(file);
-            if (fi.Exists)
-                return File.ReadLines(fi.FullName);
-
-            throw new FileNotFoundException($"ADIF custom configuration file not found: {file}", file);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        public SerialNumberGenerator GetSerialNumberGenerator(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentException("Name is required.", nameof(name));
-
-            var startStrVal = GetValue(values, $"serial_{name}_start");
-            var currentStrVal = GetValue(values, $"serial_{name}_current");
-
-            int startSerial = 1, currentSerial = 1;
-
-            if (!string.IsNullOrEmpty(startStrVal))
-            {
-                if (!int.TryParse(startStrVal, out startSerial))
-                    throw new Exception($"Invalid starting serial number for generator '{name}': {startStrVal}");
-            }
-
-            if (!string.IsNullOrEmpty(currentStrVal))
-            {
-                if (!int.TryParse(currentStrVal, out currentSerial))
-                    throw new Exception($"Invalid current serial number for generator '{name}': {currentStrVal}");
-            }
-
-            return new SerialNumberGenerator(startSerial, currentSerial);
-
-            throw new ArgumentException($"No generator exists with name '{name}'", nameof(name));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="lines"></param>
-        void ParseConfig(IEnumerable<string> lines)
-        {
-            if (lines.Any())
-            {
-                values = lines.Where(line => !string.IsNullOrWhiteSpace(line) &&
-                                             !line.Trim().StartsWith(Values.COMMENT_INDICATOR.ToString()))
-                              .Select(line => line.Split(separator, 2, 0))
-                              .ToDictionary(parts => parts[0].Trim(), parts => parts.Length > 1 ? CleanValue(parts[1].Trim()) : string.Empty);
-
-                if (values.TryGetValue(MY_CALL_CONFIG, out string? call))
-                    MyCall = call;
-
-                if (values.TryGetValue(MY_GRIDSQUARE_CONFIG, out string? gridSquare))
-                    MyGridSquare = gridSquare;
-
-                if (values.TryGetValue(MY_NAME_CONFIG, out string? name))
-                    MyName = name;
-
-                if (values.TryGetValue(MY_STATE_CONFIG, out string? state))
-                    MyState = state;
-
-                if (values.TryGetValue(MY_DXCC_CONFIG, out string? dxcc))
-                {
-                    if (int.TryParse(dxcc, out int myDxcc))
-                        MyDxcc = myDxcc;
-                }
-
-                // validate DXCC and state
-                if (MyDxcc.HasValue && MyDxcc.Value > 0)
-                {
-                    if (!Values.CountryCodes.IsValid(MyDxcc.ToString()))
-                        throw new Exception($"Invalid DXCC entity in configuration: {MyDxcc}");
-
-                    if (!string.IsNullOrEmpty(MyState) && MyDxcc.HasValue)
-                    {
-                        if (!DxccHelper.ValidatePrimarySubdivision(MyDxcc.Value, MyState))
-                            throw new Exception($"DXCC entity {MyDxcc} does not contain primary administrative subdivision '{MyState}'");
-                    }
-                }
-
-                // parse ADIF target version
-                if (values.TryGetValue(ADIF_TARGET_VERSION_CONFIG, out string? version))
-                {
-                    if (Version.TryParse(version, out Version? adifVer))
-                        AdifTargetVersion = adifVer;
-                }
-
-                var emitSettings = EmitFlags.None;
-
-                // parse emit flags
-                if (values.TryGetValue(ADD_PROGRAM_HEADERS_CONFIG, out string? addProgHeaders))
-                {
-                    if (AdifBoolean.TryParse(addProgHeaders, out bool? result) && result.HasValue && result.Value)
-                        emitSettings |= EmitFlags.AddProgramHeaderTags;
-                }
-
-                if (values.TryGetValue(LOWERCASE_TAG_NAMES_CONFIG, out string? lowerTags))
-                {
-                    if (AdifBoolean.TryParse(lowerTags, out bool? result) && result.HasValue && result.Value)
-                        emitSettings |= EmitFlags.LowercaseTagNames;
-                }
-
-                if (values.TryGetValue(ADD_MY_GRIDSQUARE_CONFIG, out string? addGridSquare))
-                {
-                    if (AdifBoolean.TryParse(addGridSquare, out bool? result) && result.HasValue && result.Value)
-                        emitSettings |= EmitFlags.AddMyGridSquare;
-                }
-
-                EmitFlags = emitSettings;
-            }
-        }
-
-        const string ADD_PROGRAM_HEADERS_CONFIG = "add_program_headers_on_emit";
-        const string LOWERCASE_TAG_NAMES_CONFIG = "emit_lowercase_tag_names";
-        const string ADD_MY_GRIDSQUARE_CONFIG = "add_my_gridsquare_to_qsos";
-        const string ADIF_TARGET_VERSION_CONFIG = "adif_target_version";
-        const string MY_DXCC_CONFIG = "my_dxcc";
-        const string MY_STATE_CONFIG = "my_state";
-        const string MY_NAME_CONFIG = "my_name";
-        const string MY_GRIDSQUARE_CONFIG = "my_grid_square";
-        const string MY_CALL_CONFIG = "my_call";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
+        /// <param name="tagName"></param>
         /// <returns></returns>
-        static string CleanValue(string value)
+        public object? GetDefaultValue(string tagName)
         {
-            value ??= string.Empty;
-            return value.Trim('"');
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="values"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        static string GetValue(IDictionary<string, string> values, string key)
-        {
-            var val = values.FirstOrDefault(kvp => kvp.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
-            return val.Value;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        static IEnumerable<string> GetSearchPaths()
-        {
-            string[] paths = [
-                      Environment.GetFolderPath(Environment.SpecialFolder.System),
-                      Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                      Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                      Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                      Environment.CurrentDirectory,
-                      GetAssemblyDirectory()
-          ];
-
-            foreach (var path in paths)
-            {
-                if (!string.IsNullOrEmpty(path))
-                {
-                    var _path = Path.GetFullPath(path);
-                    if (!string.IsNullOrEmpty(_path))
-                        yield return _path;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fileName"></param>
-        static string? FindConfigurationFile(string fileName)
-        {
-            var paths = GetSearchPaths();
-
-            foreach (var p in paths)
-            {
-                var path = Path.Combine(p, fileName);
-                if (new FileInfo(path).Exists)
-                    return path;
-            }
-
-            foreach (var s in Environment.GetLogicalDrives())
-            {
-                var path = Path.Combine(s, fileName);
-                if (new FileInfo(path).Exists)
-                    return path;
-            }
-
+            var obj = DefaultValues.FirstOrDefault(d => d.TagName.Equals(tagName, StringComparison.OrdinalIgnoreCase));
+            if (obj != null)
+                return obj.Value;
             return null;
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="tag"></param>
         /// <returns></returns>
-        static string GetAssemblyDirectory()
+        public bool ShouldRemoveTag(ITag tag)
         {
-            var codeBase = Assembly.GetExecutingAssembly().Location;
-            var uri = new UriBuilder(codeBase);
-            return Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path)) ?? Environment.CurrentDirectory;
+            var removeTag = RemoveTags.FirstOrDefault(r => r.TagName.Equals(tag.Name, StringComparison.OrdinalIgnoreCase));
+
+            if (removeTag != null)
+            {
+                if (removeTag.Value != null)
+                {
+                    if (removeTag.Value.Equals(tag.Value))
+                        return true;
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public string GetAdifHeaderText()
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public bool ShouldReplaceTag(ITag tag)
         {
-            if (string.IsNullOrWhiteSpace(MyCall))
-                return Values.DEFAULT_ADIF_HEADER_TEXT;
-            else
-                return $"{Values.DEFAULT_ADIF_HEADER_TEXT} for {MyCall}";
+            return ReplaceTags.Any(r => r.TagName.Equals(tag.Name, StringComparison.OrdinalIgnoreCase));
         }
 
-        Dictionary<string, string> values = [];
-        static readonly char[] separator = ['='];
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <param name="qso"></param>
+        /// <returns></returns>
+        public bool ShouldAddTag(string tagName, AdifQso qso)
+        {
+            var addTag = AddTags.FirstOrDefault(r => r.TagName.Equals(tagName, StringComparison.OrdinalIgnoreCase));
+            return addTag != null && !qso.Contains(addTag.TagName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        public SerialNumberGenerator? GetSerialNumberGenerator(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Serial number generator name is required.", nameof(name));
+
+            return SerialNumberGenerators.FirstOrDefault(s => name.Equals(s.Name));
+        }
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <returns></returns>
+        //static IEnumerable<string> GetSearchPaths()
+        //{
+        //    string[] paths = [
+        //              Environment.GetFolderPath(Environment.SpecialFolder.System),
+        //              Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        //              Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+        //              Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        //              Environment.CurrentDirectory
+        //  ];
+
+        //    foreach (var path in paths)
+        //    {
+        //        if (!string.IsNullOrEmpty(path))
+        //        {
+        //            var _path = Path.GetFullPath(path);
+        //            if (!string.IsNullOrEmpty(_path))
+        //                yield return _path;
+        //        }
+        //    }
+        //}
+
+    //    /// <summary>
+    //    /// 
+    //    /// </summary>
+    //    /// <param name="fileName"></param>
+    //    static string? FindConfigurationFile(string fileName)
+    //    {
+    //        var paths = GetSearchPaths();
+
+    //        foreach (var p in paths)
+    //        {
+    //            var path = Path.Combine(p, fileName);
+    //            if (new FileInfo(path).Exists)
+    //                return path;
+    //        }
+
+    //        foreach (var s in Environment.GetLogicalDrives())
+    //        {
+    //            var path = Path.Combine(s, fileName);
+    //            if (new FileInfo(path).Exists)
+    //                return path;
+    //        }
+
+    //        return null;
+    //    }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class AdifNetConfigurationParser
+    {
+        XDocument? xDoc;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        public void LoadFile(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentException("Configuration file path is required.", nameof(path));
+
+            if (!Path.IsPathRooted(path))
+                path = Path.GetFullPath(path);
+
+            var fileInfo = new FileInfo(path);
+
+            if (!fileInfo.Exists)
+                throw new FileNotFoundException($"Configuration file does not exist: {path}", path);
+
+            xDoc = XDocument.Load(fileInfo.OpenRead());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        public void LoadString(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Configuration string cannot be null or empty.", nameof(value));
+            xDoc = XDocument.Load(new StringReader(value));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        public void LoadStream(Stream stream)
+        {
+            if (stream == null || !stream.CanRead)
+                throw new ArgumentException("Cannot read configuration: invalid stream.", nameof(stream));
+
+            xDoc = XDocument.Load(stream);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public AdifCustomConfiguration Parse()
+        {
+            if (xDoc == null || xDoc.Root == null || !xDoc.Descendants().Any())
+                throw new Exception("No configuration found to parse.");
+
+            if (!xDoc.Root.Name.LocalName.Equals("AdifNetConfig"))
+                throw new Exception("Not an AdifNet configuration file.");
+
+            var config = new AdifCustomConfiguration();
+
+            var versionStr = xDoc.Root.Attribute("AdifVersion")?.Value;
+
+            if (!string.IsNullOrEmpty(versionStr))
+            {
+                if (!Version.TryParse(versionStr, out var version))
+                    throw new Exception($"Invalid ADIF version: {versionStr}");
+                config.AdifTargetVersion = version;
+            }
+
+            List<UserDefTag> userDefTags = [];
+
+            // get user-defined tags
+            foreach (var element in xDoc.Descendants("UserDefTags"))
+            {
+                if (!element.Name.LocalName.Equals("UserDefTag"))
+                    continue;
+
+                var fieldId = element.Attribute("ID")?.Value;
+                var dataType = element.Attribute("DataType")?.Value;
+                var enumStr = element.Attribute("Enum")?.Value;
+                var range = element.Attribute("Range")?.Value;
+                var fieldName = element.Value;
+
+                if (!string.IsNullOrEmpty(fieldName))
+                {
+                    var userDefTag = new UserDefTag()
+                    {
+                        FieldName = fieldName,
+                    };
+
+                    if (!string.IsNullOrEmpty(fieldId) && int.TryParse(fieldId, out var _fieldId))
+                        userDefTag.FieldId = _fieldId;
+
+                    userDefTag.DataType = dataType ?? DataTypes.String;
+                    userDefTags.Add(userDefTag);
+                }
+            }
+
+            List<AdifTagNameWithValue> defaults = [];
+
+            // get defaults
+            foreach (var element in xDoc.Descendants("Defaults"))
+            {
+                if (!element.Name.LocalName.Equals("Tag"))
+                    continue;
+
+                var tagName = element.Attribute("Name")?.Value;
+                var defaultValue = element.Value;
+
+                if (!string.IsNullOrEmpty(tagName) && !string.IsNullOrEmpty(defaultValue))
+                {
+                    tagName = tagName.ToUpper();
+
+                    var tag = TagFactory.TagFromName(tagName) ??
+                              userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
+                              throw new Exception($"Invalid ADIF tag: {tagName}");
+
+                    tag.SetValue(defaultValue);
+
+                    if (tag.Value != null)
+                        defaults.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                }
+            }
+
+            config.DefaultValues = [.. defaults];
+
+            List<AdifTagNameWithValue> adds = [];
+
+            // get tag adds
+            foreach (var element in xDoc.Descendants("AddTags"))
+            {
+                if (!element.Name.LocalName.Equals("Tag"))
+                    continue;
+
+                var tagName = element.Attribute("Name")?.Value;
+                var tagValue = element.Value;
+
+                if (!string.IsNullOrEmpty(tagName) && !string.IsNullOrEmpty(tagValue))
+                {
+                    tagName = tagName.ToUpper();
+
+                    var tag = TagFactory.TagFromName(tagName) ??
+                              userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
+                              throw new Exception($"Invalid ADIF tag: {tagName}");
+
+                    tag.SetValue(tagValue);
+
+                    if (tag.Value != null)
+                        adds.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                }
+            }
+
+            config.AddTags = [.. adds];
+
+            List<AdifTagNameWithValue> replace = [];
+
+            // get tag replacements
+            foreach (var element in xDoc.Descendants("ReplaceTags"))
+            {
+                if (!element.Name.LocalName.Equals("Tag"))
+                    continue;
+
+                var tagName = element.Attribute("Name")?.Value;
+                var tagValue = element.Value;
+
+                if (!string.IsNullOrEmpty(tagName) && !string.IsNullOrEmpty(tagValue))
+                {
+                    tagName = tagName.ToUpper();
+
+                    var tag = TagFactory.TagFromName(tagName) ??
+                              userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
+                              throw new Exception($"Invalid ADIF tag: {tagName}");
+
+                    tag.SetValue(tagValue);
+
+                    if (tag.Value != null)
+                        replace.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                }
+            }
+
+            config.ReplaceTags = [.. replace];
+
+            List<AdifTagNameWithValue> remove = [];
+
+            // get tag replacements
+            foreach (var element in xDoc.Descendants("RemoveTags"))
+            {
+                if (!element.Name.LocalName.Equals("Tag"))
+                    continue;
+
+                var tagName = element.Attribute("Name")?.Value;
+                var tagValue = element.Value;
+
+                if (!string.IsNullOrEmpty(tagName))
+                {
+                    tagName = tagName.ToUpper();
+
+                    var tag = TagFactory.TagFromName(tagName) ??
+                              userDefTags.FirstOrDefault(u => u.FieldName.Equals(tagName, StringComparison.OrdinalIgnoreCase)) ??
+                              throw new Exception($"Invalid ADIF tag: {tagName}");
+
+                    if (!string.IsNullOrEmpty(tagValue))
+                        tag.SetValue(tagValue);
+
+                    if (tag.Value != null)
+                        remove.Add(new AdifTagNameWithValue(tag.Name, tag.Value));
+                }
+            }
+
+            config.RemoveTags = [.. remove];
+
+            var flags = EmitFlags.None;
+
+            // get options
+            foreach (var element in xDoc.Descendants("Options"))
+            {
+                var value = element.Value;
+                bool isYes = Values.ADIF_BOOLEAN_TRUE.Equals(value);
+
+                switch (element.Name.LocalName)
+                {
+                    case "LowercaseTagNames":
+                        if (isYes)
+                            flags |= EmitFlags.LowercaseTagNames;
+                        break;
+
+                    case "AddProgramHeaderTags":
+                        if (isYes)
+                            flags |= EmitFlags.AddProgramHeaderTags;
+                        break;
+
+                    case "MirrorOperatorAndStationCallSign":
+                        if (isYes)
+                            flags |= EmitFlags.MirrorOperatorAndStationCallSign;
+                        break;
+
+                    case "AddCreatedTimestampTag":
+                        if (isYes)
+                            flags |= EmitFlags.AddCreatedTimestamp;
+                        break;
+
+                    default:
+                        throw new Exception($"Invalid configuration option: {element.Name.LocalName}");
+                }
+            }
+            config.EmitFlags = flags;
+
+            return config;
+        }
     }
 }
