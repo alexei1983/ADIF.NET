@@ -1,10 +1,10 @@
 ## ADIF.NET
-Fully featured ADIF and ADX parser and generator for .NET
+A fully featured ADIF/ADX parser and generator for .NET
 
 ### Introduction
-Amateur Data Interchange Format (ADIF) is a standard for exchanging ham radio on-air contacts between different platforms and systems.
+Amateur Data Interchange Format (ADIF) is an open standard for exchanging ham radio on-air contacts between different platforms and systems.
 
-The full standard can be found at the ADIF web site.
+The full standard can be found at the official [ADIF web site](https://adif.org).
 
 This library parses and generates files in both ADIF and ADX formats.
 
@@ -22,9 +22,9 @@ To create a new QSO record, instantiate the `AdifQso` class and call methods to 
 ```
 var newQso = new AdifQso();
 newQso.SetCall("K9BZM");
-newQso.SetDateTimeOn(DateTime.UtcNow);
+newQso.SetDateTimeOn("01/08/2025 13:46:39", "MM/dd/yyyy HH:mm:ss");
 newQso.SetBand("20m");
-newQso.SetMode("USB");
+newQso.SetMode("SSB", "USB");
 newQso.SetOperator("K0UOG");
 newQso.SetName("Steve");
 
@@ -34,7 +34,7 @@ Console.WriteLine(newQso.ToString("A"));
 The above code outputs the following text to the console:
 
 ```
-<CALL:5>K9BZM <QSO_DATE:8>20250111 <TIME_ON:6>005549 <BAND:3>20m <MODE:3>USB <OPERATOR:5>K0UOG <NAME:5>Steve <EOR>
+<CALL:5>K9BZM <QSO_DATE:8>20250108 <TIME_ON:6>134639 <BAND:3>20m <MODE:3>SSB <SUBMODE:3>USB <OPERATOR:5>K0UOG <NAME:5>Steve <EOR>
 ```
 
 ### SQL Adapter
@@ -58,7 +58,7 @@ var mysqlConnection = new MySqlConnection("server=localhost;user=user;database=a
 var sqlAdapter = new AdifSqlAdapter(mysqlConnection, "QSOs")
 {
 	ParameterPrefix = '?',
-	ReservedFieldsEscapedBy = ReservedWordEscape.Backticks;
+	ReservedWordsEscapedBy = ReservedWordEscape.Backticks;
 };
 
 sqlAdapter.Insert(newQso);

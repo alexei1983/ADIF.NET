@@ -76,26 +76,36 @@ namespace org.goodspace.Data.Radio.Adif
             var enumeration = new AdifEnumeration(type);
 
             var query = string.Empty;
+            Dictionary<string, object?> parameters = [];
 
-            if (type == DXCC_ENUM_STRING)
-                query = RETRIEVE_DXCC_SQL;
-            else if (type == BAND_ENUM_STRING)
-                query = RETRIEVE_BANDS_SQL;
-            else if (type == CREDIT_ENUM_STRING)
-                query = RETRIEVE_CREDIT_SQL;
-            else if (type == DARC_DOK_ENUM_STRING)
-                query = RETRIEVE_DARC_DOK_SQL;
+            if (type == Resources.EnumNameDxcc)
+                query = Resources.SqlRetrieveDxccEnum;
+            else if (type == Resources.EnumNameBand)
+                query = Resources.SqlRetrieveBandsEnum;
+            else if (type == Resources.EnumNameCredit)
+                query = Resources.SqlRetrieveCreditEnum;
+            else if (type == Resources.EnumNameDarcDok)
+                query = Resources.SqlRetrieveDarcDokEnum;
             else if (type == nameof(AdifBoolean))
                 return new AdifEnumeration(nameof(AdifBoolean), new AdifEnumerationValue(Values.ADIF_BOOLEAN_TRUE, Values.ADIF_BOOLEAN_TRUE_DISPLAY),
                                                                 new AdifEnumerationValue(Values.ADIF_BOOLEAN_FALSE, Values.ADIF_BOOLEAN_FALSE_DISPLAY));
-            else if (type == PRIMARY_SUB_ENUM_STRING)
-                query = RETRIEVE_PRIMARY_SUB_SQL;
-            else if (type == SECONDARY_SUB_ENUM_STRING)
-                query = RETRIEVE_SECONDARY_SUB_SQL;
+            else if (type == Resources.EnumNamePrimarySubdivision)
+            {
+                query = Resources.SqlRetrievePrimarySubdivisionEnum;
+                parameters.Add(Resources.SqlParameterParentType, type);
+            }
+            else if (type == Resources.EnumNameSecondarySubdivision)
+            {
+                query = Resources.SqlRetrieveSecondarySubdivisionEnum;
+                parameters.Add(Resources.SqlParameterParentType, type);
+            }
             else
-                query = ENUM_RETRIEVE_SQL.Replace("{{TYPE}}", type.Replace("'", "''"));
+            {
+                query = Resources.SqlRetrieveEnum;
+                parameters.Add(Resources.SqlParameterEnumType, type);
+            }
 
-            var data = SQLiteHelper.Instance.ReadData(query);
+            var data = SQLiteHelper.Instance.ReadData(query, parameters);
 
             foreach (dynamic d in data)
             {
@@ -142,7 +152,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         /// <param name="parentType">The enumeration type of the parent.</param>
         /// <param name="parentCode">The code of the parent enumeration value.</param>
-        public IEnumerable<AdifEnumerationValue> GetChildren(string parentType, string parentCode)
+        public static IEnumerable<AdifEnumerationValue> GetChildren(string parentType, string parentCode)
         {
             if (string.IsNullOrEmpty(parentType))
                 throw new ArgumentException("Parent type is required.", nameof(parentType));
@@ -150,14 +160,14 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(parentCode))
                 throw new ArgumentException("Parent code is required.", nameof(parentCode));
 
-            var query = ENUM_RETRIEVE_CHILDREN_SQL;
+            var query = Resources.SqlRetrieveChildEnum;
 
-            if (DXCC_ENUM_STRING.Equals(parentType))
-                query = RETRIEVE_DXCC_CHILDREN_SQL;
+            if (Resources.EnumNameDxcc.Equals(parentType))
+                query = Resources.SqlRetrieveChildDxccEnum;
 
             var data = SQLiteHelper.Instance.ReadData(query,
-                                                      new Dictionary<string, object?>() { { "@ParentType", parentType },
-                                                                                    { "@Parent", parentCode } });
+                                                      new Dictionary<string, object?>() { { Resources.SqlParameterParentType, parentType },
+                                                                                          { Resources.SqlParameterParent, parentCode } });
 
             foreach (dynamic d in data)
             {
@@ -171,8 +181,18 @@ namespace org.goodspace.Data.Radio.Adif
         /// 
         /// </summary>
         /// <param name="countryCode"></param>
+        /// <returns></returns>
+        public static IEnumerable<AdifEnumerationValue> GetPrimarySubdivisions(string countryCode)
+        {
+            return GetChildren(Resources.EnumNameDxcc, countryCode);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="countryCode"></param>
         /// <param name="primarySubdivisionCode"></param>
-        public IEnumerable<AdifEnumerationValue> GetSecondarySubdivisions(string countryCode, string primarySubdivisionCode)
+        public static IEnumerable<AdifEnumerationValue> GetSecondarySubdivisions(string countryCode, string primarySubdivisionCode)
         {
             if (string.IsNullOrEmpty(countryCode))
                 throw new ArgumentException("DXCC is required.", nameof(countryCode));
@@ -180,10 +200,10 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(primarySubdivisionCode))
                 throw new ArgumentException("Primary subdivision code is required.", nameof(primarySubdivisionCode));
 
-            var data = SQLiteHelper.Instance.ReadData(RETRIEVE_PRIMARY_SUB_CHILDREN_SQL,
-                                                      new Dictionary<string, object?>() { { "@ParentType", PRIMARY_SUB_ENUM_STRING },
-                                                                                    { "@Parent", primarySubdivisionCode },
-                                                                                    { "@CountryCode", countryCode } });
+            var data = SQLiteHelper.Instance.ReadData(Resources.SqlRetrieveChildPrimarySubdivisionEnum,
+                                                      new Dictionary<string, object?>() { { Resources.SqlParameterParentType, Resources.EnumNamePrimarySubdivision },
+                                                                                          { Resources.SqlParameterParent, primarySubdivisionCode },
+                                                                                          { Resources.SqlParameterCountryCode, countryCode } }) ;
 
             foreach (dynamic d in data)
             {
@@ -192,22 +212,5 @@ namespace org.goodspace.Data.Radio.Adif
                     yield return enumVal;
             }
         }
-
-        const string ENUM_RETRIEVE_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE Type = '{{TYPE}}' ORDER BY DisplayName, Code";
-        const string RETRIEVE_DXCC_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM \"CountryCodes\" ORDER BY Name, Code";
-        const string RETRIEVE_BANDS_SQL = "SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Bands\"";
-        const string RETRIEVE_CREDIT_SQL = "SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"Credits\" ORDER BY CreditFor";
-        const string RETRIEVE_DARC_DOK_SQL = "SELECT Code, District || ' - ' || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM \"DarcDok\" ORDER BY Code";
-        const string ENUM_RETRIEVE_CHILDREN_SQL = "SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM \"Enumerations\" WHERE ParentType = @ParentType AND Parent = @Parent ORDER BY DisplayName, Code";
-        const string RETRIEVE_DXCC_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" WHERE CAST(CountryCode AS TEXT) = @Parent AND '" + DXCC_ENUM_STRING + "' = @ParentType";
-        const string RETRIEVE_PRIMARY_SUB_CHILDREN_SQL = "SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" WHERE PrimarySubdivisionCode = @Parent AND '" + PRIMARY_SUB_ENUM_STRING + "' = @ParentType AND CAST(CountryCode AS TEXT) = @CountryCode";
-        const string RETRIEVE_PRIMARY_SUB_SQL = "SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, '" + DXCC_ENUM_STRING + "' AS ParentType FROM \"PrimaryAdminSubdivisions\" ORDER BY CountryCode, Name, Code";
-        const string RETRIEVE_SECONDARY_SUB_SQL = "SELECT s.Code, s.Name AS DisplayName, s.Deleted AS ImportOnly, s.Deleted AS Legacy, s.PrimarySubdivisionCode AS Parent, '" + PRIMARY_SUB_ENUM_STRING + "' AS ParentType FROM \"SecondaryAdminSubdivisions\" s ORDER BY s.CountryCode, s.PrimarySubdivisionCode, s.Name, s.Code";
-        const string CREDIT_ENUM_STRING = "Credit";
-        const string BAND_ENUM_STRING = "Band";
-        const string DXCC_ENUM_STRING = "DXCC";
-        const string DARC_DOK_ENUM_STRING = "DARCDOK";
-        const string PRIMARY_SUB_ENUM_STRING = "PrimarySubdivision";
-        const string SECONDARY_SUB_ENUM_STRING = "SecondarySubdivision";
     }
 }

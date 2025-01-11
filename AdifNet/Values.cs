@@ -1,9 +1,7 @@
 ﻿using System.Dynamic;
-using System.Globalization;
 using System.Reflection;
 using org.goodspace.Data.Radio.Adif.Attributes;
 using org.goodspace.Data.Radio.Adif.Helpers;
-using org.goodspace.Data.Radio.Adif.Tags;
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif
@@ -296,7 +294,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// User configuration for ADIF.NET
         /// </summary>
-        public static readonly Configuration Configuration;
+        public static readonly AdifCustomConfiguration Configuration;
 
 
         /// <summary>
@@ -304,34 +302,34 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         static Values()
         {
-            QsoUploadStatuses = AdifEnumeration.Get("QSOUploadStatus") ?? [];
-            QsoCompleteStatuses = AdifEnumeration.Get("QSOCompleteStatus") ?? [];
-            Via = AdifEnumeration.Get("Via") ?? [];
-            AntennaPaths = AdifEnumeration.Get("AntennaPath") ?? [];
-            QslMediums = AdifEnumeration.Get("QSLMedium") ?? [];
-            Continents = AdifEnumeration.Get("Continent") ?? [];
-            EQslSentStatuses = AdifEnumeration.Get("EQSLSentStatus") ?? [];
-            EQslReceivedStatuses = AdifEnumeration.Get("EQSLReceivedStatus") ?? [];
-            PropagationModes = AdifEnumeration.Get("PropagationMode") ?? [];
-            ArrlSections = AdifEnumeration.Get("ARRLSection") ?? [];
-            Awards = AdifEnumeration.Get("Award") ?? [];
-            Modes = AdifEnumeration.Get("Mode") ?? [];
-            SubModes = AdifEnumeration.Get("Submode") ?? [];
-            SponsoredAwardPrefixes = AdifEnumeration.Get("SponsoredAwardPrefix") ?? [];
-            CountryCodes = AdifEnumeration.Get("DXCC") ?? [];
-            Contests = AdifEnumeration.Get("ContestID") ?? [];
-            Bands = AdifEnumeration.Get("Band") ?? [];
-            Credits = AdifEnumeration.Get("Credit") ?? [];
-            QslSentStatuses = AdifEnumeration.Get("QSLSent") ?? [];
-            QslReceivedStatuses = AdifEnumeration.Get("QSLRcvd") ?? [];
+            QsoUploadStatuses = AdifEnumeration.Get(Resources.EnumNameQsoUploadStatus) ?? [];
+            QsoCompleteStatuses = AdifEnumeration.Get(Resources.EnumNameQsoCompleteStatus) ?? [];
+            Via = AdifEnumeration.Get(Resources.EnumNameVia) ?? [];
+            AntennaPaths = AdifEnumeration.Get(Resources.EnumNameAntennaPath) ?? [];
+            QslMediums = AdifEnumeration.Get(Resources.EnumNameQslMedium) ?? [];
+            Continents = AdifEnumeration.Get(Resources.EnumNameContinent) ?? [];
+            EQslSentStatuses = AdifEnumeration.Get(Resources.EnumNameEQslSentStatus) ?? [];
+            EQslReceivedStatuses = AdifEnumeration.Get(Resources.EnumNameEQslReceivedStatus) ?? [];
+            PropagationModes = AdifEnumeration.Get(Resources.EnumNamePropagationMode) ?? [];
+            ArrlSections = AdifEnumeration.Get(Resources.EnumNameArrlSection) ?? [];
+            Awards = AdifEnumeration.Get(Resources.EnumNameAward) ?? [];
+            Modes = AdifEnumeration.Get(Resources.EnumNameMode) ?? [];
+            SubModes = AdifEnumeration.Get(Resources.EnumNameSubMode) ?? [];
+            SponsoredAwardPrefixes = AdifEnumeration.Get(Resources.EnumNameSponsoredAwardPrefix) ?? [];
+            CountryCodes = AdifEnumeration.Get(Resources.EnumNameDxcc) ?? [];
+            Contests = AdifEnumeration.Get(Resources.EnumNameContestId) ?? [];
+            Bands = AdifEnumeration.Get(Resources.EnumNameBand) ?? [];
+            Credits = AdifEnumeration.Get(Resources.EnumNameCredit) ?? [];
+            QslSentStatuses = AdifEnumeration.Get(Resources.EnumNameQslSent) ?? [];
+            QslReceivedStatuses = AdifEnumeration.Get(Resources.EnumNameQslRcvd) ?? [];
             BooleanValues = AdifEnumeration.Get(nameof(AdifBoolean)) ?? [];
-            DarcDoks = AdifEnumeration.Get("DARCDOK") ?? [];
-            Regions = AdifEnumeration.Get("Region") ?? [];
-            PrimarySubdivisions = AdifEnumeration.Get("PrimarySubdivision") ?? [];
-            SecondarySubdivisions = AdifEnumeration.Get("SecondarySubdivision") ?? [];
-            ArrlPrecedence = AdifEnumeration.Get("ARRLPrecedence") ?? [];
-            MorseKeyTypes = AdifEnumeration.Get("MorseKeyType") ?? [];
-            Configuration = new Configuration();
+            DarcDoks = AdifEnumeration.Get(Resources.EnumNameDarcDok) ?? [];
+            Regions = AdifEnumeration.Get(Resources.EnumNameRegion) ?? [];
+            PrimarySubdivisions = AdifEnumeration.Get(Resources.EnumNamePrimarySubdivision) ?? [];
+            SecondarySubdivisions = AdifEnumeration.Get(Resources.EnumNameSecondarySubdivision) ?? [];
+            ArrlPrecedence = AdifEnumeration.Get(Resources.EnumNameArrlPrecedence) ?? [];
+            MorseKeyTypes = AdifEnumeration.Get(Resources.EnumNameMorseKeyType) ?? [];
+            Configuration = new AdifCustomConfiguration();
         }
     }
 
@@ -663,7 +661,7 @@ namespace org.goodspace.Data.Radio.Adif
         {
             var bands = new List<Band>();
 
-            var data = SQLiteHelper.Instance.ReadData(GET_BANDS_SQL);
+            var data = SQLiteHelper.Instance.ReadData(Resources.SqlGetBands);
             foreach (var d in data)
             {
                 var band = new Band(d);
@@ -680,8 +678,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="frequency">Frequency to validate.</param>
         public static bool IsAmateurFrequency(double frequency)
         {
-            var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL,
-                                                      new Dictionary<string, object?>() { { "@Frequency", frequency } });
+            var data = SQLiteHelper.Instance.ReadData(Resources.SqlValidateFrequency,
+                                                      new Dictionary<string, object?>() { { Resources.SqlParameterFrequency, frequency } });
             return data.Count > 0;
         }
 
@@ -691,8 +689,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="frequency">Frequency value.</param>
         public static Band? Get(double frequency)
         {
-            var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_SQL,
-                                                      new Dictionary<string, object?>() { { "@Frequency", frequency } });
+            var data = SQLiteHelper.Instance.ReadData(Resources.SqlValidateFrequency,
+                                                      new Dictionary<string, object?>() { { Resources.SqlParameterFrequency, frequency } });
             if (data.Count > 0 && data[0] is ExpandoObject dataObj)
                 return new Band(dataObj);
 
@@ -707,17 +705,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// <returns>True if the frequency is in the band, else false.</returns>
         public static bool IsFrequencyInBand(string band, double frequency)
         {
-            var data = SQLiteHelper.Instance.ReadData(VALIDATE_FREQUENCY_BAND_SQL,
-                                                      new Dictionary<string, object?>() { { "@Frequency", frequency },
-                                                                                          { "@Name", band } });
+            var data = SQLiteHelper.Instance.ReadData(Resources.SqlValidateFrequencyBand,
+                                                      new Dictionary<string, object?>() { { Resources.SqlParameterFrequency, frequency },
+                                                                                          { Resources.SqlParameterName, band } });
             return data.Count > 0;
         }
-
-        const string GET_UPPER_FREQENCY_SQL = "SELECT UpperFrequency FROM \"Bands\" WHERE Name = @Name";
-        const string GET_LOWER_FREQENCY_SQL = "SELECT LowerFrequency FROM \"Bands\" WHERE Name = @Name";
-        const string GET_BANDS_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\"";
-        const string VALIDATE_FREQUENCY_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\" WHERE @Frequency >= LowerFrequency AND @Frequency <= UpperFrequency";
-        const string VALIDATE_FREQUENCY_BAND_SQL = "SELECT Name, LowerFrequency, UpperFrequency FROM \"Bands\" WHERE @Frequency >= LowerFrequency AND @Frequency <= UpperFrequency AND Name = @Name";
     }
 }
 

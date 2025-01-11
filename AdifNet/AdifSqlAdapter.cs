@@ -10,22 +10,26 @@ namespace org.goodspace.Data.Radio.Adif
     public enum ReservedWordEscape
     {
         /// <summary>
-        /// Reserved words are escaped by brackets ([])
+        /// Reserved words are escaped by brackets.
+        /// <code>[]</code>
         /// </summary>
         Brackets,
 
         /// <summary>
-        /// Reserved words are escaped by double quotes (")
+        /// Reserved words are escaped by double quotes.
+        /// <code>"</code>
         /// </summary>
         DoubleQuotes,
 
         /// <summary>
-        /// Reserved words are escaped by single quotes (')
+        /// Reserved words are escaped by single quotes.
+        /// <code>'</code>
         /// </summary>
         SingleQuotes,
 
         /// <summary>
-        /// Reserved words are escaped by backticks (`)
+        /// Reserved words are escaped by backticks.
+        /// <code>`</code>
         /// </summary>
         Backticks
     }
@@ -48,7 +52,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// Determines how reserved words in SQL are escaped.
         /// </summary>
-        public ReservedWordEscape ReservedFieldsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
+        public ReservedWordEscape ReservedWordsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
 
         /// <summary>
         /// Character that denotes the start of a database parameter.
@@ -570,7 +574,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         /// <param name="qsoStartDate">QSO starting date.</param>
         /// <param name="qsoEndDate">QSO ending date.</param>
-        public IEnumerable<AdifQso> RetrieveByQSODateBetween(DateTime qsoStartDate, DateTime qsoEndDate)
+        public IEnumerable<AdifQso> RetrieveByQsoDateBetween(DateTime qsoStartDate, DateTime qsoEndDate)
         {
             if (qsoStartDate < SQL_MIN_DATE_TIME)
                 throw new ArgumentException("Invalid QSO starting date.", nameof(qsoStartDate));
@@ -579,7 +583,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentException("Invalid QSO ending date.", nameof(qsoEndDate));
 
             if (qsoStartDate > qsoEndDate)
-                throw new ArgumentException("QSO starting date cannot be greater than QSO ending date.");
+                throw new ArgumentException("QSO starting date cannot be greater than QSO ending date.", nameof(qsoStartDate));
 
             var dateMapping = ColumnMappings.GetColumnMappingFromTagName(AdifTags.QsoDate);
 
@@ -767,7 +771,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <exception cref="Exception"></exception>
         char[] GetReservedWordsEscapedBy()
         {
-            return ReservedFieldsEscapedBy switch
+            return ReservedWordsEscapedBy switch
             {
                 ReservedWordEscape.Brackets => ['[', ']'],
                 ReservedWordEscape.DoubleQuotes => ['"'],

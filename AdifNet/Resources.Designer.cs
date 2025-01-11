@@ -69,5 +69,419 @@ namespace org.goodspace.Data.Radio.Adif {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AntennaPath.
+        /// </summary>
+        internal static string EnumNameAntennaPath {
+            get {
+                return ResourceManager.GetString("EnumNameAntennaPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ARRLPrecedence.
+        /// </summary>
+        internal static string EnumNameArrlPrecedence {
+            get {
+                return ResourceManager.GetString("EnumNameArrlPrecedence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ARRLSection.
+        /// </summary>
+        internal static string EnumNameArrlSection {
+            get {
+                return ResourceManager.GetString("EnumNameArrlSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Award.
+        /// </summary>
+        internal static string EnumNameAward {
+            get {
+                return ResourceManager.GetString("EnumNameAward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Band.
+        /// </summary>
+        internal static string EnumNameBand {
+            get {
+                return ResourceManager.GetString("EnumNameBand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ContestID.
+        /// </summary>
+        internal static string EnumNameContestId {
+            get {
+                return ResourceManager.GetString("EnumNameContestId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continent.
+        /// </summary>
+        internal static string EnumNameContinent {
+            get {
+                return ResourceManager.GetString("EnumNameContinent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credit.
+        /// </summary>
+        internal static string EnumNameCredit {
+            get {
+                return ResourceManager.GetString("EnumNameCredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DARCDOK.
+        /// </summary>
+        internal static string EnumNameDarcDok {
+            get {
+                return ResourceManager.GetString("EnumNameDarcDok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DXCC.
+        /// </summary>
+        internal static string EnumNameDxcc {
+            get {
+                return ResourceManager.GetString("EnumNameDxcc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EQSLReceivedStatus.
+        /// </summary>
+        internal static string EnumNameEQslReceivedStatus {
+            get {
+                return ResourceManager.GetString("EnumNameEQslReceivedStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EQSLSentStatus.
+        /// </summary>
+        internal static string EnumNameEQslSentStatus {
+            get {
+                return ResourceManager.GetString("EnumNameEQslSentStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode.
+        /// </summary>
+        internal static string EnumNameMode {
+            get {
+                return ResourceManager.GetString("EnumNameMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MorseKeyType.
+        /// </summary>
+        internal static string EnumNameMorseKeyType {
+            get {
+                return ResourceManager.GetString("EnumNameMorseKeyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PrimarySubdivision.
+        /// </summary>
+        internal static string EnumNamePrimarySubdivision {
+            get {
+                return ResourceManager.GetString("EnumNamePrimarySubdivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PropagationMode.
+        /// </summary>
+        internal static string EnumNamePropagationMode {
+            get {
+                return ResourceManager.GetString("EnumNamePropagationMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QSLMedium.
+        /// </summary>
+        internal static string EnumNameQslMedium {
+            get {
+                return ResourceManager.GetString("EnumNameQslMedium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QSLRcvd.
+        /// </summary>
+        internal static string EnumNameQslRcvd {
+            get {
+                return ResourceManager.GetString("EnumNameQslRcvd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QSLSent.
+        /// </summary>
+        internal static string EnumNameQslSent {
+            get {
+                return ResourceManager.GetString("EnumNameQslSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QSOCompleteStatus.
+        /// </summary>
+        internal static string EnumNameQsoCompleteStatus {
+            get {
+                return ResourceManager.GetString("EnumNameQsoCompleteStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QSOUploadStatus.
+        /// </summary>
+        internal static string EnumNameQsoUploadStatus {
+            get {
+                return ResourceManager.GetString("EnumNameQsoUploadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region.
+        /// </summary>
+        internal static string EnumNameRegion {
+            get {
+                return ResourceManager.GetString("EnumNameRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SecondarySubdivision.
+        /// </summary>
+        internal static string EnumNameSecondarySubdivision {
+            get {
+                return ResourceManager.GetString("EnumNameSecondarySubdivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SponsoredAwardPrefix.
+        /// </summary>
+        internal static string EnumNameSponsoredAwardPrefix {
+            get {
+                return ResourceManager.GetString("EnumNameSponsoredAwardPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submode.
+        /// </summary>
+        internal static string EnumNameSubMode {
+            get {
+                return ResourceManager.GetString("EnumNameSubMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Via.
+        /// </summary>
+        internal static string EnumNameVia {
+            get {
+                return ResourceManager.GetString("EnumNameVia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Name, LowerFrequency, UpperFrequency FROM &quot;Bands&quot;.
+        /// </summary>
+        internal static string SqlGetBands {
+            get {
+                return ResourceManager.GetString("SqlGetBands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @CountryCode.
+        /// </summary>
+        internal static string SqlParameterCountryCode {
+            get {
+                return ResourceManager.GetString("SqlParameterCountryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @EnumType.
+        /// </summary>
+        internal static string SqlParameterEnumType {
+            get {
+                return ResourceManager.GetString("SqlParameterEnumType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Frequency.
+        /// </summary>
+        internal static string SqlParameterFrequency {
+            get {
+                return ResourceManager.GetString("SqlParameterFrequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Name.
+        /// </summary>
+        internal static string SqlParameterName {
+            get {
+                return ResourceManager.GetString("SqlParameterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Parent.
+        /// </summary>
+        internal static string SqlParameterParent {
+            get {
+                return ResourceManager.GetString("SqlParameterParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @ParentName.
+        /// </summary>
+        internal static string SqlParameterParentName {
+            get {
+                return ResourceManager.GetString("SqlParameterParentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @ParentType.
+        /// </summary>
+        internal static string SqlParameterParentType {
+            get {
+                return ResourceManager.GetString("SqlParameterParentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM &quot;Bands&quot;.
+        /// </summary>
+        internal static string SqlRetrieveBandsEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveBandsEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM &quot;PrimaryAdminSubdivisions&quot; WHERE CAST(CountryCode AS TEXT) = @Parent.
+        /// </summary>
+        internal static string SqlRetrieveChildDxccEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveChildDxccEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM &quot;Enumerations&quot; WHERE ParentType = @ParentType AND Parent = @Parent ORDER BY DisplayName, Code.
+        /// </summary>
+        internal static string SqlRetrieveChildEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveChildEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, @ParentType AS ParentType FROM &quot;SecondaryAdminSubdivisions&quot; WHERE PrimarySubdivisionCode = @Parent AND CAST(CountryCode AS TEXT) = @CountryCode.
+        /// </summary>
+        internal static string SqlRetrieveChildPrimarySubdivisionEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveChildPrimarySubdivisionEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT CreditFor AS Code, Sponsor || &apos; - &apos; || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM &quot;Credits&quot; ORDER BY CreditFor.
+        /// </summary>
+        internal static string SqlRetrieveCreditEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveCreditEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, District || &apos; - &apos; || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM &quot;DarcDok&quot; ORDER BY Code.
+        /// </summary>
+        internal static string SqlRetrieveDarcDokEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveDarcDokEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM &quot;CountryCodes&quot; ORDER BY Name, Code.
+        /// </summary>
+        internal static string SqlRetrieveDxccEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveDxccEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM &quot;Enumerations&quot; WHERE &quot;Type&quot; = @EnumType ORDER BY DisplayName, Code.
+        /// </summary>
+        internal static string SqlRetrieveEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM &quot;PrimaryAdminSubdivisions&quot; ORDER BY CountryCode, Name, Code.
+        /// </summary>
+        internal static string SqlRetrievePrimarySubdivisionEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrievePrimarySubdivisionEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.Code, s.Name AS DisplayName, s.Deleted AS ImportOnly, s.Deleted AS Legacy, s.PrimarySubdivisionCode AS Parent, @ParentType AS ParentType FROM &quot;SecondaryAdminSubdivisions&quot; s ORDER BY s.CountryCode, s.PrimarySubdivisionCode, s.Name, s.Code.
+        /// </summary>
+        internal static string SqlRetrieveSecondarySubdivisionEnum {
+            get {
+                return ResourceManager.GetString("SqlRetrieveSecondarySubdivisionEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Name, LowerFrequency, UpperFrequency FROM &quot;Bands&quot; WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency.
+        /// </summary>
+        internal static string SqlValidateFrequency {
+            get {
+                return ResourceManager.GetString("SqlValidateFrequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT Name, LowerFrequency, UpperFrequency FROM &quot;Bands&quot; WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency AND Name = @Name.
+        /// </summary>
+        internal static string SqlValidateFrequencyBand {
+            get {
+                return ResourceManager.GetString("SqlValidateFrequencyBand", resourceCulture);
+            }
+        }
     }
 }

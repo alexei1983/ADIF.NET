@@ -3,6 +3,8 @@ using org.goodspace.Data.Radio.Adif.Tags;
 using org.goodspace.Data.Radio.Adif.Helpers;
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
+using Microsoft.VisualBasic;
+using Microsoft.SqlServer.Server;
 
 namespace org.goodspace.Data.Radio.Adif
 {
@@ -117,6 +119,28 @@ namespace org.goodspace.Data.Radio.Adif
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="qsoDate"></param>
+        /// <param name="format"></param>
+        public void AddDateOn(string qsoDate, string? format = "yyyy-MM-dd")
+        {
+            var date = ParseDateTime(qsoDate, format, nameof(qsoDate));
+            AddDateOn(date);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDate"></param>
+        /// <param name="format"></param>
+        public void SetDateOn(string qsoDate, string? format = "yyyy-MM-dd")
+        {
+            var date = ParseDateTime(qsoDate, format, nameof(qsoDate));
+            SetDateOn(date);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="qsoDateTimeOn"></param>
         public void AddDateTimeOn(DateTime qsoDateTimeOn)
         {
@@ -132,6 +156,70 @@ namespace org.goodspace.Data.Radio.Adif
         {
             SetDateOn(qsoDateTimeOn);
             SetTimeOn(qsoDateTimeOn);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateTimeOn"></param>
+        /// <param name="format"></param>
+        public void SetDateTimeOn(string qsoDateTimeOn, string? format = "yyyy-MM-dd HH:mm:ss")
+        {
+            var dateTime = ParseDateTime(qsoDateTimeOn, format, nameof(qsoDateTimeOn));
+            SetDateTimeOn(dateTime);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateTimeOn"></param>
+        /// <param name="format"></param>
+        public void AddDateTimeOn(string qsoDateTimeOn, string? format = "yyyy-MM-dd HH:mm:ss")
+        {
+            var dateTime = ParseDateTime(qsoDateTimeOn, format, nameof(qsoDateTimeOn));
+            AddDateTimeOn(dateTime);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeOn"></param>
+        /// <param name="format"></param>
+        public void AddTimeOn(string timeOn, string? format = "HH:mm:ss")
+        {
+            var time = ParseDateTime(timeOn, format, nameof(timeOn));
+            AddTimeOn(time);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeOn"></param>
+        /// <param name="format"></param>
+        public void SetTimeOn(string timeOn, string? format = "HH:mm:ss")
+        {
+            var time = ParseDateTime(timeOn, format, nameof(timeOn));
+            SetTimeOn(time);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="format"></param>
+        /// <param name="argName"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        static DateTime ParseDateTime(string s, string? format, string argName)
+        {
+            if (!DateTime.TryParseExact(s,
+                                        format,
+                                        CultureInfo.CurrentCulture,
+                                        DateTimeStyles.NoCurrentDateDefault,
+                                        out var dateTime))
+                throw new ArgumentException($"Date/time value '{s}' is not in the specified format: {format}",
+                                            argName);
+            return dateTime;
         }
 
         /// <summary>
@@ -206,6 +294,72 @@ namespace org.goodspace.Data.Radio.Adif
         public void SetTimeOn(DateTime timeOn)
         {
             AddOrReplace(new TimeOnTag(timeOn));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateTimeOff"></param>
+        /// <param name="format"></param>
+        public void SetDateTimeOff(string qsoDateTimeOff, string? format = "yyyy-MM-dd HH:mm:ss")
+        {
+            var dateTime = ParseDateTime(qsoDateTimeOff, format, nameof(qsoDateTimeOff));
+            SetDateTimeOff(dateTime);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateTimeOff"></param>
+        /// <param name="format"></param>
+        public void AddDateTimeOff(string qsoDateTimeOff, string? format = "yyyy-MM-dd HH:mm:ss")
+        {
+            var dateTime = ParseDateTime(qsoDateTimeOff, format, nameof(qsoDateTimeOff));
+            AddDateTimeOff(dateTime);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateOff"></param>
+        /// <param name="format"></param>
+        public void AddDateOff(string qsoDateOff, string? format = "yyyy-MM-dd")
+        {
+            var date = ParseDateTime(qsoDateOff, format, nameof(qsoDateOff));
+            AddDateOff(date);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qsoDateOff"></param>
+        /// <param name="format"></param>
+        public void SetDateOff(string qsoDateOff, string? format = "yyyy-MM-dd")
+        {
+            var date = ParseDateTime(qsoDateOff, format, nameof(qsoDateOff));
+            SetDateOff(date);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeOff"></param>
+        /// <param name="format"></param>
+        public void AddTimeOff(string timeOff, string? format = "HH:mm:ss")
+        {
+            var time = ParseDateTime(timeOff, format, nameof(timeOff));
+            AddTimeOff(time);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="timeOff"></param>
+        /// <param name="format"></param>
+        public void SetTimeOff(string timeOff, string? format = "HH:mm:ss")
+        {
+            var time = ParseDateTime(timeOff, format, nameof(timeOff));
+            SetTimeOff(time);
         }
 
         /// <summary>

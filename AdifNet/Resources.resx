@@ -121,4 +121,142 @@
   <data name="adif" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>adif.db;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="EnumNameAntennaPath" xml:space="preserve">
+    <value>AntennaPath</value>
+  </data>
+  <data name="EnumNameArrlPrecedence" xml:space="preserve">
+    <value>ARRLPrecedence</value>
+  </data>
+  <data name="EnumNameArrlSection" xml:space="preserve">
+    <value>ARRLSection</value>
+  </data>
+  <data name="EnumNameAward" xml:space="preserve">
+    <value>Award</value>
+  </data>
+  <data name="EnumNameBand" xml:space="preserve">
+    <value>Band</value>
+  </data>
+  <data name="EnumNameContestId" xml:space="preserve">
+    <value>ContestID</value>
+  </data>
+  <data name="EnumNameContinent" xml:space="preserve">
+    <value>Continent</value>
+  </data>
+  <data name="EnumNameCredit" xml:space="preserve">
+    <value>Credit</value>
+  </data>
+  <data name="EnumNameDarcDok" xml:space="preserve">
+    <value>DARCDOK</value>
+  </data>
+  <data name="EnumNameDxcc" xml:space="preserve">
+    <value>DXCC</value>
+  </data>
+  <data name="EnumNameEQslReceivedStatus" xml:space="preserve">
+    <value>EQSLReceivedStatus</value>
+  </data>
+  <data name="EnumNameEQslSentStatus" xml:space="preserve">
+    <value>EQSLSentStatus</value>
+  </data>
+  <data name="EnumNameMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="EnumNameMorseKeyType" xml:space="preserve">
+    <value>MorseKeyType</value>
+  </data>
+  <data name="EnumNamePrimarySubdivision" xml:space="preserve">
+    <value>PrimarySubdivision</value>
+  </data>
+  <data name="EnumNamePropagationMode" xml:space="preserve">
+    <value>PropagationMode</value>
+  </data>
+  <data name="EnumNameQslMedium" xml:space="preserve">
+    <value>QSLMedium</value>
+  </data>
+  <data name="EnumNameQslRcvd" xml:space="preserve">
+    <value>QSLRcvd</value>
+  </data>
+  <data name="EnumNameQslSent" xml:space="preserve">
+    <value>QSLSent</value>
+  </data>
+  <data name="EnumNameQsoCompleteStatus" xml:space="preserve">
+    <value>QSOCompleteStatus</value>
+  </data>
+  <data name="EnumNameQsoUploadStatus" xml:space="preserve">
+    <value>QSOUploadStatus</value>
+  </data>
+  <data name="EnumNameRegion" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="EnumNameSecondarySubdivision" xml:space="preserve">
+    <value>SecondarySubdivision</value>
+  </data>
+  <data name="EnumNameSponsoredAwardPrefix" xml:space="preserve">
+    <value>SponsoredAwardPrefix</value>
+  </data>
+  <data name="EnumNameSubMode" xml:space="preserve">
+    <value>Submode</value>
+  </data>
+  <data name="EnumNameVia" xml:space="preserve">
+    <value>Via</value>
+  </data>
+  <data name="SqlGetBands" xml:space="preserve">
+    <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands"</value>
+  </data>
+  <data name="SqlParameterCountryCode" xml:space="preserve">
+    <value>@CountryCode</value>
+  </data>
+  <data name="SqlParameterEnumType" xml:space="preserve">
+    <value>@EnumType</value>
+  </data>
+  <data name="SqlParameterFrequency" xml:space="preserve">
+    <value>@Frequency</value>
+  </data>
+  <data name="SqlParameterName" xml:space="preserve">
+    <value>@Name</value>
+  </data>
+  <data name="SqlParameterParent" xml:space="preserve">
+    <value>@Parent</value>
+  </data>
+  <data name="SqlParameterParentName" xml:space="preserve">
+    <value>@ParentName</value>
+  </data>
+  <data name="SqlParameterParentType" xml:space="preserve">
+    <value>@ParentType</value>
+  </data>
+  <data name="SqlRetrieveBandsEnum" xml:space="preserve">
+    <value>SELECT Name AS Code, Name AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM "Bands"</value>
+  </data>
+  <data name="SqlRetrieveChildDxccEnum" xml:space="preserve">
+    <value>SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM "PrimaryAdminSubdivisions" WHERE CAST(CountryCode AS TEXT) = @Parent</value>
+  </data>
+  <data name="SqlRetrieveChildEnum" xml:space="preserve">
+    <value>SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM "Enumerations" WHERE ParentType = @ParentType AND Parent = @Parent ORDER BY DisplayName, Code</value>
+  </data>
+  <data name="SqlRetrieveChildPrimarySubdivisionEnum" xml:space="preserve">
+    <value>SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy, PrimarySubdivisionCode AS Parent, @ParentType AS ParentType FROM "SecondaryAdminSubdivisions" WHERE PrimarySubdivisionCode = @Parent AND CAST(CountryCode AS TEXT) = @CountryCode</value>
+  </data>
+  <data name="SqlRetrieveCreditEnum" xml:space="preserve">
+    <value>SELECT CreditFor AS Code, Sponsor || ' - ' || Award AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM "Credits" ORDER BY CreditFor</value>
+  </data>
+  <data name="SqlRetrieveDarcDokEnum" xml:space="preserve">
+    <value>SELECT Code, District || ' - ' || Dok AS DisplayName, 0 AS Legacy, 0 AS ImportOnly FROM "DarcDok" ORDER BY Code</value>
+  </data>
+  <data name="SqlRetrieveDxccEnum" xml:space="preserve">
+    <value>SELECT Code, Name AS DisplayName, Deleted AS ImportOnly, Deleted AS Legacy FROM "CountryCodes" ORDER BY Name, Code</value>
+  </data>
+  <data name="SqlRetrieveEnum" xml:space="preserve">
+    <value>SELECT Code, DisplayName, ImportOnly, Legacy, Parent, ParentType FROM "Enumerations" WHERE "Type" = @EnumType ORDER BY DisplayName, Code</value>
+  </data>
+  <data name="SqlRetrievePrimarySubdivisionEnum" xml:space="preserve">
+    <value>SELECT Code, Name AS DisplayName, Deprecated AS ImportOnly, Deprecated AS Legacy, CAST(CountryCode AS TEXT) AS Parent, @ParentType AS ParentType FROM "PrimaryAdminSubdivisions" ORDER BY CountryCode, Name, Code</value>
+  </data>
+  <data name="SqlRetrieveSecondarySubdivisionEnum" xml:space="preserve">
+    <value>SELECT s.Code, s.Name AS DisplayName, s.Deleted AS ImportOnly, s.Deleted AS Legacy, s.PrimarySubdivisionCode AS Parent, @ParentType AS ParentType FROM "SecondaryAdminSubdivisions" s ORDER BY s.CountryCode, s.PrimarySubdivisionCode, s.Name, s.Code</value>
+  </data>
+  <data name="SqlValidateFrequency" xml:space="preserve">
+    <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands" WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency</value>
+  </data>
+  <data name="SqlValidateFrequencyBand" xml:space="preserve">
+    <value>SELECT Name, LowerFrequency, UpperFrequency FROM "Bands" WHERE @Frequency &gt;= LowerFrequency AND @Frequency &lt;= UpperFrequency AND Name = @Name</value>
+  </data>
 </root>
