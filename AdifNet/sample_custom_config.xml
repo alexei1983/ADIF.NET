@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AdifNetConfig AdifVersion="3.1.5">
+  <UserDefTags>
+    <UserDefTag ID="1" DataType="S">CURRENT_MOOD</UserDefTag>
+  </UserDefTags>
+  <Defaults>
+    <Tag Name="SUBMODE">USB</Tag>
+    <Tag Name="MODE">SSB</Tag>
+  </Defaults>
+  <AddTags>
+    <Tag Name="MY_GRIDSQUARE">DM79</Tag>
+    <Tag Name="MY_NAME">Alex</Tag>
+    <Tag Name="MY_DXCC">291</Tag>
+    <Tag Name="MY_STATE">CO</Tag>
+    <Tag Name="CURRENT_MOOD">Good!</Tag>
+  </AddTags>
+  <ReplaceTags>
+    <Tag Name="SIG_INFO">SOTA</Tag>
+  </ReplaceTags>
+  <RemoveTags>
+    <Tag Name="NOTES" />
+  </RemoveTags>
+  <SerialNumberGenerators>
+    <SerialNumberGenerator Start="1" Current="46" StringLength="8">SOTA Activation #1</SerialNumberGenerator>
+  </SerialNumberGenerators>
+  <Options>
+    <AddProgramHeaderTags>Y</AddProgramHeaderTags>
+    <AddCreatedTimestampTag>Y</AddCreatedTimestampTag>
+    <MirrorOperatorAndStationCallSign>Y</MirrorOperatorAndStationCallSign>
+  </Options>
+</AdifNetConfig>
