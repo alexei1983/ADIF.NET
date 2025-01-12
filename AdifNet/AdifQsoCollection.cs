@@ -1,17 +1,14 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using org.goodspace.Data.Radio.Adif.Tags;
 
 namespace org.goodspace.Data.Radio.Adif
 {
-
     /// <summary>
     /// Represents a collection of QSOs.
     /// </summary>
     public class AdifQsoCollection : List<AdifQso>, IList<AdifQso>, ICollection<AdifQso>,
                                      ICollection, IEnumerable, IEnumerable<AdifQso>
     {
-
         /// <summary>
         /// Creates a new instance of the <see cref="AdifQsoCollection"/> class.
         /// </summary>

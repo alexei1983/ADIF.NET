@@ -1,5 +1,4 @@
-﻿using System;
-using org.goodspace.Data.Radio.Adif.Exceptions;
+﻿using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {

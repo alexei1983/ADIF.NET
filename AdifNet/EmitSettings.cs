@@ -1,15 +1,12 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif
 {
-
     /// <summary>
     /// Special instructions for generating ADIF or ADX.
     /// </summary>
     [Flags]
     public enum EmitFlags
     {
-
         /// <summary>
         /// No special option(s) set.
         /// </summary>

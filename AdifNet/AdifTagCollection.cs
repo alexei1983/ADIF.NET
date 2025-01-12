@@ -1,16 +1,13 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using org.goodspace.Data.Radio.Adif.Tags;
 
 namespace org.goodspace.Data.Radio.Adif
 {
-
     /// <summary>
     /// Represents a collection of objects that implement the <see cref="ITag"/> interface.
     /// </summary>
     public class AdifTagCollection : ICollection<ITag>, IEnumerable, IEnumerable<ITag>, IList<ITag>
     {
-
         /// <summary>
         /// 
         /// </summary>
