@@ -1317,7 +1317,7 @@ namespace org.goodspace.Data.Radio.Adif
                 Remove(AdifTags.QslRcvdVia);
 
             if (receivedOn != DateTime.MinValue)
-                AddOrReplace(new QslRvcdDateTag(receivedOn));
+                AddOrReplace(new QslRcvdDateTag(receivedOn));
             else
                 Remove(AdifTags.QslRcvdDate);
         }

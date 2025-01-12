@@ -167,6 +167,26 @@ namespace org.goodspace.Data.Radio.Adif
         public const string DarcDok = "DARC_DOK";
 
         /// <summary>
+        /// DCL_QSLRDATE tag.
+        /// </summary>
+        public const string DclQslRcvdDate = "DCL_QSLRDATE";
+
+        /// <summary>
+        /// DCL_QSLSDATE tag.
+        /// </summary>
+        public const string DclQslSentDate = "DCL_QSLSDATE";
+
+        /// <summary>
+        /// DCL_QSL_RCVD tag.
+        /// </summary>
+        public const string DclQslRcvd = "DCL_QSL_RCVD";
+
+        /// <summary>
+        /// DCL_QSL_SENT tag.
+        /// </summary>
+        public const string DclQslSent = "DCL_QSL_SENT";
+
+        /// <summary>
         /// MY_DARC_DOK tag.
         /// </summary>
         public const string MyDarcDok = "MY_DARC_DOK";

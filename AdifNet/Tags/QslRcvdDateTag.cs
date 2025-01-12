@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the QSL received date.
     /// </summary>
-    public class QslRvcdDateTag : DateTag, ITag
+    public class QslRcvdDateTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>
@@ -17,13 +14,13 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Creates a new QSLRDATE tag.
         /// </summary>
-        public QslRvcdDateTag() { }
+        public QslRcvdDateTag() { }
 
         /// <summary>
         /// Creates a new QSLRDATE tag.
         /// </summary>
         /// <param name="value">Initial tag value.</param>
-        public QslRvcdDateTag(DateTime value) : base(value) { }
+        public QslRcvdDateTag(DateTime value) : base(value) { }
 
     }
 }

@@ -7,6 +7,16 @@
     <RootNamespace>org.goodspace.Data.Radio.Adif</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<VersionPrefix>1.8.3</VersionPrefix>
+	<VersionSuffix></VersionSuffix>
+	<Authors>Alex Jennings (K0UOG)</Authors>
+    <Title>AdifNet: A complete ADIF and ADX parser and generator for .NET</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>adifnetlogo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/alexei1983/ADIF.NET.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>adif;adx;adifnet;adif.net;AmateurRadio;HamRadio</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +34,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -36,6 +57,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="adifnetlogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -31,15 +31,5 @@ namespace org.goodspace.Data.Radio.Adif
         /// Set the value of STATION_CALLSIGN to the value of OPERATOR or vice versa.
         /// </summary>
         MirrorOperatorAndStationCallSign = 16,
-
-        /// <summary>
-        /// Automatically add the MY_GRID_SQUARE QSO tag using the ADIF.NET user-defined configuration.
-        /// </summary>
-        AddMyGridSquare = 32,
-
-        /// <summary>
-        /// Automatically add the MY_NAME QSO tag using the ADIF.NET user-defined configuration.
-        /// </summary>
-        AddMyName = 64,
     }
 }
