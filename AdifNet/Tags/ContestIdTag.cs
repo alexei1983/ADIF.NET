@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the QSO contest identifier.
     /// </summary>
     public class ContestIdTag : EnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

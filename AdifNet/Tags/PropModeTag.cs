@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the propagation mode for the QSO.
     /// </summary>
     public class PropModeTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

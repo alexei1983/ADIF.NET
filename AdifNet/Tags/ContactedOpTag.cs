@@ -1,7 +1,6 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the callsign of the individual operating the contacted station.
     /// </summary>

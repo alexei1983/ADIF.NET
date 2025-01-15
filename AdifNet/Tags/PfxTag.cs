@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's WPX prefix.
     /// </summary>
     public class PfxTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

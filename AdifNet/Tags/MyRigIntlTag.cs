@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the description of the logging station's equipment.
     /// </summary>
     public class MyRigIntlTag : IntlStringTag, ITag
-    {
-
+    { 
         /// <summary>
         /// Tag name.
         /// </summary>

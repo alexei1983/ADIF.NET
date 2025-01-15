@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's FISTS CW Club member information.
     /// </summary>
     public class FistsTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

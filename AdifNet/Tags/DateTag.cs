@@ -1,16 +1,14 @@
-﻿using System;
+﻿
 using System.Globalization;
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF tag that stores a date value.
     /// </summary>
     public class DateTag : Tag<DateTime>, ITag
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -19,7 +17,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifDate();
+        public override IAdifType AdifType => new AdifDate();
 
         /// <summary>
         /// Creates a new instance of the <see cref="DateTag"/> class.
@@ -38,10 +36,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override object? ConvertValue(object? value)
         {
-
             if (value is not null)
             {
-
                 if (value is DateTime dateTime)
                     return dateTime;
                 else if (DateTime.TryParseExact(value.ToString(),

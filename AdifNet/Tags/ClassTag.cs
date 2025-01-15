@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contest class (e.g. for ARRL Field Day).
     /// </summary>
     public class ClassTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

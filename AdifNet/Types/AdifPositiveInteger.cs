@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the PositiveInteger ADIF type.
     /// </summary>
     public class AdifPositiveInteger : AdifType<int?>
     {
-
         /// <summary>
         /// Minimum numeric value.
         /// </summary>
@@ -33,7 +30,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static int? Parse(string? s)
+        public override int? Parse(string? s)
         {
             try
             {
@@ -59,7 +56,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out int? result)
+        public override bool TryParse(string? s, out int? result)
         {
             result = null;
 
@@ -82,7 +79,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             return string.IsNullOrEmpty(value) || (int.TryParse(value, out int intVal) && intVal > 0);
         }
@@ -91,7 +88,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
             if (value is null)
                 return true;

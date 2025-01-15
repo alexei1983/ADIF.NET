@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's Secondary Administrative Subdivision.
     /// </summary>
     public class MyCntyTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

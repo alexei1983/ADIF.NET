@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's antenna elevation in degrees.
     /// </summary>
     public class AntElTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

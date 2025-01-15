@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the Time ADIF type.
     /// </summary>
     public class AdifTime : AdifType<DateTime>
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -23,7 +21,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static DateTime Parse(string? s)
+        public override DateTime Parse(string? s)
         {
             if (!FromString(s, out DateTime result))
                 throw new ArgumentException($"Invalid string value: '{s ?? string.Empty}'");
@@ -36,7 +34,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out DateTime result)
+        public override bool TryParse(string? s, out DateTime result)
         {
             return FromString(s, out result);
         }
@@ -45,7 +43,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
             if (value is DateTime || value is DateTime?)
                 return true;
@@ -57,7 +55,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             return FromString(value == null ? string.Empty : value.ToString(), out DateTime _);
         }

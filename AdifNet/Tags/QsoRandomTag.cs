@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Indicates whether the QSO was random or scheduled.
     /// </summary>
     public class QsoRandomTag : BooleanTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

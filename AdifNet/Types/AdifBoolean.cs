@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the Boolean ADIF type.
     /// </summary>
     public class AdifBoolean : AdifType<bool?>
     {
-
         /// <summary>
         /// Whether or not the type is an enumeration.
         /// </summary>
@@ -27,7 +25,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool? Parse(string? s)
+        public override bool? Parse(string? s)
         {
             if (!FromString(s, out bool? result))
                 throw new ArgumentException($"Invalid ADIF Boolean value: '{s ?? string.Empty}'");
@@ -40,7 +38,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out bool? result)
+        public override bool TryParse(string? s, out bool? result)
         {
             return FromString(s, out result);
         }
@@ -49,7 +47,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
             if (value is bool || value is bool?)
                 return true;
@@ -61,7 +59,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             return FromString(value ?? string.Empty, out bool? _);
         }

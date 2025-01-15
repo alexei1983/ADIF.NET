@@ -62,5 +62,63 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// Maximum numeric value for the type.
         /// </summary>
         public virtual double MaxValue { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public virtual bool IsValidValue(object? o)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public virtual bool IsValidValue(string? s)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public abstract T Parse(string? s);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public abstract bool TryParse(string? s, out T? value);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        object IAdifType.Parse(string? s)
+        {
+            return Parse(s) ?? new object();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool IAdifType.TryParse(string? s, out object? value)
+        {
+            var result = TryParse(s, out T? _value);
+            value = _value;
+            return result;
+        }
     }
 }

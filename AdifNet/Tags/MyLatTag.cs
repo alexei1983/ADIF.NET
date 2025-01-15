@@ -2,7 +2,6 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's latitude.
     /// </summary>

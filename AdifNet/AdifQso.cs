@@ -1973,7 +1973,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(newCreditsGranted))
                 return;
 
-            if (!AdifCreditList.TryParse(newCreditsGranted, out CreditList? result))
+            if (!new AdifCreditList().TryParse(newCreditsGranted, out CreditList? result))
                 throw new CreditListException($"Invalid credit string: '{newCreditsGranted}'", newCreditsGranted);
 
             if (result != null)
@@ -2012,7 +2012,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrWhiteSpace(awards))
                 return;
 
-            var awardsArr = AdifSponsoredAwardList.Parse(awards);
+            var awardsArr = new AdifSponsoredAwardList().Parse(awards);
 
             MergeAwardGranted(awardsArr);
         }

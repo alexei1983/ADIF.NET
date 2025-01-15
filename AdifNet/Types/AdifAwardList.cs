@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the AwardList ADIF type.
     /// </summary>
-    public class AdifAwardList : AdifType<string>, IAdifType
+    public class AdifAwardList : AdifType<string[]>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -27,7 +25,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static string[] Parse(string? s)
+        public override string[] Parse(string? s)
         {
             return ParseAwardList(s, true);
         }
@@ -37,7 +35,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out string[] result)
+        public override bool TryParse(string? s, out string[] result)
         {
             try
             {
@@ -55,7 +53,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public static bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             if (o is null)
                 return true;
@@ -67,7 +65,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             if (string.IsNullOrEmpty(s))
                 return true;

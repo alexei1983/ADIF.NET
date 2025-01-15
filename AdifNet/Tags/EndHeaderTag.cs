@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Tag that marks the end of the header in an ADIF data set.
     /// </summary>
     public class EndHeaderTag : ValuelessTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

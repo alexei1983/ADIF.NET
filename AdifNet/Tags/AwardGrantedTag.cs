@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the list of awards granted by a sponsor.
     /// </summary>
     public class AwardGrantedTag : SponsoredAwardListTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

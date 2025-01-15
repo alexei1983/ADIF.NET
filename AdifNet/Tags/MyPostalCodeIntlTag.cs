@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's postal code.
     /// </summary>
     public class MyPostalCodeIntlTag : IntlStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

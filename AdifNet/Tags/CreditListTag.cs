@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class CreditListTag : StringTag, ITag
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -17,7 +15,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// 
         /// </summary>
-        public override IAdifType ADIFType => new AdifCreditList();
+        public override IAdifType AdifType => new AdifCreditList();
 
         /// <summary>
         /// 
@@ -56,7 +54,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override bool ValidateValue(object? value)
         {
-            return AdifCreditList.IsValidValue(value);
+            return new AdifCreditList().IsValidValue(value);
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             creditList ??= [];
 
-            if (AdifCreditList.TryParse(value, out CreditList? list))
+            if (new AdifCreditList().TryParse(value, out CreditList? list))
             {
                 foreach (var item in list ?? [])
                 {

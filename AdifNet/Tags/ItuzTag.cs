@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's ITU zone.
     /// </summary>
     public class ItuzTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

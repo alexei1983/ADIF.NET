@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents information associated with the contacted station's activity or interest group.
     /// </summary>
     public class SigInfoIntlTag : IntlStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

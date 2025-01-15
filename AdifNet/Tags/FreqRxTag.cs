@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's receiving frequency in Megahertz in a split frequency QSO.
     /// </summary>
     public class FreqRxTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

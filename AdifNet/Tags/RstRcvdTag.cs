@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the signal report from the contacted station.
     /// </summary>
     public class RstRcvdTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

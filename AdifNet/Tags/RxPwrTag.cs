@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's transmitter power in watts.
     /// </summary>
     public class RxPwrTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class MySigInfoTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

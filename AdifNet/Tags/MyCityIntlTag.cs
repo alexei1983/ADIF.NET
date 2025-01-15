@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's city.
     /// </summary>
     public class MyCityIntlTag : IntlStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the signal path.
     /// </summary>
     public class AntPathTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

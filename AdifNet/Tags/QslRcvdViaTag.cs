@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the means by which the QSL was received by the logging station.
     /// </summary>
     public class QslRcvdViaTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

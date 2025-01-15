@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's longitude.
     /// </summary>
     public class LonTag : LocationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

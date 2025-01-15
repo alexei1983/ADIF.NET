@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the Integer ADIF type.
     /// </summary>
     public class AdifInteger : AdifType<int?>
     {
-
         /// <summary>
         /// Minimum numeric value.
         /// </summary>
@@ -32,7 +30,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static int? Parse(string? s)
+        public override int? Parse(string? s)
         {
             try
             {
@@ -52,7 +50,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out int? result)
+        public override bool TryParse(string? s, out int? result)
         {
             result = null;
 
@@ -72,7 +70,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             if (string.IsNullOrEmpty(value) || int.TryParse(value, out int _))
                 return true;
@@ -84,15 +82,18 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
-            if (value is int || value is int?)
+            if (value is null)
+                return true;
+
+            if (value is int)
                 return true;
 
             if (value is double dblVal)
                 return dblVal.IsWholeNumber();
 
-            return IsValidValue(value == null ? string.Empty : value.ToString());
+            return IsValidValue(value.ToString());
         }
     }
 }

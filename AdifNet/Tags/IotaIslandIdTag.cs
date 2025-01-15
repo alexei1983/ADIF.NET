@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's IOTA Island Identifier.
     /// </summary>
     public class IotaIslandIdTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

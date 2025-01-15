@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the QSL card message.
     /// </summary>
     public class QslMsgIntlTag : IntlMultilineStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

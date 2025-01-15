@@ -1,14 +1,12 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the distance between the logging station and the contacted 
     /// station in kilometers via the specified signal path.
     /// </summary>
     public class DistanceTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

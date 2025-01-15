@@ -3,28 +3,26 @@ using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF.NET tag where the underlying value is numeric as represented by 
     /// a value of type nullable <see cref="double"/>.
     /// </summary>
     public class NumberTag : Tag<double?>, ITag
     {
-
         /// <summary>
         /// Minimum numeric value.
         /// </summary>
-        public virtual double MinValue => ADIFType.MinValue;
+        public virtual double MinValue => AdifType.MinValue;
 
         /// <summary>
         /// Maximum numeric value.
         /// </summary>
-        public virtual double MaxValue => ADIFType.MaxValue;
+        public virtual double MaxValue => AdifType.MaxValue;
 
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifNumber();
+        public override IAdifType AdifType => new AdifNumber();
 
         /// <summary>
         /// Whether or not values greater than the maximum are allowed during import.
@@ -54,7 +52,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 try
                 {
-                    return AdifNumber.Parse(value == null ? string.Empty : value.ToString());
+                    return AdifType.Parse(value == null ? string.Empty : value.ToString());
                 }
                 catch (Exception ex)
                 {

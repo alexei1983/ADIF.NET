@@ -87,6 +87,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const char COLON = ':';
 
         /// <summary>
+        /// Semi-colon character.
+        /// </summary>
+        public const char SEMICOLON = ';';
+
+        /// <summary>
         /// Opening curly brace character.
         /// </summary>
         public const char CURLY_BRACE_OPEN = '{';
@@ -132,11 +137,6 @@ namespace org.goodspace.Data.Radio.Adif
         public const string ADIF_BOOLEAN_FALSE_DISPLAY = "No";
 
         /// <summary>
-        /// 
-        /// </summary>
-        public const string ADIF_NET_CONFIG_FILE_NAME = "adifnet.properties";
-
-        /// <summary>
         /// Regex used to match the ADIF SOTARef data type.
         /// </summary>
         public const string SOTA_REF_REGEX = @"[a-zA-Z0-9]{1,8}\/[a-zA-Z]{2}\-([0-9][0-9][1-9]|[0-9][1-9][0-9]|[1-9][0-9][0-9])";
@@ -147,11 +147,6 @@ namespace org.goodspace.Data.Radio.Adif
         public const string CALLSIGN_REGEX = @"^((\d|[A-Z])+\/)?((\d|[A-Z]){3,})(\/(\d|[A-Z])+)?(\/(\d|[A-Z])+)?$";
 
         /// <summary>
-        /// ADIF version.
-        /// </summary>
-        public static readonly Version ADIFVersion = new(3, 1, 0);
-
-        /// <summary>
         /// The current version of ADIF.NET
         /// </summary>
         public static readonly Version ProgramVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new(1, 0);
@@ -160,6 +155,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// QSO upload status enumeration.
         /// </summary>
         public static readonly AdifEnumeration QsoUploadStatuses;
+
+        /// <summary>
+        /// QSO download status enumeration.
+        /// </summary>
+        public static readonly AdifEnumeration QsoDownloadStatuses;
 
         /// <summary>
         /// QSO completion status enumeration.
@@ -282,6 +282,11 @@ namespace org.goodspace.Data.Radio.Adif
         public static readonly AdifEnumeration SecondarySubdivisions;
 
         /// <summary>
+        /// Alternate secondary administrative subdivisions.
+        /// </summary>
+        public static readonly AdifEnumeration SecondarySubdivisionAlts;
+
+        /// <summary>
         /// 
         /// </summary>
         public static readonly AdifEnumeration Regions;
@@ -329,6 +334,8 @@ namespace org.goodspace.Data.Radio.Adif
             SecondarySubdivisions = AdifEnumeration.Get(Resources.EnumNameSecondarySubdivision) ?? [];
             ArrlPrecedence = AdifEnumeration.Get(Resources.EnumNameArrlPrecedence) ?? [];
             MorseKeyTypes = AdifEnumeration.Get(Resources.EnumNameMorseKeyType) ?? [];
+            QsoDownloadStatuses = AdifEnumeration.Get(Resources.EnumNameQsoDownloadStatus) ?? [];
+            SecondarySubdivisionAlts = AdifEnumeration.Get(Resources.EnumNameSecondarySubdivisionAlt) ?? [];
             Configuration = new AdifCustomConfiguration();
         }
     }
@@ -597,15 +604,46 @@ namespace org.goodspace.Data.Radio.Adif
         public const string SecondarySubdivisionList = "SecondarySubdivisionList";
 
         /// <summary>
+        /// A semicolon (;) delimited, unordered list of one or more members of a Secondary_Administrative_Subdivision_Alt enumeration in the form:
+        /// enumeration-name:enumeration-code
+        /// </summary>
+        public const string SecondaryAdministrativeSubdivisionListAlt = "SecondaryAdministrativeSubdivisionListAlt";
+
+        /// <summary>
         /// ADIF SOTARef type: a sequence of <see cref="Character"/>s representing an International SOTA Reference.
         /// </summary>
-        public const string SOTARef = "SOTARef";
+        public const string SotaRef = "SOTARef";
 
         /// <summary>
         /// ADIF IOTARefNo type: an IOTA designator, in format CC-XXX, where CC is a member of the ADIF Continent enumeration
         /// and XXX is the island group designator, where 1 &lt;= XXX &lt;= 999 with leading zeros.
         /// </summary>
-        public const string IOTARefNo = "IOTARefNo";
+        public const string IotaRefNo = "IOTARefNo";
+
+        /// <summary>
+        /// A sequence of case-insensitive Characters representing a Parks on the Air reference in the form xxxx-nnnnn[@yyyyyy] 
+        /// comprising 6 to 17 characters.
+        /// <para>xxxx is the POTA national program and is 1 to 4 characters in length, typically the default callsign prefix of 
+        /// the national program(rather than the DX entity)</para>
+        /// <para>nnnnn represents the unique number within the national program and is either 4 or 5 characters in length</para>
+        /// <para>yyyyyy is an optional value containing the 4 to 6 character ISO 3166-2 code to differentiate which state/province/prefecture/primary 
+        /// administration location the contact represents, in the case that the park reference spans more than one location (such as a trail).</para>
+        /// </summary>
+        public const string PotaRef = "POTARef";
+
+        /// <summary>
+        /// A comma-delimited list of one or more POTARef items.
+        /// </summary>
+        public const string PotaRefList = "POTARefList";
+
+        /// <summary>
+        /// A sequence of case-insensitive Characters representing an International World Wildlife Flora &amp; Fauna reference in the 
+        /// form xxFF-nnnn comprising 8 to 11 characters.
+        /// <para>xx is the WWFF national program and is 1 to 4 characters in length</para>
+        /// <para>FF- is two F characters followed by a dash character.</para>
+        /// <para>nnnn represents the unique number within the national program and is 4 characters in length with leading zeros</para>
+        /// </summary>
+        public const string WwFfRef = "WWFFRef";
 
         /// <summary>
         /// ADIF Integer type: a sequence of one or more <see cref="Digit"/>s representing a decimal integer, optionally preceded 

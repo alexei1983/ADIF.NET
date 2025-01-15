@@ -1,14 +1,12 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents two or four adjacent Maidenhead grid locators for the logging station's grid squares 
     /// that the contacted station may claim for the ARRL VUCC award program.
     /// </summary>
     public class MyVuccGridsTag : MultiValueStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -1,20 +1,18 @@
-﻿using System;
+﻿
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF.NET tag where the underlying value is of type <see cref="string"/>.
     /// </summary>
     public class MultilineStringTag : Tag<string>, ITag
     {
-
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifMultilineString();
+        public override IAdifType AdifType => new AdifMultilineString();
 
         /// <summary>
         /// Converts the specified object to an ADIF String.
@@ -24,7 +22,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             try
             {
-                var result = AdifMultilineString.Parse(value == null ? string.Empty : value.ToString());
+                var result = AdifType.Parse(value == null ? string.Empty : value.ToString());
                 return result;
             }
             catch (Exception ex)

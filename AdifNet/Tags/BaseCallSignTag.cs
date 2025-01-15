@@ -4,13 +4,11 @@ using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public partial class BaseCallSignTag : StringTag, ITag, IFormattable, ICloneable
     {
-
         /// <summary>
         /// Creates a new instance of the <see cref="BaseCallSignTag"/> class.
         /// </summary>

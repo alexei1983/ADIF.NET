@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Exceptions
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class SponsoredAwardListException : ValueException
     {
-
         /// <summary>
         /// 
         /// </summary>

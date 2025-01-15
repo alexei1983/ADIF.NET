@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the comment field for the QSO.
     /// </summary>
     public class CommentTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

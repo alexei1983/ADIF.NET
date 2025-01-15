@@ -3,13 +3,11 @@ using Unclassified.Util;
 
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the GridSquare ADIF type.
     /// </summary>
     public class AdifGridSquare : AdifType<string>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -24,10 +22,10 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static string? Parse(string? s)
+        public override string Parse(string? s)
         {
             if (string.IsNullOrEmpty(s))
-                return s;
+                return string.Empty;
 
             var len = s.Length;
 
@@ -51,7 +49,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out string? result)
+        public override bool TryParse(string? s, out string? result)
         {
             try
             {
@@ -69,7 +67,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public static bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             return IsValidValue(o is null ? string.Empty : o.ToString());
         }
@@ -78,7 +76,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             try
             {

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's CQ Zone.
     /// </summary>
     public class MyCQZoneTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

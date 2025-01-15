@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Exceptions
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class ValueConversionException : Exception
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -70,6 +67,5 @@ namespace org.goodspace.Data.Radio.Adif.Exceptions
             Value = value;
             TagName = tagName;
         }
-
     }
 }

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the number of meteor scatter bursts heard by the logging station.
     /// </summary>
     public class NrBurstsTag : IntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -4,7 +4,6 @@ using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents a user-defined QSO field and its value.
     /// </summary>
@@ -28,7 +27,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => AppUserDefHelper.GetADIFType(field.DataType) ?? AdifType<object>.Default;
+        public override IAdifType AdifType => AppUserDefHelper.GetAdifType(field.DataType) ?? AdifType<object>.Default;
 
         /// <summary>
         /// 
@@ -118,10 +117,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override bool ValidateValue(object? value)
         {
-
             if (base.ValidateValue(value))
             {
-
                 object? convObj;
                 try
                 {

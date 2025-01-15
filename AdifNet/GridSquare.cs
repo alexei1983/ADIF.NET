@@ -10,12 +10,11 @@ using System.Text.RegularExpressions;
 
 namespace Unclassified.Util
 {
-
     /// <summary>
     /// Class providing static methods for calculating with Maidenhead locators, especially
     /// distance and bearing.
     /// </summary>
-    public class MaidenheadLocator
+    public partial class MaidenheadLocator
     {
         /// <summary>
         /// 
@@ -118,7 +117,7 @@ namespace Unclassified.Util
         public static LatLng LocatorToLatLng(string locator)
         {
             locator = locator.Trim().ToUpper();
-            if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}$"))
+            if (GridSquare4Regex().IsMatch(locator))
             {
                 LatLng ll = new()
                 {
@@ -127,7 +126,7 @@ namespace Unclassified.Util
                 };
                 return ll;
             }
-            else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}$"))
+            else if (GridSquare6Regex().IsMatch(locator))
             {
                 LatLng ll = new()
                 {
@@ -136,7 +135,7 @@ namespace Unclassified.Util
                 };
                 return ll;
             }
-            else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}$"))
+            else if (GridSquare8Regex().IsMatch(locator))
             {
                 LatLng ll = new()
                 {
@@ -145,7 +144,7 @@ namespace Unclassified.Util
                 };
                 return ll;
             }
-            else if (Regex.IsMatch(locator, "^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}[A-X]{2}$"))
+            else if (GridSquare10Regex().IsMatch(locator))
             {
                 LatLng ll = new()
                 {
@@ -156,7 +155,7 @@ namespace Unclassified.Util
             }
             else
             {
-                throw new FormatException("Invalid locator format.");
+                throw new FormatException($"Invalid locator format: {locator}");
             }
         }
 
@@ -377,6 +376,18 @@ namespace Unclassified.Util
 
             return RadToDeg(az);
         }
+
+        [GeneratedRegex("^[A-R]{2}[0-9]{2}$")]
+        private static partial Regex GridSquare4Regex();
+
+        [GeneratedRegex("^[A-R]{2}[0-9]{2}[A-X]{2}$")]
+        private static partial Regex GridSquare6Regex();
+
+        [GeneratedRegex("^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}$")]
+        private static partial Regex GridSquare8Regex();
+
+        [GeneratedRegex("^[A-R]{2}[0-9]{2}[A-X]{2}[0-9]{2}[A-X]{2}$")]
+        private static partial Regex GridSquare10Regex();
     }
 
     /// <summary>

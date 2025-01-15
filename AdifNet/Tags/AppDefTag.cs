@@ -4,17 +4,15 @@ using org.goodspace.Data.Radio.Adif.Helpers;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an application-defined ADIF field and value.
     /// </summary>
     public class AppDefTag : Tag<object>, ITag, ICloneable, IFormattable
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>
-        public override string Name => $"{AdifTags.AppDef}{ProgramId ?? Values.DEFAULT_PROGRAM_ID}_{FieldName ?? string.Empty}";
+        public override string Name => $"{AdifTags.AppDef}{ProgramId}{Values.UNDERSCORE}{FieldName ?? string.Empty}";
 
         /// <summary>
         /// Value of the tag as a <see cref="string"/>.
@@ -112,6 +110,23 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                const int hashingMultiplier = 16777619;
+
+                var hash = base.GetHashCode();
+                hash = (hash * hashingMultiplier) ^ (ProgramId is not null ? ProgramId.ToUpperInvariant().GetHashCode() : 0);
+                hash = (hash * hashingMultiplier) ^ (FieldName is not null ? FieldName.ToUpperInvariant().GetHashCode() : 0);
+                return hash;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="value">Value to set.</param>
         public new void SetValue(object? value)
         {
@@ -149,7 +164,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                     if (!string.IsNullOrEmpty(FieldName))
                     {
                         retVal = $"{Values.TAG_OPENING}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}";
-                        retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpperInvariant()}" : string.Empty)}{Values.TAG_CLOSING}";
+                        retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpper()}" : string.Empty)}{Values.TAG_CLOSING}";
                         retVal = $"{retVal}{TextValue} ";
                     }
                     return retVal;
@@ -158,7 +173,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                     return FieldName ?? string.Empty;
 
                 case "P":
-                    return ProgramId ?? Values.DEFAULT_PROGRAM_ID;
+                    return ProgramId ?? string.Empty;
 
                 default:
                     return base.ToString(format, provider);

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Indicates whether or not the QSO pertains to a shortwave listener (SWL) report.
     /// </summary>
     public class SwlTag : BooleanTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

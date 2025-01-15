@@ -3,13 +3,11 @@ using org.goodspace.Data.Radio.Adif.Helpers;
 
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Location type (e.g. latitude or longitude).
     /// </summary>
     public enum LocationType
     {
-
         /// <summary>
         /// Unspecified location type.
         /// </summary>
@@ -29,9 +27,8 @@ namespace org.goodspace.Data.Radio.Adif.Types
     /// <summary>
     /// Represents the Location ADIF type.
     /// </summary>
-    public class AdifLocation : AdifType<string>, IAdifType
+    public class AdifLocation : AdifType<Location>, IAdifType
     {
-
         /// <summary>
         /// The ADIF data type indicator.
         /// </summary>
@@ -46,7 +43,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static Location Parse(string? s)
+        public override Location Parse(string? s)
         {
             if (string.IsNullOrEmpty(s))
                 throw new ArgumentException("Invalid ADIF location.", nameof(s));
@@ -85,7 +82,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out Location? result)
+        public override bool TryParse(string? s, out Location? result)
         {
             try
             {
@@ -103,7 +100,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// Determines whether or not the specified string is a valid ADIF Location value.
         /// </summary>
         /// <param name="value">String to check for validity.</param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             return string.IsNullOrEmpty(value) || TryParse(value, out Location? _);
         }
@@ -112,7 +109,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// Determines whether or not the specified object is a valid ADIF Location value.
         /// </summary>
         /// <param name="value">Value to check for validity.</param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
             if (value is Location)
                 return true;
@@ -179,7 +176,6 @@ namespace org.goodspace.Data.Radio.Adif.Types
     /// </summary>
     public class Location : IFormattable
     {
-
         /// <summary>
         /// The type of the location (e.g. whether latitude or longitude).
         /// </summary>
@@ -217,7 +213,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// <param name="location">ADIF string location.</param>
         public Location(string location)
         {
-            if (!AdifLocation.TryParse(location, out Location? result))
+            if (!new AdifLocation().TryParse(location, out Location? result))
                 throw new ArgumentException("Invalid location value.", nameof(location));
 
             if (result == null)

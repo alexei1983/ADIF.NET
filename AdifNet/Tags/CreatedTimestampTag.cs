@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date and time that the ADIF dataset was created.
     /// </summary>
     public class CreatedTimestampTag : Tag<DateTime>, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -4,13 +4,11 @@ using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the CreditList ADIF type.
     /// </summary>
-    public class AdifCreditList : AdifType<string>, IAdifType
+    public class AdifCreditList : AdifType<CreditList>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -30,7 +28,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static CreditList Parse(string? s)
+        public override CreditList Parse(string? s)
         {
             var creditList = ParseCreditList(s);
             return creditList ?? throw new ArgumentException($"Invalid credit list string: {s}", nameof(s));
@@ -41,7 +39,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out CreditList? result)
+        public override bool TryParse(string? s, out CreditList? result)
         {
             try
             {
@@ -59,7 +57,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public static bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             if (o is null)
                 return true;
@@ -74,7 +72,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             if (string.IsNullOrEmpty(s))
                 return true;
@@ -88,6 +86,29 @@ namespace org.goodspace.Data.Radio.Adif.Types
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        object IAdifType.Parse(string? s) 
+        {
+            return Parse(s);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool IAdifType.TryParse(string? s, out object? value)
+        {
+            var result = TryParse(s, out CreditList? _value);
+            value = _value;
+            return result;
         }
 
         /// <summary>
@@ -198,7 +219,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         {
             if (!string.IsNullOrEmpty(adifCreditListString))
             {
-                if (AdifCreditList.TryParse(adifCreditListString, out CreditList? creditList))
+                if (new AdifCreditList().TryParse(adifCreditListString, out CreditList? creditList))
                 {
                     foreach (var member in creditList ?? [])
                         internalList.Add(member);
@@ -371,18 +392,23 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// <summary>
         /// Represents a single credit and QSL medium combination.
         /// </summary>
-        public readonly struct CreditListMember : IEquatable<CreditListMember>
+        /// <remarks>
+        /// Creates a new <see cref="CreditListMember"/> instance.
+        /// </remarks>
+        /// <param name="credit">Credit enumeration member.</param>
+        /// <param name="medium">QSL medium enumeration member.</param>
+        public readonly struct CreditListMember(string credit, string? medium) : IEquatable<CreditListMember>
         {
 
             /// <summary>
             /// Credit enumeration member.
             /// </summary>
-            public string Credit { get; }
+            public string Credit { get; } = credit;
 
             /// <summary>
             /// QSL medium enumeration member.
             /// </summary>
-            public string? Medium { get; }
+            public string? Medium { get; } = medium;
 
             /// <summary>
             /// Creates a new <see cref="CreditListMember"/> instance.
@@ -390,17 +416,6 @@ namespace org.goodspace.Data.Radio.Adif.Types
             /// <param name="credit">Credit enumeration member.</param>
             public CreditListMember(string credit) : this(credit, null)
             {
-            }
-
-            /// <summary>
-            /// Creates a new <see cref="CreditListMember"/> instance.
-            /// </summary>
-            /// <param name="credit">Credit enumeration member.</param>
-            /// <param name="medium">QSL medium enumeration member.</param>
-            public CreditListMember(string credit, string? medium)
-            {
-                Medium = medium;
-                Credit = credit;
             }
 
             /// <summary>

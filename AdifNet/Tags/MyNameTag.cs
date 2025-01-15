@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging operator's name.
     /// </summary>
     public class MyNameTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's latitude.
     /// </summary>
     public class LatTag : LocationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

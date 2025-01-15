@@ -181,6 +181,9 @@
   <data name="EnumNameQsoCompleteStatus" xml:space="preserve">
     <value>QSOCompleteStatus</value>
   </data>
+  <data name="EnumNameQsoDownloadStatus" xml:space="preserve">
+    <value>QSODownloadStatus</value>
+  </data>
   <data name="EnumNameQsoUploadStatus" xml:space="preserve">
     <value>QSOUploadStatus</value>
   </data>
@@ -189,6 +192,9 @@
   </data>
   <data name="EnumNameSecondarySubdivision" xml:space="preserve">
     <value>SecondarySubdivision</value>
+  </data>
+  <data name="EnumNameSecondarySubdivisionAlt" xml:space="preserve">
+    <value>SecondarySubdivisionAlt</value>
   </data>
   <data name="EnumNameSponsoredAwardPrefix" xml:space="preserve">
     <value>SponsoredAwardPrefix</value>

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF tag of type SponsoredAwardList.
     /// </summary>
     public class SponsoredAwardListTag : MultiValueStringTag, ITag
     {
-
         /// <summary>
         /// String that delimits values in a multivalued ADIF tag.
         /// </summary>
@@ -20,7 +17,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifSponsoredAwardList();
+        public override IAdifType AdifType => new AdifSponsoredAwardList();
 
         /// <summary>
         /// Valid sponsored award prefixes.
@@ -54,7 +51,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 try
                 {
-                    AdifSponsoredAwardList.Parse(value.ToString());
+                    AdifType.Parse(value.ToString());
                     return true;
                 }
                 catch
@@ -80,7 +77,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
             try
             {
-                return AdifSponsoredAwardList.Parse(strVal);
+                return AdifType.Parse(strVal);
             }
             catch (Exception ex)
             {
@@ -97,42 +94,10 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             if (string.IsNullOrEmpty(award))
                 throw new ArgumentException("Award is required.", nameof(award));
 
-            if (!AdifSponsoredAwardList.TryParse(award, out _))
+            if (!AdifType.TryParse(award, out _))
                 throw new SponsoredAwardListException($"Award '{award}' does not have a valid sponsored prefix.", award);
 
             base.AddValue(award);
-        }
-
-        /// <summary>
-        /// Validates the specified sponsored awards.
-        /// </summary>
-        /// <param name="awards">Array of awards to validate.</param>
-        void ValidateAwards(params string[] awards)
-        {
-            if (awards == null || awards.Length == 0)
-                return;
-
-            var prefixes = Prefixes;
-            var exceptions = new List<Exception>();
-
-            foreach (var award in awards)
-            {
-                var checkedCount = 0;
-
-                foreach (var prefix in prefixes)
-                {
-                    if (!award.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-                        checkedCount++;
-                }
-
-                if (checkedCount == Prefixes.Length)
-                    exceptions.Add(new SponsoredAwardListException($"Award '{award}' does not have a valid sponsored prefix."));
-            }
-
-            if (exceptions.Count > 1)
-                throw new AggregateException(exceptions.ToArray());
-            else if (exceptions.Count == 1)
-                throw exceptions[0];
         }
     }
 }

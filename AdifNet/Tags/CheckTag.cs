@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// The contest check (e.g. for ARRL Sweepstakes).
     /// </summary>
     public class CheckTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

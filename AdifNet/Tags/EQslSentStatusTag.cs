@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
-{
-
+{ 
     /// <summary>
     /// Represents the eQSL.cc QSL sent status.
     /// </summary>
     public class EQslSentStatusTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

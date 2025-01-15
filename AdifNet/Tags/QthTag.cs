@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's city.
     /// </summary>
     public class QthTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

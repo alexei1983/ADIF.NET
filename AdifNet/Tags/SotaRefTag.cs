@@ -3,13 +3,11 @@ using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class SotaRefTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>
@@ -18,7 +16,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifSotaRef();
+        public override IAdifType AdifType => new AdifSotaRef();
 
         /// <summary>
         /// Creates a new SOTA_REF tag.
@@ -37,7 +35,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override bool ValidateValue(object? value)
         {
-            return AdifSotaRef.TryParse(value is null ? string.Empty : value.ToString(), out _);
+            return AdifType.TryParse(value is null ? string.Empty : value.ToString(), out _);
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
+﻿
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date the QSO was last uploaded to the Club Log online service.
     /// </summary>
     public class ClubLogQsoUploadDateTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

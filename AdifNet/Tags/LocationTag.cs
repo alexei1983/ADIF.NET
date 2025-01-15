@@ -1,19 +1,17 @@
-﻿using System;
+﻿
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class LocationTag : StringTag, ITag
     {
-
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifLocation();
+        public override IAdifType AdifType => new AdifLocation();
 
         /// <summary>
         /// Value of the tag as a <see cref="string"/>.
@@ -93,7 +91,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 var valStr = value is string strLoc ? strLoc : value != null ? value.ToString() : string.Empty;
 
                 if (!string.IsNullOrEmpty(valStr))
-                    return AdifLocation.Parse(valStr);
+                    return AdifType.Parse(valStr);
             }
 
             return null;
@@ -109,7 +107,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             if (value is Location)
                 return true;
 
-            return AdifLocation.TryParse(value is null ? string.Empty : value.ToString(), out _);
+            return AdifType.TryParse(value is null ? string.Empty : value.ToString(), out _);
         }
 
         /// <summary>

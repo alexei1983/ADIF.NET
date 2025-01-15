@@ -3,13 +3,11 @@ using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// 
     /// </summary>
     public class MultiValueStringTag : StringTag, ITag
     {
-
         /// <summary>
         /// 
         /// </summary>
@@ -199,15 +197,15 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 if (value.Contains(ValueSeparator))
                 {
-                    var splitVals = value.Split(new string[] { ValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                    if (splitVals != null)
+                    var splitValues = value.Split(new string[] { ValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    if (splitValues != null)
                     {
-                        if (splitVals.Length > MaxValueCount && MaxValueCount > 0 && throwExceptionOnInvalidCount)
-                            throw new MultiValueStringException($"{GetValueCountExceptionText(splitVals.Length, true)}", value);
-                        else if (splitVals.Length < MinValueCount && MinValueCount > 0 && throwExceptionOnInvalidCount)
-                            throw new MultiValueStringException($"{GetValueCountExceptionText(splitVals.Length, false)}", value);
+                        if (splitValues.Length > MaxValueCount && MaxValueCount > 0 && throwExceptionOnInvalidCount)
+                            throw new MultiValueStringException($"{GetValueCountExceptionText(splitValues.Length, true)}", value);
+                        else if (splitValues.Length < MinValueCount && MinValueCount > 0 && throwExceptionOnInvalidCount)
+                            throw new MultiValueStringException($"{GetValueCountExceptionText(splitValues.Length, false)}", value);
 
-                        return splitVals;
+                        return splitValues;
                     }
                 }
                 else

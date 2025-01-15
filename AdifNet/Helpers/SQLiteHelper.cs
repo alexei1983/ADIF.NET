@@ -221,18 +221,6 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="str"></param>
-        public string EscapeString(string str)
-        {
-            if (str == null)
-                return string.Empty;
-
-            return str.Replace("'", "''");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="query"></param>
         public ArrayList ReadData(string query)
         {

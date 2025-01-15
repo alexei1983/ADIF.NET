@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's DXCC entity name.
     /// </summary>
     public class MyCountryTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

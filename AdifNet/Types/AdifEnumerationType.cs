@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the Enumeration ADIF type.
     /// </summary>
     public class AdifEnumerationType : AdifType<string>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -27,10 +25,10 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// Validates the string representation of an ADIF Enumeration value. 
         /// </summary>
         /// <param name="s">String representation of an ADIF Enumeration value.</param>
-        public static string Parse(string? s)
+        public override string Parse(string? s)
         {
-            if (!AdifString.TryParse(s, out string? result))
-                throw new ArgumentException($"Invalid ADIF Enumeration value: {s}", nameof(s));
+            if (!new AdifString().TryParse(s, out string? result))
+                throw new ArgumentException($"Invalid ADIF enumeration value: {s}", nameof(s));
 
             return result ?? string.Empty;
         }
@@ -40,7 +38,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s">String representation of an ADIF Enumeration value.</param>
         /// <param name="options">Valid enumeration options.</param>
-        public static string Parse(string? s, AdifEnumeration options)
+        public string Parse(string? s, AdifEnumeration options)
         {
             var result = Parse(s);
 
@@ -65,9 +63,9 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s">String representation of an ADIF Enumeration value.</param>
         /// <param name="result">Result of the conversion or validation operation.</param>
-        public static bool TryParse(string? s, out string? result)
+        public override bool TryParse(string? s, out string? result)
         {
-            return AdifString.TryParse(s, out result);
+            return new AdifString().TryParse(s, out result);
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// <param name="s">String representation of an ADIF Enumeration value.</param>
         /// <param name="options">Valid enumeration options.</param>
         /// <param name="result">Result of the conversion or validation operation.</param>
-        public static bool TryParse(string? s, AdifEnumeration options, out string? result)
+        public bool TryParse(string? s, AdifEnumeration options, out string? result)
         {
             if (string.IsNullOrEmpty(s))
             {
@@ -109,7 +107,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public static bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             return IsValidValue(o == null ? string.Empty : o.ToString());
         }
@@ -118,7 +116,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             return TryParse(s, out _);
         }
@@ -128,7 +126,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="o"></param>
         /// <param name="options"></param>
-        public static bool IsValidValue(object? o, AdifEnumeration options)
+        public bool IsValidValue(object? o, AdifEnumeration options)
         {
             return IsValidValue(o == null ? string.Empty : o.ToString(), options);
         }
@@ -138,7 +136,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="options"></param>
-        public static bool IsValidValue(string? s, AdifEnumeration options)
+        public bool IsValidValue(string? s, AdifEnumeration options)
         {
             return TryParse(s, options, out _);
         }

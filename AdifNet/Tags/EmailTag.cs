@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's email address.
     /// </summary>
     public class EmailTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

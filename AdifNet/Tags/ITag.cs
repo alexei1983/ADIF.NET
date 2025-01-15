@@ -57,7 +57,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        IAdifType ADIFType { get; }
+        IAdifType AdifType { get; }
 
         /// <summary>
         /// 

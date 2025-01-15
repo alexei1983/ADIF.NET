@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the new EME "initial".
     /// </summary>
     public class ForceInitTag : BooleanTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

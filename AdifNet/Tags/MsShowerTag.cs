@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
-{
-
+{ 
     /// <summary>
     /// Represents the name of the meteor shower in a meteor scatter QSO.
     /// </summary>
     public class MsShowerTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

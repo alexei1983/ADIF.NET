@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date the QSL was sent to eQSL.cc.
     /// </summary>
     public class EQslSentDateTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

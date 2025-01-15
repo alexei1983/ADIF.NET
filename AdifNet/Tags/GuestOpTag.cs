@@ -2,14 +2,12 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging operator's callsign.
     /// </summary>
     [DeprecatedTag(AdifTags.Operator)]
     public class GuestOpTag : BaseCallSignTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

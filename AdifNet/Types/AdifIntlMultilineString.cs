@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the IntlMultilineString ADIF type.
     /// </summary>
     public class AdifIntlMultilineString : AdifType<string>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -22,7 +20,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static string Parse(string? s)
+        public override string Parse(string? s)
         {
             return s ?? string.Empty;
         }
@@ -32,7 +30,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out string result)
+        public override bool TryParse(string? s, out string result)
         {
             result = s ?? string.Empty;
             return true;
@@ -42,7 +40,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             return IsValidValue(o == null ? string.Empty : o.ToString());
         }
@@ -51,7 +49,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             return true;
         }

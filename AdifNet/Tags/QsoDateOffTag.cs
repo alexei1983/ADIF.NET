@@ -1,14 +1,12 @@
-﻿using System;
+﻿
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date on which the QSO ended.
     /// </summary>
     public class QsoDateOffTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

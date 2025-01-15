@@ -1,17 +1,15 @@
-﻿using System;
+﻿
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF.NET tag where the underlying value is numeric as represented by 
     /// a value of type nullable <see cref="int"/> greater than zero.
     /// </summary>
     public class PositiveIntegerTag : Tag<int?>, ITag
     {
-
         /// <summary>
         /// Minimum numeric value.
         /// </summary>
@@ -25,7 +23,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifPositiveInteger();
+        public override IAdifType AdifType => new AdifPositiveInteger();
 
         /// <summary>
         /// Creates a new instance of the <see cref="PositiveIntegerTag"/> class.
@@ -64,7 +62,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 try
                 {
-                    return AdifPositiveInteger.Parse(value == null ? string.Empty : value.ToString());
+                    return AdifType.Parse(value == null ? string.Empty : value.ToString());
                 }
                 catch (Exception ex)
                 {

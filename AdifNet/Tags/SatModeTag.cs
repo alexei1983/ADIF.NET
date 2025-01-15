@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the satellite mode.
     /// </summary>
     public class SatModeTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

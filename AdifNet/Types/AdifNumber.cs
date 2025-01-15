@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the Number ADIF type.
     /// </summary>
     public class AdifNumber : AdifType<double?>
     {
-
         /// <summary>
         /// Minimum numeric value.
         /// </summary>
@@ -32,7 +30,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static double? Parse(string? s)
+        public override double? Parse(string? s)
         {
             try
             {
@@ -52,7 +50,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out double? result)
+        public override bool TryParse(string? s, out double? result)
         {
             result = null;
 
@@ -72,7 +70,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(string? value)
+        public override bool IsValidValue(string? value)
         {
             if (string.IsNullOrEmpty(value) || double.TryParse(value, out double _))
                 return true;
@@ -84,7 +82,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="value"></param>
-        public static bool IsValidValue(object? value)
+        public override bool IsValidValue(object? value)
         {
             if (value is double || value is double?)
                 return true;

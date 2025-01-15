@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date the QSO was last uploaded to the QRZ.COM online service.
     /// </summary>
     public class QrzQsoUploadDateTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

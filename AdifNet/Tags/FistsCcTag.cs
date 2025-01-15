@@ -2,13 +2,11 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's FISTS CW Club Century Certificate (CC) number.
     /// </summary>
     public class FistsCcTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

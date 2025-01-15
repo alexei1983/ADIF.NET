@@ -1,7 +1,6 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Identifies the name of the logger, converter, or utility that created or processed the ADIF data set.
     /// </summary>

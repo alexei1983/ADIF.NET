@@ -42,7 +42,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public virtual IAdifType ADIFType { get; }
+        public virtual IAdifType AdifType { get; }
 
         /// <summary>
         /// ADIF data type indicator.
@@ -51,7 +51,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             get
             {
-                return ADIFType != null ? ADIFType.Type ?? string.Empty : string.Empty;
+                return AdifType != null ? AdifType.Type ?? string.Empty : string.Empty;
             }
         }
 
@@ -132,7 +132,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         public Tag()
         {
             Name = string.Empty;
-            ADIFType = AdifType<T>.Default;
+            AdifType = AdifType<T>.Default;
             ValueSeparator = string.Empty;
         }
 

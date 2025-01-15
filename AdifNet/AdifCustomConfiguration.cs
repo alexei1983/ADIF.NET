@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using org.goodspace.Data.Radio.Adif.Exceptions;
 using org.goodspace.Data.Radio.Adif.Tags;
 

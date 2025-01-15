@@ -29,7 +29,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifBoolean();
+        public override IAdifType AdifType => new AdifBoolean();
 
         /// <summary>
         /// Creates a new instance of the <see cref="BooleanTag"/> class.
@@ -56,7 +56,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 try
                 {
-                    return AdifBoolean.Parse(value is null ? string.Empty : value.ToString());
+                    return AdifType.Parse(value is null ? string.Empty : value.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +72,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         public override bool ValidateValue(object? value)
         {
             return value is null || (value is string strVal && string.IsNullOrEmpty(strVal)) ||
-                   value is bool || value is bool? || AdifBoolean.TryParse(value.ToString(), out _);
+                   value is bool || value is bool? || AdifType.TryParse(value.ToString(), out _);
         }
     }
 }

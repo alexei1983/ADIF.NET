@@ -1,7 +1,6 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's antenna azimuth in degrees.
     /// </summary>
@@ -38,7 +37,6 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="azimuth">Initial tag value.</param>
         public AntAzTag(double azimuth)
         {
-
             if (azimuth > MaxValue)
             {
                 importValue = azimuth;

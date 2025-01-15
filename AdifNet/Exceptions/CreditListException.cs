@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Exceptions
 {
     /// <summary>
@@ -7,7 +6,6 @@ namespace org.goodspace.Data.Radio.Adif.Exceptions
     /// </summary>
     public class CreditListException : ValueException
     {
-
         /// <summary>
         /// 
         /// </summary>

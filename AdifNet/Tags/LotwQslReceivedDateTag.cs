@@ -1,14 +1,12 @@
-﻿using System;
+﻿
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the date the QSL was received from ARRL Logbook of the World.
     /// </summary>
     public class LotwQslReceivedDateTag : DateTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

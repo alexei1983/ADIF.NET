@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Whether or not the contacted station's operator is now a silent key.
     /// </summary>
     public class SilentKeyTag : BooleanTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

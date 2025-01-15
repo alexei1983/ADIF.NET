@@ -28,43 +28,43 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                     if (value is bool boolVal)
                         return boolVal;
                     else
-                        return AdifBoolean.Parse(value?.ToString());
+                        return new AdifBoolean().Parse(value?.ToString());
 
                 case DataTypes.Number:
                     if (value is double doubleVal)
                         return doubleVal;
                     else
-                        return AdifNumber.Parse(value.ToString());
+                        return new AdifNumber().Parse(value.ToString());
 
                 case DataTypes.Location:
                     if (value is Location locationVal)
                         return locationVal;
                     else
-                        return AdifLocation.Parse(value.ToString());
+                        return new AdifLocation().Parse(value.ToString());
 
                 case DataTypes.String:
                     if (value is string strVal)
-                        return AdifString.Parse(strVal);
+                        return new AdifString().Parse(strVal);
                     else
-                        return AdifString.Parse(value.ToString());
+                        return new AdifString().Parse(value.ToString());
 
                 case DataTypes.MultilineString:
                     if (value is string multilineStrVal)
-                        return AdifMultilineString.Parse(multilineStrVal);
+                        return new AdifMultilineString().Parse(multilineStrVal);
                     else
-                        return AdifMultilineString.Parse(value.ToString());
+                        return new AdifMultilineString().Parse(value.ToString());
 
                 case DataTypes.IntlMultilineString:
                     if (value is string intlMultilineStrVal)
-                        return AdifIntlMultilineString.Parse(intlMultilineStrVal);
+                        return new AdifIntlMultilineString().Parse(intlMultilineStrVal);
                     else
-                        return AdifIntlMultilineString.Parse(value.ToString());
+                        return new AdifIntlMultilineString().Parse(value.ToString());
 
                 case DataTypes.IntlString:
                     if (value is string intlStrVal)
-                        return AdifIntlString.Parse(intlStrVal);
+                        return new AdifIntlString().Parse(intlStrVal);
                     else
-                        return AdifIntlString.Parse(value.ToString());
+                        return new AdifIntlString().Parse(value.ToString());
 
                 case DataTypes.Enumeration:
                     if (value is AdifEnumerationValue enumVal)
@@ -76,33 +76,29 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
 
                 case DataTypes.SponsoredAwardList:
                     if (value is string sponsoredAwardListStr)
-                        return AdifSponsoredAwardList.Parse(sponsoredAwardListStr);
+                        return new AdifSponsoredAwardList().Parse(sponsoredAwardListStr);
                     else if (value.GetType().IsAssignableFrom(typeof(IEnumerable<string>)))
-                        return new List<string>((IEnumerable<string>)value).ToArray();
+                        return new List<string>((IEnumerable<string>)value);
                     else
-                        return AdifSponsoredAwardList.Parse(value.ToString());
+                        return new AdifSponsoredAwardList().Parse(value.ToString());
 
                 case DataTypes.Date:
                     if (value is DateTime dateVal)
                         return dateVal;
-                    else if (value is DateTime?)
-                        return (DateTime?)value;
                     else
-                        return AdifDate.Parse(value.ToString());
+                        return new AdifDate().Parse(value.ToString());
 
                 case DataTypes.Time:
                     if (value is DateTime timeVal)
                         return timeVal;
-                    else if (value is DateTime?)
-                        return (DateTime?)value;
                     else
-                        return AdifTime.Parse(value.ToString());
+                        return new AdifTime().Parse(value.ToString());
 
                 case DataTypes.CreditList:
                     if (value is CreditList creditListVal)
                         return creditListVal;
                     else
-                        return AdifCreditList.Parse(value.ToString());
+                        return new AdifCreditList().Parse(value.ToString());
 
                 default:
                     return value.ToString();
@@ -175,7 +171,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// 
         /// </summary>
         /// <param name="typeIndicator"></param>
-        public static IAdifType? GetADIFType(string typeIndicator)
+        public static IAdifType? GetAdifType(string typeIndicator)
         {
             if (string.IsNullOrEmpty(typeIndicator))
                 return null;
@@ -202,7 +198,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// 
         /// </summary>
         /// <param name="typeName"></param>
-        public static IAdifType? GetADIFTypeByName(string typeName)
+        public static IAdifType? GetAdifTypeByName(string typeName)
         {
             if (string.IsNullOrEmpty(typeName))
                 return null;
@@ -222,8 +218,9 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                 DataTypeNames.String => new AdifString(),
                 DataTypeNames.Time => new AdifTime(),
                 DataTypeNames.GridSquare => new AdifGridSquare(),
-                DataTypeNames.SOTARef => new AdifSotaRef(),
+                DataTypeNames.SotaRef => new AdifSotaRef(),
                 DataTypeNames.AwardList => new AdifAwardList(),
+                DataTypeNames.SecondaryAdministrativeSubdivisionListAlt => new AdifSecondarySubdivisionListAlt(),
                 _ => null,
             };
         }
@@ -252,7 +249,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             }
 
             if (exceptions.Count > 0 && throwExceptions)
-                throw new AggregateException(exceptions.ToArray());
+                throw new AggregateException([.. exceptions]);
 
             return exceptions.Count < 1;
         }
@@ -298,7 +295,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (exceptions.Count > 0)
             {
                 if (throwExceptions)
-                    throw new AggregateException(exceptions.ToArray());
+                    throw new AggregateException([..exceptions]);
 
                 return false;
             }

@@ -251,6 +251,15 @@ namespace org.goodspace.Data.Radio.Adif {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to QSODownloadStatus.
+        /// </summary>
+        internal static string EnumNameQsoDownloadStatus {
+            get {
+                return ResourceManager.GetString("EnumNameQsoDownloadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to QSOUploadStatus.
         /// </summary>
         internal static string EnumNameQsoUploadStatus {
@@ -274,6 +283,15 @@ namespace org.goodspace.Data.Radio.Adif {
         internal static string EnumNameSecondarySubdivision {
             get {
                 return ResourceManager.GetString("EnumNameSecondarySubdivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SecondarySubdivisionAlt.
+        /// </summary>
+        internal static string EnumNameSecondarySubdivisionAlt {
+            get {
+                return ResourceManager.GetString("EnumNameSecondarySubdivisionAlt", resourceCulture);
             }
         }
         

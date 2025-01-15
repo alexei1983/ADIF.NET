@@ -107,6 +107,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string Cnty = "CNTY";
 
         /// <summary>
+        /// CNTY_ALT tag.
+        /// </summary>
+        public const string CntyAlt = "CNTY_ALT";
+
+        /// <summary>
         /// COMMENT tag.
         /// </summary>
         public const string Comment = "COMMENT";
@@ -397,6 +402,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string MyCnty = "MY_CNTY";
 
         /// <summary>
+        /// MY_CNTY_ALT tag.
+        /// </summary>
+        public const string MyCntyAlt = "MY_CNTY_ALT";
+
+        /// <summary>
         /// MY_COUNTRY tag.
         /// </summary>
         public const string MyCountry = "MY_COUNTRY";
@@ -607,6 +617,16 @@ namespace org.goodspace.Data.Radio.Adif
         public const string QrzQsoUploadDate = "QRZCOM_QSO_UPLOAD_DATE";
 
         /// <summary>
+        /// QRZCOM_QSO_DOWNLOAD_DATE tag.
+        /// </summary>
+        public const string QrzQsoDownloadDate = "QRZCOM_QSO_DOWNLOAD_DATE";
+
+        /// <summary>
+        /// QRZCOM_QSO_DOWNLOAD_STATUS tag.
+        /// </summary>
+        public const string QrzQsoDownloadStatus = "QRZCOM_QSO_DOWNLOAD_STATUS";
+
+        /// <summary>
         /// QRZCOM_QSO_UPLOAD_STATUS tag.
         /// </summary>
         public const string QrzQsoUploadStatus = "QRZCOM_QSO_UPLOAD_STATUS";
@@ -660,6 +680,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// QSLMSG tag.
         /// </summary>
         public const string QslMsg = "QSLMSG";
+
+        /// <summary>
+        /// QSLMSG_RCVD tag.
+        /// </summary>
+        public const string QslMsgRcvd = "QSLMSG_RCVD";
 
         /// <summary>
         /// QSLMSG_INTL tag.

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
-    /// Represents the logging stastion's receiving band in a split frequency QSO.
+    /// Represents the logging station's receiving band in a split frequency QSO.
     /// </summary>
     public class BandRxTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

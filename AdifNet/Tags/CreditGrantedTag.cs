@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the list of credits granted for this QSO.
     /// </summary>
     public class CreditGrantedTag : CreditListTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -6,7 +6,6 @@ namespace org.goodspace.Data.Radio.Adif.Exceptions
     /// </summary>
     public class UserDefTagException : Exception
     {
-
         /// <summary>
         /// Name of the user-defined field that caused the exception.
         /// </summary>

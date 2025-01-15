@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using org.goodspace.Data.Radio.Adif.Tags;
 using org.goodspace.Data.Radio.Adif.Exceptions;
+using System.Xml;
 
 namespace org.goodspace.Data.Radio.Adif
 {
@@ -34,19 +35,60 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("File path is required.", nameof(path));
 
-            doc = XDocument.Parse(File.ReadAllText(path));
+            if (!Path.IsPathRooted(path))
+                path = Path.GetFullPath(path);
+
+            var fileInfo = new FileInfo(path);
+            if (!fileInfo.Exists)
+                throw new FileNotFoundException($"ADX file '{path}' does not exist.", path);
+
+            doc = XDocument.Load(fileInfo.OpenRead());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="text"></param>
-        public void Load(string text)
+        /// <param name="str"></param>
+        public void Load(string str)
         {
-            if (string.IsNullOrWhiteSpace(text))
-                throw new ArgumentException("Text is required.", nameof(text));
+            if (string.IsNullOrWhiteSpace(str))
+                throw new ArgumentException("ADX string is required.", nameof(str));
 
-            doc = XDocument.Parse(text);
+            doc = XDocument.Load(new StringReader(str));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        public void LoadString(string str)
+        {
+            Load(str);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        public void LoadXml(XmlDocument xmlDoc)
+        {
+            if (xmlDoc == null || string.IsNullOrWhiteSpace(xmlDoc.OuterXml))
+                throw new ArgumentException("Invalid XML document: no ADX data found.", nameof(xmlDoc));
+
+            Load(xmlDoc.OuterXml);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xDoc"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public void LoadXml(XDocument xDoc)
+        {
+            if (xDoc == null || xDoc.Root == null || !xDoc.Root.Descendants().Any())
+                throw new ArgumentException("Invalid XML document: no ADX data found.", nameof(xDoc));
+
+            doc = xDoc;
         }
 
         /// <summary>
@@ -69,19 +111,17 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         public AdifDataSet Parse()
         {
-            var dataSet = new AdifDataSet
-            {
-                Header = [],
-                Qsos = []
-            };
-
-            //var doc = XDocument.Parse(data);
-
             if (doc == null || doc.Root == null)
                 throw new AdxParseException("No XML document root found.");
 
             if (doc.Root.Name.LocalName != ADXValues.ADX_ROOT_ELEMENT)
                 throw new AdxParseException("Invalid ADX document.");
+
+            var dataSet = new AdifDataSet
+            {
+                Header = [],
+                Qsos = []
+            };
 
             elementCount = doc.Descendants().Count();
 

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Types {
 
   /// <summary>
@@ -21,7 +20,7 @@ namespace org.goodspace.Data.Radio.Adif.Types {
     /// 
     /// </summary>
     /// <param name="s"></param>
-    public static string Parse(string? s)
+    public override string Parse(string? s)
     {
       s ??= string.Empty;
 
@@ -39,7 +38,7 @@ namespace org.goodspace.Data.Radio.Adif.Types {
     /// </summary>
     /// <param name="s"></param>
     /// <param name="result"></param>
-    public static bool TryParse(string? s, out string? result)
+    public override bool TryParse(string? s, out string? result)
     {
       try
       {
@@ -57,7 +56,7 @@ namespace org.goodspace.Data.Radio.Adif.Types {
     /// 
     /// </summary>
     /// <param name="o"></param>
-    public bool IsValidValue(object? o)
+    public override bool IsValidValue(object? o)
     {
       return IsValidValue(o == null ? string.Empty : o.ToString());
     }
@@ -66,7 +65,7 @@ namespace org.goodspace.Data.Radio.Adif.Types {
     /// 
     /// </summary>
     /// <param name="s"></param>
-    public bool IsValidValue(string? s)
+    public override bool IsValidValue(string? s)
     {
       s ??= string.Empty;
       return s.IsAscii() && 

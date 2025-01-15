@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the solar flux at the time of the QSO.
     /// </summary>
     public class SfiTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

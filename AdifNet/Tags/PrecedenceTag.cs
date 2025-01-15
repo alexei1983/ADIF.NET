@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contest precedence (e.g. for ARRL sweepstakes).
     /// </summary>
     public class PrecedenceTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the MultilineString ADIF type.
     /// </summary>
     public class AdifMultilineString : AdifType<string>, IAdifType
     {
-
         /// <summary>
         /// ADIF data type indicator.
         /// </summary>
@@ -22,7 +20,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static string Parse(string? s)
+        public override string Parse(string? s)
         {
             s ??= string.Empty;
 
@@ -37,7 +35,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out string? result)
+        public override bool TryParse(string? s, out string? result)
         {
             result = null;
             try
@@ -55,7 +53,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             return IsValidValue(o == null ? string.Empty : o.ToString());
         }
@@ -64,10 +62,33 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             s ??= string.Empty;
             return s.IsAscii();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        object IAdifType.Parse(string? s)
+        {
+            return Parse(s);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool IAdifType.TryParse(string? s, out object? value)
+        {
+            var result = TryParse(s, out string? _value);
+            value = _value;
+            return result;
         }
     }
 }

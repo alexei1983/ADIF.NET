@@ -1,7 +1,6 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents a public encryption key.
     /// </summary>

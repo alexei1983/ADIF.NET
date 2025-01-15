@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the QSO frequency in Megahertz.
     /// </summary>
     public class FreqTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

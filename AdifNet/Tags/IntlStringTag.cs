@@ -1,21 +1,18 @@
-﻿using System;
-using org.goodspace.Data.Radio.Adif.Exceptions;
+﻿using org.goodspace.Data.Radio.Adif.Exceptions;
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF.NET tag where the underlying value is of type <see cref="string"/> 
     /// with the potential presence of non-ASCII characters.
     /// </summary>
     public class IntlStringTag : Tag<string>, ITag
     {
-
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifIntlString();
+        public override IAdifType AdifType => new AdifIntlString();
 
         /// <summary>
         /// Creates a new instance of the <see cref="IntlStringTag"/> class.
@@ -37,7 +34,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             try
             {
                 var strVal = value is string strValue ? strValue : value != null ? value.ToString() : string.Empty;
-                return AdifIntlString.Parse(strVal);
+                return AdifType.Parse(strVal);
             }
             catch (Exception ex)
             {

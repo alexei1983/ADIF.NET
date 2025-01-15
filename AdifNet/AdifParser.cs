@@ -34,16 +34,32 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("File path is required.", nameof(path));
 
+            if (!Path.IsPathRooted(path))
+                path = Path.GetFullPath(path);
+
+            var fileInfo = new FileInfo(path);
+            if (!fileInfo.Exists)
+                throw new FileNotFoundException($"ADIF file '{path}' does not exist.", path);
+
             data = File.ReadAllText(path);
         }
 
         /// <summary>
-        /// Prepares the specified text for parsing.
+        /// Prepares the specified string for parsing.
         /// </summary>
-        /// <param name="text">Text containing the ADIF data that will be parsed.</param>
-        public void Load(string text)
+        /// <param name="str">String containing the ADIF data that will be parsed.</param>
+        public void Load(string str)
         {
-            data = text ?? string.Empty;
+            data = str ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Prepares the specified string for parsing.
+        /// </summary>
+        /// <param name="str">String containing the ADIF data that will be parsed.</param>
+        public void LoadString(string str)
+        {
+            Load(str);
         }
 
         /// <summary>
@@ -66,7 +82,8 @@ namespace org.goodspace.Data.Radio.Adif
 
             using (stream)
             {
-                stream.Seek(0, SeekOrigin.Begin);
+                if (stream.CanSeek)
+                    stream.Seek(0, SeekOrigin.Begin);
 
                 do
                 {
@@ -155,7 +172,7 @@ namespace org.goodspace.Data.Radio.Adif
                         else if (IsAppDefinedField(entry.Key, out AppDefTag? appTag) && appTag != null)
                             tag = appTag.Clone() as AppDefTag;
                         else
-                            throw new AdifParseException($"Unknown tag: {entry.Key}");
+                            throw new AdifParseException($"Unknown ADIF tag: {entry.Key}");
                     }
 
                     if (tag != null)
@@ -313,7 +330,7 @@ namespace org.goodspace.Data.Radio.Adif
                             var x = 0;
                             var fieldName = string.Empty;
                             var curlyBraceVal = string.Empty;
-                            string[] enumVals = [];
+                            string[] enumValues = [];
                             var min = 0d;
                             var max = 0d;
 
@@ -359,7 +376,7 @@ namespace org.goodspace.Data.Radio.Adif
                                 if (DataTypes.Enumeration.Equals(userDefDataType, StringComparison.OrdinalIgnoreCase) || curlyBraceVal.Contains(Values.COMMA))
                                 {
                                     // split by comma
-                                    enumVals = curlyBraceVal.Split(new[] { Values.COMMA }, StringSplitOptions.RemoveEmptyEntries);
+                                    enumValues = curlyBraceVal.Split(new[] { Values.COMMA }, StringSplitOptions.RemoveEmptyEntries);
                                 }
                                 else
                                 {
@@ -387,7 +404,7 @@ namespace org.goodspace.Data.Radio.Adif
                                 FieldName = fieldName,
                                 UpperBound = max,
                                 LowerBound = min,
-                                CustomOptions = enumVals ?? [],
+                                CustomOptions = enumValues ?? [],
                                 DataType = userDefDataType?.ToUpper() ?? string.Empty
                             });
 

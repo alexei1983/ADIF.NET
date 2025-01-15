@@ -1,26 +1,26 @@
 ﻿
-namespace org.goodspace.Data.Radio.Adif.Tags {
-
-  /// <summary>
-  /// Represents the contacted station's complete mailing address: full name, 
-  /// street address, city, postal code, and country.
-  /// </summary>
-  public class AddressIntlTag : IntlMultilineStringTag, ITag {
-
+namespace org.goodspace.Data.Radio.Adif.Tags
+{
     /// <summary>
-    /// Tag name.
+    /// Represents the contacted station's complete mailing address: full name, 
+    /// street address, city, postal code, and country.
     /// </summary>
-    public override string Name => AdifTags.AddressIntl;
+    public class AddressIntlTag : IntlMultilineStringTag, ITag
+    {
+        /// <summary>
+        /// Tag name.
+        /// </summary>
+        public override string Name => AdifTags.AddressIntl;
 
-    /// <summary>
-    /// Creates a new ADDRESS_INTL tag.
-    /// </summary>
-    public AddressIntlTag() { }
+        /// <summary>
+        /// Creates a new ADDRESS_INTL tag.
+        /// </summary>
+        public AddressIntlTag() { }
 
-    /// <summary>
-    /// Creates a new ADDRESS_INTL tag.
-    /// </summary>
-    /// <param name="value">Initial tag value.</param>
-    public AddressIntlTag(string value) : base(value) { }
-  }
+        /// <summary>
+        /// Creates a new ADDRESS_INTL tag.
+        /// </summary>
+        /// <param name="value">Initial tag value.</param>
+        public AddressIntlTag(string value) : base(value) { }
+    }
 }

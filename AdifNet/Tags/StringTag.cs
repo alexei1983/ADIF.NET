@@ -1,20 +1,18 @@
-﻿using System;
+﻿
 using org.goodspace.Data.Radio.Adif.Types;
 using org.goodspace.Data.Radio.Adif.Exceptions;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF.NET tag where the underlying value is of type <see cref="string"/>.
     /// </summary>
     public class StringTag : Tag<string>, ITag
     {
-
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifString();
+        public override IAdifType AdifType => new AdifString();
 
         /// <summary>
         /// Converts the specified object to an ADIF String.
@@ -24,7 +22,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             try
             {
-                var result = AdifString.Parse(value == null ? string.Empty : value.ToString());
+                var result = AdifType.Parse(value == null ? string.Empty : value.ToString());
                 return result;
             }
             catch (Exception ex)
@@ -60,6 +58,5 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// </summary>
         /// <param name="value">Initial value for the tag.</param>
         public StringTag(string value) : base(value) { }
-
     }
 }

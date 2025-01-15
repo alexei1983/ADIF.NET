@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the code for the logging station's Primary Administrative Subdivision (e.g. US State, JA Island, VE Province).
     /// </summary>
     public class MyStateTag : RestrictedEnumerationTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

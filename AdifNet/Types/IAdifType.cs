@@ -55,5 +55,20 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// Maximum value.
         /// </summary>
         double MaxValue { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        object Parse(string? s);
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool TryParse(string? s, out object? value);
     }
 }

@@ -4,15 +4,13 @@ using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// An ADIF.NET tag whose value represents a time in the format HHMM or HHMMSS.
     /// </summary>
     public class TimeTag : DateTag, ITag
     {
-
         /// <summary>
-        /// 
+        /// Text value of the tag.
         /// </summary>
         public override string TextValue
         {
@@ -34,12 +32,12 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// ADIF type.
         /// </summary>
-        public override IAdifType ADIFType => new AdifTime();
+        public override IAdifType AdifType => new AdifTime();
 
         /// <summary>
         /// 
         /// </summary>
-        public bool ConvertToUTC { get; }
+        public bool ConvertToUtc { get; }
 
         /// <summary>
         /// Creates a new instance of the <see cref="TimeTag"/> class.
@@ -58,10 +56,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override object? ConvertValue(object? value)
         {
-
             if (value is not null)
             {
-
                 var final = DateTime.MinValue;
 
                 if (value is DateTime dateTime)
@@ -83,7 +79,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                         final = dateTimeParsed;
                 }
 
-                if (final != DateTime.MinValue && ConvertToUTC)
+                if (final != DateTime.MinValue && ConvertToUtc)
                     final = final.ToUniversalTime();
 
                 return final;

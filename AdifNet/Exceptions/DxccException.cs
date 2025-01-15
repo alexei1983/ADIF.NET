@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Exceptions
 {
     /// <summary>

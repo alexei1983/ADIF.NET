@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Exceptions
 {
-
     /// <summary>
     /// Represents an exception related to the validation or processing of a specific value or values.
     /// </summary>
     public class ValueException : Exception
     {
-
         /// <summary>
         /// Value that caused the exception.
         /// </summary>

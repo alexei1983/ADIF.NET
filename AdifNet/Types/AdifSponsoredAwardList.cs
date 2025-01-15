@@ -2,11 +2,10 @@
 
 namespace org.goodspace.Data.Radio.Adif.Types
 {
-
     /// <summary>
     /// Represents the SponsoredAwardList ADIF type.
     /// </summary>
-    public class AdifSponsoredAwardList : AdifType<string>, IAdifType
+    public class AdifSponsoredAwardList : AdifType<string[]>, IAdifType
     {
         /// <summary>
         /// ADIF data type indicator.
@@ -27,7 +26,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static string[] Parse(string? s)
+        public override string[] Parse(string? s)
         {
             return ParseAwardList(s, true);
         }
@@ -37,7 +36,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// </summary>
         /// <param name="s"></param>
         /// <param name="result"></param>
-        public static bool TryParse(string? s, out string[] result)
+        public override bool TryParse(string? s, out string[] result)
         {
             try
             {
@@ -55,7 +54,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="o"></param>
-        public static bool IsValidValue(object? o)
+        public override bool IsValidValue(object? o)
         {
             if (o is null)
                 return true;
@@ -67,7 +66,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// 
         /// </summary>
         /// <param name="s"></param>
-        public static bool IsValidValue(string? s)
+        public override bool IsValidValue(string? s)
         {
             if (string.IsNullOrEmpty(s))
                 return true;
@@ -81,6 +80,29 @@ namespace org.goodspace.Data.Radio.Adif.Types
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        object IAdifType.Parse(string? s)
+        {
+            return Parse(s);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool IAdifType.TryParse(string? s, out object? value)
+        {
+            var result = TryParse(s, out string[]? _value);
+            value = _value;
+            return result;
         }
 
         /// <summary>
@@ -119,7 +141,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
             if (throwExceptions)
             {
                 if (exceptions.Count > 1)
-                    throw new AggregateException(exceptions.ToArray());
+                    throw new AggregateException([..exceptions]);
                 else if (exceptions.Count == 1)
                     throw exceptions[0];
             }
