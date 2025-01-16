@@ -20,9 +20,21 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         public override string TextValue => AppUserDefHelper.GetTextValueByType(DataType, Value);
 
         /// <summary>
-        /// Field name.
+        /// Application-defined field name.
         /// </summary>
-        public string FieldName { get; set; } = string.Empty;
+        public string FieldName
+        {
+            get
+            {
+                return fieldName ?? string.Empty;
+            }
+
+            set
+            {
+                AppUserDefHelper.ValidateAppDefFieldName(value);
+                fieldName = value;
+            }
+        }
 
         /// <summary>
         /// Program ID.
@@ -201,6 +213,6 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             return el;
         }
 
-        string? programId;
+        string? programId, fieldName;
     }
 }

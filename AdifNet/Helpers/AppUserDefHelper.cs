@@ -260,7 +260,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// <param name="fieldName">Name of the user-defined field to validate.</param>
         /// <param name="throwExceptions">Whether or not validation exceptions will be thrown.</param>
         /// <param name="validateTagNameMatch"></param>
-        public static bool ValidateFieldName(string fieldName, bool throwExceptions = true, bool validateTagNameMatch = true)
+        public static bool ValidateUserDefFieldName(string fieldName, bool throwExceptions = true, bool validateTagNameMatch = true)
         {
             var exceptions = new List<Exception>();
 
@@ -344,9 +344,52 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
         /// <param name="programId">Program ID to validate.</param>
         public static void ValidateProgramId(string programId)
         {
-            if (programId != null)
-                if (programId.Contains(Values.UNDERSCORE))
-                    throw new AppDefTagException("Program ID cannot contain the underscore character.");
+            if (string.IsNullOrEmpty(programId))
+                throw new AppDefTagException("Program ID is required.");
+
+            if (programId.Contains(Values.UNDERSCORE))
+                throw new AppDefTagException("Program ID cannot contain an underscore.");
+
+            if (programId.Contains(Values.COMMA))
+                throw new AppDefTagException("Program ID cannot contain a comma.");
+
+            if (programId.Contains(Values.COLON))
+                throw new AppDefTagException("Program ID cannot contain a colon.");
+
+            if (programId.Contains(Values.TAG_OPENING) || programId.Contains(Values.TAG_CLOSING))
+                throw new AppDefTagException("Program ID cannot contain an open-angle bracket or close-angle bracket.");
+
+            if (programId.Contains(Values.CURLY_BRACE_OPEN) || programId.Contains(Values.CURLY_BRACE_CLOSE))
+                throw new AppDefTagException("Program ID cannot contain an open-curly brace or close-curly brace.");
+
+            if (programId.EndsWith(' '))
+                throw new AppDefTagException("Program ID cannot end with a space.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <exception cref="AppDefTagException"></exception>
+        public static void ValidateAppDefFieldName(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                throw new AppDefTagException("Application-defined field name is required.");
+
+            if (fieldName.Contains(Values.COMMA))
+                throw new AppDefTagException("Application-defined field cannot contain a comma.");
+
+            if (fieldName.Contains(Values.COLON))
+                throw new AppDefTagException("Application-defined field cannot contain a colon.");
+
+            if (fieldName.Contains(Values.TAG_OPENING) || fieldName.Contains(Values.TAG_CLOSING))
+                throw new AppDefTagException("Application-defined field cannot contain an open-angle bracket or close-angle bracket.");
+
+            if (fieldName.Contains(Values.CURLY_BRACE_OPEN) || fieldName.Contains(Values.CURLY_BRACE_CLOSE))
+                throw new AppDefTagException("Application-defined field cannot contain an open-curly brace or close-curly brace.");
+
+            if (fieldName.EndsWith(' '))
+                throw new AppDefTagException("Application-defined field cannot end with a space.");
         }
     }
 }

@@ -45,7 +45,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    AppUserDefHelper.ValidateFieldName(value);
+                    AppUserDefHelper.ValidateUserDefFieldName(value);
 
                 fieldName = value ?? string.Empty;
             }
