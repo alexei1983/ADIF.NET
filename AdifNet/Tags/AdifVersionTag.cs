@@ -1,11 +1,10 @@
-﻿using org.goodspace.Data.Radio.Adif.Exceptions;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
     /// <summary>
     /// Represents the version of ADIF used to generate the data set.
     /// </summary>
-    public class AdifVersionTag : Tag<Version>, ITag
+    public class AdifVersionTag : BaseVersionTag, ITag
     {
         /// <summary>
         /// Tag name.
@@ -28,31 +27,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// Creates a new ADIF_VER tag.
         /// </summary>
         /// <param name="value">Initial tag value.</param>
-        public AdifVersionTag(Version value)
+        public AdifVersionTag(Version value) : base(value)
         {
-            base.SetValue(value);
-        }
-
-        /// <summary>
-        /// Converts the specified object to the expected value type for the tag.
-        /// </summary>
-        /// <param name="value">Value to convert.</param>
-        public override object? ConvertValue(object? value)
-        {
-            if (value is not null)
-            {
-                try
-                {
-                    var version = Version.Parse(value.ToString() ?? string.Empty);
-                    return version;
-                }
-                catch (Exception ex)
-                {
-                    throw new ValueConversionException(value, Name, ex);
-                }
-            }
-
-            return null;
         }
     }
 }

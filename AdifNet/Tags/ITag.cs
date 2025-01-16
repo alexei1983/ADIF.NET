@@ -3,7 +3,6 @@ using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Defines the properties and methods that all ADIF.NET tags must implement.
     /// </summary>

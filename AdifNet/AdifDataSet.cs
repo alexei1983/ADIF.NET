@@ -573,8 +573,7 @@ namespace org.goodspace.Data.Radio.Adif
                     }
                     finally
                     {
-                        if (!alreadyChecked)
-                            checkedTags.Add(tag.Name.ToUpper());
+                        checkedTags.Add(tag.Name.ToUpper());
                     }
                 }
             }
@@ -597,8 +596,7 @@ namespace org.goodspace.Data.Radio.Adif
                 }
                 finally
                 {
-                    if (!alreadyChecked)
-                        checkedTags.Add(tag.Name.ToUpper());
+                    checkedTags.Add(tag.Name.ToUpper());
                 }
             }
 

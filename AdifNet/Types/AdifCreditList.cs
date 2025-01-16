@@ -399,7 +399,6 @@ namespace org.goodspace.Data.Radio.Adif.Types
         /// <param name="medium">QSL medium enumeration member.</param>
         public readonly struct CreditListMember(string credit, string? medium) : IEquatable<CreditListMember>
         {
-
             /// <summary>
             /// Credit enumeration member.
             /// </summary>

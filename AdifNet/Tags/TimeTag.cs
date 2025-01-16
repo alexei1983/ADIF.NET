@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using org.goodspace.Data.Radio.Adif.Types;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
@@ -64,7 +63,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                     final = dateTime;
                 else
                 {
-                    var objStr = value.ToString() ?? string.Empty;
+                    var objStr = value is string strVal ? strVal : value.ToString() ?? string.Empty;
 
                     var formatString = objStr.Length > 4 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT;
 

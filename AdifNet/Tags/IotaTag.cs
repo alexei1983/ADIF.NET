@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's IOTA designator.
     /// </summary>
     public class IotaTag : StringTag, ITag
     {
-
         /// <summary>
         /// Name of the tag.
         /// </summary>

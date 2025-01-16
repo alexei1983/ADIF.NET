@@ -1,16 +1,13 @@
-﻿
-using org.goodspace.Data.Radio.Adif.Tags;
+﻿using org.goodspace.Data.Radio.Adif.Tags;
 
 namespace org.goodspace.Data.Radio.Adif
 {
-
     /// <summary>
     /// Represents a collection of objects that implement the <see cref="ITag"/> interface and which define 
     /// an ADIF header.
     /// </summary>
     public class AdifHeader : AdifTagCollection
     {
-
         /// <summary>
         /// 
         /// </summary>

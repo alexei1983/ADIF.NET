@@ -21,7 +21,6 @@ namespace org.goodspace.Data.Radio.Adif
 
             set
             {
-
                 if (value is null)
                     return;
 

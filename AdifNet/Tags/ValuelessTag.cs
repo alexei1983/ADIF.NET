@@ -1,15 +1,12 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents an ADIF tag that stores no value.
     /// </summary>
     public class ValuelessTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag value.
         /// </summary>

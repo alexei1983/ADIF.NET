@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's power in watts.
     /// </summary>
     public class TxPwrTag : NumberTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

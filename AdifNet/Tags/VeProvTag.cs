@@ -2,14 +2,12 @@
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the two-letter Canadian province or territory abbreviation of the contacted station.
     /// </summary>
     [DeprecatedTag(AdifTags.State)]
     public class VeProvTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

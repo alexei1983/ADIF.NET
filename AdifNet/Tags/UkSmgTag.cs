@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's UKSMG (UK Six Metre Group) member number.
     /// </summary>
     public class UkSmgTag : PositiveIntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>
@@ -29,6 +27,5 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// </summary>
         /// <param name="value">Initial tag value.</param>
         public UkSmgTag(int value) : base(value) { }
-
     }
 }

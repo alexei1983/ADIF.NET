@@ -1,17 +1,14 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Xml;
 using org.goodspace.Data.Radio.Adif.Helpers;
 
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the specification of a user-defined QSO field.
     /// </summary>
     public class UserDefTag : StringTag, ITag, IFormattable
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

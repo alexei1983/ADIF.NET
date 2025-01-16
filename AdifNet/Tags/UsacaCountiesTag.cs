@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents two US counties where the contacted station is located on a border between two counties.
     /// </summary>
     public class UsacaCountiesTag : MultiValueStringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

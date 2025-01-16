@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contest QSO received serial number.
     /// </summary>
     public class SrxTag : IntegerTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

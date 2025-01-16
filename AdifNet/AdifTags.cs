@@ -22,6 +22,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string AdifVer = "ADIF_VER";
 
         /// <summary>
+        /// ALTITUDE tag.
+        /// </summary>
+        public const string Altitude = "ALTITUDE";
+
+        /// <summary>
         /// AGE tag.
         /// </summary>
         public const string Age = "AGE";
@@ -277,9 +282,34 @@ namespace org.goodspace.Data.Radio.Adif
         public const string GridSquare = "GRIDSQUARE";
 
         /// <summary>
+        /// GRIDSQUARE_EXT tag.
+        /// </summary>
+        public const string GridSquareExt = "GRIDSQUARE_EXT";
+
+        /// <summary>
         /// GUEST_OP tag.
         /// </summary>
         public const string GuestOp = "GUEST_OP";
+
+        /// <summary>
+        /// HAMLOGEU_QSO_UPLOAD_DATE tag.
+        /// </summary>
+        public const string HamLogEuQsoUploadDate = "HAMLOGEU_QSO_UPLOAD_DATE";
+
+        /// <summary>
+        /// HAMLOGEU_QSO_UPLOAD_STATUS tag.
+        /// </summary>
+        public const string HamLogEuQsoUploadStatus = "HAMLOGEU_QSO_UPLOAD_STATUS";
+
+        /// <summary>
+        /// HAMQTH_QSO_UPLOAD_DATE tag.
+        /// </summary>
+        public const string HamQthQsoUploadDate = "HAMQTH_QSO_UPLOAD_DATE";
+
+        /// <summary>
+        /// HAMQTH_QSO_UPLOAD_STATUS tag.
+        /// </summary>
+        public const string HamQthQsoUploadStatus = "HAMQTH_QSO_UPLOAD_STATUS";
 
         /// <summary>
         /// HRDLOG_QSO_UPLOAD_DATE tag.
@@ -367,9 +397,19 @@ namespace org.goodspace.Data.Radio.Adif
         public const string MsShower = "MS_SHOWER";
 
         /// <summary>
+        /// MY_ALTITUDE tag.
+        /// </summary>
+        public const string MyAltitude = "MY_ALTITUDE";
+
+        /// <summary>
         /// MY_ANTENNA tag.
         /// </summary>
         public const string MyAntenna = "MY_ANTENNA";
+
+        /// <summary>
+        /// MY_ARRL_SECT tag.
+        /// </summary>
+        public const string MyArrlSect = "MY_ARRL_SECT";
 
         /// <summary>
         /// MY_MORSE_KEY_TYPE tag.
@@ -437,6 +477,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string MyGridSquare = "MY_GRIDSQUARE";
 
         /// <summary>
+        /// MY_GRIDSQUARE_EXT tag.
+        /// </summary>
+        public const string MyGridSquareExt = "MY_GRIDSQUARE_EXT";
+
+        /// <summary>
         /// MY_IOTA tag.
         /// </summary>
         public const string MyIota = "MY_IOTA";
@@ -480,6 +525,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// MY_POSTAL_CODE_INTL tag.
         /// </summary>
         public const string MyPostalCodeIntl = "MY_POSTAL_CODE_INTL";
+
+        /// <summary>
+        /// MY_POTA_REF tag.
+        /// </summary>
+        public const string MyPotaRef = "MY_POTA_REF";
 
         /// <summary>
         /// MY_RIG tag.
@@ -600,6 +650,11 @@ namespace org.goodspace.Data.Radio.Adif
         /// PROGRAMVERSION tag.
         /// </summary>
         public const string ProgramVersion = "PROGRAMVERSION";
+
+        /// <summary>
+        /// POTA_REF tag.
+        /// </summary>
+        public const string PotaRef = "POTA_REF";
 
         /// <summary>
         /// PROP_MODE tag.
@@ -880,6 +935,16 @@ namespace org.goodspace.Data.Radio.Adif
         /// WEB tag.
         /// </summary>
         public const string Web = "WEB";
+
+        /// <summary>
+        /// WWFF_REF tag.
+        /// </summary>
+        public const string WwFfRef = "WWFF_REF";
+
+        /// <summary>
+        /// MY_WWFF_REF tag.
+        /// </summary>
+        public const string MyWwFfRef = "MY_WWFF_REF";
 
         /// <summary>
         /// Retrieves all ADIF tag names.

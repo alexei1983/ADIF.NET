@@ -44,15 +44,15 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <param name="value"></param>
         public override object? ConvertValue(object? value)
         {
-
             if (value is not null)
             {
-
-                if (DateTime.TryParseExact(value.ToString(),
-                                           FormatString ?? $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}",
-                                           FormatProvider,
-                                           DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
-                                           out DateTime dateTimeParsed))
+                if (value is DateTime dateTimeIn)
+                    return dateTimeIn;
+                else if (DateTime.TryParseExact(value is string strVal ? strVal : value.ToString(),
+                                               FormatString ?? $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}",
+                                               FormatProvider,
+                                               DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
+                                               out DateTime dateTimeParsed))
                     return dateTimeParsed;
             }
 

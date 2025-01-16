@@ -588,6 +588,11 @@ namespace org.goodspace.Data.Radio.Adif
         public const string GridSquare = "GridSquare";
 
         /// <summary>
+        /// ADIF GridSquareExt.
+        /// </summary>
+        public const string GridSquareExt = "GridSquareExt";
+
+        /// <summary>
         /// ADIF GridSquareList type consisting of a comma-delimited list of <see cref="GridSquare"/> items.
         /// </summary>
         public const string GridSquareList = "GridSquareList";

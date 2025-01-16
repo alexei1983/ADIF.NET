@@ -1,11 +1,9 @@
-﻿
-using org.goodspace.Data.Radio.Adif.Tags;
+﻿using org.goodspace.Data.Radio.Adif.Tags;
 
 namespace org.goodspace.Data.Radio.Adif
 {
-
     /// <summary>
-    /// 
+    /// Factory for building ADIF tags.
     /// </summary>
     public static class TagFactory
     {
@@ -21,8 +19,9 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.AntPath, typeof(AntPathTag) },
       { AdifTags.AdifVer, typeof(AdifVersionTag) },
       { AdifTags.Age, typeof(AgeTag) },
+      { AdifTags.Altitude, typeof(AltitudeTag) },
       { AdifTags.AntAz, typeof(AntAzTag) },
-      { AdifTags.ArrlSect, typeof(ARRLSectTag) },
+      { AdifTags.ArrlSect, typeof(ArrlSectTag) },
       { AdifTags.AwardGranted, typeof(AwardGrantedTag) },
       { AdifTags.AwardSubmitted, typeof(AwardSubmittedTag) },
       { AdifTags.Band, typeof(BandTag) },
@@ -32,6 +31,7 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.Class, typeof(ClassTag) },
       { AdifTags.ClubLogQsoUploadDate, typeof(ClubLogQsoUploadDateTag) },
       { AdifTags.ClubLogQsoUploadStatus, typeof(ClubLogQsoUploadStatusTag) },
+      { AdifTags.CntyAlt, typeof(CntyAltTag) },
       { AdifTags.Cnty, typeof(CntyTag) },
       { AdifTags.Comment, typeof(CommentTag) },
       { AdifTags.CommentIntl, typeof(CommentIntlTag) },
@@ -65,7 +65,12 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.Freq, typeof(FreqTag) },
       { AdifTags.FreqRx, typeof(FreqRxTag) },
       { AdifTags.GridSquare, typeof(GridSquareTag) },
+      { AdifTags.GridSquareExt, typeof(GridSquareExtTag) },
       { AdifTags.GuestOp, typeof(GuestOpTag) },
+      { AdifTags.HamLogEuQsoUploadDate, typeof(HamLogEuQsoUploadDateTag) },
+      { AdifTags.HamLogEuQsoUploadStatus, typeof(HamLogEuQsoUploadStatusTag) },
+      { AdifTags.HamQthQsoUploadDate, typeof(HamQthQsoUploadDateTag) },
+      { AdifTags.HamQthQsoUploadStatus, typeof(HamQthQsoUploadStatusTag) },
       { AdifTags.HrdLogQsoUploadDate, typeof(HrdLogQsoUploadDateTag) },
       { AdifTags.HrdLogQsoUploadStatus, typeof(HrdLogQsoUploadStatusTag) },
       { AdifTags.Iota, typeof(IotaTag) },
@@ -83,18 +88,22 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.MorseKeyInfo, typeof(MorseKeyInfoTag) },
       { AdifTags.MorseKeyType, typeof(MorseKeyTypeTag) },
       { AdifTags.MsShower, typeof(MsShowerTag) },
+      { AdifTags.MyAltitude, typeof(MyAltitudeTag) },
       { AdifTags.MyAntenna, typeof(MyAntennaTag) },
+      { AdifTags.MyArrlSect, typeof(MyArrlSectTag) },
       { AdifTags.MyAntennaIntl, typeof(MyAntennaIntlTag) },
       { AdifTags.MyCity, typeof(MyCityTag) },
       { AdifTags.MyCityIntl, typeof(MyCityIntlTag) },
       { AdifTags.MyCountry, typeof(MyCountryTag) },
       { AdifTags.MyCountryIntl, typeof(MyCountryIntlTag) },
+      { AdifTags.MyCntyAlt, typeof(MyCntyAltTag) },
       { AdifTags.MyCnty, typeof(MyCntyTag) },
       { AdifTags.MyCqZone, typeof(MyCQZoneTag) },
       { AdifTags.MyDarcDok, typeof(MyDarcDokTag) },
       { AdifTags.MyDxcc, typeof(MyDXCCTag) },
       { AdifTags.MyFists, typeof(MyFISTSTag) },
       { AdifTags.MyGridSquare, typeof(MyGridSquareTag) },
+      { AdifTags.MyGridSquareExt, typeof(MyGridSquareExtTag) },
       { AdifTags.MyLat, typeof(MyLatTag) },
       { AdifTags.MyLon, typeof(MyLonTag) },
       { AdifTags.MyIota, typeof(MyIotaTag) },
@@ -106,6 +115,7 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.MyNameIntl, typeof(MyNameIntlTag) },
       { AdifTags.MyPostalCode, typeof(MyPostalCodeTag) },
       { AdifTags.MyPostalCodeIntl, typeof(MyPostalCodeIntlTag) },
+      { AdifTags.MyPotaRef, typeof(MyPotaRefTag) },
       { AdifTags.MyRig, typeof(MyRigTag) },
       { AdifTags.MyRigIntl, typeof(MyRigIntlTag) },
       { AdifTags.MySig, typeof(MySigTag) },
@@ -116,6 +126,7 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.MyState, typeof(MyStateTag) },
       { AdifTags.MyStreet, typeof(MyStreetTag) },
       { AdifTags.MyStreetIntl, typeof(MyStreetIntlTag) },
+      { AdifTags.MyWwFfRef, typeof(MyWwFfRefTag) },
       { AdifTags.MyUsacaCounties, typeof(MyUsacaCountiesTag) },
       { AdifTags.MyVuccGrids, typeof(MyVuccGridsTag) },
       { AdifTags.Name, typeof(NameTag) },
@@ -127,6 +138,7 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.Operator, typeof(OperatorTag) },
       { AdifTags.OwnerCallSign, typeof(OwnerCallSignTag) },
       { AdifTags.Pfx, typeof(PfxTag) },
+      { AdifTags.PotaRef, typeof(PotaRefTag) },
       { AdifTags.Precedence, typeof(PrecedenceTag) },
       { AdifTags.ProgramId, typeof(ProgramIdTag) },
       { AdifTags.ProgramVersion, typeof(ProgramVersionTag) },
@@ -134,6 +146,8 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.PublicKey, typeof(PublicKeyTag) },
       { AdifTags.QrzQsoUploadDate, typeof(QrzQsoUploadDateTag) },
       { AdifTags.QrzQsoUploadStatus, typeof(QrzQsoUploadStatusTag) },
+      { AdifTags.QrzQsoDownloadDate, typeof(QrzQsoDownloadDateTag) },
+      { AdifTags.QrzQsoDownloadStatus, typeof(QrzQsoDownloadStatusTag) },
       { AdifTags.QslVia, typeof(QslViaTag) },
       { AdifTags.QslSent, typeof(QslSentTag) },
       { AdifTags.QslSentVia, typeof(QslSentViaTag) },
@@ -144,6 +158,7 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.QsoDateOff, typeof(QsoDateOffTag) },
       { AdifTags.QslRcvdDate, typeof(QslRcvdDateTag) },
       { AdifTags.QslSentDate, typeof(QslSentDateTag) },
+      { AdifTags.QslMsgRcvd, typeof(QslMsgRcvdTag) },
       { AdifTags.QslMsg, typeof(QslMsgTag) },
       { AdifTags.QslMsgIntl, typeof(QslMsgIntlTag) },
       { AdifTags.QsoRandom, typeof(QsoRandomTag) },
@@ -182,7 +197,8 @@ namespace org.goodspace.Data.Radio.Adif
       { AdifTags.UsacaCounties, typeof(UsacaCountiesTag) },
       { AdifTags.VuccGrids, typeof(VuccGridsTag) },
       { AdifTags.VeProv, typeof(VeProvTag) },
-      { AdifTags.Web, typeof(WebTag) }};
+      { AdifTags.Web, typeof(WebTag) },
+      { AdifTags.WwFfRef, typeof(WwFfRefTag) }};
 
         /// <summary>
         /// 

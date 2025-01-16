@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the logging station's callsign (the callsign used over the air).
     /// </summary>
     public class StationCallSignTag : BaseCallSignTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

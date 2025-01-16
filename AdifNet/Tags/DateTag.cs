@@ -40,7 +40,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             {
                 if (value is DateTime dateTime)
                     return dateTime;
-                else if (DateTime.TryParseExact(value.ToString(),
+                else if (DateTime.TryParseExact(value is string strVal ? strVal : value.ToString(),
                                                FormatString,
                                                FormatProvider,
                                                DateTimeStyles.AllowInnerWhite |

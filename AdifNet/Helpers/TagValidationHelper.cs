@@ -77,9 +77,9 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                     if (!Values.Modes.IsValid(modeVal))
                     {
                         if (Values.SubModes.IsValid(modeVal))
-                            throw new Exception($"'{modeVal.ToUpper()}' is a sub-mode, not a mode.");
+                            throw new InvalidEnumerationOptionException($"'{modeVal.ToUpper()}' is a sub-mode, not a mode.");
                         else
-                            throw new Exception($"'{modeVal.ToUpper()}' is not a valid mode.");
+                            throw new InvalidEnumerationOptionException($"'{modeVal.ToUpper()}' is not a valid mode.");
                     }
                 }
             }
@@ -95,13 +95,13 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                     if (Values.SubModes.IsValid(subModeVal))
                     {
                         if (!hasMode)
-                            throw new Exception($"Sub-mode '{subModeVal.ToUpper()}' requires a mode to be specified.");
+                            throw new InvalidEnumerationOptionException($"Sub-mode '{subModeVal.ToUpper()}' requires a mode to be specified.");
 
                         // is the right parent mode specified?
-                        var parentMode = Values.SubModes.GetValue(subModeVal) ?? throw new Exception($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
+                        var parentMode = Values.SubModes.GetValue(subModeVal) ?? throw new InvalidEnumerationOptionException($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
 
                         if (!modeVal.Equals(parentMode.Code, StringComparison.OrdinalIgnoreCase))
-                            throw new Exception($"Sub-mode '{subModeVal.ToUpper()}' does not belong to mode '{modeVal.ToUpper()}'");
+                            throw new InvalidEnumerationOptionException($"Sub-mode '{subModeVal.ToUpper()}' does not belong to mode '{modeVal.ToUpper()}'");
                     }
                 }
             }

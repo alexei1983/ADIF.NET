@@ -2,14 +2,14 @@
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
     /// <summary>
-    /// Represents the contacted station's ARRL section.
+    /// Represents the logging station's ARRL section.
     /// </summary>
-    public class ArrlSectTag : RestrictedEnumerationTag, ITag
+    public class MyArrlSectTag : RestrictedEnumerationTag, ITag
     {
         /// <summary>
         /// Tag name.
         /// </summary>
-        public override string Name => AdifTags.ArrlSect;
+        public override string Name => AdifTags.MyArrlSect;
 
         /// <summary>
         /// 
@@ -17,14 +17,14 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         public override AdifEnumeration Options => Values.ArrlSections;
 
         /// <summary>
-        /// Creates a new ARRL_SECT tag.
+        /// Creates a new MY_ARRL_SECT tag.
         /// </summary>
-        public ArrlSectTag() { }
+        public MyArrlSectTag() { }
 
         /// <summary>
-        /// Creates a new ARRL_SECT tag.
+        /// Creates a new MY_ARRL_SECT tag.
         /// </summary>
         /// <param name="value">Initial tag value.</param>
-        public ArrlSectTag(string value) : base(value) { }
+        public MyArrlSectTag(string value) : base(value) { }
     }
 }

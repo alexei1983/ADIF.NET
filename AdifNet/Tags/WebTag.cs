@@ -1,13 +1,11 @@
 ﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the contacted station's URL.
     /// </summary>
     public class WebTag : StringTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>

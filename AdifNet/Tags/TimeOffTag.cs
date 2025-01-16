@@ -1,14 +1,11 @@
-﻿using System;
-
+﻿
 namespace org.goodspace.Data.Radio.Adif.Tags
 {
-
     /// <summary>
     /// Represents the time the QSO ended.
     /// </summary>
     public class TimeOffTag : TimeTag, ITag
     {
-
         /// <summary>
         /// Tag name.
         /// </summary>
