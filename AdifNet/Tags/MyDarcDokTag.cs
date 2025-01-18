@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.DarcDoks;
+        public override AdifEnumeration Options => AdifEnumerations.DarcDoks;
 
         /// <summary>
         /// Creates a new MY_DARC_DOK tag.

@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.QslReceivedStatuses;
+        public override AdifEnumeration Options => AdifEnumerations.QslReceivedStatuses;
 
         /// <summary>
         /// Creates a new LOTW_QSL_RCVD tag.

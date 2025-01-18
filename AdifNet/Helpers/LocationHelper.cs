@@ -4,7 +4,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// Helper class for the ADIF Location type.
     /// </summary>
-    public static class LocationHelper
+    internal static class LocationHelper
     {
         const string NORTH = "N";
         const string SOUTH = "S";

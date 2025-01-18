@@ -5,7 +5,7 @@ namespace org.goodspace.Data.Radio.Adif
     /// <summary>
     /// Factory for building ADIF tags.
     /// </summary>
-    public static class TagFactory
+    internal static class TagFactory
     {
         /// <summary>
         /// Maps tag names to tag types.

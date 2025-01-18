@@ -68,7 +68,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
         static bool FromString(string? s, out DateTime result)
         {
             bool success = DateTime.TryParseExact(s,
-                                                 Values.ADIF_DATE_FORMAT,
+                                                 AdifConstants.DateFormat,
                                                  CultureInfo.CurrentCulture,
                                                  DateTimeStyles.NoCurrentDateDefault,
                                                  out result);

@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.Bands;
+        public override AdifEnumeration Options => AdifEnumerations.Bands;
 
         /// <summary>
         /// Creates a new BAND tag.

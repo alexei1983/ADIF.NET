@@ -144,7 +144,7 @@ namespace org.goodspace.Data.Radio.Adif
                 if (string.IsNullOrEmpty(uniqueId))
                 {
                     uniqueId = Guid.NewGuid().ToString().Replace("-", string.Empty);
-                    qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, Values.DEFAULT_PROGRAM_ID, uniqueId);
+                    qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, uniqueId);
                 }
 
                 commandText += $"{EscapeReservedWord(UNIQ_ID_SQL_COL)},";
@@ -602,8 +602,8 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(band))
                 throw new ArgumentException("Band is required.", nameof(band));
 
-            if (!Values.Bands.IsValid(band))
-                throw new ArgumentException($"Invalid band: {band}", nameof(band));
+            if (!AdifEnumerations.Bands.IsValid(band))
+                throw new InvalidEnumerationOptionException($"Invalid band: {band}", nameof(band));
 
             var bandMapping = ColumnMappings.GetColumnMappingFromTagName(AdifTags.Band);
 
@@ -622,8 +622,8 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(mode))
                 throw new ArgumentException("Mode is required.", nameof(mode));
 
-            if (!Values.Modes.IsValid(mode))
-                throw new ArgumentException($"Invalid mode: {mode}", nameof(mode));
+            if (!AdifEnumerations.Modes.IsValid(mode))
+                throw new InvalidEnumerationOptionException($"Invalid mode: {mode}", nameof(mode));
 
             var modeMapping = ColumnMappings.GetColumnMappingFromTagName(AdifTags.Band);
 
@@ -644,14 +644,14 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(band))
                 throw new ArgumentException("Band is required.", nameof(band));
 
-            if (!Values.Bands.IsValid(band))
-                throw new ArgumentException($"Invalid band: {band}", nameof(band));
+            if (!AdifEnumerations.Bands.IsValid(band))
+                throw new InvalidEnumerationOptionException($"Invalid band: {band}", nameof(band));
 
             if (string.IsNullOrEmpty(mode))
                 throw new ArgumentException("Mode is required.", nameof(mode));
 
-            if (!Values.Modes.IsValid(mode))
-                throw new ArgumentException($"Invalid mode: {mode}", nameof(mode));
+            if (!AdifEnumerations.Modes.IsValid(mode))
+                throw new InvalidEnumerationOptionException($"Invalid mode: {mode}", nameof(mode));
 
             var modeMapping = ColumnMappings.GetColumnMappingFromTagName(AdifTags.Band);
 
@@ -687,7 +687,7 @@ namespace org.goodspace.Data.Radio.Adif
                         continue;
 
                     if (UNIQ_ID_SQL_COL.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase))
-                        qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, Values.DEFAULT_PROGRAM_ID, DataTypes.String, reader.GetValue(r));
+                        qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, DataTypes.String, reader.GetValue(r));
                     else
                     {
                         var columnMapping = ColumnMappings.GetColumnMappingFromColumnName(dbFieldName);
@@ -965,7 +965,7 @@ namespace org.goodspace.Data.Radio.Adif
             GC.SuppressFinalize(this);
         }
 
-        const string UNIQ_ID_APP_DEF_FIELD = AdifTags.AppDef + Values.DEFAULT_PROGRAM_ID + "_" + UNIQ_ID_APP_DEF_FIELD_NAME;
+        const string UNIQ_ID_APP_DEF_FIELD = AdifTags.AppDef + AdifNet.ProgramId + "_" + UNIQ_ID_APP_DEF_FIELD_NAME;
         const string UNIQ_ID_APP_DEF_FIELD_NAME = "QSOUNIQID";
         const string UNIQ_ID_SQL_COL = "ADIFNET_UNIQ_ID";
         const string SQL_SELECT_COMMAND_TEXT = "SELECT * FROM {0}";

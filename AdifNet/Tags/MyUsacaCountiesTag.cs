@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// String that delimits values in a multi-valued tag.
         /// </summary>
-        public override string ValueSeparator => Values.COLON.ToString();
+        public override string ValueSeparator => AdifConstants.Colon.ToString();
 
         /// <summary>
         /// Maximum number of values in a multi-valued tag.

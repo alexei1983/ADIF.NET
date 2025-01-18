@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.Contests;
+        public override AdifEnumeration Options => AdifEnumerations.Contests;
 
         /// <summary>
         /// Creates a new CONTEST_ID tag.

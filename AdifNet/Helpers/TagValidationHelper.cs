@@ -7,7 +7,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// Helper class for validating tags in a header or QSO.
     /// </summary>
-    public static class TagValidationHelper
+    internal static class TagValidationHelper
     {
         /// <summary>
         /// 
@@ -47,7 +47,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
 
             if (!string.IsNullOrEmpty(band) && frequency.HasValue)
             {
-                if (!Band.IsFrequencyInBand(band, frequency.Value))
+                if (!AdifBand.IsFrequencyInBand(band, frequency.Value))
                     throw new Exception($"Frequency {frequency.Value} is not in the {band} band.");
             }
         }
@@ -74,9 +74,9 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                 {
                     modeVal = modeTag.Value is string strMode ? strMode : string.Empty;
 
-                    if (!Values.Modes.IsValid(modeVal))
+                    if (!AdifEnumerations.Modes.IsValid(modeVal))
                     {
-                        if (Values.SubModes.IsValid(modeVal))
+                        if (AdifEnumerations.SubModes.IsValid(modeVal))
                             throw new InvalidEnumerationOptionException($"'{modeVal.ToUpper()}' is a sub-mode, not a mode.");
                         else
                             throw new InvalidEnumerationOptionException($"'{modeVal.ToUpper()}' is not a valid mode.");
@@ -92,13 +92,13 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                 {
                     var subModeVal = subModeTag.Value is string strSubMode ? strSubMode : string.Empty;
 
-                    if (Values.SubModes.IsValid(subModeVal))
+                    if (AdifEnumerations.SubModes.IsValid(subModeVal))
                     {
                         if (!hasMode)
                             throw new InvalidEnumerationOptionException($"Sub-mode '{subModeVal.ToUpper()}' requires a mode to be specified.");
 
                         // is the right parent mode specified?
-                        var parentMode = Values.SubModes.GetValue(subModeVal) ?? throw new InvalidEnumerationOptionException($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
+                        var parentMode = AdifEnumerations.SubModes.GetValue(subModeVal) ?? throw new InvalidEnumerationOptionException($"Sub-mode {subModeVal.ToUpper()} has no associated mode.");
 
                         if (!modeVal.Equals(parentMode.Code, StringComparison.OrdinalIgnoreCase))
                             throw new InvalidEnumerationOptionException($"Sub-mode '{subModeVal.ToUpper()}' does not belong to mode '{modeVal.ToUpper()}'");

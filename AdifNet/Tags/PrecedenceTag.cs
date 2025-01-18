@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.ArrlPrecedence;
+        public override AdifEnumeration Options => AdifEnumerations.ArrlPrecedence;
 
         /// <summary>
         /// Creates a new PRECEDENCE tag.

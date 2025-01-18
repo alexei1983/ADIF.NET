@@ -366,7 +366,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="mode">Mode to add to the current QSO.</param>
         public void AddMode(string mode)
         {
-            if (!Values.Modes.IsValid(mode))
+            if (!AdifEnumerations.Modes.IsValid(mode))
                 throw new InvalidEnumerationOptionException($"Invalid mode: '{mode ?? string.Empty}'", mode ?? string.Empty);
 
             Add(new ModeTag(mode));
@@ -378,7 +378,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="mode"></param>
         public void SetMode(string mode)
         {
-            if (!Values.Modes.IsValid(mode))
+            if (!AdifEnumerations.Modes.IsValid(mode))
                 throw new InvalidEnumerationOptionException($"Invalid mode: '{mode ?? string.Empty}'", mode ?? string.Empty);
 
             AddOrReplace(new ModeTag(mode));
@@ -418,8 +418,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="band">Band to add to the current QSO.</param>
         public void AddBand(string band)
         {
-            if (!Values.Bands.IsValid(band))
-                throw new ArgumentException($"Invalid band: '{band}'");
+            if (!AdifEnumerations.Bands.IsValid(band))
+                throw new InvalidEnumerationOptionException($"Invalid band: '{band}'");
 
             Add(new BandTag(band));
         }
@@ -430,8 +430,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="band">Band value.</param>
         public void SetBand(string band)
         {
-            if (!Values.Bands.IsValid(band))
-                throw new ArgumentException($"Invalid band: '{band}'");
+            if (!AdifEnumerations.Bands.IsValid(band))
+                throw new InvalidEnumerationOptionException($"Invalid band: '{band}'");
 
             AddOrReplace(new BandTag(band));
         }
@@ -442,8 +442,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="bandRx">Receiving to add to the current QSO.</param>
         public void AddBandRx(string bandRx)
         {
-            if (!Values.Bands.IsValid(bandRx))
-                throw new ArgumentException($"Invalid band: '{bandRx}'");
+            if (!AdifEnumerations.Bands.IsValid(bandRx))
+                throw new InvalidEnumerationOptionException($"Invalid band: '{bandRx}'");
 
             Add(new BandRxTag(bandRx));
         }
@@ -454,8 +454,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="bandRx">Receiving to set for the current QSO.</param>
         public void SetBandRx(string bandRx)
         {
-            if (!Values.Bands.IsValid(bandRx))
-                throw new ArgumentException($"Invalid band: '{bandRx}'");
+            if (!AdifEnumerations.Bands.IsValid(bandRx))
+                throw new InvalidEnumerationOptionException($"Invalid band: '{bandRx}'");
 
             AddOrReplace(new BandRxTag(bandRx));
         }
@@ -603,7 +603,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             if (addBand)
             {
-                var band = Band.Get(frequency);
+                var band = AdifBand.Get(frequency);
                 if (band != null)
                     AddBand(band.Name);
                 else
@@ -632,7 +632,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             if (setBand)
             {
-                var band = Band.Get(frequency);
+                var band = AdifBand.Get(frequency);
                 if (band != null)
                     SetBand(band.Name);
                 else
@@ -654,7 +654,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             if (addBandRx)
             {
-                var band = Band.Get(frequencyRx);
+                var band = AdifBand.Get(frequencyRx);
                 if (band != null)
                     AddBandRx(band.Name);
                 else
@@ -683,7 +683,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             if (setBandRx)
             {
-                var band = Band.Get(frequencyRx);
+                var band = AdifBand.Get(frequencyRx);
                 if (band != null)
                     SetBandRx(band.Name);
                 else
@@ -1173,14 +1173,14 @@ namespace org.goodspace.Data.Radio.Adif
               string.IsNullOrEmpty(countryName) || string.IsNullOrEmpty(dxccCode))
                 throw new ArgumentException("Cannot set address: missing one or more required values.");
 
-            _ = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            _ = AdifEnumerations.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
 
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(dxccCode), state))
                 throw new DxccException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{state}'");
 
-            var addressValue = $"{operatorName}{Values.CARRIAGE_RETURN}{Values.NEWLINE}{streetAddress}" +
-                               $"{Values.CARRIAGE_RETURN}{Values.NEWLINE}{city}, {state} {postalCode}" +
-                               $"{Values.CARRIAGE_RETURN}{Values.NEWLINE}{countryName}";
+            var addressValue = $"{operatorName}{AdifConstants.CarriageReturn}{AdifConstants.Newline}{streetAddress}" +
+                               $"{AdifConstants.CarriageReturn}{AdifConstants.Newline}{city}, {state} {postalCode}" +
+                               $"{AdifConstants.CarriageReturn}{AdifConstants.Newline}{countryName}";
 
             if (addressValue.IsAscii())
                 AddOrReplace(new AddressTag(addressValue));
@@ -1210,7 +1210,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="setCountryNameFromDxcc"></param>
         public void SetPrimaryAdminSubdivision(string dxccCode, string primaryAdminSubdivisionCode, bool setCountryNameFromDxcc = false)
         {
-            var dxccEntity = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            var dxccEntity = AdifEnumerations.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
             
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(dxccCode), primaryAdminSubdivisionCode))
                 throw new DxccException($"DXCC entity {dxccCode} does not contain primary administrative subdivision '{primaryAdminSubdivisionCode}'");
@@ -1241,7 +1241,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(dxccCode))
                 throw new ArgumentException("DXCC code is required.", nameof(dxccCode));
 
-            var dxccEntity = Values.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
+            var dxccEntity = AdifEnumerations.CountryCodes.GetValue(dxccCode) ?? throw new DxccException($"Invalid DXCC entity: {dxccCode ?? string.Empty}", dxccCode ?? string.Empty);
             
             SetAddress(operatorName, streetAddress, city, state, postalCode, dxccEntity.DisplayName, dxccCode);
         }
@@ -1267,7 +1267,7 @@ namespace org.goodspace.Data.Radio.Adif
               string.IsNullOrEmpty(myCountryName) || string.IsNullOrEmpty(myDxccCode))
                 throw new ArgumentException("Cannot set address: missing one or more required values.");
 
-            var dxccEntity = Values.CountryCodes.GetValue(myDxccCode) ?? throw new DxccException($"Invalid DXCC entity: {myDxccCode ?? string.Empty}", myDxccCode ?? string.Empty);
+            var dxccEntity = AdifEnumerations.CountryCodes.GetValue(myDxccCode) ?? throw new DxccException($"Invalid DXCC entity: {myDxccCode ?? string.Empty}", myDxccCode ?? string.Empty);
 
             if (!DxccHelper.ValidatePrimarySubdivision(DxccHelper.ConvertDxcc(myDxccCode), myState))
                 throw new DxccException($"DXCC entity {myDxccCode} does not contain primary administrative subdivision '{myState}'");
@@ -1304,12 +1304,12 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="receivedVia"></param>
         public void MarkQslReceived(DateTime receivedOn, string? receivedVia)
         {
-            AddOrReplace(new QslRcvdTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new QslRcvdTag(AdifConstants.BooleanTrue));
 
             if (!string.IsNullOrEmpty(receivedVia))
             {
-                if (!Values.Via.IsValid(receivedVia))
-                    throw new ArgumentException($"'{receivedVia}' is not a valid QSL means.");
+                if (!AdifEnumerations.Via.IsValid(receivedVia))
+                    throw new InvalidEnumerationOptionException($"'{receivedVia}' is not a valid QSL means.");
 
                 AddOrReplace(new QslRcvdViaTag(receivedVia));
             }
@@ -1346,12 +1346,12 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="sentVia"></param>
         public void MarkQslSent(DateTime sentOn, string? sentVia)
         {
-            AddOrReplace(new QslSentTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new QslSentTag(AdifConstants.BooleanTrue));
 
             if (!string.IsNullOrEmpty(sentVia))
             {
-                if (!Values.Via.IsValid(sentVia))
-                    throw new ArgumentException($"'{sentVia}' is not a valid QSL means.");
+                if (!AdifEnumerations.Via.IsValid(sentVia))
+                    throw new InvalidEnumerationOptionException($"'{sentVia}' is not a valid QSL means.");
 
                 AddOrReplace(new QslSentViaTag(sentVia));
             }
@@ -1393,7 +1393,7 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.LotwQslSentDate);
 
-            AddOrReplace(new LotwQslSentTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new LotwQslSentTag(AdifConstants.BooleanTrue));
 
             if (addQslSentTag)
                 MarkQslSent(sentOn, "E");
@@ -1411,7 +1411,7 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.LotwQslReceivedDate);
 
-            AddOrReplace(new LotwQslRcvdTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new LotwQslRcvdTag(AdifConstants.BooleanTrue));
 
             if (addQSLRcvdTag)
                 MarkQslReceived(receivedOn, "E");
@@ -1429,7 +1429,7 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.EQslSentDate);
 
-            AddOrReplace(new EQslSentStatusTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new EQslSentStatusTag(AdifConstants.BooleanTrue));
 
             if (addQSLSentTag)
                 MarkQslSent(sentOn, "E");
@@ -1447,7 +1447,7 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.EQslReceivedDate);
 
-            AddOrReplace(new EQslReceivedStatusTag(Values.ADIF_BOOLEAN_TRUE));
+            AddOrReplace(new EQslReceivedStatusTag(AdifConstants.BooleanTrue));
 
             if (addQSLRcvdTag)
                 MarkQslReceived(receivedOn, "E");
@@ -1501,7 +1501,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             dataType ??= string.Empty;
 
-            Add(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
+            Add(new AppDefTag(fieldName, AdifNet.ProgramId, dataType, value));
         }
 
         /// <summary>
@@ -1514,7 +1514,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("Field name is required.", nameof(fieldName));
 
-            Add(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, string.Empty, value));
+            Add(new AppDefTag(fieldName, AdifNet.ProgramId, string.Empty, value));
         }
 
         /// <summary>
@@ -1550,7 +1550,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             dataType ??= string.Empty;
 
-            AddOrReplace(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, dataType, value));
+            AddOrReplace(new AppDefTag(fieldName, AdifNet.ProgramId, dataType, value));
         }
 
         /// <summary>
@@ -1563,7 +1563,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (string.IsNullOrEmpty(fieldName))
                 throw new ArgumentException("Field name is required.", nameof(fieldName));
 
-            AddOrReplace(new AppDefTag(fieldName, Values.DEFAULT_PROGRAM_ID, string.Empty, value));
+            AddOrReplace(new AppDefTag(fieldName, AdifNet.ProgramId, string.Empty, value));
         }
 
         /// <summary>
@@ -1713,7 +1713,7 @@ namespace org.goodspace.Data.Radio.Adif
                 var freq = GetTagValue<double?>(AdifTags.Freq);
 
                 if (freq.HasValue)
-                    band = Band.Get(freq.Value)?.Name;
+                    band = AdifBand.Get(freq.Value)?.Name;
             }
 
             return band;
@@ -1731,7 +1731,7 @@ namespace org.goodspace.Data.Radio.Adif
                 var freqRx = GetTagValue<double?>(AdifTags.FreqRx);
 
                 if (freqRx.HasValue)
-                    bandRx = Band.Get(freqRx.Value)?.Name;
+                    bandRx = AdifBand.Get(freqRx.Value)?.Name;
             }
 
             return bandRx;
@@ -2022,7 +2022,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         public void SetClubLogDoNotUpload()
         {
-            AddOrReplace(new ClubLogQsoUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+            AddOrReplace(new ClubLogQsoUploadStatusTag(AdifConstants.BooleanFalse));
         }
 
         /// <summary>
@@ -2030,7 +2030,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         public void SetHrdDoNotUpload()
         {
-            AddOrReplace(new HrdLogQsoUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+            AddOrReplace(new HrdLogQsoUploadStatusTag(AdifConstants.BooleanFalse));
         }
 
         /// <summary>
@@ -2038,7 +2038,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// </summary>
         public void SetQrzDoNotUpload()
         {
-            AddOrReplace(new QrzQsoUploadStatusTag(Values.ADIF_BOOLEAN_FALSE));
+            AddOrReplace(new QrzQsoUploadStatusTag(AdifConstants.BooleanFalse));
         }
 
         /// <summary>
@@ -2072,8 +2072,8 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.ClubLogQsoUploadDate);
 
-            if (Values.QsoUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
-                AddOrReplace(new ClubLogQsoUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
+            if (AdifEnumerations.QsoUploadStatuses.IsValid(AdifConstants.BooleanTrue))
+                AddOrReplace(new ClubLogQsoUploadStatusTag(AdifConstants.BooleanTrue));
         }
 
         /// <summary>
@@ -2087,8 +2087,8 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.HrdLogQsoUploadDate);
 
-            if (Values.QsoUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
-                AddOrReplace(new HrdLogQsoUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
+            if (AdifEnumerations.QsoUploadStatuses.IsValid(AdifConstants.BooleanTrue))
+                AddOrReplace(new HrdLogQsoUploadStatusTag(AdifConstants.BooleanTrue));
         }
 
         /// <summary>
@@ -2102,8 +2102,8 @@ namespace org.goodspace.Data.Radio.Adif
             else
                 Remove(AdifTags.QrzQsoUploadDate);
 
-            if (Values.QsoUploadStatuses.IsValid(Values.ADIF_BOOLEAN_TRUE))
-                AddOrReplace(new QrzQsoUploadStatusTag(Values.ADIF_BOOLEAN_TRUE));
+            if (AdifEnumerations.QsoUploadStatuses.IsValid(AdifConstants.BooleanTrue))
+                AddOrReplace(new QrzQsoUploadStatusTag(AdifConstants.BooleanTrue));
         }
 
         /// <summary>

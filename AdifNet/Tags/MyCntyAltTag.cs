@@ -16,7 +16,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.SecondarySubdivisionAlts;
+        public override AdifEnumeration Options => AdifEnumerations.SecondarySubdivisionAlts;
 
         /// <summary>
         /// ADIF type.

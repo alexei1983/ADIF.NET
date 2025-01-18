@@ -5,7 +5,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// Helper methods for working with DXCC entities and their primary and secondary administrative subdivisions.
     /// </summary>
-    public static class DxccHelper
+    internal static class DxccHelper
     {
         /// <summary>
         /// 

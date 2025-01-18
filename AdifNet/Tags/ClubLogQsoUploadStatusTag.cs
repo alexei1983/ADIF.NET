@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.QsoUploadStatuses;
+        public override AdifEnumeration Options => AdifEnumerations.QsoUploadStatuses;
 
         /// <summary>
         /// Creates a new CLUBLOG_QSO_UPLOAD_STATUS tag.

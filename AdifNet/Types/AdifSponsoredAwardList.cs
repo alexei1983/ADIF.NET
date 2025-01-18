@@ -115,12 +115,12 @@ namespace org.goodspace.Data.Radio.Adif.Types
             if (string.IsNullOrEmpty(s))
                 return [];
 
-            var prefixes = Values.SponsoredAwardPrefixes.GetValues();
+            var prefixes = AdifEnumerations.SponsoredAwardPrefixes.GetValues();
             var result = new List<string>();
             var exceptions = new List<Exception>();
 
             // split by comma
-            var split = s.Split(Values.COMMA);
+            var split = s.Split(AdifConstants.Comma);
 
             foreach (var award in split)
             {

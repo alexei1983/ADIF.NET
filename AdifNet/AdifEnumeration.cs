@@ -87,8 +87,8 @@ namespace org.goodspace.Data.Radio.Adif
             else if (type == Resources.EnumNameDarcDok)
                 query = Resources.SqlRetrieveDarcDokEnum;
             else if (type == nameof(AdifBoolean))
-                return new AdifEnumeration(nameof(AdifBoolean), new AdifEnumerationValue(Values.ADIF_BOOLEAN_TRUE, Values.ADIF_BOOLEAN_TRUE_DISPLAY),
-                                                                new AdifEnumerationValue(Values.ADIF_BOOLEAN_FALSE, Values.ADIF_BOOLEAN_FALSE_DISPLAY));
+                return new AdifEnumeration(nameof(AdifBoolean), new AdifEnumerationValue(AdifConstants.BooleanTrue, AdifConstants.BooleanTrueDisplay),
+                                                                new AdifEnumerationValue(AdifConstants.BooleanFalse, AdifConstants.BooleanFalseDisplay));
             else if (type == Resources.EnumNamePrimarySubdivision)
             {
                 query = Resources.SqlRetrievePrimarySubdivisionEnum;

@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.PropagationModes;
+        public override AdifEnumeration Options => AdifEnumerations.PropagationModes;
 
         /// <summary>
         /// Creates a new PROP_MODE tag.

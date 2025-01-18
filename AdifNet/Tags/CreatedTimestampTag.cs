@@ -15,7 +15,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Format string.
         /// </summary>
-        public override string? FormatString { get; set; } = $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}";
+        public override string? FormatString { get; set; } = $"{AdifConstants.DateFormat} {AdifConstants.TimeFormatLong}";
 
         /// <summary>
         /// Whether or not the tag is a header tag.
@@ -49,7 +49,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 if (value is DateTime dateTimeIn)
                     return dateTimeIn;
                 else if (DateTime.TryParseExact(value is string strVal ? strVal : value.ToString(),
-                                               FormatString ?? $"{Values.ADIF_DATE_FORMAT} {Values.ADIF_TIME_FORMAT_LONG}",
+                                               FormatString ?? $"{AdifConstants.DateFormat} {AdifConstants.TimeFormatLong}",
                                                FormatProvider,
                                                DateTimeStyles.AllowInnerWhite | DateTimeStyles.AllowLeadingWhite | DateTimeStyles.AllowTrailingWhite,
                                                out DateTime dateTimeParsed))

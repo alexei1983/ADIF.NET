@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration options.
         /// </summary>
-        public override AdifEnumeration Options => Values.Continents;
+        public override AdifEnumeration Options => AdifEnumerations.Continents;
 
         /// <summary>
         /// Creates a new CONT tag.

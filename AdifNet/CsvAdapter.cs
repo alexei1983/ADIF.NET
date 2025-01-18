@@ -5,7 +5,7 @@ namespace org.goodspace.Data.Radio.Adif
     /// <summary>
     /// 
     /// </summary>
-    public class CsvAdapter
+    internal class CsvAdapter
     {
         readonly CsvReader? reader;
         readonly string? contents;

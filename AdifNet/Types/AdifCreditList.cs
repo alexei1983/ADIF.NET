@@ -124,32 +124,32 @@ namespace org.goodspace.Data.Radio.Adif.Types
             var list = new CreditList();
 
             // split by comma first
-            var split = s.Split(Values.COMMA);
+            var split = s.Split(AdifConstants.Comma);
 
             foreach (var val in split)
             {
                 // if a colon is present, split again
-                if (val.Contains(Values.COLON))
+                if (val.Contains(AdifConstants.Colon))
                 {
-                    var creditQslSplit = val.Split(Values.COLON);
+                    var creditQslSplit = val.Split(AdifConstants.Colon);
 
                     if (creditQslSplit == null || creditQslSplit.Length != 2)
                         throw new CreditListException("Invalid value.", val);
 
                     // validate the credit part of the string
-                    if (!Values.Credits.IsValid(creditQslSplit[0]))
+                    if (!AdifEnumerations.Credits.IsValid(creditQslSplit[0]))
                         throw new CreditListException($"Credit '{creditQslSplit[0]}' is not valid.", creditQslSplit[0]);
 
                     // now try to split by ampersand
-                    if (creditQslSplit[1].Contains(Values.AMPERSAND))
+                    if (creditQslSplit[1].Contains(AdifConstants.Ampersand))
                     {
-                        var mediumSplit = creditQslSplit[1].Split(Values.AMPERSAND);
+                        var mediumSplit = creditQslSplit[1].Split(AdifConstants.Ampersand);
 
                         mediumSplit ??= [];
 
                         foreach (var medium in mediumSplit)
                         {
-                            if (!Values.QslMediums.IsValid(medium))
+                            if (!AdifEnumerations.QslMediums.IsValid(medium))
                                 throw new CreditListException($"QSL medium '{medium}' is not valid for credit '{creditQslSplit[0]}'.", $"{creditQslSplit[0]}:{medium}");
 
                             list.Add(creditQslSplit[0], medium);
@@ -158,7 +158,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
                     else
                     {
                         // if no ampersand is present, validate against QSL medium
-                        if (!Values.QslMediums.IsValid(creditQslSplit[1]))
+                        if (!AdifEnumerations.QslMediums.IsValid(creditQslSplit[1]))
                             throw new CreditListException($"QSL medium '{creditQslSplit[1]}' is not valid for credit '{creditQslSplit[0]}'.", $"{creditQslSplit[0]}:{creditQslSplit[1]}");
 
                         list.Add(creditQslSplit[0], creditQslSplit[1]);
@@ -167,7 +167,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
                 else
                 {
                     // if a colon was not present, simply validate against the credit enumeration
-                    if (!Values.Credits.IsValid(val))
+                    if (!AdifEnumerations.Credits.IsValid(val))
                         throw new CreditListException($"Credit '{val}' is not valid.", val);
 
                     list.Add(val);
@@ -521,7 +521,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
                             continue;
 
                         if (x > 0 && total < Count)
-                            result += Values.COMMA.ToString();
+                            result += AdifConstants.Comma.ToString();
 
                         result += this[x].Credit;
 
@@ -529,14 +529,14 @@ namespace org.goodspace.Data.Radio.Adif.Types
 
                         if (mediums != null && mediums.Length > 0)
                         {
-                            result += Values.COLON.ToString();
+                            result += AdifConstants.Colon.ToString();
 
                             for (var y = 0; y < mediums.Length; y++)
                             {
                                 result += mediums[y];
                                 total++;
                                 if ((y + 1) < mediums.Length)
-                                    result += Values.AMPERSAND.ToString();
+                                    result += AdifConstants.Ampersand.ToString();
                             }
                         }
                         else

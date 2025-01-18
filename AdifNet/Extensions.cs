@@ -7,7 +7,7 @@ namespace org.goodspace.Data.Radio.Adif
     /// <summary>
     /// Extension methods for ADIF.
     /// </summary>
-    public static partial class Extensions
+    internal static partial class Extensions
     {
         /// <summary>
         /// Converts the specified string to an <see cref="int"/>.
@@ -50,7 +50,7 @@ namespace org.goodspace.Data.Radio.Adif
         public static bool HasLineEnding(this string s)
         {
             s ??= string.Empty;
-            return s.Contains(Environment.NewLine) || s.Contains(Values.CARRIAGE_RETURN) || s.Contains(Values.NEWLINE);
+            return s.Contains(Environment.NewLine) || s.Contains(AdifConstants.CarriageReturn) || s.Contains(AdifConstants.Newline);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace org.goodspace.Data.Radio.Adif
         /// <returns>True if the <see cref="string"/> is an IOTA designator, else false.</returns>
         public static bool IsIotaDesignator(this string str)
         {
-            var continents = Values.Continents;
+            var continents = AdifEnumerations.Continents;
             var regex = "^(";
 
             for (var x = 0; x < continents.Count; x++)
@@ -233,7 +233,7 @@ namespace org.goodspace.Data.Radio.Adif
             return SotaRegex().IsMatch(str ?? string.Empty);
         }
 
-        [GeneratedRegex(Values.SOTA_REF_REGEX)]
+        [GeneratedRegex(AdifConstants.SotaRefRegex)]
         private static partial Regex SotaRegex();
     }
 }

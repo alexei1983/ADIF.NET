@@ -7,7 +7,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// Helper class for user-defined and application-defined ADIF tags.
     /// </summary>
-    public static class AppUserDefHelper
+    internal static class AppUserDefHelper
     {
         /// <summary>
         /// Converts the specified value to the appropriate type based on the 
@@ -118,14 +118,14 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             switch (typeIndicator.ToUpper())
             {
                 case DataTypes.Boolean:
-                    return value != null && value is bool boolVal ? boolVal ? Values.ADIF_BOOLEAN_TRUE : Values.ADIF_BOOLEAN_FALSE : string.Empty;
+                    return value != null && value is bool boolVal ? boolVal ? AdifConstants.BooleanTrue : AdifConstants.BooleanFalse : string.Empty;
 
                 case DataTypes.Date:
-                    return value != null && value is DateTime dateVal ? dateVal.ToString(Values.ADIF_DATE_FORMAT) : string.Empty;
+                    return value != null && value is DateTime dateVal ? dateVal.ToString(AdifConstants.DateFormat) : string.Empty;
 
                 case DataTypes.Time:
-                    return value != null && value is DateTime timeVal ? timeVal.Second > 0 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_LONG) :
-                           timeVal.Second < 1 ? timeVal.ToString(Values.ADIF_TIME_FORMAT_SHORT) : string.Empty : string.Empty;
+                    return value != null && value is DateTime timeVal ? timeVal.Second > 0 ? timeVal.ToString(AdifConstants.TimeFormatLong) :
+                           timeVal.Second < 1 ? timeVal.ToString(AdifConstants.TimeFormatShort) : string.Empty : string.Empty;
 
                 case DataTypes.String:
                 case DataTypes.MultilineString:
@@ -150,7 +150,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                     if (value != null)
                     {
                         if (value.GetType().IsAssignableFrom(typeof(IEnumerable<string>)))
-                            return string.Join(Values.COMMA.ToString(), (IEnumerable<string>)value);
+                            return string.Join(AdifConstants.Comma.ToString(), (IEnumerable<string>)value);
                         else if (value is string awardListStr)
                             return awardListStr;
                     }
@@ -273,16 +273,16 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
                 if (fieldName[0] == ' ' || fieldName[^1] == ' ')
                     exceptions.Add(new UserDefTagException("User-defined field name cannot begin or end with a space.", fieldName));
 
-                if (fieldName.Contains(Values.CURLY_BRACE_OPEN) || fieldName.Contains(Values.CURLY_BRACE_CLOSE))
+                if (fieldName.Contains(AdifConstants.CurlyBraceOpen) || fieldName.Contains(AdifConstants.CurlyBraceClose))
                     exceptions.Add(new UserDefTagException("User-defined field name cannot contain curly braces.", fieldName));
 
-                if (fieldName.Contains(Values.TAG_OPENING) || fieldName.Contains(Values.TAG_CLOSING))
+                if (fieldName.Contains(AdifConstants.TagOpen) || fieldName.Contains(AdifConstants.TagClose))
                     exceptions.Add(new UserDefTagException("User-defined field name cannot contain angle brackets (greater-than or less-than sign).", fieldName));
 
-                if (fieldName.Contains(Values.COLON))
+                if (fieldName.Contains(AdifConstants.Colon))
                     exceptions.Add(new UserDefTagException("User-defined field name cannot contain a colon.", fieldName));
 
-                if (fieldName.Contains(Values.COMMA))
+                if (fieldName.Contains(AdifConstants.Comma))
                     exceptions.Add(new UserDefTagException("User-defined field name cannot contain a comma.", fieldName));
 
                 if (validateTagNameMatch)
@@ -312,12 +312,12 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (string.IsNullOrEmpty(fullFieldName))
                 throw new ArgumentException("Application-defined field name is required.", nameof(fullFieldName));
 
-            var parts = fullFieldName.Split(Values.UNDERSCORE);
+            var parts = fullFieldName.Split(AdifConstants.Underscore);
 
             if (parts.Length < 3)
                 throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
-            if (!AdifTags.AppDef.Equals($"{parts[0] ?? string.Empty}{Values.UNDERSCORE}", StringComparison.OrdinalIgnoreCase))
+            if (!AdifTags.AppDef.Equals($"{parts[0] ?? string.Empty}{AdifConstants.Underscore}", StringComparison.OrdinalIgnoreCase))
                 throw new AppDefTagException($"Invalid application-defined field name: {fullFieldName}", fullFieldName);
 
             var newParts = new List<string>() { parts[0], parts[1] };
@@ -326,7 +326,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             for (var p = 2; p < parts.Length; p++)
             {
                 if (p > 2)
-                    fieldName += Values.UNDERSCORE.ToString();
+                    fieldName += AdifConstants.Underscore.ToString();
 
                 fieldName += parts[p];
             }
@@ -347,19 +347,19 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (string.IsNullOrEmpty(programId))
                 throw new AppDefTagException("Program ID is required.");
 
-            if (programId.Contains(Values.UNDERSCORE))
+            if (programId.Contains(AdifConstants.Underscore))
                 throw new AppDefTagException("Program ID cannot contain an underscore.");
 
-            if (programId.Contains(Values.COMMA))
+            if (programId.Contains(AdifConstants.Comma))
                 throw new AppDefTagException("Program ID cannot contain a comma.");
 
-            if (programId.Contains(Values.COLON))
+            if (programId.Contains(AdifConstants.Colon))
                 throw new AppDefTagException("Program ID cannot contain a colon.");
 
-            if (programId.Contains(Values.TAG_OPENING) || programId.Contains(Values.TAG_CLOSING))
+            if (programId.Contains(AdifConstants.TagOpen) || programId.Contains(AdifConstants.TagClose))
                 throw new AppDefTagException("Program ID cannot contain an open-angle bracket or close-angle bracket.");
 
-            if (programId.Contains(Values.CURLY_BRACE_OPEN) || programId.Contains(Values.CURLY_BRACE_CLOSE))
+            if (programId.Contains(AdifConstants.CurlyBraceOpen) || programId.Contains(AdifConstants.CurlyBraceClose))
                 throw new AppDefTagException("Program ID cannot contain an open-curly brace or close-curly brace.");
 
             if (programId.EndsWith(' '))
@@ -376,16 +376,16 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (string.IsNullOrEmpty(fieldName))
                 throw new AppDefTagException("Application-defined field name is required.");
 
-            if (fieldName.Contains(Values.COMMA))
+            if (fieldName.Contains(AdifConstants.Comma))
                 throw new AppDefTagException("Application-defined field cannot contain a comma.");
 
-            if (fieldName.Contains(Values.COLON))
+            if (fieldName.Contains(AdifConstants.Colon))
                 throw new AppDefTagException("Application-defined field cannot contain a colon.");
 
-            if (fieldName.Contains(Values.TAG_OPENING) || fieldName.Contains(Values.TAG_CLOSING))
+            if (fieldName.Contains(AdifConstants.TagOpen) || fieldName.Contains(AdifConstants.TagClose))
                 throw new AppDefTagException("Application-defined field cannot contain an open-angle bracket or close-angle bracket.");
 
-            if (fieldName.Contains(Values.CURLY_BRACE_OPEN) || fieldName.Contains(Values.CURLY_BRACE_CLOSE))
+            if (fieldName.Contains(AdifConstants.CurlyBraceOpen) || fieldName.Contains(AdifConstants.CurlyBraceClose))
                 throw new AppDefTagException("Application-defined field cannot contain an open-curly brace or close-curly brace.");
 
             if (fieldName.EndsWith(' '))

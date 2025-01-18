@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.Modes;
+        public override AdifEnumeration Options => AdifEnumerations.Modes;
 
         /// <summary>
         /// Creates a new MODE tag.

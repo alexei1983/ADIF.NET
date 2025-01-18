@@ -12,7 +12,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// 
         /// </summary>
-        public override string? FormatString { get; set; } = Values.ADIF_DATE_FORMAT;
+        public override string? FormatString { get; set; } = AdifConstants.DateFormat;
 
         /// <summary>
         /// ADIF type.

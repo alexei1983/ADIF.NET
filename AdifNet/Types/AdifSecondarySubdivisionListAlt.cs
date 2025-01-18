@@ -71,9 +71,9 @@ namespace org.goodspace.Data.Radio.Adif.Types
             else if (o is AdifEnumerationValue enumVal)
                 strVal = enumVal.Code;
             else if (objType.IsAssignableFrom(typeof(IEnumerable<AdifEnumerationValue>)))
-                strVal = string.Join(Values.SEMICOLON, ((IEnumerable<AdifEnumerationValue>)o).Select(e => e.Code));
+                strVal = string.Join(AdifConstants.Semicolon, ((IEnumerable<AdifEnumerationValue>)o).Select(e => e.Code));
             else if (objType.IsAssignableFrom(typeof(IEnumerable<string>)))
-                strVal = string.Join(Values.SEMICOLON, (IEnumerable<string>)o);
+                strVal = string.Join(AdifConstants.Semicolon, (IEnumerable<string>)o);
             else
                 strVal = o.ToString();
 
@@ -112,16 +112,16 @@ namespace org.goodspace.Data.Radio.Adif.Types
 
             List<string> returnVal = [];
 
-            if (s.Contains(Values.SEMICOLON))
+            if (s.Contains(AdifConstants.Semicolon))
             {
-                var values = s.Split(Values.SEMICOLON, StringSplitOptions.RemoveEmptyEntries |
+                var values = s.Split(AdifConstants.Semicolon, StringSplitOptions.RemoveEmptyEntries |
                                                        StringSplitOptions.TrimEntries);
 
                 if (values?.Length > 0)
                 {
                     foreach (var val in values)
                     {
-                        if (!Values.SecondarySubdivisionAlts.IsValid(val) && throwExceptions)
+                        if (!AdifEnumerations.SecondarySubdivisionAlts.IsValid(val) && throwExceptions)
                             throw new InvalidEnumerationOptionException($"Invalid value for ADIF type {TypeName}: {val}");
                         else
                             returnVal = [.. returnVal, val];

@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.Via;
+        public override AdifEnumeration Options => AdifEnumerations.Via;
 
         /// <summary>
         /// Creates a new QSL_SENT_VIA tag.

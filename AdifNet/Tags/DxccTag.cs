@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.CountryCodes;
+        public override AdifEnumeration Options => AdifEnumerations.CountryCodes;
 
         /// <summary>
         /// Creates a new DXCC tag.

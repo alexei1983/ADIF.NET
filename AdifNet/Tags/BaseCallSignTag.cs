@@ -48,7 +48,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             return CallsignRegex().IsMatch(strVal);
         }
 
-        [GeneratedRegex(Values.CALLSIGN_REGEX)]
+        [GeneratedRegex(AdifConstants.CallSignRegex)]
         private static partial Regex CallsignRegex();
     }
 }

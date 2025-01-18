@@ -4,7 +4,7 @@ namespace org.goodspace.Data.Radio.Adif
     /// <summary>
     /// Defines the names of ADIF tags.
     /// </summary>
-    public static class AdifTags
+    internal static class AdifTags
     {
         /// <summary>
         /// ADDRESS tag.

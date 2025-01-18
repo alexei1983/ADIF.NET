@@ -24,9 +24,9 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 var value = $"{FieldName}";
 
                 if (CustomOptions != null && CustomOptions.Length > 0)
-                    value = $"{value}{Values.COMMA}{Values.CURLY_BRACE_OPEN}{string.Join(Values.COMMA.ToString(), CustomOptions)}{Values.CURLY_BRACE_CLOSE}";
+                    value = $"{value}{AdifConstants.Comma}{AdifConstants.CurlyBraceOpen}{string.Join(AdifConstants.Comma.ToString(), CustomOptions)}{AdifConstants.CurlyBraceClose}";
                 else if (UpperBound > LowerBound)
-                    value = $"{value}{Values.COMMA}{Values.CURLY_BRACE_OPEN}{LowerBound}{Values.COLON}{UpperBound}{Values.CURLY_BRACE_CLOSE}";
+                    value = $"{value}{AdifConstants.Comma}{AdifConstants.CurlyBraceOpen}{LowerBound}{AdifConstants.Colon}{UpperBound}{AdifConstants.CurlyBraceClose}";
 
                 return value;
             }
@@ -148,8 +148,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
                     if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(FieldName) && FieldId > 0)
                     {
-                        retVal = $"{Values.TAG_OPENING}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}{ToString("I", provider)}";
-                        retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpperInvariant()}" : string.Empty)}{Values.TAG_CLOSING}";
+                        retVal = $"{AdifConstants.TagOpen}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}{ToString("I", provider)}";
+                        retVal = $"{retVal}{AdifConstants.ValueLengthIndicator}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{AdifConstants.Colon}{DataType.ToUpperInvariant()}" : string.Empty)}{AdifConstants.TagClose}";
                         retVal = $"{retVal}{TextValue} ";
                     }
                     return retVal;
@@ -176,10 +176,10 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
             var el = document.CreateElement(Name);
             el.InnerText = FieldName;
-            el.SetAttribute(ADXValues.ADX_FIELDID_ATTRIBUTE, FieldId.ToString());
+            el.SetAttribute(AdxConstants.AttributeFieldId, FieldId.ToString());
 
             if (!string.IsNullOrEmpty(DataType))
-                el.SetAttribute(ADXValues.ADX_TYPE_ATTRIBUTE, DataType);
+                el.SetAttribute(AdxConstants.AttributeType, DataType);
 
             if (CustomOptions != null)
             {
@@ -188,15 +188,15 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 {
                     enumStr += CustomOptions[x];
                     if ((x + 1) < CustomOptions.Length)
-                        enumStr += Values.COMMA.ToString();
+                        enumStr += AdifConstants.Comma.ToString();
                 }
-                el.SetAttribute(ADXValues.ADX_ENUM_ATTRIBUTE,
-                                $"{Values.CURLY_BRACE_OPEN}{enumStr}{Values.CURLY_BRACE_CLOSE}");
+                el.SetAttribute(AdxConstants.AttributeEnum,
+                                $"{AdifConstants.CurlyBraceOpen}{enumStr}{AdifConstants.CurlyBraceClose}");
             }
 
             if (LowerBound < UpperBound)
-                el.SetAttribute(ADXValues.ADX_RANGE_ATTRIBUTE,
-                                $"{Values.CURLY_BRACE_OPEN}{LowerBound}{Values.COLON}{UpperBound}{Values.CURLY_BRACE_CLOSE}");
+                el.SetAttribute(AdxConstants.AttributeRange,
+                                $"{AdifConstants.CurlyBraceOpen}{LowerBound}{AdifConstants.Colon}{UpperBound}{AdifConstants.CurlyBraceClose}");
 
             return el;
         }

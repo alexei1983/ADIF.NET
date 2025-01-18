@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.QsoCompleteStatuses;
+        public override AdifEnumeration Options => AdifEnumerations.QsoCompleteStatuses;
 
         /// <summary>
         /// Creates a new QSO_COMPLETE tag.

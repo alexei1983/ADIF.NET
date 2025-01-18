@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// 
         /// </summary>
-        public override AdifEnumeration Options => Values.ArrlSections;
+        public override AdifEnumeration Options => AdifEnumerations.ArrlSections;
 
         /// <summary>
         /// Creates a new ARRL_SECT tag.

@@ -114,7 +114,7 @@ namespace org.goodspace.Data.Radio.Adif
             if (doc == null || doc.Root == null)
                 throw new AdxParseException("No XML document root found.");
 
-            if (doc.Root.Name.LocalName != ADXValues.ADX_ROOT_ELEMENT)
+            if (doc.Root.Name.LocalName != AdxConstants.ElementRoot)
                 throw new AdxParseException("Invalid ADX document.");
 
             var dataSet = new AdifDataSet
@@ -129,7 +129,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             var qsoList = new List<AdifQso>();
 
-            foreach (var headerElement in doc.Descendants(ns + ADXValues.ADX_HEADER_ELEMENT)?.Elements() ?? [])
+            foreach (var headerElement in doc.Descendants(ns + AdxConstants.ElementHeader)?.Elements() ?? [])
             {
                 currentElementCount++;
 
@@ -148,7 +148,7 @@ namespace org.goodspace.Data.Radio.Adif
 
                     userDefTag.FieldName = headerElement.Value;
 
-                    XAttribute? fieldIdAttr = headerElement.Attribute(ADXValues.ADX_FIELDID_ATTRIBUTE);
+                    XAttribute? fieldIdAttr = headerElement.Attribute(AdxConstants.AttributeFieldId);
 
                     if (fieldIdAttr == null || string.IsNullOrEmpty(fieldIdAttr.Value))
                         throw new AdxParseException($"No field ID specified for user-defined field {userDefTag.FieldName}.");
@@ -160,29 +160,29 @@ namespace org.goodspace.Data.Radio.Adif
                     userDefTag.FieldId = fieldId;
 
                     // get the data type indicator
-                    XAttribute? typeAttr = headerElement.Attribute(ADXValues.ADX_TYPE_ATTRIBUTE);
+                    XAttribute? typeAttr = headerElement.Attribute(AdxConstants.AttributeType);
 
                     if (typeAttr != null)
                         userDefTag.DataType = typeAttr.Value?.ToUpper() ?? string.Empty;
 
                     // get the enum attribute, if present
-                    XAttribute? enumAttr = headerElement.Attribute(ADXValues.ADX_ENUM_ATTRIBUTE);
+                    XAttribute? enumAttr = headerElement.Attribute(AdxConstants.AttributeEnum);
 
                     if (enumAttr != null)
                     {
-                        var enumStr = (enumAttr.Value ?? string.Empty).Trim().Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
-                        var customOptions = enumStr.Split(Values.COMMA);
+                        var enumStr = (enumAttr.Value ?? string.Empty).Trim().Trim(AdifConstants.CurlyBraceOpen).Trim(AdifConstants.CurlyBraceClose);
+                        var customOptions = enumStr.Split(AdifConstants.Comma);
                         if (customOptions != null && customOptions.Length > 0)
                             userDefTag.CustomOptions = customOptions;
                     }
 
                     // get the range attribute, if present
-                    XAttribute? rangeAttr = headerElement.Attribute(ADXValues.ADX_RANGE_ATTRIBUTE);
+                    XAttribute? rangeAttr = headerElement.Attribute(AdxConstants.AttributeRange);
 
                     if (rangeAttr != null)
                     {
-                        var rangeStr = (rangeAttr.Value ?? string.Empty).Trim().Trim(Values.CURLY_BRACE_OPEN).Trim(Values.CURLY_BRACE_CLOSE);
-                        var ranges = rangeStr.Split(Values.COLON);
+                        var rangeStr = (rangeAttr.Value ?? string.Empty).Trim().Trim(AdifConstants.CurlyBraceOpen).Trim(AdifConstants.CurlyBraceClose);
+                        var ranges = rangeStr.Split(AdifConstants.Colon);
                         if (ranges != null && ranges.Length == 2)
                         {
                             if (!double.TryParse(ranges[0], out double lowerBound))
@@ -208,7 +208,7 @@ namespace org.goodspace.Data.Radio.Adif
                 ReportProgress();
             }
 
-            foreach (var recordElement in doc.Descendants(ns + ADXValues.ADX_RECORDS_ELEMENT)?.Elements() ?? [])
+            foreach (var recordElement in doc.Descendants(ns + AdxConstants.ElementRecords)?.Elements() ?? [])
             {
                 currentElementCount++;
 
@@ -223,19 +223,19 @@ namespace org.goodspace.Data.Radio.Adif
 
                     if (qsoTag == null || AdifTags.UserDef.Equals(qsoElement.Name.LocalName))
                     {
-                        if (ADXValues.ADX_APP_ELEMENT.Equals(qsoElement.Name.LocalName))
+                        if (AdxConstants.ElementApp.Equals(qsoElement.Name.LocalName))
                         {
                             // <APP PROGRAMID="MONOLOG" FIELDNAME="Compression" TYPE="s">off</APP>
                             var appTag = new AppDefTag();
 
                             // get the data type attribute, if present
-                            XAttribute? typeAttr = qsoElement.Attribute(ADXValues.ADX_TYPE_ATTRIBUTE);
+                            XAttribute? typeAttr = qsoElement.Attribute(AdxConstants.AttributeType);
 
                             if (typeAttr != null)
                                 appTag.DataType = typeAttr.Value?.ToUpper() ?? string.Empty;
 
                             // get the field name attribute, if present
-                            XAttribute? fieldNameAttr = qsoElement.Attribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE);
+                            XAttribute? fieldNameAttr = qsoElement.Attribute(AdxConstants.AttributeFieldName);
 
                             if (fieldNameAttr == null || string.IsNullOrEmpty(fieldNameAttr.Value))
                                 throw new AdxParseException("Field name is required for all application-defined fields.");
@@ -243,7 +243,7 @@ namespace org.goodspace.Data.Radio.Adif
                             appTag.FieldName = fieldNameAttr.Value;
 
                             // get the program ID attribute, if present
-                            XAttribute? progIdAttr = qsoElement.Attribute(ADXValues.ADX_PROGRAMID_ATTRIBUTE);
+                            XAttribute? progIdAttr = qsoElement.Attribute(AdxConstants.AttributeProgramId);
 
                             if (progIdAttr == null || string.IsNullOrEmpty(progIdAttr.Value))
                                 throw new AdxParseException($"Program ID is required for application-defined field {appTag.FieldName}");
@@ -256,7 +256,7 @@ namespace org.goodspace.Data.Radio.Adif
                         else if (AdifTags.UserDef.Equals(qsoElement.Name.LocalName))
                         {
                             // <USERDEF FIELDNAME="EPC">32123</USERDEF>
-                            XAttribute? userDefFieldNameAttr = qsoElement.Attribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE);
+                            XAttribute? userDefFieldNameAttr = qsoElement.Attribute(AdxConstants.AttributeFieldName);
 
                             if (userDefFieldNameAttr == null || string.IsNullOrEmpty(userDefFieldNameAttr.Value))
                                 throw new AdxParseException("Field name is required for all user-defined fields.");

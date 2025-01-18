@@ -62,7 +62,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             else
                 _value = value?.ToString() ?? string.Empty;
 
-            if (!IsValidOption(_value))
+            if (!IsValidOption(_value) && RestrictOptions)
                 throw new InvalidEnumerationOptionException($"Invalid enumeration value for tag {Name}: {_value}");
 
             return _value;

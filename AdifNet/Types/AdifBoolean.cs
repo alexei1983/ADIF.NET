@@ -78,12 +78,12 @@ namespace org.goodspace.Data.Radio.Adif.Types
             bool success;
             switch (s)
             {
-                case Values.ADIF_BOOLEAN_TRUE:
+                case AdifConstants.BooleanTrue:
                     result = true;
                     success = true;
                     break;
 
-                case Values.ADIF_BOOLEAN_FALSE:
+                case AdifConstants.BooleanFalse:
                     result = false;
                     success = true;
                     break;

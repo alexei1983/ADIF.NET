@@ -14,7 +14,12 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration options.
         /// </summary>
-        public override AdifEnumeration Options => Values.SubModes;
+        public override AdifEnumeration Options => AdifEnumerations.SubModes;
+
+        /// <summary>
+        /// Whether or not values must be part of the defined enumeration for the tag.
+        /// </summary>
+        public override bool RestrictOptions => false;
 
         /// <summary>
         /// Creates a new SUBMODE tag.

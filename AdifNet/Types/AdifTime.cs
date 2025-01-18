@@ -70,7 +70,7 @@ namespace org.goodspace.Data.Radio.Adif.Types
             s ??= string.Empty;
 
             bool success = DateTime.TryParseExact(s,
-                                                  s.Length > 4 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT,
+                                                  s.Length > 4 ? AdifConstants.TimeFormatLong : AdifConstants.TimeFormatShort,
                                                   CultureInfo.CurrentCulture,
                                                   DateTimeStyles.NoCurrentDateDefault,
                                                   out result);

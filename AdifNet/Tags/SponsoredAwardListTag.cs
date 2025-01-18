@@ -12,7 +12,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// String that delimits values in a multivalued ADIF tag.
         /// </summary>
-        public override string ValueSeparator => Values.COMMA.ToString();
+        public override string ValueSeparator => AdifConstants.Comma.ToString();
 
         /// <summary>
         /// ADIF type.
@@ -22,7 +22,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid sponsored award prefixes.
         /// </summary>
-        public string[] Prefixes => Values.SponsoredAwardPrefixes.GetValues();
+        public string[] Prefixes => AdifEnumerations.SponsoredAwardPrefixes.GetValues();
 
         /// <summary>
         /// Creates a new instance of the <see cref="SponsoredAwardListTag"/>.

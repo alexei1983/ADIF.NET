@@ -4,7 +4,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// 
     /// </summary>
-    public static class CabrilloHelper
+    internal static class CabrilloHelper
     {
         /// <summary>
         /// 
@@ -30,9 +30,9 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
             if (string.IsNullOrEmpty(mode))
             {
                 var subMode = qso.GetTagValue<string>(AdifTags.SubMode);
-                if (!string.IsNullOrEmpty(subMode) && Values.SubModes.IsValid(subMode))
+                if (!string.IsNullOrEmpty(subMode) && AdifEnumerations.SubModes.IsValid(subMode))
                 {
-                    var parentMode = Values.SubModes.GetValue(subMode);
+                    var parentMode = AdifEnumerations.SubModes.GetValue(subMode);
                     if (parentMode != null)
                         mode = parentMode.Code;
                 }

@@ -36,8 +36,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             get
             {
-                return DataType == DataTypes.Date ? Values.ADIF_DATE_FORMAT :
-                  DataType == DataTypes.Time ? Values.ADIF_TIME_FORMAT_LONG : null;
+                return DataType == DataTypes.Date ? AdifConstants.DateFormat :
+                  DataType == DataTypes.Time ? AdifConstants.TimeFormatLong : null;
             }
         }
 
@@ -156,7 +156,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
             var el = document.CreateElement(AdifTags.UserDef);
             el.InnerText = TextValue;
-            el.SetAttribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE, Name);
+            el.SetAttribute(AdxConstants.AttributeFieldName, Name);
 
             return el;
         }

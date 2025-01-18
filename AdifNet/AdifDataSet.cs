@@ -133,11 +133,11 @@ namespace org.goodspace.Data.Radio.Adif
             HandleFlags(flags);
 
             var doc = new XmlDocument();
-            var rootEl = doc.CreateElement(ADXValues.ADX_ROOT_ELEMENT);
+            var rootEl = doc.CreateElement(AdxConstants.ElementRoot);
 
             if (Header != null)
             {
-                var headerEl = doc.CreateElement(ADXValues.ADX_HEADER_ELEMENT);
+                var headerEl = doc.CreateElement(AdxConstants.ElementHeader);
 
                 var headerText = ToString("H", CultureInfo.CurrentCulture);
 
@@ -154,13 +154,13 @@ namespace org.goodspace.Data.Radio.Adif
                 rootEl.AppendChild(headerEl);
             }
 
-            var recordEl = doc.CreateElement(ADXValues.ADX_RECORDS_ELEMENT);
+            var recordEl = doc.CreateElement(AdxConstants.ElementRecords);
 
             if (Qsos != null)
             {
                 foreach (var qso in Qsos)
                 {
-                    var qsoRecordEl = doc.CreateElement(ADXValues.ADX_RECORD_ELEMENT);
+                    var qsoRecordEl = doc.CreateElement(AdxConstants.ElementRecord);
 
                     foreach (var tag in qso)
                     {
@@ -286,8 +286,8 @@ namespace org.goodspace.Data.Radio.Adif
 
                     if (!Header.Contains(AdifTags.ProgramId))
                     {
-                        Header.Add(new ProgramIdTag(Values.DEFAULT_PROGRAM_ID));
-                        Header.AddOrReplace(new ProgramVersionTag(Values.ProgramVersion));
+                        Header.Add(new ProgramIdTag(AdifNet.ProgramId));
+                        Header.AddOrReplace(new ProgramVersionTag(AdifNet.ProgramVersion));
                     }
                 }
             }
@@ -651,7 +651,7 @@ namespace org.goodspace.Data.Radio.Adif
 
                     if (Header != null && Header.Count > 0)
                     {
-                        val += (string.IsNullOrEmpty(HeaderText) ? Values.DEFAULT_ADIF_HEADER_TEXT : HeaderText) + Environment.NewLine;
+                        val += (string.IsNullOrEmpty(HeaderText) ? AdifConstants.DefaultHeaderText : HeaderText) + Environment.NewLine;
                         foreach (var tag in Header)
                         {
                             if (tag is not EndHeaderTag)

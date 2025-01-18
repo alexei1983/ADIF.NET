@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Primary subdivision enumeration.
         /// </summary>
-        public override AdifEnumeration Options => Values.PrimarySubdivisions;
+        public override AdifEnumeration Options => AdifEnumerations.PrimarySubdivisions;
 
         /// <summary>
         /// Creates a new STATE tag.

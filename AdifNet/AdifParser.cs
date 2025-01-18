@@ -194,7 +194,7 @@ namespace org.goodspace.Data.Radio.Adif
         void Initialize()
         {
             // find the position of <EOH>
-            var headerEndingPos = data.IndexOf($"{Values.TAG_OPENING}{AdifTags.EndHeader}{Values.TAG_CLOSING}",
+            var headerEndingPos = data.IndexOf($"{AdifConstants.TagOpen}{AdifTags.EndHeader}{AdifConstants.TagClose}",
                                                     StringComparison.OrdinalIgnoreCase);
 
             // if a header is not present, we can return from the method
@@ -212,11 +212,11 @@ namespace org.goodspace.Data.Radio.Adif
             while (i < headerEndingPos)
             {
                 // skip comments
-                if (data[i] == Values.COMMENT_INDICATOR)
+                if (data[i] == AdifConstants.CommentIndicator)
                 {
                     while (i < headerEndingPos)
                     {
-                        if (data[i] == Values.NEWLINE)
+                        if (data[i] == AdifConstants.Newline)
                         {
                             lineNumber++;
                             break;
@@ -227,14 +227,14 @@ namespace org.goodspace.Data.Radio.Adif
                 else
                 {
                     // find the beginning of a tag
-                    if (data[i] == Values.TAG_OPENING)
+                    if (data[i] == AdifConstants.TagOpen)
                     {
                         i++;
 
                         // record the key
-                        while (i < headerEndingPos && data[i] != Values.VALUE_LENGTH_CHAR)
+                        while (i < headerEndingPos && data[i] != AdifConstants.ValueLengthIndicator)
                         {
-                            if (data[i] == Values.NEWLINE)
+                            if (data[i] == AdifConstants.Newline)
                                 lineNumber++;
 
                             tag = $"{tag}{data[i]}"; //tag + this.data[this.i];
@@ -247,9 +247,9 @@ namespace org.goodspace.Data.Radio.Adif
                                 var fieldNumber = string.Empty;
 
                                 // read the field ID
-                                while (i < headerEndingPos && data[i] != Values.VALUE_LENGTH_CHAR)
+                                while (i < headerEndingPos && data[i] != AdifConstants.ValueLengthIndicator)
                                 {
-                                    if (data[i] == Values.NEWLINE)
+                                    if (data[i] == AdifConstants.Newline)
                                         lineNumber++;
 
                                     fieldNumber += data[i];
@@ -262,9 +262,9 @@ namespace org.goodspace.Data.Radio.Adif
                                 fieldId = fieldNumber.ToInt32();
 
                                 // read the value length
-                                while (i < headerEndingPos && data[i] != Values.VALUE_LENGTH_CHAR)
+                                while (i < headerEndingPos && data[i] != AdifConstants.ValueLengthIndicator)
                                 {
-                                    if (data[i] == Values.NEWLINE)
+                                    if (data[i] == AdifConstants.Newline)
                                         lineNumber++;
 
                                     valueLength += data[i];
@@ -275,9 +275,9 @@ namespace org.goodspace.Data.Radio.Adif
                                 i++;
 
                                 // read the data type
-                                while (i < headerEndingPos && data[i] != Values.TAG_CLOSING)
+                                while (i < headerEndingPos && data[i] != AdifConstants.TagClose)
                                 {
-                                    if (data[i] == Values.NEWLINE)
+                                    if (data[i] == AdifConstants.Newline)
                                         lineNumber++;
 
                                     userDefDataType += data[i];
@@ -296,9 +296,9 @@ namespace org.goodspace.Data.Radio.Adif
                             i++;
 
                             // find out how long the value is
-                            while (i < headerEndingPos && data[i] != Values.TAG_CLOSING)
+                            while (i < headerEndingPos && data[i] != AdifConstants.TagClose)
                             {
-                                if (data[i] == Values.NEWLINE)
+                                if (data[i] == AdifConstants.Newline)
                                     lineNumber++;
 
                                 valueLength += data[i];
@@ -314,7 +314,7 @@ namespace org.goodspace.Data.Radio.Adif
                         // copy the value into the buffer
                         while (len > 0 && i < headerEndingPos)
                         {
-                            if (data[i] == Values.NEWLINE)
+                            if (data[i] == AdifConstants.Newline)
                                 lineNumber++;
 
                             value += data[i];
@@ -335,9 +335,9 @@ namespace org.goodspace.Data.Radio.Adif
                             var max = 0d;
 
                             // read the field name
-                            while (userDefLen > 0 && value[x] != Values.COMMA)
+                            while (userDefLen > 0 && value[x] != AdifConstants.Comma)
                             {
-                                if (data[i] == Values.NEWLINE)
+                                if (data[i] == AdifConstants.Newline)
                                     lineNumber++;
 
                                 fieldName += value[x];
@@ -345,23 +345,23 @@ namespace org.goodspace.Data.Radio.Adif
                                 x++;
                             };
 
-                            while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_OPEN)
+                            while (userDefLen > 0 && value[x] != AdifConstants.CurlyBraceOpen)
                             {
-                                if (data[i] == Values.NEWLINE)
+                                if (data[i] == AdifConstants.Newline)
                                     lineNumber++;
 
                                 x++;
                                 userDefLen--;
                             }
 
-                            if (userDefLen > 0 && value[x] == Values.CURLY_BRACE_OPEN)
+                            if (userDefLen > 0 && value[x] == AdifConstants.CurlyBraceOpen)
                             {
                                 x++; // iterate past the curly braces
 
                                 // read the value between the curly braces
-                                while (userDefLen > 0 && value[x] != Values.CURLY_BRACE_CLOSE)
+                                while (userDefLen > 0 && value[x] != AdifConstants.CurlyBraceClose)
                                 {
-                                    if (data[i] == Values.NEWLINE)
+                                    if (data[i] == AdifConstants.Newline)
                                         lineNumber++;
 
                                     curlyBraceVal += value[x];
@@ -373,17 +373,17 @@ namespace org.goodspace.Data.Radio.Adif
                             if (!string.IsNullOrWhiteSpace(curlyBraceVal))
                             {
                                 // determine how to parse the optional curly brace string (e.g. as enum or range)
-                                if (DataTypes.Enumeration.Equals(userDefDataType, StringComparison.OrdinalIgnoreCase) || curlyBraceVal.Contains(Values.COMMA))
+                                if (DataTypes.Enumeration.Equals(userDefDataType, StringComparison.OrdinalIgnoreCase) || curlyBraceVal.Contains(AdifConstants.Comma))
                                 {
                                     // split by comma
-                                    enumValues = curlyBraceVal.Split(new[] { Values.COMMA }, StringSplitOptions.RemoveEmptyEntries);
+                                    enumValues = curlyBraceVal.Split(new[] { AdifConstants.Comma }, StringSplitOptions.RemoveEmptyEntries);
                                 }
                                 else
                                 {
                                     // parse as range
-                                    if (curlyBraceVal.Contains(Values.COLON.ToString()))
+                                    if (curlyBraceVal.Contains(AdifConstants.Colon.ToString()))
                                     {
-                                        var minMaxArray = curlyBraceVal.Split(new[] { Values.COLON }, StringSplitOptions.RemoveEmptyEntries);
+                                        var minMaxArray = curlyBraceVal.Split(new[] { AdifConstants.Colon }, StringSplitOptions.RemoveEmptyEntries);
 
                                         if (minMaxArray.Length == 2)
                                         {
@@ -427,7 +427,7 @@ namespace org.goodspace.Data.Radio.Adif
             // iterate past the <EOH> header ending tag
             i = headerEndingPos + 5;
 
-            if (data[i] == Values.NEWLINE)
+            if (data[i] == AdifConstants.Newline)
                 lineNumber++;
 
             // parse the header tags into ITag objects
@@ -461,7 +461,7 @@ namespace org.goodspace.Data.Radio.Adif
         {
             if (i >= data.Length)
                 return [];
-            var end = data.IndexOf($"{Values.TAG_OPENING}{AdifTags.EndRecord}{Values.TAG_CLOSING}",
+            var end = data.IndexOf($"{AdifConstants.TagOpen}{AdifTags.EndRecord}{AdifConstants.TagClose}",
                                     i,
                                     StringComparison.OrdinalIgnoreCase);
 
@@ -493,7 +493,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             for (var a = 0; a < record.Length; a++)
             {
-                if (record[a] == Values.TAG_OPENING)
+                if (record[a] == AdifConstants.TagOpen)
                 {
                     var tagName = string.Empty;
                     var value = string.Empty;
@@ -510,7 +510,7 @@ namespace org.goodspace.Data.Radio.Adif
                     a++; //go past the tag opening <
 
                     // get the tag
-                    while (record[a] != Values.VALUE_LENGTH_CHAR)
+                    while (record[a] != AdifConstants.ValueLengthIndicator)
                     {
                         tagName += record[a]; // append this char to the tag name
                         a++;
@@ -521,28 +521,28 @@ namespace org.goodspace.Data.Radio.Adif
                             isAppField = true;
 
                             // read the program ID
-                            while (a < record.Length && record[a] != Values.UNDERSCORE)
+                            while (a < record.Length && record[a] != AdifConstants.Underscore)
                             {
                                 programId += record[a];
                                 a++;
                             }
 
                             // bypass the underscore
-                            if (record[a] == Values.UNDERSCORE)
+                            if (record[a] == AdifConstants.Underscore)
                                 a++;
 
                             // read the field name (until we hit a colon)
-                            while (a < record.Length && record[a] != Values.VALUE_LENGTH_CHAR)
+                            while (a < record.Length && record[a] != AdifConstants.ValueLengthIndicator)
                             {
                                 appFieldName += record[a];
                                 a++;
                             }
 
                             // read the length and data type
-                            if (record[a] == Values.VALUE_LENGTH_CHAR)
+                            if (record[a] == AdifConstants.ValueLengthIndicator)
                                 a++;
 
-                            while (a < record.Length && record[a] != Values.VALUE_LENGTH_CHAR && record[a] != Values.TAG_CLOSING)
+                            while (a < record.Length && record[a] != AdifConstants.ValueLengthIndicator && record[a] != AdifConstants.TagClose)
                             {
                                 appFieldLength += record[a];
                                 a++;
@@ -550,16 +550,16 @@ namespace org.goodspace.Data.Radio.Adif
 
                             len = appFieldLength.ToInt32();
 
-                            var dataTypePresent = record[a] == Values.VALUE_LENGTH_CHAR;
+                            var dataTypePresent = record[a] == AdifConstants.ValueLengthIndicator;
 
                             // bypass unnecessary characters
-                            if (record[a] == Values.VALUE_LENGTH_CHAR) //|| record[a] == Values.TagClosing)
+                            if (record[a] == AdifConstants.ValueLengthIndicator) //|| record[a] == Values.TagClosing)
                                 a++;
 
                             // read the data type, if one is present
                             if (dataTypePresent)
                             {
-                                while (a < record.Length && record[a] != Values.TAG_CLOSING)
+                                while (a < record.Length && record[a] != AdifConstants.TagClose)
                                 {
                                     appFieldDataType += record[a];
                                     a++;
@@ -584,14 +584,14 @@ namespace org.goodspace.Data.Radio.Adif
                     {
                         a++; // iterate past the : (value separator)
 
-                        while (record[a] != Values.TAG_CLOSING && record[a] != Values.VALUE_LENGTH_CHAR)
+                        while (record[a] != AdifConstants.TagClose && record[a] != AdifConstants.ValueLengthIndicator)
                         {
                             len_str += record[a];
                             a++;
                         };
-                        if (record[a] == Values.VALUE_LENGTH_CHAR)
+                        if (record[a] == AdifConstants.ValueLengthIndicator)
                         {
-                            while (record[a] != Values.TAG_CLOSING)
+                            while (record[a] != AdifConstants.TagClose)
                             {
                                 a++;
                             }
@@ -614,11 +614,11 @@ namespace org.goodspace.Data.Radio.Adif
                 }
 
                 // skip comments
-                if (record[a] == Values.COMMENT_INDICATOR)
+                if (record[a] == AdifConstants.CommentIndicator)
                 {
                     while (a < record.Length)
                     {
-                        if (record[a] == Values.NEWLINE)
+                        if (record[a] == AdifConstants.Newline)
                         {
                             break;
                         }

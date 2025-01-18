@@ -12,7 +12,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Tag name.
         /// </summary>
-        public override string Name => $"{AdifTags.AppDef}{ProgramId}{Values.UNDERSCORE}{FieldName ?? string.Empty}";
+        public override string Name => $"{AdifTags.AppDef}{ProgramId}{AdifConstants.Underscore}{FieldName ?? string.Empty}";
 
         /// <summary>
         /// Value of the tag as a <see cref="string"/>.
@@ -44,7 +44,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
             get
             {
-                return programId ?? Values.DEFAULT_PROGRAM_ID;
+                return programId ?? AdifNet.ProgramId;
             }
 
             set
@@ -175,8 +175,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
                     if (!string.IsNullOrEmpty(FieldName))
                     {
-                        retVal = $"{Values.TAG_OPENING}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}";
-                        retVal = $"{retVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{Values.COLON}{DataType.ToUpper()}" : string.Empty)}{Values.TAG_CLOSING}";
+                        retVal = $"{AdifConstants.TagOpen}{("a".Equals(format) ? ToString("n", provider) : ToString("N", provider))}";
+                        retVal = $"{retVal}{AdifConstants.ValueLengthIndicator}{ValueLength}{(!string.IsNullOrEmpty(DataType) ? $"{AdifConstants.Colon}{DataType.ToUpper()}" : string.Empty)}{AdifConstants.TagClose}";
                         retVal = $"{retVal}{TextValue} ";
                     }
                     return retVal;
@@ -202,13 +202,13 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             if (document == null)
                 return null;
 
-            var el = document.CreateElement(ADXValues.ADX_APP_ELEMENT);
+            var el = document.CreateElement(AdxConstants.ElementApp);
             el.InnerText = TextValue;
-            el.SetAttribute(ADXValues.ADX_PROGRAMID_ATTRIBUTE, ProgramId);
-            el.SetAttribute(ADXValues.ADX_FIELDNAME_ATTRIBUTE, FieldName);
+            el.SetAttribute(AdxConstants.AttributeProgramId, ProgramId);
+            el.SetAttribute(AdxConstants.AttributeFieldName, FieldName);
 
             if (!string.IsNullOrEmpty(DataType))
-                el.SetAttribute(ADXValues.ADX_TYPE_ATTRIBUTE, DataType);
+                el.SetAttribute(AdxConstants.AttributeType, DataType);
 
             return el;
         }

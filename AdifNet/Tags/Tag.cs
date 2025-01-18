@@ -355,12 +355,12 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
                     if (!string.IsNullOrEmpty(Name))
                     {
-                        upperVal = $"{Values.TAG_OPENING}{ToString("N", provider)}";
+                        upperVal = $"{AdifConstants.TagOpen}{ToString("N", provider)}";
 
                         if (!SuppressLength)
-                            upperVal = $"{upperVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
+                            upperVal = $"{upperVal}{AdifConstants.ValueLengthIndicator}{ValueLength}";
 
-                        upperVal = $"{upperVal}{Values.TAG_CLOSING}{TextValue} ";
+                        upperVal = $"{upperVal}{AdifConstants.TagClose}{TextValue} ";
                     }
                     return upperVal;
 
@@ -369,12 +369,12 @@ namespace org.goodspace.Data.Radio.Adif.Tags
 
                     if (!string.IsNullOrEmpty(Name))
                     {
-                        lowerVal = $"{Values.TAG_OPENING}{ToString("n", provider)}";
+                        lowerVal = $"{AdifConstants.TagOpen}{ToString("n", provider)}";
 
                         if (!SuppressLength)
-                            lowerVal = $"{lowerVal}{Values.VALUE_LENGTH_CHAR}{ValueLength}";
+                            lowerVal = $"{lowerVal}{AdifConstants.ValueLengthIndicator}{ValueLength}";
 
-                        lowerVal = $"{lowerVal}{Values.TAG_CLOSING}{TextValue} ";
+                        lowerVal = $"{lowerVal}{AdifConstants.TagClose}{TextValue} ";
                     }
                     return lowerVal;
 

@@ -17,7 +17,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Value separator.
         /// </summary>
-        public override string ValueSeparator => Values.SEMICOLON.ToString();
+        public override string ValueSeparator => AdifConstants.Semicolon.ToString();
 
         /// <summary>
         /// Creates a new instance of the <see cref="MultiValueEnumerationTag"/> class.

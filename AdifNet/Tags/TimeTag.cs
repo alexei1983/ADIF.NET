@@ -16,7 +16,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
             get
             {
                 if (Value != DateTime.MinValue)
-                    return Value.ToString(Value.Second > 0 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT,
+                    return Value.ToString(Value.Second > 0 ? AdifConstants.TimeFormatLong : AdifConstants.TimeFormatShort,
                                           FormatProvider ?? CultureInfo.CurrentCulture);
 
                 return string.Empty;
@@ -26,7 +26,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// 
         /// </summary>
-        public override string? FormatString { get; set; } = Values.ADIF_TIME_FORMAT_SHORT;
+        public override string? FormatString { get; set; } = AdifConstants.TimeFormatShort;
 
         /// <summary>
         /// ADIF type.
@@ -65,7 +65,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
                 {
                     var objStr = value is string strVal ? strVal : value.ToString() ?? string.Empty;
 
-                    var formatString = objStr.Length > 4 ? Values.ADIF_TIME_FORMAT_LONG : Values.ADIF_TIME_FORMAT_SHORT;
+                    var formatString = objStr.Length > 4 ? AdifConstants.TimeFormatLong : AdifConstants.TimeFormatShort;
 
                     if (DateTime.TryParseExact(objStr,
                                                formatString,

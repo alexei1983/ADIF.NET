@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.MorseKeyTypes;
+        public override AdifEnumeration Options => AdifEnumerations.MorseKeyTypes;
 
         /// <summary>
         /// Creates a new MY_MORSE_KEY_TYPE tag.

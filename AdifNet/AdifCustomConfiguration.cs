@@ -172,56 +172,6 @@ namespace org.goodspace.Data.Radio.Adif
 
             return SerialNumberGenerators.FirstOrDefault(s => name.Equals(s.Name));
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <returns></returns>
-        //static IEnumerable<string> GetSearchPaths()
-        //{
-        //    string[] paths = [
-        //              Environment.GetFolderPath(Environment.SpecialFolder.System),
-        //              Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        //              Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-        //              Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        //              Environment.CurrentDirectory
-        //  ];
-
-        //    foreach (var path in paths)
-        //    {
-        //        if (!string.IsNullOrEmpty(path))
-        //        {
-        //            var _path = Path.GetFullPath(path);
-        //            if (!string.IsNullOrEmpty(_path))
-        //                yield return _path;
-        //        }
-        //    }
-        //}
-
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    /// <param name="fileName"></param>
-    //    static string? FindConfigurationFile(string fileName)
-    //    {
-    //        var paths = GetSearchPaths();
-
-    //        foreach (var p in paths)
-    //        {
-    //            var path = Path.Combine(p, fileName);
-    //            if (new FileInfo(path).Exists)
-    //                return path;
-    //        }
-
-    //        foreach (var s in Environment.GetLogicalDrives())
-    //        {
-    //            var path = Path.Combine(s, fileName);
-    //            if (new FileInfo(path).Exists)
-    //                return path;
-    //        }
-
-    //        return null;
-    //    }
     }
 
     /// <summary>
@@ -237,6 +187,8 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="path"></param>
         public void LoadFile(string path)
         {
+            Reset();
+
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("Configuration file path is required.", nameof(path));
 
@@ -249,6 +201,9 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new FileNotFoundException($"Configuration file does not exist: {path}", path);
 
             xDoc = XDocument.Load(fileInfo.OpenRead());
+
+            if (!IsAdifNetConfig())
+                throw new Exception($"'{path}' is not a valid AdifNet configuration file.");
         }
 
         /// <summary>
@@ -257,9 +212,15 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="value"></param>
         public void LoadString(string value)
         {
+            Reset();
+
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("Configuration string cannot be null or empty.", nameof(value));
+
             xDoc = XDocument.Load(new StringReader(value));
+            
+            if (!IsAdifNetConfig())
+                throw new Exception("No AdifNet configuration data was found.");
         }
 
         /// <summary>
@@ -268,10 +229,24 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="stream"></param>
         public void LoadStream(Stream stream)
         {
+            Reset();
+
             if (stream == null || !stream.CanRead)
                 throw new ArgumentException("Cannot read configuration: invalid stream.", nameof(stream));
 
             xDoc = XDocument.Load(stream);
+
+            if (!IsAdifNetConfig())
+                throw new Exception("No AdifNet configuration data was found.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAdifNetConfig()
+        {
+            return ELEMENT_ROOT.Equals(xDoc?.Root?.Name?.LocalName);
         }
 
         /// <summary>
@@ -433,16 +408,16 @@ namespace org.goodspace.Data.Radio.Adif
                 var optionsElement = new XElement(ELEMENT_OPTIONS);
 
                 if ((configuration.EmitFlags & EmitFlags.LowercaseTagNames) == EmitFlags.LowercaseTagNames)
-                    optionsElement.Add(new XElement(ELEMENT_LOWERCASE_TAG_NAMES) { Value = Values.ADIF_BOOLEAN_TRUE });
+                    optionsElement.Add(new XElement(ELEMENT_LOWERCASE_TAG_NAMES) { Value = AdifConstants.BooleanTrue });
 
                 if ((configuration.EmitFlags & EmitFlags.AddProgramHeaderTags) == EmitFlags.AddProgramHeaderTags)
-                    optionsElement.Add(new XElement(ELEMENT_ADD_PROGRAM_HEADER_TAGS) { Value = Values.ADIF_BOOLEAN_TRUE });
+                    optionsElement.Add(new XElement(ELEMENT_ADD_PROGRAM_HEADER_TAGS) { Value = AdifConstants.BooleanTrue });
 
                 if ((configuration.EmitFlags & EmitFlags.AddCreatedTimestamp) == EmitFlags.AddCreatedTimestamp)
-                    optionsElement.Add(new XElement(ELEMENT_ADD_CREATED_TIMESTAMP_TAG) { Value = Values.ADIF_BOOLEAN_TRUE });
+                    optionsElement.Add(new XElement(ELEMENT_ADD_CREATED_TIMESTAMP_TAG) { Value = AdifConstants.BooleanTrue });
 
                 if ((configuration.EmitFlags & EmitFlags.MirrorOperatorAndStationCallSign) == EmitFlags.MirrorOperatorAndStationCallSign)
-                    optionsElement.Add(new XElement(ELEMENT_MIRROR_OPERATOR_STATION_CALLSIGN) { Value = Values.ADIF_BOOLEAN_TRUE });
+                    optionsElement.Add(new XElement(ELEMENT_MIRROR_OPERATOR_STATION_CALLSIGN) { Value = AdifConstants.BooleanTrue });
 
                 rootElement.Add(optionsElement);
             }
@@ -459,9 +434,6 @@ namespace org.goodspace.Data.Radio.Adif
         {
             if (xDoc == null || xDoc.Root == null || !xDoc.Descendants().Any())
                 throw new Exception("No configuration data found.");
-
-            if (!xDoc.Root.Name.LocalName.Equals(ELEMENT_ROOT))
-                throw new Exception("Not an AdifNet configuration file.");
 
             var config = new AdifCustomConfiguration();
 
@@ -666,7 +638,7 @@ namespace org.goodspace.Data.Radio.Adif
             foreach (var element in xDoc.Descendants(ELEMENT_OPTIONS).Elements())
             {
                 var value = element.Value;
-                bool isYes = Values.ADIF_BOOLEAN_TRUE.Equals(value);
+                bool isYes = AdifConstants.BooleanTrue.Equals(value);
 
                 switch (element.Name.LocalName)
                 {
@@ -697,6 +669,11 @@ namespace org.goodspace.Data.Radio.Adif
             config.EmitFlags = flags;
 
             return config;
+        }
+
+        void Reset()
+        {
+            xDoc = null;
         }
 
         const string ATTRIBUTE_NAME = "Name";

@@ -14,7 +14,7 @@ namespace Unclassified.Util
     /// Class providing static methods for calculating with Maidenhead locators, especially
     /// distance and bearing.
     /// </summary>
-    public partial class MaidenheadLocator
+    internal partial class MaidenheadLocator
     {
         /// <summary>
         /// 

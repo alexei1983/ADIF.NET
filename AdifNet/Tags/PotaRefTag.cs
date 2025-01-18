@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Value separator.
         /// </summary>
-        public override string ValueSeparator => Values.COMMA.ToString();
+        public override string ValueSeparator => AdifConstants.Comma.ToString();
 
         /// <summary>
         /// Creates a new POTA_REF tag.

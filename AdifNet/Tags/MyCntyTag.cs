@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.SecondarySubdivisions;
+        public override AdifEnumeration Options => AdifEnumerations.SecondarySubdivisions;
 
         /// <summary>
         /// Creates a new MY_CNTY tag.

@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.AntennaPaths;
+        public override AdifEnumeration Options => AdifEnumerations.AntennaPaths;
 
         /// <summary>
         /// Creates a new ANT_PATH tag.

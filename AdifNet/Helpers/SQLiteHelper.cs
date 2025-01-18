@@ -8,7 +8,7 @@ namespace org.goodspace.Data.Radio.Adif.Helpers
     /// <summary>
     /// Provides SQLite database helper methods.
     /// </summary>
-    public class SQLiteHelper : IDisposable
+    internal class SQLiteHelper : IDisposable
     {
         /// <summary>
         /// 

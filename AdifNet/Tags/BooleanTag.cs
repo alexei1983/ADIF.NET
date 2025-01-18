@@ -15,8 +15,8 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         {
             get
             {
-                return Value.HasValue && Value.Value ? Values.ADIF_BOOLEAN_TRUE :
-                       Value.HasValue && !Value.Value ? Values.ADIF_BOOLEAN_FALSE :
+                return Value.HasValue && Value.Value ? AdifConstants.BooleanTrue :
+                       Value.HasValue && !Value.Value ? AdifConstants.BooleanFalse :
                        string.Empty;
             }
         }
@@ -24,7 +24,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.BooleanValues;
+        public override AdifEnumeration Options => AdifEnumerations.BooleanValues;
 
         /// <summary>
         /// ADIF type.

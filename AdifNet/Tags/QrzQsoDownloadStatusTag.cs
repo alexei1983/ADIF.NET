@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.QsoDownloadStatuses;
+        public override AdifEnumeration Options => AdifEnumerations.QsoDownloadStatuses;
 
         /// <summary>
         /// Creates a new QRZCOM_QSO_DOWNLOAD_STATUS tag.

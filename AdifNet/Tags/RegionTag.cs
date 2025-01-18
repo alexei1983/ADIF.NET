@@ -14,7 +14,7 @@ namespace org.goodspace.Data.Radio.Adif.Tags
         /// <summary>
         /// Valid enumeration values.
         /// </summary>
-        public override AdifEnumeration Options => Values.Regions;
+        public override AdifEnumeration Options => AdifEnumerations.Regions;
 
         /// <summary>
         /// Creates a new REGION tag.
