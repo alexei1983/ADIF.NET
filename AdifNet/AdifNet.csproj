@@ -7,7 +7,7 @@
     <RootNamespace>org.goodspace.Data.Radio.Adif</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<VersionPrefix>1.8.3</VersionPrefix>
+	<VersionPrefix>1.8.6</VersionPrefix>
 	<VersionSuffix></VersionSuffix>
 	<Authors>Alex Jennings (K0UOG)</Authors>
     <Title>AdifNet: A complete ADIF and ADX parser and generator for .NET</Title>

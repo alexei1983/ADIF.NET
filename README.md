@@ -55,11 +55,7 @@ To store the `newQso` object in a MySQL database table named `QSOs`, instantiate
 ```
 var mysqlConnection = new MySqlConnection("server=localhost;user=user;database=adif;password=password;");
 
-var sqlAdapter = new AdifSqlAdapter(mysqlConnection, "QSOs")
-{
-	ParameterPrefix = '?',
-	ReservedWordsEscapedBy = ReservedWordEscape.Backticks;
-};
+var sqlAdapter = new AdifSqlAdapter(mysqlConnection, "QSOs", SqlReservedWordEscape.Backticks, SqlParameterPrefix.Question);
 
 sqlAdapter.Insert(newQso);
 
