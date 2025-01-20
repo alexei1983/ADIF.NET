@@ -5,36 +5,6 @@ using org.goodspace.Data.Radio.Adif.Tags;
 namespace org.goodspace.Data.Radio.Adif
 {
     /// <summary>
-    /// Determines how reserved words are escaped in a specific database implementation.
-    /// </summary>
-    public enum ReservedWordEscape
-    {
-        /// <summary>
-        /// Reserved words are escaped by brackets.
-        /// <code>[]</code>
-        /// </summary>
-        Brackets,
-
-        /// <summary>
-        /// Reserved words are escaped by double quotes.
-        /// <code>"</code>
-        /// </summary>
-        DoubleQuotes,
-
-        /// <summary>
-        /// Reserved words are escaped by single quotes.
-        /// <code>'</code>
-        /// </summary>
-        SingleQuotes,
-
-        /// <summary>
-        /// Reserved words are escaped by backticks.
-        /// <code>`</code>
-        /// </summary>
-        Backticks
-    }
-
-    /// <summary>
     /// 
     /// </summary>
     public class AdifSqlAdapter : IDisposable
@@ -43,21 +13,6 @@ namespace org.goodspace.Data.Radio.Adif
         /// Database connection.
         /// </summary>
         public IDbConnection Connection { get; private set; }
-
-        /// <summary>
-        /// Name of the database table containing the ADIF QSOs.
-        /// </summary>
-        public string QsoTable { get; set; }
-
-        /// <summary>
-        /// Determines how reserved words in SQL are escaped.
-        /// </summary>
-        public ReservedWordEscape ReservedWordsEscapedBy { get; set; } = ReservedWordEscape.Brackets;
-
-        /// <summary>
-        /// Character that denotes the start of a database parameter.
-        /// </summary>
-        public char ParameterPrefix { get; set; } = '@';
 
         /// <summary>
         /// ADIF header containing any relevant user-defined fields stored in the database.
@@ -74,31 +29,53 @@ namespace org.goodspace.Data.Radio.Adif
             set => mapping = value;
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="AdifSqlAdapter"/> class.
-        /// </summary>
-        /// <param name="connection">Database connection.</param>
-        /// <param name="qsoTable">Name of the database table containing the ADIF QSOs.</param>
-        /// <param name="header">ADIF header containing any relevant user-defined fields stored in the database.</param>
-        public AdifSqlAdapter(IDbConnection connection, string qsoTable, AdifHeader header)
-        {
-            if (string.IsNullOrEmpty(qsoTable))
-                throw new ArgumentException("QSO table name is required.", nameof(qsoTable));
+        readonly AdifSqlAdapterSettings settings;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="adapterSettings"></param>
+        /// <param name="header"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public AdifSqlAdapter(IDbConnection connection, AdifSqlAdapterSettings adapterSettings, AdifHeader? header)
+        {
             Connection = connection ?? throw new ArgumentNullException(nameof(connection), "SQL connection is required.");
-            QsoTable = qsoTable;
+
+            if (adapterSettings == null)
+                throw new ArgumentNullException(nameof(adapterSettings), "Adapter settings are required.");
+
+            if (string.IsNullOrEmpty(adapterSettings.TableName))
+                throw new ArgumentException("QSO table name is required.", nameof(adapterSettings));
+
+            settings = adapterSettings;
 
             Connect();
 
             Header = header ?? [];
         }
 
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="connection"></param>
+       /// <param name="qsoTable"></param>
+       /// <param name="reservedWordEscape"></param>
+       /// <param name="parameterPrefix"></param>
+        public AdifSqlAdapter(IDbConnection connection, string qsoTable, SqlReservedWordEscape reservedWordEscape, SqlParameterPrefix parameterPrefix) : 
+            this(connection, new AdifSqlAdapterSettings(qsoTable, reservedWordEscape, parameterPrefix), []) { }
+
         /// <summary>
-        /// Creates a new instance of the <see cref="AdifSqlAdapter"/> class.
+        /// 
         /// </summary>
-        /// <param name="connection">Database connection.</param>
-        /// <param name="qsoTable">Name of the database table containing the ADIF QSOs.</param>
-        public AdifSqlAdapter(IDbConnection connection, string qsoTable) : this(connection, qsoTable, []) { }
+        /// <param name="connection"></param>
+        /// <param name="qsoTable"></param>
+        /// <param name="reservedWordEscape"></param>
+        /// <param name="parameterPrefix"></param>
+        /// <param name="header"></param>
+        public AdifSqlAdapter(IDbConnection connection, string qsoTable, SqlReservedWordEscape reservedWordEscape, SqlParameterPrefix parameterPrefix, AdifHeader? header) :
+            this(connection, new AdifSqlAdapterSettings(qsoTable, reservedWordEscape, parameterPrefix), header)
+        { }
 
         /// <summary>
         /// Retrieves all QSOs from the database.
@@ -107,7 +84,7 @@ namespace org.goodspace.Data.Radio.Adif
         {
             using var command = Connection.CreateCommand();
             command.Connection = Connection;
-            command.CommandText = string.Format(SQL_SELECT_COMMAND_TEXT, EscapeReservedWord(QsoTable));
+            command.CommandText = string.Format(SQL_SELECT_COMMAND_TEXT, settings.TableName);
 
             using var reader = command.ExecuteReader();
             while (reader != null && reader.Read())
@@ -135,7 +112,7 @@ namespace org.goodspace.Data.Radio.Adif
 
             using (var command = Connection.CreateCommand())
             {
-                var commandText = $"INSERT INTO {EscapeReservedWord(QsoTable)} (";
+                var commandText = $"INSERT INTO {settings.TableName} (";
                 var parameterText = string.Empty;
 
                 var uniqueId = qso.GetTagValue<string>(UNIQ_ID_APP_DEF_FIELD);
@@ -147,8 +124,8 @@ namespace org.goodspace.Data.Radio.Adif
                     qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, uniqueId);
                 }
 
-                commandText += $"{EscapeReservedWord(UNIQ_ID_SQL_COL)},";
-                parameterText += $"{ParameterPrefix}{UNIQ_ID_SQL_COL},";
+                commandText += $"{settings.Escape(UNIQ_ID_SQL_COL)},";
+                parameterText += $"{settings.GetParameter(UNIQ_ID_SQL_COL)},";
                 command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
 
                 foreach (var tag in qso)
@@ -161,8 +138,8 @@ namespace org.goodspace.Data.Radio.Adif
                     if (columnNameMapping == null || string.IsNullOrEmpty(columnNameMapping.ColumnName))
                         continue;
 
-                    commandText += $"{EscapeReservedWord(columnNameMapping.ColumnName)},";
-                    parameterText += $"{ParameterPrefix}{columnNameMapping.ColumnName},";
+                    commandText += $"{settings.Escape(columnNameMapping.ColumnName)},";
+                    parameterText += $"{settings.GetParameter(columnNameMapping.ColumnName)},";
                     command.Parameters.Add(GetParameter(command, tag, columnNameMapping));
                 }
 
@@ -200,7 +177,7 @@ namespace org.goodspace.Data.Radio.Adif
             Connect();
 
             using var command = Connection.CreateCommand();
-            var commandText = $"UPDATE {EscapeReservedWord(QsoTable)} SET ";
+            var commandText = $"UPDATE {settings.TableName} SET ";
 
             foreach (var tag in qso)
             {
@@ -212,12 +189,12 @@ namespace org.goodspace.Data.Radio.Adif
                 if (columnNameMapping == null || string.IsNullOrEmpty(columnNameMapping.ColumnName))
                     continue;
 
-                commandText += $"{EscapeReservedWord(columnNameMapping.ColumnName)} = {ParameterPrefix}{columnNameMapping.ColumnName},";
+                commandText += $"{settings.Escape(columnNameMapping.ColumnName)} = {settings.GetParameter(columnNameMapping.ColumnName)},";
                 command.Parameters.Add(GetParameter(command, tag, columnNameMapping));
             }
 
             commandText = commandText.Trim(',');
-            command.CommandText = $"{commandText} WHERE {EscapeReservedWord(UNIQ_ID_SQL_COL)} = {ParameterPrefix}{UNIQ_ID_SQL_COL}";
+            command.CommandText = $"{commandText} WHERE {settings.Escape(UNIQ_ID_SQL_COL)} = {settings.GetParameter(UNIQ_ID_SQL_COL)}";
             command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
 
             if (command.Parameters.Count > 1)
@@ -246,7 +223,7 @@ namespace org.goodspace.Data.Radio.Adif
             Connect();
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"DELETE FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(UNIQ_ID_SQL_COL)} = {ParameterPrefix}{UNIQ_ID_SQL_COL}";
+            command.CommandText = $"DELETE FROM {settings.TableName} WHERE {settings.Escape(UNIQ_ID_SQL_COL)} = {settings.GetParameter(UNIQ_ID_SQL_COL)}";
             command.Parameters.Add(GetParameter(command, UNIQ_ID_SQL_COL, uniqueId));
 
             if (command.Parameters.Count > 0)
@@ -326,7 +303,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(searchValue), "Search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} = {ParameterPrefix}{columnMapping.ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} = {settings.GetParameter(columnMapping.ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
             using var reader = command.ExecuteReader();
@@ -369,12 +346,12 @@ namespace org.goodspace.Data.Radio.Adif
             }
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMappings[0].ColumnName)} = {ParameterPrefix}{columnMappings[0].ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMappings[0].ColumnName)} = {settings.GetParameter(columnMappings[0].ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMappings[0].ColumnName, searchValues[0]));
 
             for (var c = 1; c < columnMappings.Length; c++)
             {
-                command.CommandText = $"{command.CommandText} AND {EscapeReservedWord(columnMappings[c].ColumnName)} = {ParameterPrefix}{columnMappings[c].ColumnName}";
+                command.CommandText = $"{command.CommandText} AND {settings.Escape(columnMappings[c].ColumnName)} = {settings.GetParameter(columnMappings[c].ColumnName)}";
                 command.Parameters.Add(GetParameter(command, columnMappings[c].ColumnName, searchValues[c]));
             }
 
@@ -403,7 +380,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(searchValue), "Search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} > {ParameterPrefix}{columnMapping.ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} > {settings.GetParameter(columnMapping.ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
             using var reader = command.ExecuteReader();
@@ -431,7 +408,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(searchValue), "Search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} < {ParameterPrefix}{columnMapping.ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} < {settings.GetParameter(columnMapping.ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
             using var reader = command.ExecuteReader();
@@ -459,7 +436,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(searchValue), "Search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} >= {ParameterPrefix}{columnMapping.ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} >= {settings.GetParameter(columnMapping.ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
             using var reader = command.ExecuteReader();
@@ -487,7 +464,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(searchValue), "Search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} <= {ParameterPrefix}{columnMapping.ColumnName}";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} <= {settings.GetParameter(columnMapping.ColumnName)}";
             command.Parameters.Add(GetParameter(command, columnMapping.ColumnName, searchValue));
 
             using var reader = command.ExecuteReader();
@@ -519,7 +496,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(endSearchValue), "Ending search value is required to retrieve data.");
 
             using var command = Connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM {EscapeReservedWord(QsoTable)} WHERE {EscapeReservedWord(columnMapping.ColumnName)} BETWEEN {ParameterPrefix}{columnMapping.ColumnName}1 AND {ParameterPrefix}{columnMapping.ColumnName}2";
+            command.CommandText = $"SELECT * FROM {settings.TableName} WHERE {settings.Escape(columnMapping.ColumnName)} BETWEEN {settings.GetParameter($"{columnMapping.ColumnName}1")} AND {settings.GetParameter($"{columnMapping.ColumnName}2")}";
             command.Parameters.Add(GetParameter(command, $"{columnMapping.ColumnName}1", startSearchValue));
             command.Parameters.Add(GetParameter(command, $"{columnMapping.ColumnName}2", endSearchValue));
 
@@ -672,113 +649,61 @@ namespace org.goodspace.Data.Radio.Adif
         /// <param name="reader">Data reader containing QSO data.</param>
         AdifQso GetQsoFromReader(IDataReader reader)
         {
+            ArgumentNullException.ThrowIfNull(reader);
+
             var qso = new AdifQso();
 
-            if (reader != null && !reader.IsClosed)
+            using (reader)
             {
-                for (var r = 0; r < reader.FieldCount; r++)
+                if (!reader.IsClosed)
                 {
-                    if (reader.IsDBNull(r))
-                        continue;
-
-                    var dbFieldName = reader.GetName(r);
-
-                    if (string.IsNullOrEmpty(dbFieldName))
-                        continue;
-
-                    if (UNIQ_ID_SQL_COL.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase))
-                        qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, DataTypes.String, reader.GetValue(r));
-                    else
+                    for (var r = 0; r < reader.FieldCount; r++)
                     {
-                        var columnMapping = ColumnMappings.GetColumnMappingFromColumnName(dbFieldName);
-
-                        if (columnMapping == null || string.IsNullOrEmpty(columnMapping.TagName))
+                        if (reader.IsDBNull(r))
                             continue;
 
-                        if (columnMapping.IsUserDef)
-                        {
-                            if (Header == null)
-                                continue;
+                        var dbFieldName = reader.GetName(r);
 
-                            var userDefDefTag = Header.GetUserDefinedTag(columnMapping.TagName) ?? 
-                                throw new UserDefTagException($"No user-defined field found with name '{columnMapping.TagName}'.", columnMapping.TagName);
+                        if (string.IsNullOrEmpty(dbFieldName))
+                            continue;
 
-                            qso.AddUserDefinedTag(userDefDefTag, reader.GetValue(r));
-                        }
-                        else if (columnMapping.IsAppDef)
-                        {
-                            qso.Add(new AppDefTag(columnMapping.TagName, reader.GetValue(r)));
-                        }
+                        if (UNIQ_ID_SQL_COL.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase))
+                            qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, DataTypes.String, reader.GetValue(r));
                         else
                         {
-                            var tag = TagFactory.TagFromName(columnMapping.TagName) ?? throw new Exception($"Invalid ADIF tag name: {columnMapping.TagName}");
-                            if (tag.Header)
-                                throw new Exception($"Tag {columnMapping.TagName} is a header tag and cannot be added to a QSO.");
+                            var columnMapping = ColumnMappings.GetColumnMappingFromColumnName(dbFieldName);
 
-                            tag.SetValue(reader.GetValue(r));
-                            qso.Add(tag);
+                            if (columnMapping == null || string.IsNullOrEmpty(columnMapping.TagName))
+                                continue;
+
+                            if (columnMapping.IsUserDef)
+                            {
+                                if (Header == null)
+                                    continue;
+
+                                var userDefDefTag = Header.GetUserDefinedTag(columnMapping.TagName) ??
+                                    throw new UserDefTagException($"No user-defined field found with name '{columnMapping.TagName}'.", columnMapping.TagName);
+
+                                qso.AddUserDefinedTag(userDefDefTag, reader.GetValue(r));
+                            }
+                            else if (columnMapping.IsAppDef)
+                            {
+                                qso.Add(new AppDefTag(columnMapping.TagName, reader.GetValue(r)));
+                            }
+                            else
+                            {
+                                var tag = TagFactory.TagFromName(columnMapping.TagName) ?? throw new Exception($"Invalid ADIF tag name: {columnMapping.TagName}");
+                                if (tag.Header)
+                                    throw new Exception($"Tag {columnMapping.TagName} is a header tag and cannot be added to a QSO.");
+
+                                tag.SetValue(reader.GetValue(r));
+                                qso.Add(tag);
+                            }
                         }
                     }
                 }
             }
             return qso;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        bool IsTextEscaped(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentException("Text value is required.", nameof(text));
-
-            var escapeChars = GetReservedWordsEscapedBy();
-
-            char startChar = escapeChars[0];
-            char endChar = escapeChars.Length > 1 ? escapeChars[1] : escapeChars[0];
-
-            if (!text.StartsWith(startChar))
-                return false;
-
-            if (!text.EndsWith(endChar))
-                return false;
-
-            string[] parts;
-
-            if (text.Contains('.'))
-                parts = text.Split('.');
-            else
-                parts = [text];
-
-            foreach (var part in parts)
-            {
-                if (!part.StartsWith(startChar))
-                    return false;
-
-                if (!part.EndsWith(endChar))
-                    return false;                
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        char[] GetReservedWordsEscapedBy()
-        {
-            return ReservedWordsEscapedBy switch
-            {
-                ReservedWordEscape.Brackets => ['[', ']'],
-                ReservedWordEscape.DoubleQuotes => ['"'],
-                ReservedWordEscape.SingleQuotes => ['\''],
-                ReservedWordEscape.Backticks => ['`'],
-                _ => throw new Exception(),
-            };
         }
 
         /// <summary>
@@ -798,42 +723,6 @@ namespace org.goodspace.Data.Radio.Adif
                 return false;
 
             return true;
-        }
-
-        /// <summary>
-        /// Escapes the specified text to ensure it does not have special meaning 
-        /// in SQL.
-        /// </summary>
-        /// <param name="text">Text value to escape.</param>
-        string EscapeReservedWord(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                throw new ArgumentException("Text value is required.", nameof(text));
-
-            if (IsTextEscaped(text))
-                return text;
-
-            string[] parts;
-
-            if (text.Contains('.'))
-                parts = text.Split('.');
-            else
-                parts = [text];
-
-            var escapeChars = GetReservedWordsEscapedBy();
-
-            char startChar = escapeChars[0];
-            char endChar = escapeChars.Length > 1 ? escapeChars[1] : escapeChars[0];
-            var val = string.Empty;
-
-            foreach (var part in parts)
-            {
-                if (!string.IsNullOrEmpty(val) && parts.Length > 1)
-                    val += '.';
-                val += $"{startChar}{part}{endChar}";
-            }
-
-            return val;
         }
 
         /// <summary>
@@ -895,7 +784,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(command), "DB command is required.");
 
             var parameter = command.CreateParameter();
-            parameter.ParameterName = $"{ParameterPrefix}{mapping.ColumnName}";
+            parameter.ParameterName = $"{settings.GetParameter(mapping.ColumnName)}";
             parameter.Value = GetParameterValue(tag, mapping);
             parameter.Direction = direction;
             return parameter;
@@ -918,7 +807,7 @@ namespace org.goodspace.Data.Radio.Adif
                 throw new ArgumentNullException(nameof(command), "DB command is required.");
 
             var parameter = command.CreateParameter();
-            parameter.ParameterName = $"{ParameterPrefix}{name}";
+            parameter.ParameterName = $"{settings.GetParameter(name)}";
             parameter.Value = GetParameterValue(value);
             parameter.Direction = direction;
             return parameter;
@@ -951,8 +840,6 @@ namespace org.goodspace.Data.Radio.Adif
 
                     Connection.Dispose();
                 }
-
-                QsoTable = string.Empty;
             }
         }
 
