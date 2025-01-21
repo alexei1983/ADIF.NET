@@ -653,52 +653,49 @@ namespace org.goodspace.Data.Radio.Adif
 
             var qso = new AdifQso();
 
-            using (reader)
+            if (!reader.IsClosed)
             {
-                if (!reader.IsClosed)
+                for (var r = 0; r < reader.FieldCount; r++)
                 {
-                    for (var r = 0; r < reader.FieldCount; r++)
+                    if (reader.IsDBNull(r))
+                        continue;
+
+                    var dbFieldName = reader.GetName(r);
+
+                    if (string.IsNullOrEmpty(dbFieldName))
+                        continue;
+
+                    if (UNIQ_ID_SQL_COL.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase))
+                        qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, DataTypes.String, reader.GetValue(r));
+                    else
                     {
-                        if (reader.IsDBNull(r))
+                        var columnMapping = ColumnMappings.GetColumnMappingFromColumnName(dbFieldName);
+
+                        if (columnMapping == null || string.IsNullOrEmpty(columnMapping.TagName))
                             continue;
 
-                        var dbFieldName = reader.GetName(r);
-
-                        if (string.IsNullOrEmpty(dbFieldName))
-                            continue;
-
-                        if (UNIQ_ID_SQL_COL.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase))
-                            qso.AddAppDefinedField(UNIQ_ID_APP_DEF_FIELD_NAME, AdifNet.ProgramId, DataTypes.String, reader.GetValue(r));
-                        else
+                        if (columnMapping.IsUserDef)
                         {
-                            var columnMapping = ColumnMappings.GetColumnMappingFromColumnName(dbFieldName);
-
-                            if (columnMapping == null || string.IsNullOrEmpty(columnMapping.TagName))
+                            if (Header == null)
                                 continue;
 
-                            if (columnMapping.IsUserDef)
-                            {
-                                if (Header == null)
-                                    continue;
+                            var userDefDefTag = Header.GetUserDefinedTag(columnMapping.TagName) ??
+                                throw new UserDefTagException($"No user-defined field found with name '{columnMapping.TagName}'.", columnMapping.TagName);
 
-                                var userDefDefTag = Header.GetUserDefinedTag(columnMapping.TagName) ??
-                                    throw new UserDefTagException($"No user-defined field found with name '{columnMapping.TagName}'.", columnMapping.TagName);
+                            qso.AddUserDefinedTag(userDefDefTag, reader.GetValue(r));
+                        }
+                        else if (columnMapping.IsAppDef)
+                        {
+                            qso.Add(new AppDefTag(columnMapping.TagName, reader.GetValue(r)));
+                        }
+                        else
+                        {
+                            var tag = TagFactory.TagFromName(columnMapping.TagName) ?? throw new Exception($"Invalid ADIF tag name: {columnMapping.TagName}");
+                            if (tag.Header)
+                                throw new Exception($"Tag {columnMapping.TagName} is a header tag and cannot be added to a QSO.");
 
-                                qso.AddUserDefinedTag(userDefDefTag, reader.GetValue(r));
-                            }
-                            else if (columnMapping.IsAppDef)
-                            {
-                                qso.Add(new AppDefTag(columnMapping.TagName, reader.GetValue(r)));
-                            }
-                            else
-                            {
-                                var tag = TagFactory.TagFromName(columnMapping.TagName) ?? throw new Exception($"Invalid ADIF tag name: {columnMapping.TagName}");
-                                if (tag.Header)
-                                    throw new Exception($"Tag {columnMapping.TagName} is a header tag and cannot be added to a QSO.");
-
-                                tag.SetValue(reader.GetValue(r));
-                                qso.Add(tag);
-                            }
+                            tag.SetValue(reader.GetValue(r));
+                            qso.Add(tag);
                         }
                     }
                 }
